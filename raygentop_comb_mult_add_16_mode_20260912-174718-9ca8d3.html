@@ -38,6 +38,43 @@ pre { white-space: pre-wrap; word-break: break-word; margin: .3rem 0 .8rem;
 pre.prompt { background: #f4f4f2; border-left: 3px solid #b8b8b0; }
 pre.response { background: #eef3f8; border-left: 3px solid #7f9fbf; }
 pre.plain { background: #f6f6f6; }
+/* A prompt or response with its Markdown rendered. The tint and the left rule are the same
+   as the plain form above, so a rendered block still reads as quoted agent traffic and not
+   as the page's own prose; only the inside is laid out instead of shown as source. */
+.md { margin: .3rem 0 .8rem; padding: .6rem .9rem; border-radius: 4px; font-size: .93em;
+  overflow-wrap: break-word; }
+.md.prompt { background: #f4f4f2; border-left: 3px solid #b8b8b0; }
+.md.response { background: #eef3f8; border-left: 3px solid #7f9fbf; }
+.md > :first-child { margin-top: 0; } .md > :last-child { margin-bottom: 0; }
+.md p { margin: .5rem 0; }
+.md ul, .md ol { margin: .5rem 0; padding-left: 1.5rem; }
+.md li { margin: .15rem 0; }
+.md ul.md-litnum { list-style: none; padding-left: .8rem; }
+.md .md-num { color: #555; }
+.md blockquote { margin: .5rem 0; padding: .1rem .8rem; border-left: 2px solid #c4c4c4;
+  color: #444; }
+.md hr { border: 0; border-top: 1px solid #d5d5d5; margin: .8rem 0; }
+.md code { background: rgba(0,0,0,.055); padding: .05em .3em; border-radius: 3px; }
+.md .mdh { font-weight: 600; margin: .9rem 0 .35rem; line-height: 1.3; }
+.md .mdh1 { font-size: 1.12em; } .md .mdh2 { font-size: 1.07em; }
+.md .mdh3 { font-size: 1.02em; } .md .mdh4, .md .mdh5, .md .mdh6 { font-size: 1em; }
+/* A fenced block is a box inside the response, and must not widen or escape it: it wraps,
+   and scrolls sideways only within its own frame. */
+.md .md-code { margin: .5rem 0; border: 1px solid #dcdcdc; border-radius: 4px;
+  background: #fbfbfa; max-width: 100%; overflow: hidden; }
+.md .md-lang { display: block; padding: .15rem .6rem; border-bottom: 1px solid #e6e6e6;
+  color: #666; font-size: .8em; letter-spacing: .03em; }
+.md .md-code > pre { margin: 0; background: none; border: 0; border-radius: 0;
+  padding: .55rem .7rem; max-width: 100%; overflow-x: auto; white-space: pre-wrap;
+  word-break: break-word; }
+.md .md-code > pre > code { background: none; padding: 0; }
+.md .md-tw { overflow-x: auto; max-width: 100%; margin: .5rem 0; }
+.md .md-tw table { border-collapse: collapse; }
+.md .md-tw th, .md .md-tw td { border: 1px solid #dedede; padding: .2rem .5rem;
+  white-space: normal; }
+.md .md-note { color: #666; font-size: .85em; font-style: italic; margin: 0 0 .5rem; }
+ul.paths { margin: .2rem 0; padding-left: 1.2rem; }
+ul.paths li { margin: .1rem 0; word-break: break-all; }
 .diff { white-space: pre-wrap; word-break: break-word; margin: .3rem 0 .8rem;
   padding: .7rem .9rem; border-radius: 4px; font-size: .86em; line-height: 1.5;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
@@ -68,69 +105,13 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fo
 function setAll(open) {
   document.querySelectorAll('details').forEach(function (d) { d.open = open; });
 }
-</script></head><body><main><h1>raygentop → comb_mult_add_16_mode · 20260912-174718-9ca8d3</h1><p class="sub">benchadapt adaptation run · record at <code>outputs/adapt/vtr_demo/raygentop/comb_mult_add_16_mode/20260912-174718-9ca8d3</code></p><dl class="kv"><dt>run id</dt><dd><code>20260912-174718-9ca8d3</code></dd><dt>started</dt><dd>2026-09-12 17:47:18 -0700</dd><dt>finished</dt><dd>2026-09-12 17:51:30 -0700</dd><dt>suite / design</dt><dd>vtr_demo / <b>raygentop</b></dd><dt>target mode</dt><dd><code>comb_mult_add_16_mode</code></dd><dt>tier</dt><dd>needs restructuring (T2) — the region did not fit the mode as is</dd><dt>outcome</dt><dd><b class="ok">ACCEPTED</b> — reviewer agent confirmed</dd><dt>editor attempts</dt><dd>2 <span class="note">(editor calls against the one approved plan; record field <code>iterations</code>)</span></dd><dt>wall clock</dt><dd>4m 12s (agents 2m 30s, VTR and other 1m 42s)  [252.0 s total; 'other' is synthesis-only checks and framework time between calls]</dd><dt>models per role</dt><dd>planner: <code>opencode-go/gpt-5.6-luna</code><br>reviewer:plan: <code>opencode-go/gpt-5.6-luna</code><br>editor: <code>opencode-go/gpt-5.6-luna</code><br>reviewer:acceptance: <code>opencode-go/gpt-5.6-luna</code></dd><dt>VPR arguments</dt><dd>channel width 300 · device koios_extra_small · seed 1 <span class="note">(from run.json)</span></dd><dt>repo commit</dt><dd><code>5cf3dac891e9</code> <span class="bad">with uncommitted changes to tracked files</span></dd></dl><div class="controls"><button type="button" onclick="setAll(true)">expand all</button><button type="button" onclick="setAll(false)">collapse all</button>exported 2026-09-13T00:50:55-07:00</div><details class="section"><summary><h2>Mode contract</h2> <span class="meta">recorded (outcome.json contract field)</span></summary><div class="body"><p class="note">Verbatim, as recorded with the run and sent to the agents.</p><pre class="plain">Hard-block primitive to instantiate: `comb_mult_add_16`   (precision INT16)
+</script></head><body><main><h1>raygentop → comb_mult_add_16_mode · 20260912-174718-9ca8d3</h1><p class="sub">benchadapt adaptation run · record at <code>outputs/adapt/vtr_demo/raygentop/comb_mult_add_16_mode/20260912-174718-9ca8d3</code></p><dl class="kv"><dt>run id</dt><dd><code>20260912-174718-9ca8d3</code></dd><dt>started</dt><dd>2026-09-12 17:47:18 -0700</dd><dt>finished</dt><dd>2026-09-12 17:51:30 -0700</dd><dt>suite / design</dt><dd>vtr_demo / <b>raygentop</b></dd><dt>target mode</dt><dd><code>comb_mult_add_16_mode</code></dd><dt>tier</dt><dd>needs restructuring (T2) — the region did not fit the mode as is</dd><dt>outcome</dt><dd><b class="ok">ACCEPTED</b> — reviewer agent confirmed</dd><dt>editor attempts</dt><dd>2 <span class="note">(editor calls against the one approved plan; record field <code>iterations</code>)</span></dd><dt>wall clock</dt><dd>4m 12s (agents 2m 30s, VTR and other 1m 42s)  [252.0 s total; 'other' is synthesis-only checks and framework time between calls]</dd><dt>models per role</dt><dd>planner: <code>opencode-go/gpt-5.6-luna</code><br>reviewer:plan: <code>opencode-go/gpt-5.6-luna</code><br>editor: <code>opencode-go/gpt-5.6-luna</code><br>reviewer:acceptance: <code>opencode-go/gpt-5.6-luna</code></dd><dt>VPR arguments</dt><dd>channel width 300 · device koios_extra_small · seed 1 <span class="note">(from run.json)</span></dd><dt>repo commit</dt><dd><code>5cf3dac891e9</code> <span class="bad">with uncommitted changes to tracked files</span></dd><dt>agent reads</dt><dd>editor read a behavioral model; editor read the framework repository <span class="note">(paths each agent named outside its own working directory, computed from the tool events; its own scratch excluded)</span></dd><dt>prompt set</dt><dd><span class="absent">not recorded (runs before 2026-09-13 carry no prompt-set hash)</span></dd></dl><div class="controls"><button type="button" onclick="setAll(true)">expand all</button><button type="button" onclick="setAll(false)">collapse all</button>exported 2026-09-13T15:30:21-07:00</div><details class="section"><summary><h2>Mode contract</h2> <span class="meta">recorded (outcome.json contract field)</span></summary><div class="body"><p class="note">Verbatim, as recorded with the run and sent to the agents.</p><pre class="plain">Hard-block primitive to instantiate: `comb_mult_add_16`   (precision INT16)
   computes: out = ax*ay + bx
   input ports:  ax[16], ay[16], bx[32]
   output ports: result[64]
   arithmetic: the block's operands and result are signed two's complement. A design operand narrower than its port must be widened to the port width: zero-extended if the design treats it as unsigned, sign-extended if signed. An unsigned design operand as wide as its port has no exact representation on this block.
   timing: the block is combinational; `result` is valid in the same cycle the inputs are applied (no clock port).
-  Wire EVERY operand of the fused region onto the input ports (name them exactly as above); drive the region's real consumer from the output port. Tie unused term ports to 0. Do not leave input ports unconnected.</pre></div></details><details class="section"><summary><h2>Agent calls</h2> <span class="meta">6 call(s), in order</span></summary><div class="body"><details class="call"><summary>Call 1 · <b>planner</b> · opencode-go/gpt-5.6-luna · <span class="ok">ok</span> <span class="meta">in 9 · out 434 · reasoning 1577 · cache read 12344 · cache write 10338 · 23.9 s</span></summary><div class="body"><div class="label">prompt</div><pre class="prompt">You are the Planner. Choose the best region(s) in raygentop.v to adapt so hard-block mode
-'comb_mult_add_16_mode' (Hard-block primitive to instantiate: `comb_mult_add_16`   (precision INT16)
-  computes: out = ax*ay + bx
-  input ports:  ax[16], ay[16], bx[32]
-  output ports: result[64]
-  arithmetic: the block's operands and result are signed two's complement. A design operand narrower than its port must be widened to the port width: zero-extended if the design treats it as unsigned, sign-extended if signed. An unsigned design operand as wide as its port has no exact representation on this block.
-  timing: the block is combinational; `result` is valid in the same cycle the inputs are applied (no clock port).
-  Wire EVERY operand of the fused region onto the input ports (name them exactly as above); drive the region's real consumer from the output port. Tie unused term ports to 0. Do not leave input ports unconnected.) is exercised, then write a concrete plan. Do NOT edit files —
-output the header + plan only.
-
-Pick the most REPRESENTATIVE mapping — arithmetic a real designer of THIS workload would actually
-map to 'comb_mult_add_16_mode', never fabricated computation. For a sum-of-products / MAC mode you must
-find product terms that ALREADY feed a COMMON reduction (a shared sum/accumulator); products that
-feed SEPARATE outputs (e.g. distinct systolic-array elements) must NOT be fused. An isolated scalar
-multiply is NOT a representative sum-of-products target. If nothing representative exists, output
-`TIER: NONE`.
-
-Candidate arithmetic regions (id | operation | instances):
-bilinearintrp.$mul$raygentop.v:2874$348 | multiply | 1
-bilinearintrp.$mul$raygentop.v:2875$349 | multiply | 1
-bilinearintrp.$mul$raygentop.v:2876$350 | multiply | 1
-bilinearintrp.$mul$raygentop.v:2877$351 | multiply | 1
-bilinearintrp.$mul$raygentop.v:2878$352 | multiply | 1
-bilinearintrp.$mul$raygentop.v:2879$353 | multiply | 1
-bilinearintrp.$mul$raygentop.v:2880$354 | multiply | 1
-bilinearintrp.$mul$raygentop.v:2881$355 | multiply | 1
-bilinearintrp.$mul$raygentop.v:2882$356 | multiply | 1
-matmult.$mul$raygentop.v:335$15 | multiply | 1
-matmult.$mul$raygentop.v:336$16 | multiply | 1
-matmult.$mul$raygentop.v:337$17 | multiply | 1
-matmult.$mul$raygentop.v:338$18 | multiply | 1
-matmult.$mul$raygentop.v:339$19 | multiply | 1
-matmult.$mul$raygentop.v:340$20 | multiply | 1
-matmult.$mul$raygentop.v:341$21 | multiply | 1
-matmult.$mul$raygentop.v:342$22 | multiply | 1
-matmult.$mul$raygentop.v:343$23 | multiply | 1
-
-Classify the tier of the change you propose (a datatype/algorithm variant, T3, is out of scope —
-do not propose one):
-- T1: Direct replacement: no change to the computed function or surrounding structure; no datatype change.
-- T2: Local restructuring only; preserve the region's function, role, and live consumers; no new operation/datatype family.
-
-Read the source. Output EXACTLY this header (uppercase keys), then the plan:
-
-TIER: T1 | T2 | NONE
-REGIONS: &lt;comma-separated region id(s)&gt;            # one id for a direct swap; N ids for a fusion
-SHARED_REDUCTION: &lt;the signal/module the terms feed&gt;   # or NONE for a single region
-MAPPING: &lt;which operands map to which of the mode's ports&gt;
-PLAN: &lt;how the module's live inputs/outputs and downstream consumers are preserved; any introduced
-operations/datatypes (should be NONE for T1/T2); and the main risks&gt;
-
-
-Read these files in this directory: raygentop.v</pre><div class="label">response</div><pre class="response">TIER: T2
-REGIONS: bilinearintrp.$mul$raygentop.v:2874$348, bilinearintrp.$mul$raygentop.v:2875$349
-SHARED_REDUCTION: bilinearintrp.r = i1r + i2r + i3r
-MAPPING: ax=ul (zero-extended from 8 bits), ay=rul (zero-extended from 7 bits), bx=i2r (zero-extended from 15 bits); result replaces the i1r+i2r partial sum, with i3r retained.
-PLAN: In bilinearintrp, preserve the registered inputs and the live r consumer, replacing the first two terms of the existing red-channel common reduction with one combinational comb_mult_add_16 instance. Feed its 64-bit result through the original-width truncation needed by the reduction, then add i3r as before. No introduced operations or datatypes beyond the required primitive; zero-extension preserves the unsigned source semantics. Main risks are signed-block interpretation and matching the original truncation width/timing.</pre><details class="inner"><summary>tool events <span class="meta">3 recorded, 0 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>grep</code> <span class="meta"><span class="ok">completed</span> module matmult|module bilinearintrp|assign|always</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+  Wire EVERY operand of the fused region onto the input ports (name them exactly as above); drive the region's real consumer from the output port. Tie unused term ports to 0. Do not leave input ports unconnected.</pre></div></details><details class="section"><summary><h2>Agent calls</h2> <span class="meta">6 call(s), in order</span></summary><div class="body"><details class="call"><summary>Call 1 · <b>planner</b> · opencode-go/gpt-5.6-luna · <span class="ok">ok</span> <span class="meta">in 9 · out 434 · reasoning 1577 · cache read 12344 · cache write 10338 · 23.9 s</span></summary><div class="body"><div class="label">prompt</div><div class="md prompt"><p>You are the Planner. Choose the best region(s) in raygentop.v to adapt so hard-block mode<br>'comb_mult_add_16_mode' (Hard-block primitive to instantiate: <code>comb_mult_add_16</code>   (precision INT16)<br>  computes: out = ax*ay + bx<br>  input ports:  ax[16], ay[16], bx[32]<br>  output ports: result[64]<br>  arithmetic: the block's operands and result are signed two's complement. A design operand narrower than its port must be widened to the port width: zero-extended if the design treats it as unsigned, sign-extended if signed. An unsigned design operand as wide as its port has no exact representation on this block.<br>  timing: the block is combinational; <code>result</code> is valid in the same cycle the inputs are applied (no clock port).<br>  Wire EVERY operand of the fused region onto the input ports (name them exactly as above); drive the region's real consumer from the output port. Tie unused term ports to 0. Do not leave input ports unconnected.) is exercised, then write a concrete plan. Do NOT edit files —<br>output the header + plan only.</p><p>Pick the most REPRESENTATIVE mapping — arithmetic a real designer of THIS workload would actually<br>map to 'comb_mult_add_16_mode', never fabricated computation. For a sum-of-products / MAC mode you must<br>find product terms that ALREADY feed a COMMON reduction (a shared sum/accumulator); products that<br>feed SEPARATE outputs (e.g. distinct systolic-array elements) must NOT be fused. An isolated scalar<br>multiply is NOT a representative sum-of-products target. If nothing representative exists, output<br><code>TIER: NONE</code>.</p><p>Candidate arithmetic regions (id | operation | instances):<br>bilinearintrp.$mul$raygentop.v:2874$348 | multiply | 1<br>bilinearintrp.$mul$raygentop.v:2875$349 | multiply | 1<br>bilinearintrp.$mul$raygentop.v:2876$350 | multiply | 1<br>bilinearintrp.$mul$raygentop.v:2877$351 | multiply | 1<br>bilinearintrp.$mul$raygentop.v:2878$352 | multiply | 1<br>bilinearintrp.$mul$raygentop.v:2879$353 | multiply | 1<br>bilinearintrp.$mul$raygentop.v:2880$354 | multiply | 1<br>bilinearintrp.$mul$raygentop.v:2881$355 | multiply | 1<br>bilinearintrp.$mul$raygentop.v:2882$356 | multiply | 1<br>matmult.$mul$raygentop.v:335$15 | multiply | 1<br>matmult.$mul$raygentop.v:336$16 | multiply | 1<br>matmult.$mul$raygentop.v:337$17 | multiply | 1<br>matmult.$mul$raygentop.v:338$18 | multiply | 1<br>matmult.$mul$raygentop.v:339$19 | multiply | 1<br>matmult.$mul$raygentop.v:340$20 | multiply | 1<br>matmult.$mul$raygentop.v:341$21 | multiply | 1<br>matmult.$mul$raygentop.v:342$22 | multiply | 1<br>matmult.$mul$raygentop.v:343$23 | multiply | 1</p><p>Classify the tier of the change you propose (a datatype/algorithm variant, T3, is out of scope —<br>do not propose one):</p><ul><li>T1: Direct replacement: no change to the computed function or surrounding structure; no datatype change.</li><li>T2: Local restructuring only; preserve the region's function, role, and live consumers; no new operation/datatype family.</li></ul><p>Read the source. Output EXACTLY this header (uppercase keys), then the plan:</p><p>TIER: T1 | T2 | NONE<br>REGIONS: &lt;comma-separated region id(s)&gt;            # one id for a direct swap; N ids for a fusion<br>SHARED_REDUCTION: &lt;the signal/module the terms feed&gt;   # or NONE for a single region<br>MAPPING: &lt;which operands map to which of the mode's ports&gt;<br>PLAN: &lt;how the module's live inputs/outputs and downstream consumers are preserved; any introduced<br>operations/datatypes (should be NONE for T1/T2); and the main risks&gt;</p><p>Read these files in this directory: raygentop.v</p></div><div class="label">response</div><div class="md response"><p>TIER: T2<br>REGIONS: bilinearintrp.$mul$raygentop.v:2874$348, bilinearintrp.$mul$raygentop.v:2875$349<br>SHARED_REDUCTION: bilinearintrp.r = i1r + i2r + i3r<br>MAPPING: ax=ul (zero-extended from 8 bits), ay=rul (zero-extended from 7 bits), bx=i2r (zero-extended from 15 bits); result replaces the i1r+i2r partial sum, with i3r retained.<br>PLAN: In bilinearintrp, preserve the registered inputs and the live r consumer, replacing the first two terms of the existing red-channel common reduction with one combinational comb_mult_add_16 instance. Feed its 64-bit result through the original-width truncation needed by the reduction, then add i3r as before. No introduced operations or datatypes beyond the required primitive; zero-extension preserves the unsigned source semantics. Main risks are signed-block interpretation and matching the original truncation width/timing.</p></div><details class="inner"><summary>tool events <span class="meta">3 recorded, 0 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>grep</code> <span class="meta"><span class="ok">completed</span> module matmult|module bilinearintrp|assign|always</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
  "pattern": "module matmult|module bilinearintrp|assign|always",
  "path": "/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/_scratch/oc_hl4mkacd/raygentop.v",
  "include": "raygentop.v"
@@ -498,27 +479,7 @@ PLAN: In bilinearintrp, preserve the registered inputs and the live r consumer, 
 2876:            i3r &lt;= wl * rwl ; 
 2877:            i1g &lt;= ul * gul ; 
 2878:            i2g &lt;= vl * gv
-…[truncated, 4634 chars total]</pre></div></details></div></div></details></div></details><details class="call"><summary>Call 2 · <b>reviewer:plan</b> · opencode-go/gpt-5.6-luna · <span class="ok">ok</span> <span class="meta">in 9 · out 229 · reasoning 653 · cache read 11079 · cache write 8389 · 18.2 s</span></summary><div class="body"><div class="label">prompt</div><pre class="prompt">You are an INDEPENDENT, fair Reviewer. You did not write this plan. Judge it on merit.
-Target mode: comb_mult_add_16_mode   Tier: T2   Rule: Local restructuring only; preserve the region's function, role, and live consumers; no new operation/datatype family.
-Region: bilinearintrp.$mul$raygentop.v:2874$348  (op 'multiply', datatype int8, consumers ['bilinearintrp']).
-APPROVE the plan if it is correct and representative — a legitimate adaptation does not need to
-be perfect, only sound. Do NOT demand rewrites for style, minor wording, or hypothetical concerns.
-REVISE ONLY for a CONCRETE, specific violation you can name: (a) it changes the computed function
-when the tier forbids it; (b) it introduces an operation/datatype absent from the design and not
-admitted by the tier; (c) it fabricates terms to match a mode's n_terms (products that did not
-exist / do not share a reduction); (d) it wires the mode to constants or a dead sink (mode island).
-If none of these apply, APPROVE.
-Your FIRST line must be exactly 'APPROVE' or 'REVISE', nothing else. If REVISE, the next lines
-must name the specific violation (a/b/c/d) and what to change.
-
---- PLAN ---
-TIER: T2
-REGIONS: bilinearintrp.$mul$raygentop.v:2874$348, bilinearintrp.$mul$raygentop.v:2875$349
-SHARED_REDUCTION: bilinearintrp.r = i1r + i2r + i3r
-MAPPING: ax=ul (zero-extended from 8 bits), ay=rul (zero-extended from 7 bits), bx=i2r (zero-extended from 15 bits); result replaces the i1r+i2r partial sum, with i3r retained.
-PLAN: In bilinearintrp, preserve the registered inputs and the live r consumer, replacing the first two terms of the existing red-channel common reduction with one combinational comb_mult_add_16 instance. Feed its 64-bit result through the original-width truncation needed by the reduction, then add i3r as before. No introduced operations or datatypes beyond the required primitive; zero-extension preserves the unsigned source semantics. Main risks are signed-block interpretation and matching the original truncation width/timing.
-
-Read these files in this directory: raygentop.v</pre><div class="label">response</div><pre class="response">APPROVE</pre><details class="inner"><summary>tool events <span class="meta">3 recorded, 0 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>read</code> <span class="meta"><span class="ok">completed</span> /home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/_scratch/oc_wpo9845w/raygentop.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+…[truncated, 4634 chars total]</pre></div></details></div></div></details></div></details><details class="call"><summary>Call 2 · <b>reviewer:plan</b> · opencode-go/gpt-5.6-luna · <span class="ok">ok</span> <span class="meta">in 9 · out 229 · reasoning 653 · cache read 11079 · cache write 8389 · 18.2 s</span></summary><div class="body"><div class="label">prompt</div><div class="md prompt"><p>You are an INDEPENDENT, fair Reviewer. You did not write this plan. Judge it on merit.<br>Target mode: comb_mult_add_16_mode   Tier: T2   Rule: Local restructuring only; preserve the region's function, role, and live consumers; no new operation/datatype family.<br>Region: bilinearintrp.$mul$raygentop.v:2874$348  (op 'multiply', datatype int8, consumers ['bilinearintrp']).<br>APPROVE the plan if it is correct and representative — a legitimate adaptation does not need to<br>be perfect, only sound. Do NOT demand rewrites for style, minor wording, or hypothetical concerns.<br>REVISE ONLY for a CONCRETE, specific violation you can name: (a) it changes the computed function<br>when the tier forbids it; (b) it introduces an operation/datatype absent from the design and not<br>admitted by the tier; (c) it fabricates terms to match a mode's n_terms (products that did not<br>exist / do not share a reduction); (d) it wires the mode to constants or a dead sink (mode island).<br>If none of these apply, APPROVE.<br>Your FIRST line must be exactly 'APPROVE' or 'REVISE', nothing else. If REVISE, the next lines<br>must name the specific violation (a/b/c/d) and what to change.</p><p>--- PLAN ---<br>TIER: T2<br>REGIONS: bilinearintrp.$mul$raygentop.v:2874$348, bilinearintrp.$mul$raygentop.v:2875$349<br>SHARED_REDUCTION: bilinearintrp.r = i1r + i2r + i3r<br>MAPPING: ax=ul (zero-extended from 8 bits), ay=rul (zero-extended from 7 bits), bx=i2r (zero-extended from 15 bits); result replaces the i1r+i2r partial sum, with i3r retained.<br>PLAN: In bilinearintrp, preserve the registered inputs and the live r consumer, replacing the first two terms of the existing red-channel common reduction with one combinational comb_mult_add_16 instance. Feed its 64-bit result through the original-width truncation needed by the reduction, then add i3r as before. No introduced operations or datatypes beyond the required primitive; zero-extension preserves the unsigned source semantics. Main risks are signed-block interpretation and matching the original truncation width/timing.</p><p>Read these files in this directory: raygentop.v</p></div><div class="label">response</div><div class="md response"><p>APPROVE</p></div><details class="inner"><summary>tool events <span class="meta">3 recorded, 0 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>read</code> <span class="meta"><span class="ok">completed</span> /home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/_scratch/oc_wpo9845w/raygentop.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
  "filePath": "/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/_scratch/oc_wpo9845w/raygentop.v",
  "offset": 2840,
  "limit": 80
@@ -744,43 +705,7 @@ Read these files in this directory: raygentop.v</pre><div class="label">response
 2814:         reg[6:0] bul; 
 2815:         reg[6:0] bvl; 
 2816:     
-…[truncated, 5136 chars total]</pre></div></details></div></div></details></div></details><details class="call"><summary>Call 3 · <b>editor</b> · opencode-go/gpt-5.6-luna · <span class="ok">ok</span> <span class="meta">in 39 · out 1525 · reasoning 1075 · cache read 110179 · cache write 12104 · 39.3 s</span></summary><div class="body"><div class="label">prompt</div><pre class="prompt">Edit raygentop.v in this directory. Local restructuring: re-express the region (e.g. a multiply array + adder tree as a fused sum-of-products) to reach the mode; preserve the region's function and role, keep the rest of the design unchanged, wire the mode's real consumers.
-
-Goal: rewrite the RTL so the hard-block mode 'comb_mult_add_16_mode' is exercised in the packed netlist,
-doing real work, while preserving the design's behaviour and role.
-Tier: T2
-
-Hard-block primitive to instantiate: `comb_mult_add_16`   (precision INT16)
-  computes: out = ax*ay + bx
-  input ports:  ax[16], ay[16], bx[32]
-  output ports: result[64]
-  arithmetic: the block's operands and result are signed two's complement. A design operand narrower than its port must be widened to the port width: zero-extended if the design treats it as unsigned, sign-extended if signed. An unsigned design operand as wide as its port has no exact representation on this block.
-  timing: the block is combinational; `result` is valid in the same cycle the inputs are applied (no clock port).
-  Wire EVERY operand of the fused region onto the input ports (name them exactly as above); drive the region's real consumer from the output port. Tie unused term ports to 0. Do not leave input ports unconnected.
-
-This is a MULTI-REGION fusion: aggregate these 1 product regions — bilinearintrp.$mul$raygentop.v:2874$348, bilinearintrp.$mul$raygentop.v:2875$349 — which already feed the common reduction 'bilinearintrp.r = i1r + i2r + i3r', into one 1-term 'comb_mult_add_16_mode' instance. Fuse only these existing terms; do not invent new ones.
-Rules: edit Verilog source only; preserve the module's live inputs/outputs and its downstream
-consumers; do not introduce operations or datatypes absent from the design unless this tier
-admits a variant; keep the surrounding design unchanged for T1/T2. Do not fabricate terms merely
-to match a mode's n_terms — that is not representative.
-
-
-Follow this approved plan:
-TIER: T2
-REGIONS: bilinearintrp.$mul$raygentop.v:2874$348, bilinearintrp.$mul$raygentop.v:2875$349
-SHARED_REDUCTION: bilinearintrp.r = i1r + i2r + i3r
-MAPPING: ax=ul (zero-extended from 8 bits), ay=rul (zero-extended from 7 bits), bx=i2r (zero-extended from 15 bits); result replaces the i1r+i2r partial sum, with i3r retained.
-PLAN: In bilinearintrp, preserve the registered inputs and the live r consumer, replacing the first two terms of the existing red-channel common reduction with one combinational comb_mult_add_16 instance. Feed its 64-bit result through the original-width truncation needed by the reduction, then add i3r as before. No introduced operations or datatypes beyond the required primitive; zero-extension preserves the unsigned source semantics. Main risks are signed-block interpretation and matching the original truncation width/timing.
-
-Work iteratively IN THIS SESSION: after each edit, run `bash check.sh raygentop.v` and read its output; if it does not synthesize, fix the RTL and check again. Do NOT run place-and-route or any VTR/vpr command — that is verified separately. Stop when check.sh reports it synthesizes cleanly with the intended arithmetic.</pre><div class="label">response</div><pre class="response">Edited `raygentop.v`:
-
-- Added `comb_mult_add_16` for the red-channel partial sum.
-- Zero-extended `ul`, `rul`, and `i2r` to the required port widths.
-- Truncated the 64-bit result back to 15 bits.
-- Preserved `i3r` and the live `r` consumer.
-- Removed the replaced `i1r` multiply.
-
-Verification: `bash check.sh raygentop.v` reports `OK: synthesizes cleanly`.</pre><details class="inner"><summary>tool events <span class="meta">16 recorded, 0 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>todowrite</code> <span class="meta"><span class="ok">completed</span> </span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+…[truncated, 5136 chars total]</pre></div></details></div></div></details></div></details><details class="call"><summary>Call 3 · <b>editor</b> · opencode-go/gpt-5.6-luna · <span class="ok">ok</span> <span class="meta">in 39 · out 1525 · reasoning 1075 · cache read 110179 · cache write 12104 · 39.3 s · read outside the work dir</span></summary><div class="body"><details class="inner"><summary>read outside the work dir: a behavioral model, the framework repository <span class="meta">2 path(s)</span></summary><div class="body"><ul class="paths"><li><code>/home/samu/dev/llm-hardblocks/benchadapt</code></li><li><code>/home/samu/dev/llm-hardblocks/benchadapt/verify/models/comb_mult_add_16.v</code></li></ul></div></details><div class="label">prompt</div><div class="md prompt"><p>Edit raygentop.v in this directory. Local restructuring: re-express the region (e.g. a multiply array + adder tree as a fused sum-of-products) to reach the mode; preserve the region's function and role, keep the rest of the design unchanged, wire the mode's real consumers.</p><p>Goal: rewrite the RTL so the hard-block mode 'comb_mult_add_16_mode' is exercised in the packed netlist,<br>doing real work, while preserving the design's behaviour and role.<br>Tier: T2</p><p>Hard-block primitive to instantiate: <code>comb_mult_add_16</code>   (precision INT16)<br>  computes: out = ax*ay + bx<br>  input ports:  ax[16], ay[16], bx[32]<br>  output ports: result[64]<br>  arithmetic: the block's operands and result are signed two's complement. A design operand narrower than its port must be widened to the port width: zero-extended if the design treats it as unsigned, sign-extended if signed. An unsigned design operand as wide as its port has no exact representation on this block.<br>  timing: the block is combinational; <code>result</code> is valid in the same cycle the inputs are applied (no clock port).<br>  Wire EVERY operand of the fused region onto the input ports (name them exactly as above); drive the region's real consumer from the output port. Tie unused term ports to 0. Do not leave input ports unconnected.</p><p>This is a MULTI-REGION fusion: aggregate these 1 product regions — bilinearintrp.$mul$raygentop.v:2874$348, bilinearintrp.$mul$raygentop.v:2875$349 — which already feed the common reduction 'bilinearintrp.r = i1r + i2r + i3r', into one 1-term 'comb_mult_add_16_mode' instance. Fuse only these existing terms; do not invent new ones.<br>Rules: edit Verilog source only; preserve the module's live inputs/outputs and its downstream<br>consumers; do not introduce operations or datatypes absent from the design unless this tier<br>admits a variant; keep the surrounding design unchanged for T1/T2. Do not fabricate terms merely<br>to match a mode's n_terms — that is not representative.</p><p>Follow this approved plan:<br>TIER: T2<br>REGIONS: bilinearintrp.$mul$raygentop.v:2874$348, bilinearintrp.$mul$raygentop.v:2875$349<br>SHARED_REDUCTION: bilinearintrp.r = i1r + i2r + i3r<br>MAPPING: ax=ul (zero-extended from 8 bits), ay=rul (zero-extended from 7 bits), bx=i2r (zero-extended from 15 bits); result replaces the i1r+i2r partial sum, with i3r retained.<br>PLAN: In bilinearintrp, preserve the registered inputs and the live r consumer, replacing the first two terms of the existing red-channel common reduction with one combinational comb_mult_add_16 instance. Feed its 64-bit result through the original-width truncation needed by the reduction, then add i3r as before. No introduced operations or datatypes beyond the required primitive; zero-extension preserves the unsigned source semantics. Main risks are signed-block interpretation and matching the original truncation width/timing.</p><p>Work iteratively IN THIS SESSION: after each edit, run <code>bash check.sh raygentop.v</code> and read its output; if it does not synthesize, fix the RTL and check again. Do NOT run place-and-route or any VTR/vpr command — that is verified separately. Stop when check.sh reports it synthesizes cleanly with the intended arithmetic.</p></div><div class="label">response</div><div class="md response"><p>Edited <code>raygentop.v</code>:</p><ul><li>Added <code>comb_mult_add_16</code> for the red-channel partial sum.</li><li>Zero-extended <code>ul</code>, <code>rul</code>, and <code>i2r</code> to the required port widths.</li><li>Truncated the 64-bit result back to 15 bits.</li><li>Preserved <code>i3r</code> and the live <code>r</code> consumer.</li><li>Removed the replaced <code>i1r</code> multiply.</li></ul><p>Verification: <code>bash check.sh raygentop.v</code> reports <code>OK: synthesizes cleanly</code>.</p></div><details class="inner"><summary>tool events <span class="meta">16 recorded, 0 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>todowrite</code> <span class="meta"><span class="ok">completed</span> </span></summary><div class="body"><div class="label">input</div><pre class="plain">{
  "todos": [
   {
    "content": "Inspect raygentop.v reduction and surrounding declarations",
@@ -1170,117 +1095,7 @@ M outputs/adapt/vtr_demo/raygentop/comb_mult_add_16_mode/20260912-174718-9ca8d3/
     "status": "completed",
     "priority": "high"
   }
-]</pre></div></details></div></div></details></div></details><details class="call"><summary>Call 4 · <b>reviewer:acceptance</b> · opencode-go/gpt-5.6-luna · <span class="ok">ok</span> <span class="meta">in 9 · out 249 · reasoning 669 · cache read 13656 · cache write 7882 · 16.8 s</span></summary><div class="body"><div class="label">prompt</div><pre class="prompt">You are an INDEPENDENT ACCEPTANCE REVIEWER — the gate of record for whether an adapted design is
-a LEGITIMATE member of its benchmark suite. You did NOT plan or write this edit. Judge only what
-is in front of you. Your verdict is final and fully automated; there is no human backstop, so err
-toward rejecting anything you cannot positively ground.
-
-FRAMING — refute by default. Your job is to find why this adaptation is NOT a legitimate suite
-member. Assume it is contrived until the evidence shows otherwise. A rewrite that merely "makes
-the mode appear in the netlist" is NOT sufficient — the mode must do real work the original
-workload actually implied.
-
-This case has already passed the deterministic structural, provenance, and (for T3) evidence
-gates — do not re-litigate those mechanically. Your judgement is the *legitimacy* call they
-cannot make: would a real designer of THIS workload ship this, or is it a mode-island / fabricated
-dot-product / gratuitous variant dressed up to pass?
-
-REJECT if any of these hold:
-- (a) FABRICATED TERMS — a fused N-term product/sum aggregates operands that did not genuinely
-  share a reduction in the original; the "dot product" is manufactured to fill the mode's arity.
-- (b) MODE ISLAND / DEAD WORK — the mode's result does not flow to the design's real outputs, or
-  is wired to constants / a sink that the rest of the design ignores.
-- (c) ROLE BREAK — the adapted region no longer plays the workload role the witness recorded
-  (e.g. a control-path multiply repurposed as a fake datapath MAC).
-- (d) UNGROUNDED VARIANT (T3) — the precision/algorithm variant is not the one the cited sibling
-  design evidences; the adaptation drifts to a workload character the suite does not contain.
-
-ACCEPT if the adaptation is sound: the mapped arithmetic genuinely existed, the fused terms really
-shared a reduction, the mode's output drives the original consumers, and the workload role is
-preserved. Legitimate adaptation need not be optimal — only real.
-
-You MUST ground your verdict: cite the specific preserved role (from the witness), the real
-region(s)/reduction the mode maps onto, and — for T3 — the sibling evidence axis. A verdict you
-cannot ground is a REJECT.
-
---- ADAPTATION UNDER REVIEW ---
-Target mode: comb_mult_add_16_mode   Tier: T2
-Region witness (the 'before'): role 'bilinearintrp', operation 'multiply', datatype int8,
-  regions ['bilinearintrp.$mul$raygentop.v:2874$348', 'bilinearintrp.$mul$raygentop.v:2875$349'], shared reduction 'bilinearintrp.r = i1r + i2r + i3r', downstream consumers ['bilinearintrp'].
-Manifest (the 'after'): introduced operations [], introduced datatypes
-  [], intended consumers ['bilinearintrp'].
-Deterministic gates: PASSED. Evidence floor: no variant introduced (T1/T2).
-Packed netlist: target mode present = True.
-
---- EDIT DIFF ---
---- outputs/adapt/vtr_demo/raygentop/comb_mult_add_16_mode/20260912-174718-9ca8d3/edit/.pristine/raygentop/raygentop.v	2026-08-16 18:14:11.414163698 -0700
-+++ outputs/adapt/vtr_demo/raygentop/comb_mult_add_16_mode/20260912-174718-9ca8d3/edit/raygentop/raygentop.v	2026-09-12 17:48:23.656850362 -0700
-@@ -2802,9 +2802,8 @@
-         reg[14:0] i1g; 
-         reg[14:0] i2g; 
-         reg[14:0] i3g; 
--        reg[14:0] i1r; 
--        reg[14:0] i2r; 
--        reg[14:0] i3r; 
-+         reg[14:0] i2r; 
-+         reg[14:0] i3r; 
-         reg[6:0] rul; 
-         reg[6:0] rvl; 
-         reg[6:0] rwl; 
-@@ -2812,8 +2811,18 @@
-         reg[6:0] gvl; 
-         reg[6:0] gwl; 
-         reg[6:0] bul; 
--        reg[6:0] bvl; 
--        reg[6:0] bwl; 
-+         reg[6:0] bvl; 
-+         reg[6:0] bwl; 
-+         wire[63:0] fused_i12r_result;
-+         wire[14:0] fused_i12r;
-+
-+         comb_mult_add_16 fused_i12r_block (
-+            .ax ({8'b0, ul}),
-+            .ay ({9'b0, rul}),
-+            .bx ({17'b0, i2r}),
-+            .result (fused_i12r_result)
-+         );
-+         assign fused_i12r = fused_i12r_result[14:0];
- 
-         always @(selectuv or u01a or u01b or u01c or v01a or v01b or v01c or u10a or 
-                  u10b or u10c or v10a or v10b or v10c)
-@@ -2871,8 +2880,7 @@
-            bul &lt;= bu ; 
-            bvl &lt;= bv ; 
-            bwl &lt;= bw ; 
--           i1r &lt;= ul * rul ; 
--           i2r &lt;= vl * rvl ; 
-+            i2r &lt;= vl * rvl ; 
-            i3r &lt;= wl * rwl ; 
-            i1g &lt;= ul * gul ; 
-            i2g &lt;= vl * gvl ; 
-@@ -2881,7 +2889,7 @@
-            i2b &lt;= vl * bvl ; 
-            i3b &lt;= wl * bwl ;  
-         end 
--        assign r = (i1r + i2r + i3r) ;
-+         assign r = (fused_i12r + i3r) ;
-         assign g = (i1g + i2g + i3g) ;
-         assign b = (i1b + i2b + i3b) ;
-      endmodule
-@@ -2975,4 +2983,3 @@
-        end 
-     end 
-  endmodule
--
-
-
-Your FIRST line must be exactly 'ACCEPT' or 'REJECT'. Then, on the following lines, state the
-grounding (role preserved / real region mapped / sibling evidence) or the specific violation
-(a/b/c/d) and what makes it illegitimate.
-
-Read these files in this directory: raygentop.v</pre><div class="label">response</div><pre class="response">REJECT
-
-The witness role is bilinear interpolation (`bilinearintrp`), and the real reduction is `i1r + i2r + i3r` driving output `r`. However, the adaptation breaks that role: `fused_i12r` computes the current `ul * rul`, while `i2r` is a registered prior-cycle product. It therefore does not preserve the original aligned reduction represented by `i1r + i2r + i3r`; the mode performs a temporally mismatched sum rather than the original interpolation computation.</pre><details class="inner"><summary>tool events <span class="meta">2 recorded, 0 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>read</code> <span class="meta"><span class="ok">completed</span> /home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/_scratch/oc_usjcin3g/raygentop.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+]</pre></div></details></div></div></details></div></details><details class="call"><summary>Call 4 · <b>reviewer:acceptance</b> · opencode-go/gpt-5.6-luna · <span class="ok">ok</span> <span class="meta">in 9 · out 249 · reasoning 669 · cache read 13656 · cache write 7882 · 16.8 s</span></summary><div class="body"><div class="label">prompt</div><div class="md prompt"><p>You are an INDEPENDENT ACCEPTANCE REVIEWER — the gate of record for whether an adapted design is<br>a LEGITIMATE member of its benchmark suite. You did NOT plan or write this edit. Judge only what<br>is in front of you. Your verdict is final and fully automated; there is no human backstop, so err<br>toward rejecting anything you cannot positively ground.</p><p>FRAMING — refute by default. Your job is to find why this adaptation is NOT a legitimate suite<br>member. Assume it is contrived until the evidence shows otherwise. A rewrite that merely "makes<br>the mode appear in the netlist" is NOT sufficient — the mode must do real work the original<br>workload actually implied.</p><p>This case has already passed the deterministic structural, provenance, and (for T3) evidence<br>gates — do not re-litigate those mechanically. Your judgement is the <em>legitimacy</em> call they<br>cannot make: would a real designer of THIS workload ship this, or is it a mode-island / fabricated<br>dot-product / gratuitous variant dressed up to pass?</p><p>REJECT if any of these hold:</p><ul><li>(a) FABRICATED TERMS — a fused N-term product/sum aggregates operands that did not genuinely<br> share a reduction in the original; the "dot product" is manufactured to fill the mode's arity.</li><li>(b) MODE ISLAND / DEAD WORK — the mode's result does not flow to the design's real outputs, or<br> is wired to constants / a sink that the rest of the design ignores.</li><li>(c) ROLE BREAK — the adapted region no longer plays the workload role the witness recorded<br> (e.g. a control-path multiply repurposed as a fake datapath MAC).</li><li>(d) UNGROUNDED VARIANT (T3) — the precision/algorithm variant is not the one the cited sibling<br> design evidences; the adaptation drifts to a workload character the suite does not contain.</li></ul><p>ACCEPT if the adaptation is sound: the mapped arithmetic genuinely existed, the fused terms really<br>shared a reduction, the mode's output drives the original consumers, and the workload role is<br>preserved. Legitimate adaptation need not be optimal — only real.</p><p>You MUST ground your verdict: cite the specific preserved role (from the witness), the real<br>region(s)/reduction the mode maps onto, and — for T3 — the sibling evidence axis. A verdict you<br>cannot ground is a REJECT.</p><p>--- ADAPTATION UNDER REVIEW ---<br>Target mode: comb_mult_add_16_mode   Tier: T2<br>Region witness (the 'before'): role 'bilinearintrp', operation 'multiply', datatype int8,<br>  regions ['bilinearintrp.$mul$raygentop.v:2874$348', 'bilinearintrp.$mul$raygentop.v:2875$349'], shared reduction 'bilinearintrp.r = i1r + i2r + i3r', downstream consumers ['bilinearintrp'].<br>Manifest (the 'after'): introduced operations [], introduced datatypes<br>  [], intended consumers ['bilinearintrp'].<br>Deterministic gates: PASSED. Evidence floor: no variant introduced (T1/T2).<br>Packed netlist: target mode present = True.</p><p>--- EDIT DIFF ---<br>--- outputs/adapt/vtr_demo/raygentop/comb_mult_add_16_mode/20260912-174718-9ca8d3/edit/.pristine/raygentop/raygentop.v	2026-08-16 18:14:11.414163698 -0700<br>+++ outputs/adapt/vtr_demo/raygentop/comb_mult_add_16_mode/20260912-174718-9ca8d3/edit/raygentop/raygentop.v	2026-09-12 17:48:23.656850362 -0700<br>@@ -2802,9 +2802,8 @@<br>         reg[14:0] i1g; <br>         reg[14:0] i2g; <br>         reg[14:0] i3g; </p><ul><li>reg[14:0] i1r; </li><li>reg[14:0] i2r; </li><li>reg[14:0] i3r; </li><li>reg[14:0] i2r; </li><li><p>reg[14:0] i3r; <br>        reg[6:0] rul; <br>        reg[6:0] rvl; <br>        reg[6:0] rwl; <br>@@ -2812,8 +2811,18 @@<br>        reg[6:0] gvl; <br>        reg[6:0] gwl; <br>        reg[6:0] bul; </p></li><li>reg[6:0] bvl; </li><li>reg[6:0] bwl; </li><li>reg[6:0] bvl; </li><li>reg[6:0] bwl; </li><li>wire[63:0] fused_i12r_result;</li><li>wire[14:0] fused_i12r;<br>+</li><li>comb_mult_add_16 fused_i12r_block (</li><li>.ax ({8'b0, ul}),</li><li>.ay ({9'b0, rul}),</li><li>.bx ({17'b0, i2r}),</li><li>.result (fused_i12r_result)</li><li>);</li><li>assign fused_i12r = fused_i12r_result[14:0];</li></ul><p>         always @(selectuv or u01a or u01b or u01c or v01a or v01b or v01c or u10a or <br>                  u10b or u10c or v10a or v10b or v10c)<br>@@ -2871,8 +2880,7 @@<br>            bul &lt;= bu ; <br>            bvl &lt;= bv ; <br>            bwl &lt;= bw ; </p><ul><li>i1r &lt;= ul * rul ; </li><li>i2r &lt;= vl * rvl ; </li><li><p>i2r &lt;= vl * rvl ; <br>           i3r &lt;= wl * rwl ; <br>           i1g &lt;= ul * gul ; <br>           i2g &lt;= vl * gvl ; <br>@@ -2881,7 +2889,7 @@<br>           i2b &lt;= vl * bvl ; <br>           i3b &lt;= wl * bwl ;  <br>        end </p></li><li>assign r = (i1r + i2r + i3r) ;</li><li><p>assign r = (fused_i12r + i3r) ;<br>        assign g = (i1g + i2g + i3g) ;<br>        assign b = (i1b + i2b + i3b) ;<br>     endmodule<br>@@ -2975,4 +2983,3 @@<br>       end <br>    end <br> endmodule<br>-</p></li></ul><p>Your FIRST line must be exactly 'ACCEPT' or 'REJECT'. Then, on the following lines, state the<br>grounding (role preserved / real region mapped / sibling evidence) or the specific violation<br>(a/b/c/d) and what makes it illegitimate.</p><p>Read these files in this directory: raygentop.v</p></div><div class="label">response</div><div class="md response"><p>REJECT</p><p>The witness role is bilinear interpolation (<code>bilinearintrp</code>), and the real reduction is <code>i1r + i2r + i3r</code> driving output <code>r</code>. However, the adaptation breaks that role: <code>fused_i12r</code> computes the current <code>ul * rul</code>, while <code>i2r</code> is a registered prior-cycle product. It therefore does not preserve the original aligned reduction represented by <code>i1r + i2r + i3r</code>; the mode performs a temporally mismatched sum rather than the original interpolation computation.</p></div><details class="inner"><summary>tool events <span class="meta">2 recorded, 0 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>read</code> <span class="meta"><span class="ok">completed</span> /home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/_scratch/oc_usjcin3g/raygentop.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
  "filePath": "/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/_scratch/oc_usjcin3g/raygentop.v",
  "offset": 2780,
  "limit": 125
@@ -1414,42 +1229,7 @@ The witness role is bilinear interpolation (`bilinearintrp`), and the real reduc
 }</pre><div class="label">output</div><pre class="plain">Found 1 matches
 /home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/_scratch/oc_usjcin3g/raygentop.v:
   Line 2819:          comb_mult_add_16 fused_i12r_block (
-</pre></div></details></div></div></details></div></details><details class="call"><summary>Call 5 · <b>editor</b> · opencode-go/gpt-5.6-luna · <span class="ok">ok</span> <span class="meta">in 15 · out 626 · reasoning 2675 · cache read 73242 · cache write 5060 · 36.3 s</span></summary><div class="body"><div class="label">prompt</div><pre class="prompt">Edit raygentop.v in this directory. Local restructuring: re-express the region (e.g. a multiply array + adder tree as a fused sum-of-products) to reach the mode; preserve the region's function and role, keep the rest of the design unchanged, wire the mode's real consumers.
-
-Goal: rewrite the RTL so the hard-block mode 'comb_mult_add_16_mode' is exercised in the packed netlist,
-doing real work, while preserving the design's behaviour and role.
-Tier: T2
-
-Hard-block primitive to instantiate: `comb_mult_add_16`   (precision INT16)
-  computes: out = ax*ay + bx
-  input ports:  ax[16], ay[16], bx[32]
-  output ports: result[64]
-  arithmetic: the block's operands and result are signed two's complement. A design operand narrower than its port must be widened to the port width: zero-extended if the design treats it as unsigned, sign-extended if signed. An unsigned design operand as wide as its port has no exact representation on this block.
-  timing: the block is combinational; `result` is valid in the same cycle the inputs are applied (no clock port).
-  Wire EVERY operand of the fused region onto the input ports (name them exactly as above); drive the region's real consumer from the output port. Tie unused term ports to 0. Do not leave input ports unconnected.
-
-This is a MULTI-REGION fusion: aggregate these 1 product regions — bilinearintrp.$mul$raygentop.v:2874$348, bilinearintrp.$mul$raygentop.v:2875$349 — which already feed the common reduction 'bilinearintrp.r = i1r + i2r + i3r', into one 1-term 'comb_mult_add_16_mode' instance. Fuse only these existing terms; do not invent new ones.
-Rules: edit Verilog source only; preserve the module's live inputs/outputs and its downstream
-consumers; do not introduce operations or datatypes absent from the design unless this tier
-admits a variant; keep the surrounding design unchanged for T1/T2. Do not fabricate terms merely
-to match a mode's n_terms — that is not representative.
-
-Previous attempt failed. Fix:
-Acceptance reviewer REJECTED this adaptation as not a legitimate suite member:
-REJECT
-
-The witness role is bilinear interpolation (`bilinearintrp`), and the real reduction is `i1r + i2r + i3r` driving output `r`. However, the adaptation breaks that role: `fused_i12r` computes the current `ul * rul`, while `i2r` is a registered prior-cycle product. It therefore does not preserve the original aligned reduction represented by `i1r + i2r + i3r`; the mode performs a temporally mismatched sum rather than the original interpolation computation.
-
-Follow this approved plan:
-TIER: T2
-REGIONS: bilinearintrp.$mul$raygentop.v:2874$348, bilinearintrp.$mul$raygentop.v:2875$349
-SHARED_REDUCTION: bilinearintrp.r = i1r + i2r + i3r
-MAPPING: ax=ul (zero-extended from 8 bits), ay=rul (zero-extended from 7 bits), bx=i2r (zero-extended from 15 bits); result replaces the i1r+i2r partial sum, with i3r retained.
-PLAN: In bilinearintrp, preserve the registered inputs and the live r consumer, replacing the first two terms of the existing red-channel common reduction with one combinational comb_mult_add_16 instance. Feed its 64-bit result through the original-width truncation needed by the reduction, then add i3r as before. No introduced operations or datatypes beyond the required primitive; zero-extension preserves the unsigned source semantics. Main risks are signed-block interpretation and matching the original truncation width/timing.
-
-Work iteratively IN THIS SESSION: after each edit, run `bash check.sh raygentop.v` and read its output; if it does not synthesize, fix the RTL and check again. Do NOT run place-and-route or any VTR/vpr command — that is verified separately. Stop when check.sh reports it synthesizes cleanly with the intended arithmetic.</pre><div class="label">response</div><pre class="response">Fixed the cycle alignment by adding registered delayed operands for the fused red-channel product. The primitive now computes the same-cycle-aligned `i1r + i2r` partial sum, with `i3r` retained.
-
-Verification: `bash check.sh raygentop.v` reports `OK: synthesizes cleanly`.</pre><details class="inner"><summary>tool events <span class="meta">4 recorded, 0 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>apply_patch</code> <span class="meta"><span class="ok">completed</span> </span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+</pre></div></details></div></div></details></div></details><details class="call"><summary>Call 5 · <b>editor</b> · opencode-go/gpt-5.6-luna · <span class="ok">ok</span> <span class="meta">in 15 · out 626 · reasoning 2675 · cache read 73242 · cache write 5060 · 36.3 s</span></summary><div class="body"><div class="label">prompt</div><div class="md prompt"><p>Edit raygentop.v in this directory. Local restructuring: re-express the region (e.g. a multiply array + adder tree as a fused sum-of-products) to reach the mode; preserve the region's function and role, keep the rest of the design unchanged, wire the mode's real consumers.</p><p>Goal: rewrite the RTL so the hard-block mode 'comb_mult_add_16_mode' is exercised in the packed netlist,<br>doing real work, while preserving the design's behaviour and role.<br>Tier: T2</p><p>Hard-block primitive to instantiate: <code>comb_mult_add_16</code>   (precision INT16)<br>  computes: out = ax*ay + bx<br>  input ports:  ax[16], ay[16], bx[32]<br>  output ports: result[64]<br>  arithmetic: the block's operands and result are signed two's complement. A design operand narrower than its port must be widened to the port width: zero-extended if the design treats it as unsigned, sign-extended if signed. An unsigned design operand as wide as its port has no exact representation on this block.<br>  timing: the block is combinational; <code>result</code> is valid in the same cycle the inputs are applied (no clock port).<br>  Wire EVERY operand of the fused region onto the input ports (name them exactly as above); drive the region's real consumer from the output port. Tie unused term ports to 0. Do not leave input ports unconnected.</p><p>This is a MULTI-REGION fusion: aggregate these 1 product regions — bilinearintrp.$mul$raygentop.v:2874$348, bilinearintrp.$mul$raygentop.v:2875$349 — which already feed the common reduction 'bilinearintrp.r = i1r + i2r + i3r', into one 1-term 'comb_mult_add_16_mode' instance. Fuse only these existing terms; do not invent new ones.<br>Rules: edit Verilog source only; preserve the module's live inputs/outputs and its downstream<br>consumers; do not introduce operations or datatypes absent from the design unless this tier<br>admits a variant; keep the surrounding design unchanged for T1/T2. Do not fabricate terms merely<br>to match a mode's n_terms — that is not representative.</p><p>Previous attempt failed. Fix:<br>Acceptance reviewer REJECTED this adaptation as not a legitimate suite member:<br>REJECT</p><p>The witness role is bilinear interpolation (<code>bilinearintrp</code>), and the real reduction is <code>i1r + i2r + i3r</code> driving output <code>r</code>. However, the adaptation breaks that role: <code>fused_i12r</code> computes the current <code>ul * rul</code>, while <code>i2r</code> is a registered prior-cycle product. It therefore does not preserve the original aligned reduction represented by <code>i1r + i2r + i3r</code>; the mode performs a temporally mismatched sum rather than the original interpolation computation.</p><p>Follow this approved plan:<br>TIER: T2<br>REGIONS: bilinearintrp.$mul$raygentop.v:2874$348, bilinearintrp.$mul$raygentop.v:2875$349<br>SHARED_REDUCTION: bilinearintrp.r = i1r + i2r + i3r<br>MAPPING: ax=ul (zero-extended from 8 bits), ay=rul (zero-extended from 7 bits), bx=i2r (zero-extended from 15 bits); result replaces the i1r+i2r partial sum, with i3r retained.<br>PLAN: In bilinearintrp, preserve the registered inputs and the live r consumer, replacing the first two terms of the existing red-channel common reduction with one combinational comb_mult_add_16 instance. Feed its 64-bit result through the original-width truncation needed by the reduction, then add i3r as before. No introduced operations or datatypes beyond the required primitive; zero-extension preserves the unsigned source semantics. Main risks are signed-block interpretation and matching the original truncation width/timing.</p><p>Work iteratively IN THIS SESSION: after each edit, run <code>bash check.sh raygentop.v</code> and read its output; if it does not synthesize, fix the RTL and check again. Do NOT run place-and-route or any VTR/vpr command — that is verified separately. Stop when check.sh reports it synthesizes cleanly with the intended arithmetic.</p></div><div class="label">response</div><div class="md response"><p>Fixed the cycle alignment by adding registered delayed operands for the fused red-channel product. The primitive now computes the same-cycle-aligned <code>i1r + i2r</code> partial sum, with <code>i3r</code> retained.</p><p>Verification: <code>bash check.sh raygentop.v</code> reports <code>OK: synthesizes cleanly</code>.</p></div><details class="inner"><summary>tool events <span class="meta">4 recorded, 0 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>apply_patch</code> <span class="meta"><span class="ok">completed</span> </span></summary><div class="body"><div class="label">input</div><pre class="plain">{
  "patchText": "*** Begin Patch\n*** Update File: /home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/vtr_demo/raygentop/comb_mult_add_16_mode/20260912-174718-9ca8d3/edit/raygentop/raygentop.v\n@@\n          reg[6:0] bul; \n          reg[6:0] bvl; \n          reg[6:0] bwl; \n+         reg[7:0] ul_fused; \n+         reg[6:0] rul_fused; \n          wire[63:0] fused_i12r_result;\n          wire[14:0] fused_i12r;\n \n          comb_mult_add_16 fused_i12r_block (\n-            .ax ({8'b0, ul}),\n-            .ay ({9'b0, rul}),\n+            .ax ({8'b0, ul_fused}),\n+            .ay ({9'b0, rul_fused}),\n@@\n             ul &lt;= u ; \n             vl &lt;= v ; \n             rul &lt;= ru ; \n+            ul_fused &lt;= ul ;\n+            rul_fused &lt;= rul ;\n             rvl &lt;= rv ; \n*** End Patch"
 }</pre><div class="label">output</div><pre class="plain">Success. Updated the following files:
 M outputs/adapt/vtr_demo/raygentop/comb_mult_add_16_mode/20260912-174718-9ca8d3/edit/raygentop/raygentop.v</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> bash check.sh raygentop.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
@@ -1536,139 +1316,7 @@ M outputs/adapt/vtr_demo/raygentop/comb_mult_add_16_mode/20260912-174718-9ca8d3/
     "status": "completed",
     "priority": "high"
   }
-]</pre></div></details></div></div></details></div></details><details class="call"><summary>Call 6 · <b>reviewer:acceptance</b> · opencode-go/gpt-5.6-luna · <span class="ok">ok</span> <span class="meta">in 12 · out 307 · reasoning 527 · cache read 58862 · cache write 28630 · 15.4 s</span></summary><div class="body"><div class="label">prompt</div><pre class="prompt">You are an INDEPENDENT ACCEPTANCE REVIEWER — the gate of record for whether an adapted design is
-a LEGITIMATE member of its benchmark suite. You did NOT plan or write this edit. Judge only what
-is in front of you. Your verdict is final and fully automated; there is no human backstop, so err
-toward rejecting anything you cannot positively ground.
-
-FRAMING — refute by default. Your job is to find why this adaptation is NOT a legitimate suite
-member. Assume it is contrived until the evidence shows otherwise. A rewrite that merely "makes
-the mode appear in the netlist" is NOT sufficient — the mode must do real work the original
-workload actually implied.
-
-This case has already passed the deterministic structural, provenance, and (for T3) evidence
-gates — do not re-litigate those mechanically. Your judgement is the *legitimacy* call they
-cannot make: would a real designer of THIS workload ship this, or is it a mode-island / fabricated
-dot-product / gratuitous variant dressed up to pass?
-
-REJECT if any of these hold:
-- (a) FABRICATED TERMS — a fused N-term product/sum aggregates operands that did not genuinely
-  share a reduction in the original; the "dot product" is manufactured to fill the mode's arity.
-- (b) MODE ISLAND / DEAD WORK — the mode's result does not flow to the design's real outputs, or
-  is wired to constants / a sink that the rest of the design ignores.
-- (c) ROLE BREAK — the adapted region no longer plays the workload role the witness recorded
-  (e.g. a control-path multiply repurposed as a fake datapath MAC).
-- (d) UNGROUNDED VARIANT (T3) — the precision/algorithm variant is not the one the cited sibling
-  design evidences; the adaptation drifts to a workload character the suite does not contain.
-
-ACCEPT if the adaptation is sound: the mapped arithmetic genuinely existed, the fused terms really
-shared a reduction, the mode's output drives the original consumers, and the workload role is
-preserved. Legitimate adaptation need not be optimal — only real.
-
-You MUST ground your verdict: cite the specific preserved role (from the witness), the real
-region(s)/reduction the mode maps onto, and — for T3 — the sibling evidence axis. A verdict you
-cannot ground is a REJECT.
-
---- ADAPTATION UNDER REVIEW ---
-Target mode: comb_mult_add_16_mode   Tier: T2
-Region witness (the 'before'): role 'bilinearintrp', operation 'multiply', datatype int8,
-  regions ['bilinearintrp.$mul$raygentop.v:2874$348', 'bilinearintrp.$mul$raygentop.v:2875$349'], shared reduction 'bilinearintrp.r = i1r + i2r + i3r', downstream consumers ['bilinearintrp'].
-Manifest (the 'after'): introduced operations [], introduced datatypes
-  [], intended consumers ['bilinearintrp'].
-Deterministic gates: PASSED. Evidence floor: no variant introduced (T1/T2).
-Packed netlist: target mode present = True.
-
---- EDIT DIFF ---
---- outputs/adapt/vtr_demo/raygentop/comb_mult_add_16_mode/20260912-174718-9ca8d3/edit/.pristine/raygentop/raygentop.v	2026-08-16 18:14:11.414163698 -0700
-+++ outputs/adapt/vtr_demo/raygentop/comb_mult_add_16_mode/20260912-174718-9ca8d3/edit/raygentop/raygentop.v	2026-09-12 17:50:13.728720338 -0700
-@@ -2802,18 +2802,29 @@
-         reg[14:0] i1g; 
-         reg[14:0] i2g; 
-         reg[14:0] i3g; 
--        reg[14:0] i1r; 
--        reg[14:0] i2r; 
--        reg[14:0] i3r; 
-+         reg[14:0] i2r; 
-+         reg[14:0] i3r; 
-         reg[6:0] rul; 
-         reg[6:0] rvl; 
-         reg[6:0] rwl; 
-         reg[6:0] gul; 
-         reg[6:0] gvl; 
-         reg[6:0] gwl; 
--        reg[6:0] bul; 
--        reg[6:0] bvl; 
--        reg[6:0] bwl; 
-+         reg[6:0] bul; 
-+         reg[6:0] bvl; 
-+         reg[6:0] bwl; 
-+         reg[7:0] ul_fused; 
-+         reg[6:0] rul_fused; 
-+         wire[63:0] fused_i12r_result;
-+         wire[14:0] fused_i12r;
-+
-+         comb_mult_add_16 fused_i12r_block (
-+            .ax ({8'b0, ul_fused}),
-+            .ay ({9'b0, rul_fused}),
-+            .bx ({17'b0, i2r}),
-+            .result (fused_i12r_result)
-+         );
-+         assign fused_i12r = fused_i12r_result[14:0];
- 
-         always @(selectuv or u01a or u01b or u01c or v01a or v01b or v01c or u10a or 
-                  u10b or u10c or v10a or v10b or v10c)
-@@ -2860,10 +2871,12 @@
-         always @(posedge clk)
-         begin
-            wl &lt;= 8'b11111111 - u - v ; 
--           ul &lt;= u ; 
--           vl &lt;= v ; 
--           rul &lt;= ru ; 
--           rvl &lt;= rv ; 
-+            ul &lt;= u ; 
-+            vl &lt;= v ; 
-+            rul &lt;= ru ; 
-+            ul_fused &lt;= ul ;
-+            rul_fused &lt;= rul ;
-+            rvl &lt;= rv ; 
-            rwl &lt;= rw ; 
-            gul &lt;= gu ; 
-            gvl &lt;= gv ; 
-@@ -2871,8 +2884,7 @@
-            bul &lt;= bu ; 
-            bvl &lt;= bv ; 
-            bwl &lt;= bw ; 
--           i1r &lt;= ul * rul ; 
--           i2r &lt;= vl * rvl ; 
-+            i2r &lt;= vl * rvl ; 
-            i3r &lt;= wl * rwl ; 
-            i1g &lt;= ul * gul ; 
-            i2g &lt;= vl * gvl ; 
-@@ -2881,7 +2893,7 @@
-            i2b &lt;= vl * bvl ; 
-            i3b &lt;= wl * bwl ;  
-         end 
--        assign r = (i1r + i2r + i3r) ;
-+         assign r = (fused_i12r + i3r) ;
-         assign g = (i1g + i2g + i3g) ;
-         assign b = (i1b + i2b + i3b) ;
-      endmodule
-@@ -2975,4 +2987,3 @@
-        end 
-     end 
-  endmodule
--
-
-
-Your FIRST line must be exactly 'ACCEPT' or 'REJECT'. Then, on the following lines, state the
-grounding (role preserved / real region mapped / sibling evidence) or the specific violation
-(a/b/c/d) and what makes it illegitimate.
-
-Read these files in this directory: raygentop.v</pre><div class="label">response</div><pre class="response">ACCEPT
-
-Role preserved: `bilinearintrp` performs the original red-channel bilinear interpolation multiply/reduction.
-
-The fused mode maps the real reduction `i1r + i2r`: `ul * rul` and `vl * rvl` are genuine terms in the original `r = i1r + i2r + i3r` computation. Its result remains on the real output path via `r = fused_i12r + i3r` (lines 2887–2897), consumed by the enclosing interpolation logic. No T3 sibling evidence is applicable.</pre><details class="inner"><summary>tool events <span class="meta">3 recorded, 0 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>read</code> <span class="meta"><span class="ok">completed</span> /home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/_scratch/oc_hmbt0tb2/raygentop.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+]</pre></div></details></div></div></details></div></details><details class="call"><summary>Call 6 · <b>reviewer:acceptance</b> · opencode-go/gpt-5.6-luna · <span class="ok">ok</span> <span class="meta">in 12 · out 307 · reasoning 527 · cache read 58862 · cache write 28630 · 15.4 s</span></summary><div class="body"><div class="label">prompt</div><div class="md prompt"><p>You are an INDEPENDENT ACCEPTANCE REVIEWER — the gate of record for whether an adapted design is<br>a LEGITIMATE member of its benchmark suite. You did NOT plan or write this edit. Judge only what<br>is in front of you. Your verdict is final and fully automated; there is no human backstop, so err<br>toward rejecting anything you cannot positively ground.</p><p>FRAMING — refute by default. Your job is to find why this adaptation is NOT a legitimate suite<br>member. Assume it is contrived until the evidence shows otherwise. A rewrite that merely "makes<br>the mode appear in the netlist" is NOT sufficient — the mode must do real work the original<br>workload actually implied.</p><p>This case has already passed the deterministic structural, provenance, and (for T3) evidence<br>gates — do not re-litigate those mechanically. Your judgement is the <em>legitimacy</em> call they<br>cannot make: would a real designer of THIS workload ship this, or is it a mode-island / fabricated<br>dot-product / gratuitous variant dressed up to pass?</p><p>REJECT if any of these hold:</p><ul><li>(a) FABRICATED TERMS — a fused N-term product/sum aggregates operands that did not genuinely<br> share a reduction in the original; the "dot product" is manufactured to fill the mode's arity.</li><li>(b) MODE ISLAND / DEAD WORK — the mode's result does not flow to the design's real outputs, or<br> is wired to constants / a sink that the rest of the design ignores.</li><li>(c) ROLE BREAK — the adapted region no longer plays the workload role the witness recorded<br> (e.g. a control-path multiply repurposed as a fake datapath MAC).</li><li>(d) UNGROUNDED VARIANT (T3) — the precision/algorithm variant is not the one the cited sibling<br> design evidences; the adaptation drifts to a workload character the suite does not contain.</li></ul><p>ACCEPT if the adaptation is sound: the mapped arithmetic genuinely existed, the fused terms really<br>shared a reduction, the mode's output drives the original consumers, and the workload role is<br>preserved. Legitimate adaptation need not be optimal — only real.</p><p>You MUST ground your verdict: cite the specific preserved role (from the witness), the real<br>region(s)/reduction the mode maps onto, and — for T3 — the sibling evidence axis. A verdict you<br>cannot ground is a REJECT.</p><p>--- ADAPTATION UNDER REVIEW ---<br>Target mode: comb_mult_add_16_mode   Tier: T2<br>Region witness (the 'before'): role 'bilinearintrp', operation 'multiply', datatype int8,<br>  regions ['bilinearintrp.$mul$raygentop.v:2874$348', 'bilinearintrp.$mul$raygentop.v:2875$349'], shared reduction 'bilinearintrp.r = i1r + i2r + i3r', downstream consumers ['bilinearintrp'].<br>Manifest (the 'after'): introduced operations [], introduced datatypes<br>  [], intended consumers ['bilinearintrp'].<br>Deterministic gates: PASSED. Evidence floor: no variant introduced (T1/T2).<br>Packed netlist: target mode present = True.</p><p>--- EDIT DIFF ---<br>--- outputs/adapt/vtr_demo/raygentop/comb_mult_add_16_mode/20260912-174718-9ca8d3/edit/.pristine/raygentop/raygentop.v	2026-08-16 18:14:11.414163698 -0700<br>+++ outputs/adapt/vtr_demo/raygentop/comb_mult_add_16_mode/20260912-174718-9ca8d3/edit/raygentop/raygentop.v	2026-09-12 17:50:13.728720338 -0700<br>@@ -2802,18 +2802,29 @@<br>         reg[14:0] i1g; <br>         reg[14:0] i2g; <br>         reg[14:0] i3g; </p><ul><li>reg[14:0] i1r; </li><li>reg[14:0] i2r; </li><li>reg[14:0] i3r; </li><li>reg[14:0] i2r; </li><li><p>reg[14:0] i3r; <br>        reg[6:0] rul; <br>        reg[6:0] rvl; <br>        reg[6:0] rwl; <br>        reg[6:0] gul; <br>        reg[6:0] gvl; <br>        reg[6:0] gwl; </p></li><li>reg[6:0] bul; </li><li>reg[6:0] bvl; </li><li>reg[6:0] bwl; </li><li>reg[6:0] bul; </li><li>reg[6:0] bvl; </li><li>reg[6:0] bwl; </li><li>reg[7:0] ul_fused; </li><li>reg[6:0] rul_fused; </li><li>wire[63:0] fused_i12r_result;</li><li>wire[14:0] fused_i12r;<br>+</li><li>comb_mult_add_16 fused_i12r_block (</li><li>.ax ({8'b0, ul_fused}),</li><li>.ay ({9'b0, rul_fused}),</li><li>.bx ({17'b0, i2r}),</li><li>.result (fused_i12r_result)</li><li>);</li><li>assign fused_i12r = fused_i12r_result[14:0];</li></ul><p>         always @(selectuv or u01a or u01b or u01c or v01a or v01b or v01c or u10a or <br>                  u10b or u10c or v10a or v10b or v10c)<br>@@ -2860,10 +2871,12 @@<br>         always @(posedge clk)<br>         begin<br>            wl &lt;= 8'b11111111 - u - v ; </p><ul><li>ul &lt;= u ; </li><li>vl &lt;= v ; </li><li>rul &lt;= ru ; </li><li>rvl &lt;= rv ; </li><li>ul &lt;= u ; </li><li>vl &lt;= v ; </li><li>rul &lt;= ru ; </li><li>ul_fused &lt;= ul ;</li><li>rul_fused &lt;= rul ;</li><li><p>rvl &lt;= rv ; <br>           rwl &lt;= rw ; <br>           gul &lt;= gu ; <br>           gvl &lt;= gv ; <br>@@ -2871,8 +2884,7 @@<br>           bul &lt;= bu ; <br>           bvl &lt;= bv ; <br>           bwl &lt;= bw ; </p></li><li>i1r &lt;= ul * rul ; </li><li>i2r &lt;= vl * rvl ; </li><li><p>i2r &lt;= vl * rvl ; <br>           i3r &lt;= wl * rwl ; <br>           i1g &lt;= ul * gul ; <br>           i2g &lt;= vl * gvl ; <br>@@ -2881,7 +2893,7 @@<br>           i2b &lt;= vl * bvl ; <br>           i3b &lt;= wl * bwl ;  <br>        end </p></li><li>assign r = (i1r + i2r + i3r) ;</li><li><p>assign r = (fused_i12r + i3r) ;<br>        assign g = (i1g + i2g + i3g) ;<br>        assign b = (i1b + i2b + i3b) ;<br>     endmodule<br>@@ -2975,4 +2987,3 @@<br>       end <br>    end <br> endmodule<br>-</p></li></ul><p>Your FIRST line must be exactly 'ACCEPT' or 'REJECT'. Then, on the following lines, state the<br>grounding (role preserved / real region mapped / sibling evidence) or the specific violation<br>(a/b/c/d) and what makes it illegitimate.</p><p>Read these files in this directory: raygentop.v</p></div><div class="label">response</div><div class="md response"><p>ACCEPT</p><p>Role preserved: <code>bilinearintrp</code> performs the original red-channel bilinear interpolation multiply/reduction.</p><p>The fused mode maps the real reduction <code>i1r + i2r</code>: <code>ul * rul</code> and <code>vl * rvl</code> are genuine terms in the original <code>r = i1r + i2r + i3r</code> computation. Its result remains on the real output path via <code>r = fused_i12r + i3r</code> (lines 2887–2897), consumed by the enclosing interpolation logic. No T3 sibling evidence is applicable.</p></div><details class="inner"><summary>tool events <span class="meta">3 recorded, 0 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>read</code> <span class="meta"><span class="ok">completed</span> /home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/_scratch/oc_hmbt0tb2/raygentop.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
  "filePath": "/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/_scratch/oc_hmbt0tb2/raygentop.v"
 }</pre><div class="label">output</div><pre class="plain">&lt;path&gt;/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/_scratch/oc_hmbt0tb2/raygentop.v&lt;/path&gt;
 &lt;type&gt;file&lt;/type&gt;

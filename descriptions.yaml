@@ -6,6 +6,13 @@
 # A run with no entry still appears in the index, with blank description and equivalence
 # cells. Keep lines short; the index shows them verbatim.
 
+20260913-002957-033296:
+  description: "Claude roster, repeat of 2026-09-12 211952 at the same commit; same nine regions, same nine-block shape. Second of three control runs."
+
+20260913-003854-c7b4de:
+  description: "Claude roster, third control run at the same commit; same nine regions and shape again. The plan reviewer approved but the loop re-ran the planner, which is what surfaced the verdict-parse defect."
+  equivalence: "not checked"
+
 20260912-211952-6553b1:
   description: "Claude roster, same design and mode as 2026-09-06; nine blocks across all three channels rather than three over red only. The plan varies run to run."
   equivalence: "bit- and cycle-exact in simulation on all three channels, including four overflow vectors; LEC proven, 124/124 points"

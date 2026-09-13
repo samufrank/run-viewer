@@ -38,6 +38,43 @@ pre { white-space: pre-wrap; word-break: break-word; margin: .3rem 0 .8rem;
 pre.prompt { background: #f4f4f2; border-left: 3px solid #b8b8b0; }
 pre.response { background: #eef3f8; border-left: 3px solid #7f9fbf; }
 pre.plain { background: #f6f6f6; }
+/* A prompt or response with its Markdown rendered. The tint and the left rule are the same
+   as the plain form above, so a rendered block still reads as quoted agent traffic and not
+   as the page's own prose; only the inside is laid out instead of shown as source. */
+.md { margin: .3rem 0 .8rem; padding: .6rem .9rem; border-radius: 4px; font-size: .93em;
+  overflow-wrap: break-word; }
+.md.prompt { background: #f4f4f2; border-left: 3px solid #b8b8b0; }
+.md.response { background: #eef3f8; border-left: 3px solid #7f9fbf; }
+.md > :first-child { margin-top: 0; } .md > :last-child { margin-bottom: 0; }
+.md p { margin: .5rem 0; }
+.md ul, .md ol { margin: .5rem 0; padding-left: 1.5rem; }
+.md li { margin: .15rem 0; }
+.md ul.md-litnum { list-style: none; padding-left: .8rem; }
+.md .md-num { color: #555; }
+.md blockquote { margin: .5rem 0; padding: .1rem .8rem; border-left: 2px solid #c4c4c4;
+  color: #444; }
+.md hr { border: 0; border-top: 1px solid #d5d5d5; margin: .8rem 0; }
+.md code { background: rgba(0,0,0,.055); padding: .05em .3em; border-radius: 3px; }
+.md .mdh { font-weight: 600; margin: .9rem 0 .35rem; line-height: 1.3; }
+.md .mdh1 { font-size: 1.12em; } .md .mdh2 { font-size: 1.07em; }
+.md .mdh3 { font-size: 1.02em; } .md .mdh4, .md .mdh5, .md .mdh6 { font-size: 1em; }
+/* A fenced block is a box inside the response, and must not widen or escape it: it wraps,
+   and scrolls sideways only within its own frame. */
+.md .md-code { margin: .5rem 0; border: 1px solid #dcdcdc; border-radius: 4px;
+  background: #fbfbfa; max-width: 100%; overflow: hidden; }
+.md .md-lang { display: block; padding: .15rem .6rem; border-bottom: 1px solid #e6e6e6;
+  color: #666; font-size: .8em; letter-spacing: .03em; }
+.md .md-code > pre { margin: 0; background: none; border: 0; border-radius: 0;
+  padding: .55rem .7rem; max-width: 100%; overflow-x: auto; white-space: pre-wrap;
+  word-break: break-word; }
+.md .md-code > pre > code { background: none; padding: 0; }
+.md .md-tw { overflow-x: auto; max-width: 100%; margin: .5rem 0; }
+.md .md-tw table { border-collapse: collapse; }
+.md .md-tw th, .md .md-tw td { border: 1px solid #dedede; padding: .2rem .5rem;
+  white-space: normal; }
+.md .md-note { color: #666; font-size: .85em; font-style: italic; margin: 0 0 .5rem; }
+ul.paths { margin: .2rem 0; padding-left: 1.2rem; }
+ul.paths li { margin: .1rem 0; word-break: break-all; }
 .diff { white-space: pre-wrap; word-break: break-word; margin: .3rem 0 .8rem;
   padding: .7rem .9rem; border-radius: 4px; font-size: .86em; line-height: 1.5;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
@@ -68,89 +105,13 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fo
 function setAll(open) {
   document.querySelectorAll('details').forEach(function (d) { d.open = open; });
 }
-</script></head><body><main><h1>raygentop → sop_4_mode · 20260827-153207-b498fe</h1><p class="sub">benchadapt adaptation run · record at <code>outputs/adapt/vtr_demo/raygentop/sop_4_mode/20260827-153207-b498fe</code></p><dl class="kv"><dt>run id</dt><dd><code>20260827-153207-b498fe</code></dd><dt>started</dt><dd>2026-08-27 15:32:07 -0700</dd><dt>finished</dt><dd>2026-08-27 15:38:46 -0700</dd><dt>suite / design</dt><dd>vtr_demo / <b>raygentop</b></dd><dt>target mode</dt><dd><code>sop_4_mode</code></dd><dt>tier</dt><dd>needs restructuring (T2) — the region did not fit the mode as is</dd><dt>outcome</dt><dd><b class="ok">ACCEPTED</b> — reviewer agent confirmed</dd><dt>editor attempts</dt><dd>1 <span class="note">(editor calls against the one approved plan; record field <code>iterations</code>)</span></dd><dt>wall clock</dt><dd>6m 39s (agents 6m 14s, VTR and other 25s)  [399.2 s total; 'other' is synthesis-only checks and framework time between calls]</dd><dt>models per role</dt><dd>planner: <code>anthropic/claude-opus-5</code><br>reviewer:plan: <code>anthropic/claude-opus-5</code><br>editor: <code>anthropic/claude-opus-5</code><br>reviewer:acceptance: <code>anthropic/claude-opus-5</code></dd><dt>VPR arguments</dt><dd><span class="absent">not recorded (this run predates the vpr record in run.json)</span></dd><dt>repo commit</dt><dd><span class="absent">not recorded (runs before 2026-09-12 carry no commit)</span></dd></dl><div class="controls"><button type="button" onclick="setAll(true)">expand all</button><button type="button" onclick="setAll(false)">collapse all</button>exported 2026-09-13T00:50:55-07:00</div><details class="section"><summary><h2>Mode contract</h2> <span class="meta">from the prompt of call 3 (editor)</span></summary><div class="body"><p class="note">Verbatim, as the agents received it: taken from the prompt of call 3 (editor), where the contract is embedded in full. This run predates the separate contract field in the record.</p><pre class="plain">Hard-block primitive to instantiate: `int_sop_4`   (precision INT9)
+</script></head><body><main><h1>raygentop → sop_4_mode · 20260827-153207-b498fe</h1><p class="sub">benchadapt adaptation run · record at <code>outputs/adapt/vtr_demo/raygentop/sop_4_mode/20260827-153207-b498fe</code></p><dl class="kv"><dt>run id</dt><dd><code>20260827-153207-b498fe</code></dd><dt>started</dt><dd>2026-08-27 15:32:07 -0700</dd><dt>finished</dt><dd>2026-08-27 15:38:46 -0700</dd><dt>suite / design</dt><dd>vtr_demo / <b>raygentop</b></dd><dt>target mode</dt><dd><code>sop_4_mode</code></dd><dt>tier</dt><dd>needs restructuring (T2) — the region did not fit the mode as is</dd><dt>outcome</dt><dd><b class="ok">ACCEPTED</b> — reviewer agent confirmed</dd><dt>editor attempts</dt><dd>1 <span class="note">(editor calls against the one approved plan; record field <code>iterations</code>)</span></dd><dt>wall clock</dt><dd>6m 39s (agents 6m 14s, VTR and other 25s)  [399.2 s total; 'other' is synthesis-only checks and framework time between calls]</dd><dt>models per role</dt><dd>planner: <code>anthropic/claude-opus-5</code><br>reviewer:plan: <code>anthropic/claude-opus-5</code><br>editor: <code>anthropic/claude-opus-5</code><br>reviewer:acceptance: <code>anthropic/claude-opus-5</code></dd><dt>VPR arguments</dt><dd><span class="absent">not recorded (this run predates the vpr record in run.json)</span></dd><dt>repo commit</dt><dd><span class="absent">not recorded (runs before 2026-09-12 carry no commit)</span></dd><dt>agent reads</dt><dd>editor read a prior run's edited design; editor read a prior run's records; editor read the architecture XML; plan reviewer and editor read the framework repository <span class="note">(paths each agent named outside its own working directory, computed from the tool events; its own scratch excluded)</span></dd><dt>prompt set</dt><dd><span class="absent">not recorded (runs before 2026-09-13 carry no prompt-set hash)</span></dd></dl><div class="controls"><button type="button" onclick="setAll(true)">expand all</button><button type="button" onclick="setAll(false)">collapse all</button>exported 2026-09-13T15:30:22-07:00</div><details class="section"><summary><h2>Mode contract</h2> <span class="meta">from the prompt of call 3 (editor)</span></summary><div class="body"><p class="note">Verbatim, as the agents received it: taken from the prompt of call 3 (editor), where the contract is embedded in full. This run predates the separate contract field in the record.</p><pre class="plain">Hard-block primitive to instantiate: `int_sop_4`   (precision INT9)
   computes: out = ax*ay + bx*by + cx*cy + dx*dy
   input ports:  clk[1] (clock), reset[1], mode_sigs[12], ax[9], ay[9], bx[9], by[9], cx[9], cy[9], dx[9], dy[9], chainin[64]
   output ports: result[64], chainout[64]
   timing: `result` is registered inside the block on `clk`; it is valid 1 cycle after the input operands are applied.
-  Wire EVERY operand of the fused region onto the input ports (name them exactly as above); drive the region's real consumer from the output port. Tie unused term ports to 0. Do not leave input ports unconnected.</pre></div></details><details class="section"><summary><h2>Agent calls</h2> <span class="meta">4 call(s), in order</span></summary><div class="body"><details class="call"><summary>Call 1 · <b>planner</b> · anthropic/claude-opus-5 · <span class="ok">ok</span> <span class="meta">in 14 · out 5928 · reasoning 0 · cache read 91906 · cache write 22325 · 96.9 s</span></summary><div class="body"><div class="label">prompt</div><pre class="prompt">You are the Planner. Choose the best region(s) in raygentop.v to adapt so hard-block mode
-'sop_4_mode' (Hard-block primitive to instantiate: `int_sop_4`   (precision INT9)
-  computes: out = ax*ay + bx*by + cx*cy + dx*dy
-  input ports:  clk[1] (clock), reset[1], mode_sigs[12], ax[9], ay[9], bx[9], by[9], cx[9], cy[9], dx[9], dy[9], chainin[64]
-  output ports: result[64], chainout[64]
-  timing: `result` is registered inside the block on `clk`; it is valid 1 cycle after the input operands are applied.
-  Wire EVERY operand of the fused region onto the input ports (name them exactly as above); drive the region's real consumer from the output port. Tie unused term ports to 0. Do not leave input ports unconnected.) is exercised, then write a concrete plan. Do NOT edit files —
-output the header + plan only.
-
-Pick the most REPRESENTATIVE mapping — arithmetic a real designer of THIS workload would actually
-map to 'sop_4_mode', never fabricated computation. For a sum-of-products / MAC mode you must
-find product terms that ALREADY feed a COMMON reduction (a shared sum/accumulator); products that
-feed SEPARATE outputs (e.g. distinct systolic-array elements) must NOT be fused. An isolated scalar
-multiply is NOT a representative sum-of-products target. If nothing representative exists, output
-`TIER: NONE`.
-
-Candidate arithmetic regions (id | operation | instances):
-matmult.$mul$raygentop.v:335$15 | mac | 1
-matmult.$mul$raygentop.v:336$16 | sop | 1
-matmult.$mul$raygentop.v:337$17 | sop | 1
-matmult.$mul$raygentop.v:338$18 | sop | 1
-matmult.$mul$raygentop.v:339$19 | mult_add | 1
-matmult.$mul$raygentop.v:340$20 | mac | 1
-matmult.$mul$raygentop.v:341$21 | multiply | 1
-matmult.$mul$raygentop.v:342$22 | multiply | 1
-matmult.$mul$raygentop.v:343$23 | multiply | 1
-bilinearintrp.$mul$raygentop.v:2874$348 | sop | 1
-bilinearintrp.$mul$raygentop.v:2875$349 | sop | 1
-bilinearintrp.$mul$raygentop.v:2876$350 | sop | 1
-bilinearintrp.$mul$raygentop.v:2877$351 | mac | 1
-bilinearintrp.$mul$raygentop.v:2878$352 | multiply | 1
-bilinearintrp.$mul$raygentop.v:2879$353 | sop | 1
-bilinearintrp.$mul$raygentop.v:2880$354 | multiply | 1
-bilinearintrp.$mul$raygentop.v:2881$355 | multiply | 1
-bilinearintrp.$mul$raygentop.v:2882$356 | sop | 1
-
-Classify the tier of the change you propose (a datatype/algorithm variant, T3, is out of scope —
-do not propose one):
-- T1: Direct replacement: no change to the computed function or surrounding structure; no datatype change.
-- T2: Local restructuring only; preserve the region's function, role, and live consumers; no new operation/datatype family.
-
-Read the source. Output EXACTLY this header (uppercase keys), then the plan:
-
-TIER: T1 | T2 | NONE
-REGIONS: &lt;comma-separated region id(s)&gt;            # one id for a direct swap; N ids for a fusion
-SHARED_REDUCTION: &lt;the signal/module the terms feed&gt;   # or NONE for a single region
-MAPPING: &lt;which operands map to which of the mode's ports&gt;
-PLAN: &lt;how the module's live inputs/outputs and downstream consumers are preserved; any introduced
-operations/datatypes (should be NONE for T1/T2); and the main risks&gt;
-
-
-Read these files in this directory: raygentop.v</pre><div class="label">response</div><pre class="response">I'll start by examining the source file around the candidate regions.I've read the source. Here's my analysis and plan.
-
-## Findings
-
-**`bilinearintrp` (lines 2762–2887)** is the barycentric color interpolator. Per color channel it computes three products that are registered and then reduced by a *single shared adder*:
-
-```verilog
-i1r &lt;= ul * rul ;   i2r &lt;= vl * rvl ;   i3r &lt;= wl * rwl ;   // 8b x 7b -&gt; 15b
-assign r = (i1r + i2r + i3r) ;                              // shared reduction -&gt; r[6:0]
-```
-
-- `ul/vl/wl` are `reg[7:0]` (0..255) and `rul/rvl/rwl` are `reg[6:0]` (0..127) — **both fit exactly in signed INT9** when zero-extended. Products are exact in 15 bits.
-- Latency matches the hard block exactly: today the products register on `clk` and the adder is combinational, so `r` settles one cycle after the operand registers. `int_sop_4` registers `result` on `clk`, valid 1 cycle after operands — identical.
-- `i1r/i2r/i3r` have **no other consumers** (verified by search); `r` → `blr` → `temp_shadedata{a,b,c}[20:14]`, a live output.
-
-**Rejected: `matmult` (lines 335–350).** Its 16-bit operands exceed INT9, and each row sums *pre-truncated* products (`am11[30:15] + ...`), so fusing into a full-precision SOP changes the computed value. `Cx/Cy/Cz` are also three separate reductions.
-
-**Not fused:** the `g` and `b` channels (2877–2882) feed *separate* reductions (`g`, `b`) and must stay independent.
-
----
-
-TIER: T2
-REGIONS: bilinearintrp.$mul$raygentop.v:2874$348, bilinearintrp.$mul$raygentop.v:2875$349, bilinearintrp.$mul$raygentop.v:2876$350
-SHARED_REDUCTION: `assign r = (i1r + i2r + i3r)` in module `bilinearintrp` — the 7-bit red-channel output `r`, which drives `blr` in `resultwriter` and is packed into `temp_shadedata{a,b,c}[20:14]`
-MAPPING:
-```
-clk       &lt;- clk                       // module's only clock
+  Wire EVERY operand of the fused region onto the input ports (name them exactly as above); drive the region's real consumer from the output port. Tie unused term ports to 0. Do not leave input ports unconnected.</pre></div></details><details class="section"><summary><h2>Agent calls</h2> <span class="meta">4 call(s), in order</span></summary><div class="body"><details class="call"><summary>Call 1 · <b>planner</b> · anthropic/claude-opus-5 · <span class="ok">ok</span> <span class="meta">in 14 · out 5928 · reasoning 0 · cache read 91906 · cache write 22325 · 96.9 s</span></summary><div class="body"><div class="label">prompt</div><div class="md prompt"><p>You are the Planner. Choose the best region(s) in raygentop.v to adapt so hard-block mode<br>'sop_4_mode' (Hard-block primitive to instantiate: <code>int_sop_4</code>   (precision INT9)<br>  computes: out = ax*ay + bx*by + cx*cy + dx*dy<br>  input ports:  clk[1] (clock), reset[1], mode_sigs[12], ax[9], ay[9], bx[9], by[9], cx[9], cy[9], dx[9], dy[9], chainin[64]<br>  output ports: result[64], chainout[64]<br>  timing: <code>result</code> is registered inside the block on <code>clk</code>; it is valid 1 cycle after the input operands are applied.<br>  Wire EVERY operand of the fused region onto the input ports (name them exactly as above); drive the region's real consumer from the output port. Tie unused term ports to 0. Do not leave input ports unconnected.) is exercised, then write a concrete plan. Do NOT edit files —<br>output the header + plan only.</p><p>Pick the most REPRESENTATIVE mapping — arithmetic a real designer of THIS workload would actually<br>map to 'sop_4_mode', never fabricated computation. For a sum-of-products / MAC mode you must<br>find product terms that ALREADY feed a COMMON reduction (a shared sum/accumulator); products that<br>feed SEPARATE outputs (e.g. distinct systolic-array elements) must NOT be fused. An isolated scalar<br>multiply is NOT a representative sum-of-products target. If nothing representative exists, output<br><code>TIER: NONE</code>.</p><p>Candidate arithmetic regions (id | operation | instances):<br>matmult.$mul$raygentop.v:335$15 | mac | 1<br>matmult.$mul$raygentop.v:336$16 | sop | 1<br>matmult.$mul$raygentop.v:337$17 | sop | 1<br>matmult.$mul$raygentop.v:338$18 | sop | 1<br>matmult.$mul$raygentop.v:339$19 | mult_add | 1<br>matmult.$mul$raygentop.v:340$20 | mac | 1<br>matmult.$mul$raygentop.v:341$21 | multiply | 1<br>matmult.$mul$raygentop.v:342$22 | multiply | 1<br>matmult.$mul$raygentop.v:343$23 | multiply | 1<br>bilinearintrp.$mul$raygentop.v:2874$348 | sop | 1<br>bilinearintrp.$mul$raygentop.v:2875$349 | sop | 1<br>bilinearintrp.$mul$raygentop.v:2876$350 | sop | 1<br>bilinearintrp.$mul$raygentop.v:2877$351 | mac | 1<br>bilinearintrp.$mul$raygentop.v:2878$352 | multiply | 1<br>bilinearintrp.$mul$raygentop.v:2879$353 | sop | 1<br>bilinearintrp.$mul$raygentop.v:2880$354 | multiply | 1<br>bilinearintrp.$mul$raygentop.v:2881$355 | multiply | 1<br>bilinearintrp.$mul$raygentop.v:2882$356 | sop | 1</p><p>Classify the tier of the change you propose (a datatype/algorithm variant, T3, is out of scope —<br>do not propose one):</p><ul><li>T1: Direct replacement: no change to the computed function or surrounding structure; no datatype change.</li><li>T2: Local restructuring only; preserve the region's function, role, and live consumers; no new operation/datatype family.</li></ul><p>Read the source. Output EXACTLY this header (uppercase keys), then the plan:</p><p>TIER: T1 | T2 | NONE<br>REGIONS: &lt;comma-separated region id(s)&gt;            # one id for a direct swap; N ids for a fusion<br>SHARED_REDUCTION: &lt;the signal/module the terms feed&gt;   # or NONE for a single region<br>MAPPING: &lt;which operands map to which of the mode's ports&gt;<br>PLAN: &lt;how the module's live inputs/outputs and downstream consumers are preserved; any introduced<br>operations/datatypes (should be NONE for T1/T2); and the main risks&gt;</p><p>Read these files in this directory: raygentop.v</p></div><div class="label">response</div><div class="md response"><p class="md-note">1 paragraph break restored by the export, where the recorder joined text blocks with no separator.</p><p>I'll start by examining the source file around the candidate regions.</p><p>I've read the source. Here's my analysis and plan.</p><div class="mdh mdh2">Findings</div><p><strong><code>bilinearintrp</code> (lines 2762–2887)</strong> is the barycentric color interpolator. Per color channel it computes three products that are registered and then reduced by a <em>single shared adder</em>:</p><div class="md-code"><span class="md-lang">verilog</span><pre><code>i1r &lt;= ul * rul ;   i2r &lt;= vl * rvl ;   i3r &lt;= wl * rwl ;   // 8b x 7b -&gt; 15b
+assign r = (i1r + i2r + i3r) ;                              // shared reduction -&gt; r[6:0]</code></pre></div><ul><li><code>ul/vl/wl</code> are <code>reg[7:0]</code> (0..255) and <code>rul/rvl/rwl</code> are <code>reg[6:0]</code> (0..127) — <strong>both fit exactly in signed INT9</strong> when zero-extended. Products are exact in 15 bits.</li><li>Latency matches the hard block exactly: today the products register on <code>clk</code> and the adder is combinational, so <code>r</code> settles one cycle after the operand registers. <code>int_sop_4</code> registers <code>result</code> on <code>clk</code>, valid 1 cycle after operands — identical.</li><li><code>i1r/i2r/i3r</code> have <strong>no other consumers</strong> (verified by search); <code>r</code> → <code>blr</code> → <code>temp_shadedata{a,b,c}[20:14]</code>, a live output.</li></ul><p><strong>Rejected: <code>matmult</code> (lines 335–350).</strong> Its 16-bit operands exceed INT9, and each row sums <em>pre-truncated</em> products (<code>am11[30:15] + ...</code>), so fusing into a full-precision SOP changes the computed value. <code>Cx/Cy/Cz</code> are also three separate reductions.</p><p><strong>Not fused:</strong> the <code>g</code> and <code>b</code> channels (2877–2882) feed <em>separate</em> reductions (<code>g</code>, <code>b</code>) and must stay independent.</p><hr><p>TIER: T2<br>REGIONS: bilinearintrp.$mul$raygentop.v:2874$348, bilinearintrp.$mul$raygentop.v:2875$349, bilinearintrp.$mul$raygentop.v:2876$350<br>SHARED_REDUCTION: <code>assign r = (i1r + i2r + i3r)</code> in module <code>bilinearintrp</code> — the 7-bit red-channel output <code>r</code>, which drives <code>blr</code> in <code>resultwriter</code> and is packed into <code>temp_shadedata{a,b,c}[20:14]</code><br>MAPPING:</p><div class="md-code"><pre><code>clk       &lt;- clk                       // module's only clock
 reset     &lt;- 1'b0                      // bilinearintrp has no reset port; hold inactive
 mode_sigs &lt;- sop_4_mode encoding (constant)
 ax        &lt;- {1'b0, ul}       (8b unsigned -&gt; 9b)   ay &lt;- {2'b00, rul}   // term 1: ul*rul  (was i1r)
@@ -159,22 +120,7 @@ cx        &lt;- {1'b0, wl}                             cy &lt;- {2'b00, rwl}   /
 dx        &lt;- 9'd0                                   dy &lt;- 9'd0           // 4th term unused, tied 0
 chainin   &lt;- 64'd0                                                       // no cascade
 result    -&gt; assign r = result[6:0];                                     // real consumer
-chainout  -&gt; left unused (declared wire, no load)
-```
-PLAN:
-1. Instantiate one `int_sop_4` inside `bilinearintrp`, fed directly from the existing `ul/vl/wl` and `rul/rvl/rwl` registers (which stay — they are also used elsewhere, e.g. `ul` feeds the texture address path, and `wl &lt;= 8'hFF - u - v` is a real pipeline stage).
-2. Delete the now-dead `reg[14:0] i1r, i2r, i3r` declarations and their three assignments in the `always @(posedge clk)` block; replace `assign r = (i1r + i2r + i3r);` with `assign r = result[6:0];`.
-3. Everything else is untouched: the module port list, the `selectuv` mux, the `g` and `b` channels (their own products and reductions remain in RTL), and all downstream consumers of `r`/`blr`.
-4. **Introduced operations/datatypes: NONE.** Same unsigned integer multiply-accumulate, same operand values, same latency, same output width.
-
-**Risks / correctness notes:**
-- *Truncation equivalence.* Today the sum is evaluated in 15-bit context (max exact sum is 3·255·127 = 97155, which wraps mod 2^15) and then truncated to `r[6:0]`. Wrapping at bit 15 cannot disturb bits [6:0], so `r` is exactly `exact_sum[6:0]` — matching `result[6:0]` from a 64-bit accumulator. Safe, but this is the one thing to re-verify in simulation.
-- *Signedness.* `int_sop_4` is INT9 (signed −256..255). All operands are zero-extended non-negative values, so products and the sum are positive and the signed/unsigned distinction is immaterial. Must not sign-extend `ul` (bit 7 set for values ≥128 would become negative).
-- *Reset tie-off.* The module has no reset; tying `reset` to `1'b0` means `result` is never cleared — matching current behavior, where `i1r/i2r/i3r` also have no reset. If the block's `reset` is active-low, invert this tie-off.
-- *Utilization asymmetry.* Only 3 of 4 term slots are used (`d*` tied to 0), so one multiplier in the block is idle. The `g` and `b` channels cannot legally fill it — they are distinct reductions. If more coverage is wanted, instantiate two more blocks (one per channel) rather than merging channels.
-- *Lint.* Removing `i1r/i2r/i3r` may leave unused-signal warnings if any testbench or waveform script references them by name.
-
-Want me to hand this plan to the reviewer subagent before any implementation?</pre><details class="inner"><summary>tool events <span class="meta">7 recorded, 0 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> wc -l raygentop.v &amp;&amp; ls -la</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+chainout  -&gt; left unused (declared wire, no load)</code></pre></div><p>PLAN:</p><ol><li>Instantiate one <code>int_sop_4</code> inside <code>bilinearintrp</code>, fed directly from the existing <code>ul/vl/wl</code> and <code>rul/rvl/rwl</code> registers (which stay — they are also used elsewhere, e.g. <code>ul</code> feeds the texture address path, and <code>wl &lt;= 8'hFF - u - v</code> is a real pipeline stage).</li><li>Delete the now-dead <code>reg[14:0] i1r, i2r, i3r</code> declarations and their three assignments in the <code>always @(posedge clk)</code> block; replace <code>assign r = (i1r + i2r + i3r);</code> with <code>assign r = result[6:0];</code>.</li><li>Everything else is untouched: the module port list, the <code>selectuv</code> mux, the <code>g</code> and <code>b</code> channels (their own products and reductions remain in RTL), and all downstream consumers of <code>r</code>/<code>blr</code>.</li><li><strong>Introduced operations/datatypes: NONE.</strong> Same unsigned integer multiply-accumulate, same operand values, same latency, same output width.</li></ol><p><strong>Risks / correctness notes:</strong></p><ul><li><em>Truncation equivalence.</em> Today the sum is evaluated in 15-bit context (max exact sum is 3·255·127 = 97155, which wraps mod 2^15) and then truncated to <code>r[6:0]</code>. Wrapping at bit 15 cannot disturb bits [6:0], so <code>r</code> is exactly <code>exact_sum[6:0]</code> — matching <code>result[6:0]</code> from a 64-bit accumulator. Safe, but this is the one thing to re-verify in simulation.</li><li><em>Signedness.</em> <code>int_sop_4</code> is INT9 (signed −256..255). All operands are zero-extended non-negative values, so products and the sum are positive and the signed/unsigned distinction is immaterial. Must not sign-extend <code>ul</code> (bit 7 set for values ≥128 would become negative).</li><li><em>Reset tie-off.</em> The module has no reset; tying <code>reset</code> to <code>1'b0</code> means <code>result</code> is never cleared — matching current behavior, where <code>i1r/i2r/i3r</code> also have no reset. If the block's <code>reset</code> is active-low, invert this tie-off.</li><li><em>Utilization asymmetry.</em> Only 3 of 4 term slots are used (<code>d*</code> tied to 0), so one multiplier in the block is idle. The <code>g</code> and <code>b</code> channels cannot legally fill it — they are distinct reductions. If more coverage is wanted, instantiate two more blocks (one per channel) rather than merging channels.</li><li><em>Lint.</em> Removing <code>i1r/i2r/i3r</code> may leave unused-signal warnings if any testbench or waveform script references them by name.</li></ul><p>Want me to hand this plan to the reviewer subagent before any implementation?</p></div><details class="inner"><summary>tool events <span class="meta">7 recorded, 0 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> wc -l raygentop.v &amp;&amp; ls -la</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
  "command": "wc -l raygentop.v &amp;&amp; ls -la"
 }</pre><div class="label">output</div><pre class="plain">2978 raygentop.v
 total 92
@@ -582,47 +528,8 @@ drwxrwxr-x 3 samu samu  4096 Aug 27 15:32 ..
   Line 2483:                          temp_shadedatac[13:7] = blg ; 
 
   Line 2484:                          temp_shadedatac[20:14] = blr ; 
-</pre></div></details></div></div></details></div></details><details class="call"><summary>Call 2 · <b>reviewer:plan</b> · anthropic/claude-opus-5 · <span class="ok">ok</span> <span class="meta">in 8 · out 2462 · reasoning 0 · cache read 35784 · cache write 15344 · 41.4 s</span></summary><div class="body"><div class="label">prompt</div><pre class="prompt">You are an INDEPENDENT, fair Reviewer. You did not write this plan. Judge it on merit.
-Target mode: sop_4_mode   Tier: T2   Rule: Local restructuring only; preserve the region's function, role, and live consumers; no new operation/datatype family.
-Region: bilinearintrp.$mul$raygentop.v:2874$348  (op 'sop', datatype int8, consumers ['bilinearintrp']).
-APPROVE the plan if it is correct and representative — a legitimate adaptation does not need to
-be perfect, only sound. Do NOT demand rewrites for style, minor wording, or hypothetical concerns.
-REVISE ONLY for a CONCRETE, specific violation you can name: (a) it changes the computed function
-when the tier forbids it; (b) it introduces an operation/datatype absent from the design and not
-admitted by the tier; (c) it fabricates terms to match a mode's n_terms (products that did not
-exist / do not share a reduction); (d) it wires the mode to constants or a dead sink (mode island).
-If none of these apply, APPROVE.
-Your FIRST line must be exactly 'APPROVE' or 'REVISE', nothing else. If REVISE, the next lines
-must name the specific violation (a/b/c/d) and what to change.
-
---- PLAN ---
-I'll start by examining the source file around the candidate regions.I've read the source. Here's my analysis and plan.
-
-## Findings
-
-**`bilinearintrp` (lines 2762–2887)** is the barycentric color interpolator. Per color channel it computes three products that are registered and then reduced by a *single shared adder*:
-
-```verilog
-i1r &lt;= ul * rul ;   i2r &lt;= vl * rvl ;   i3r &lt;= wl * rwl ;   // 8b x 7b -&gt; 15b
-assign r = (i1r + i2r + i3r) ;                              // shared reduction -&gt; r[6:0]
-```
-
-- `ul/vl/wl` are `reg[7:0]` (0..255) and `rul/rvl/rwl` are `reg[6:0]` (0..127) — **both fit exactly in signed INT9** when zero-extended. Products are exact in 15 bits.
-- Latency matches the hard block exactly: today the products register on `clk` and the adder is combinational, so `r` settles one cycle after the operand registers. `int_sop_4` registers `result` on `clk`, valid 1 cycle after operands — identical.
-- `i1r/i2r/i3r` have **no other consumers** (verified by search); `r` → `blr` → `temp_shadedata{a,b,c}[20:14]`, a live output.
-
-**Rejected: `matmult` (lines 335–350).** Its 16-bit operands exceed INT9, and each row sums *pre-truncated* products (`am11[30:15] + ...`), so fusing into a full-precision SOP changes the computed value. `Cx/Cy/Cz` are also three separate reductions.
-
-**Not fused:** the `g` and `b` channels (2877–2882) feed *separate* reductions (`g`, `b`) and must stay independent.
-
----
-
-TIER: T2
-REGIONS: bilinearintrp.$mul$raygentop.v:2874$348, bilinearintrp.$mul$raygentop.v:2875$349, bilinearintrp.$mul$raygentop.v:2876$350
-SHARED_REDUCTION: `assign r = (i1r + i2r + i3r)` in module `bilinearintrp` — the 7-bit red-channel output `r`, which drives `blr` in `resultwriter` and is packed into `temp_shadedata{a,b,c}[20:14]`
-MAPPING:
-```
-clk       &lt;- clk                       // module's only clock
+</pre></div></details></div></div></details></div></details><details class="call"><summary>Call 2 · <b>reviewer:plan</b> · anthropic/claude-opus-5 · <span class="ok">ok</span> <span class="meta">in 8 · out 2462 · reasoning 0 · cache read 35784 · cache write 15344 · 41.4 s · read outside the work dir</span></summary><div class="body"><details class="inner"><summary>read outside the work dir: the framework repository <span class="meta">1 path(s)</span></summary><div class="body"><ul class="paths"><li><code>/home/samu/dev/llm-hardblocks/benchadapt</code></li></ul></div></details><div class="label">prompt</div><div class="md prompt"><p class="md-note">1 paragraph break restored by the export, where the recorder joined text blocks with no separator.</p><p>You are an INDEPENDENT, fair Reviewer. You did not write this plan. Judge it on merit.<br>Target mode: sop_4_mode   Tier: T2   Rule: Local restructuring only; preserve the region's function, role, and live consumers; no new operation/datatype family.<br>Region: bilinearintrp.$mul$raygentop.v:2874$348  (op 'sop', datatype int8, consumers ['bilinearintrp']).<br>APPROVE the plan if it is correct and representative — a legitimate adaptation does not need to<br>be perfect, only sound. Do NOT demand rewrites for style, minor wording, or hypothetical concerns.<br>REVISE ONLY for a CONCRETE, specific violation you can name: (a) it changes the computed function<br>when the tier forbids it; (b) it introduces an operation/datatype absent from the design and not<br>admitted by the tier; (c) it fabricates terms to match a mode's n_terms (products that did not<br>exist / do not share a reduction); (d) it wires the mode to constants or a dead sink (mode island).<br>If none of these apply, APPROVE.<br>Your FIRST line must be exactly 'APPROVE' or 'REVISE', nothing else. If REVISE, the next lines<br>must name the specific violation (a/b/c/d) and what to change.</p><p>--- PLAN ---<br>I'll start by examining the source file around the candidate regions.</p><p>I've read the source. Here's my analysis and plan.</p><div class="mdh mdh2">Findings</div><p><strong><code>bilinearintrp</code> (lines 2762–2887)</strong> is the barycentric color interpolator. Per color channel it computes three products that are registered and then reduced by a <em>single shared adder</em>:</p><div class="md-code"><span class="md-lang">verilog</span><pre><code>i1r &lt;= ul * rul ;   i2r &lt;= vl * rvl ;   i3r &lt;= wl * rwl ;   // 8b x 7b -&gt; 15b
+assign r = (i1r + i2r + i3r) ;                              // shared reduction -&gt; r[6:0]</code></pre></div><ul><li><code>ul/vl/wl</code> are <code>reg[7:0]</code> (0..255) and <code>rul/rvl/rwl</code> are <code>reg[6:0]</code> (0..127) — <strong>both fit exactly in signed INT9</strong> when zero-extended. Products are exact in 15 bits.</li><li>Latency matches the hard block exactly: today the products register on <code>clk</code> and the adder is combinational, so <code>r</code> settles one cycle after the operand registers. <code>int_sop_4</code> registers <code>result</code> on <code>clk</code>, valid 1 cycle after operands — identical.</li><li><code>i1r/i2r/i3r</code> have <strong>no other consumers</strong> (verified by search); <code>r</code> → <code>blr</code> → <code>temp_shadedata{a,b,c}[20:14]</code>, a live output.</li></ul><p><strong>Rejected: <code>matmult</code> (lines 335–350).</strong> Its 16-bit operands exceed INT9, and each row sums <em>pre-truncated</em> products (<code>am11[30:15] + ...</code>), so fusing into a full-precision SOP changes the computed value. <code>Cx/Cy/Cz</code> are also three separate reductions.</p><p><strong>Not fused:</strong> the <code>g</code> and <code>b</code> channels (2877–2882) feed <em>separate</em> reductions (<code>g</code>, <code>b</code>) and must stay independent.</p><hr><p>TIER: T2<br>REGIONS: bilinearintrp.$mul$raygentop.v:2874$348, bilinearintrp.$mul$raygentop.v:2875$349, bilinearintrp.$mul$raygentop.v:2876$350<br>SHARED_REDUCTION: <code>assign r = (i1r + i2r + i3r)</code> in module <code>bilinearintrp</code> — the 7-bit red-channel output <code>r</code>, which drives <code>blr</code> in <code>resultwriter</code> and is packed into <code>temp_shadedata{a,b,c}[20:14]</code><br>MAPPING:</p><div class="md-code"><pre><code>clk       &lt;- clk                       // module's only clock
 reset     &lt;- 1'b0                      // bilinearintrp has no reset port; hold inactive
 mode_sigs &lt;- sop_4_mode encoding (constant)
 ax        &lt;- {1'b0, ul}       (8b unsigned -&gt; 9b)   ay &lt;- {2'b00, rul}   // term 1: ul*rul  (was i1r)
@@ -631,34 +538,7 @@ cx        &lt;- {1'b0, wl}                             cy &lt;- {2'b00, rwl}   /
 dx        &lt;- 9'd0                                   dy &lt;- 9'd0           // 4th term unused, tied 0
 chainin   &lt;- 64'd0                                                       // no cascade
 result    -&gt; assign r = result[6:0];                                     // real consumer
-chainout  -&gt; left unused (declared wire, no load)
-```
-PLAN:
-1. Instantiate one `int_sop_4` inside `bilinearintrp`, fed directly from the existing `ul/vl/wl` and `rul/rvl/rwl` registers (which stay — they are also used elsewhere, e.g. `ul` feeds the texture address path, and `wl &lt;= 8'hFF - u - v` is a real pipeline stage).
-2. Delete the now-dead `reg[14:0] i1r, i2r, i3r` declarations and their three assignments in the `always @(posedge clk)` block; replace `assign r = (i1r + i2r + i3r);` with `assign r = result[6:0];`.
-3. Everything else is untouched: the module port list, the `selectuv` mux, the `g` and `b` channels (their own products and reductions remain in RTL), and all downstream consumers of `r`/`blr`.
-4. **Introduced operations/datatypes: NONE.** Same unsigned integer multiply-accumulate, same operand values, same latency, same output width.
-
-**Risks / correctness notes:**
-- *Truncation equivalence.* Today the sum is evaluated in 15-bit context (max exact sum is 3·255·127 = 97155, which wraps mod 2^15) and then truncated to `r[6:0]`. Wrapping at bit 15 cannot disturb bits [6:0], so `r` is exactly `exact_sum[6:0]` — matching `result[6:0]` from a 64-bit accumulator. Safe, but this is the one thing to re-verify in simulation.
-- *Signedness.* `int_sop_4` is INT9 (signed −256..255). All operands are zero-extended non-negative values, so products and the sum are positive and the signed/unsigned distinction is immaterial. Must not sign-extend `ul` (bit 7 set for values ≥128 would become negative).
-- *Reset tie-off.* The module has no reset; tying `reset` to `1'b0` means `result` is never cleared — matching current behavior, where `i1r/i2r/i3r` also have no reset. If the block's `reset` is active-low, invert this tie-off.
-- *Utilization asymmetry.* Only 3 of 4 term slots are used (`d*` tied to 0), so one multiplier in the block is idle. The `g` and `b` channels cannot legally fill it — they are distinct reductions. If more coverage is wanted, instantiate two more blocks (one per channel) rather than merging channels.
-- *Lint.* Removing `i1r/i2r/i3r` may leave unused-signal warnings if any testbench or waveform script references them by name.
-
-Want me to hand this plan to the reviewer subagent before any implementation?
-
-Read these files in this directory: raygentop.v</pre><div class="label">response</div><pre class="response">APPROVE
-
-Verified against `raygentop.v`:
-
-- **Terms are real, not fabricated (c).** Lines 2874–2876 are exactly `i1r &lt;= ul*rul; i2r &lt;= vl*rvl; i3r &lt;= wl*rwl;`, and line 2884 `assign r = (i1r + i2r + i3r);` is a genuine single shared reduction over those three products. Tying `dx/dy` to zero is the correct honest choice — no 4th product exists in that reduction, and the `g`/`b` products (2877–2882) legitimately belong to separate reductions, so the plan is right to leave them alone.
-- **Not a mode island (d).** `r` → `blr` (instance at line 2012) → `temp_shadedata{a,b,c}[20:14]` at 2267/2425/2484. Live consumer, real driven output.
-- **Function preserved (a).** Expression width of `i1r+i2r+i3r` is 15 bits, so the current value is `exact_sum mod 2^15` truncated to `r[6:0]`; wrap at bit 15 cannot perturb bits [6:0], so `r == exact_sum[6:0] == result[6:0]`. Latency also matches: today products register on `clk` with a combinational adder; `int_sop_4` registers `result` — one cycle either way.
-- **No new op/datatype (b).** `ul/vl/wl` are `reg[7:0]` (≤255) and `rul/rvl/rwl` are `reg[6:0]` (≤127); zero-extension to INT9 keeps every operand and product non-negative and exact. The plan explicitly flags the must-not-sign-extend hazard, which is the right call.
-- `i1r/i2r/i3r` have no other readers (only 2805–2807 decls, 2874–2876 writes, 2884 read), so deleting them is safe.
-
-Minor, non-blocking: the claim that `ul` "feeds the texture address path" is wrong — that `addr &lt;= start + ul[6:2]...` is a different module's local `ul`. The registers must still be kept anyway because the `g`/`b` channels consume them, so the conclusion stands. The `matmult` rejection (16-bit operands exceed INT9; per-row sums are of *pre-truncated* products, so fusing would change the value) is also correct reasoning.</pre><details class="inner"><summary>tool events <span class="meta">4 recorded, 0 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> ls -la; find . -name "raygentop.v" 2&gt;/dev/null</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+chainout  -&gt; left unused (declared wire, no load)</code></pre></div><p>PLAN:</p><ol><li>Instantiate one <code>int_sop_4</code> inside <code>bilinearintrp</code>, fed directly from the existing <code>ul/vl/wl</code> and <code>rul/rvl/rwl</code> registers (which stay — they are also used elsewhere, e.g. <code>ul</code> feeds the texture address path, and <code>wl &lt;= 8'hFF - u - v</code> is a real pipeline stage).</li><li>Delete the now-dead <code>reg[14:0] i1r, i2r, i3r</code> declarations and their three assignments in the <code>always @(posedge clk)</code> block; replace <code>assign r = (i1r + i2r + i3r);</code> with <code>assign r = result[6:0];</code>.</li><li>Everything else is untouched: the module port list, the <code>selectuv</code> mux, the <code>g</code> and <code>b</code> channels (their own products and reductions remain in RTL), and all downstream consumers of <code>r</code>/<code>blr</code>.</li><li><strong>Introduced operations/datatypes: NONE.</strong> Same unsigned integer multiply-accumulate, same operand values, same latency, same output width.</li></ol><p><strong>Risks / correctness notes:</strong></p><ul><li><em>Truncation equivalence.</em> Today the sum is evaluated in 15-bit context (max exact sum is 3·255·127 = 97155, which wraps mod 2^15) and then truncated to <code>r[6:0]</code>. Wrapping at bit 15 cannot disturb bits [6:0], so <code>r</code> is exactly <code>exact_sum[6:0]</code> — matching <code>result[6:0]</code> from a 64-bit accumulator. Safe, but this is the one thing to re-verify in simulation.</li><li><em>Signedness.</em> <code>int_sop_4</code> is INT9 (signed −256..255). All operands are zero-extended non-negative values, so products and the sum are positive and the signed/unsigned distinction is immaterial. Must not sign-extend <code>ul</code> (bit 7 set for values ≥128 would become negative).</li><li><em>Reset tie-off.</em> The module has no reset; tying <code>reset</code> to <code>1'b0</code> means <code>result</code> is never cleared — matching current behavior, where <code>i1r/i2r/i3r</code> also have no reset. If the block's <code>reset</code> is active-low, invert this tie-off.</li><li><em>Utilization asymmetry.</em> Only 3 of 4 term slots are used (<code>d*</code> tied to 0), so one multiplier in the block is idle. The <code>g</code> and <code>b</code> channels cannot legally fill it — they are distinct reductions. If more coverage is wanted, instantiate two more blocks (one per channel) rather than merging channels.</li><li><em>Lint.</em> Removing <code>i1r/i2r/i3r</code> may leave unused-signal warnings if any testbench or waveform script references them by name.</li></ul><p>Want me to hand this plan to the reviewer subagent before any implementation?</p><p>Read these files in this directory: raygentop.v</p></div><div class="label">response</div><div class="md response"><p>APPROVE</p><p>Verified against <code>raygentop.v</code>:</p><ul><li><strong>Terms are real, not fabricated (c).</strong> Lines 2874–2876 are exactly <code>i1r &lt;= ul*rul; i2r &lt;= vl*rvl; i3r &lt;= wl*rwl;</code>, and line 2884 <code>assign r = (i1r + i2r + i3r);</code> is a genuine single shared reduction over those three products. Tying <code>dx/dy</code> to zero is the correct honest choice — no 4th product exists in that reduction, and the <code>g</code>/<code>b</code> products (2877–2882) legitimately belong to separate reductions, so the plan is right to leave them alone.</li><li><strong>Not a mode island (d).</strong> <code>r</code> → <code>blr</code> (instance at line 2012) → <code>temp_shadedata{a,b,c}[20:14]</code> at 2267/2425/2484. Live consumer, real driven output.</li><li><strong>Function preserved (a).</strong> Expression width of <code>i1r+i2r+i3r</code> is 15 bits, so the current value is <code>exact_sum mod 2^15</code> truncated to <code>r[6:0]</code>; wrap at bit 15 cannot perturb bits [6:0], so <code>r == exact_sum[6:0] == result[6:0]</code>. Latency also matches: today products register on <code>clk</code> with a combinational adder; <code>int_sop_4</code> registers <code>result</code> — one cycle either way.</li><li><strong>No new op/datatype (b).</strong> <code>ul/vl/wl</code> are <code>reg[7:0]</code> (≤255) and <code>rul/rvl/rwl</code> are <code>reg[6:0]</code> (≤127); zero-extension to INT9 keeps every operand and product non-negative and exact. The plan explicitly flags the must-not-sign-extend hazard, which is the right call.</li><li><code>i1r/i2r/i3r</code> have no other readers (only 2805–2807 decls, 2874–2876 writes, 2884 read), so deleting them is safe.</li></ul><p>Minor, non-blocking: the claim that <code>ul</code> "feeds the texture address path" is wrong — that <code>addr &lt;= start + ul[6:2]...</code> is a different module's local <code>ul</code>. The registers must still be kept anyway because the <code>g</code>/<code>b</code> channels consume them, so the conclusion stands. The <code>matmult</code> rejection (16-bit operands exceed INT9; per-row sums are of <em>pre-truncated</em> products, so fusing would change the value) is also correct reasoning.</p></div><details class="inner"><summary>tool events <span class="meta">4 recorded, 0 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> ls -la; find . -name "raygentop.v" 2&gt;/dev/null</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
  "command": "ls -la; find . -name \"raygentop.v\" 2&gt;/dev/null"
 }</pre><div class="label">output</div><pre class="plain">total 92
 drwx------ 2 samu samu  4096 Aug 27 15:33 .
@@ -850,54 +730,8 @@ module fifo3 (datain, writeen, dataout, shiften, globalreset, clk);
 2425:                         temp_shadedatab[20:14] = blr ; 
 2484:                         temp_shadedatac[20:14] = blr ; 
 2762:     module bilinearintrp (u01a, u01b, u01c, v01a, v01b, v01c, u10a, u10b, u10c, v10a, v10b, v10c, selectuv, ru, rv, rw, gu, gv, gw, bu, bv, bw, r, g, b, clk);
-</pre></div></details></div></div></details></div></details><details class="call"><summary>Call 3 · <b>editor</b> · anthropic/claude-opus-5 · <span class="ok">ok</span> <span class="meta">in 32 · out 5476 · reasoning 0 · cache read 296776 · cache write 25296 · 117.1 s</span></summary><div class="body"><div class="label">prompt</div><pre class="prompt">Edit raygentop.v in this directory. Local restructuring: re-express the region (e.g. a multiply array + adder tree as a fused sum-of-products) to reach the mode; preserve the region's function and role, keep the rest of the design unchanged, wire the mode's real consumers.
-
-Goal: rewrite the RTL so the hard-block mode 'sop_4_mode' is exercised in the packed netlist,
-doing real work, while preserving the design's behaviour and role.
-Tier: T2
-
-Hard-block primitive to instantiate: `int_sop_4`   (precision INT9)
-  computes: out = ax*ay + bx*by + cx*cy + dx*dy
-  input ports:  clk[1] (clock), reset[1], mode_sigs[12], ax[9], ay[9], bx[9], by[9], cx[9], cy[9], dx[9], dy[9], chainin[64]
-  output ports: result[64], chainout[64]
-  timing: `result` is registered inside the block on `clk`; it is valid 1 cycle after the input operands are applied.
-  Wire EVERY operand of the fused region onto the input ports (name them exactly as above); drive the region's real consumer from the output port. Tie unused term ports to 0. Do not leave input ports unconnected.
-
-This is a MULTI-REGION fusion: aggregate these 4 product regions — bilinearintrp.$mul$raygentop.v:2874$348, bilinearintrp.$mul$raygentop.v:2875$349, bilinearintrp.$mul$raygentop.v:2876$350 — which already feed the common reduction '`assign r = (i1r + i2r + i3r)` in module `bilinearintrp` — the 7-bit red-channel output `r`, which drives `blr` in `resultwriter` and is packed into `temp_shadedata{a,b,c}[20:14]`', into one 4-term 'sop_4_mode' instance. Fuse only these existing terms; do not invent new ones.
-Rules: edit Verilog source only; preserve the module's live inputs/outputs and its downstream
-consumers; do not introduce operations or datatypes absent from the design unless this tier
-admits a variant; keep the surrounding design unchanged for T1/T2. Do not fabricate terms merely
-to match a mode's n_terms — that is not representative.
-
-
-Follow this approved plan:
-I'll start by examining the source file around the candidate regions.I've read the source. Here's my analysis and plan.
-
-## Findings
-
-**`bilinearintrp` (lines 2762–2887)** is the barycentric color interpolator. Per color channel it computes three products that are registered and then reduced by a *single shared adder*:
-
-```verilog
-i1r &lt;= ul * rul ;   i2r &lt;= vl * rvl ;   i3r &lt;= wl * rwl ;   // 8b x 7b -&gt; 15b
-assign r = (i1r + i2r + i3r) ;                              // shared reduction -&gt; r[6:0]
-```
-
-- `ul/vl/wl` are `reg[7:0]` (0..255) and `rul/rvl/rwl` are `reg[6:0]` (0..127) — **both fit exactly in signed INT9** when zero-extended. Products are exact in 15 bits.
-- Latency matches the hard block exactly: today the products register on `clk` and the adder is combinational, so `r` settles one cycle after the operand registers. `int_sop_4` registers `result` on `clk`, valid 1 cycle after operands — identical.
-- `i1r/i2r/i3r` have **no other consumers** (verified by search); `r` → `blr` → `temp_shadedata{a,b,c}[20:14]`, a live output.
-
-**Rejected: `matmult` (lines 335–350).** Its 16-bit operands exceed INT9, and each row sums *pre-truncated* products (`am11[30:15] + ...`), so fusing into a full-precision SOP changes the computed value. `Cx/Cy/Cz` are also three separate reductions.
-
-**Not fused:** the `g` and `b` channels (2877–2882) feed *separate* reductions (`g`, `b`) and must stay independent.
-
----
-
-TIER: T2
-REGIONS: bilinearintrp.$mul$raygentop.v:2874$348, bilinearintrp.$mul$raygentop.v:2875$349, bilinearintrp.$mul$raygentop.v:2876$350
-SHARED_REDUCTION: `assign r = (i1r + i2r + i3r)` in module `bilinearintrp` — the 7-bit red-channel output `r`, which drives `blr` in `resultwriter` and is packed into `temp_shadedata{a,b,c}[20:14]`
-MAPPING:
-```
-clk       &lt;- clk                       // module's only clock
+</pre></div></details></div></div></details></div></details><details class="call"><summary>Call 3 · <b>editor</b> · anthropic/claude-opus-5 · <span class="ok">ok</span> <span class="meta">in 32 · out 5476 · reasoning 0 · cache read 296776 · cache write 25296 · 117.1 s · read outside the work dir</span></summary><div class="body"><details class="inner"><summary>read outside the work dir: a prior run's edited design, a prior run's records, the architecture XML, the framework repository <span class="meta">5 path(s)</span></summary><div class="body"><ul class="paths"><li><code>/home/samu/dev/llm-hardblocks/benchadapt</code></li><li><code>/home/samu/dev/llm-hardblocks/benchadapt/arch/k6FracN10LB_mem20K_complexDSP_customSB_22nm.xml</code></li><li><code>/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/vtr_demo</code></li><li><code>/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/vtr_demo/raygentop/sop_4_mode/20260827-152947-8d3f03/edit/raygentop/raygentop.v</code></li><li><code>/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/vtr_demo/raygentop/sop_4_mode/20260827-152947-8d3f03/report.md</code></li></ul></div></details><div class="label">prompt</div><div class="md prompt"><p class="md-note">1 paragraph break restored by the export, where the recorder joined text blocks with no separator.</p><p>Edit raygentop.v in this directory. Local restructuring: re-express the region (e.g. a multiply array + adder tree as a fused sum-of-products) to reach the mode; preserve the region's function and role, keep the rest of the design unchanged, wire the mode's real consumers.</p><p>Goal: rewrite the RTL so the hard-block mode 'sop_4_mode' is exercised in the packed netlist,<br>doing real work, while preserving the design's behaviour and role.<br>Tier: T2</p><p>Hard-block primitive to instantiate: <code>int_sop_4</code>   (precision INT9)<br>  computes: out = ax*ay + bx*by + cx*cy + dx*dy<br>  input ports:  clk[1] (clock), reset[1], mode_sigs[12], ax[9], ay[9], bx[9], by[9], cx[9], cy[9], dx[9], dy[9], chainin[64]<br>  output ports: result[64], chainout[64]<br>  timing: <code>result</code> is registered inside the block on <code>clk</code>; it is valid 1 cycle after the input operands are applied.<br>  Wire EVERY operand of the fused region onto the input ports (name them exactly as above); drive the region's real consumer from the output port. Tie unused term ports to 0. Do not leave input ports unconnected.</p><p>This is a MULTI-REGION fusion: aggregate these 4 product regions — bilinearintrp.$mul$raygentop.v:2874$348, bilinearintrp.$mul$raygentop.v:2875$349, bilinearintrp.$mul$raygentop.v:2876$350 — which already feed the common reduction '<code>assign r = (i1r + i2r + i3r)</code> in module <code>bilinearintrp</code> — the 7-bit red-channel output <code>r</code>, which drives <code>blr</code> in <code>resultwriter</code> and is packed into <code>temp_shadedata{a,b,c}[20:14]</code>', into one 4-term 'sop_4_mode' instance. Fuse only these existing terms; do not invent new ones.<br>Rules: edit Verilog source only; preserve the module's live inputs/outputs and its downstream<br>consumers; do not introduce operations or datatypes absent from the design unless this tier<br>admits a variant; keep the surrounding design unchanged for T1/T2. Do not fabricate terms merely<br>to match a mode's n_terms — that is not representative.</p><p>Follow this approved plan:<br>I'll start by examining the source file around the candidate regions.</p><p>I've read the source. Here's my analysis and plan.</p><div class="mdh mdh2">Findings</div><p><strong><code>bilinearintrp</code> (lines 2762–2887)</strong> is the barycentric color interpolator. Per color channel it computes three products that are registered and then reduced by a <em>single shared adder</em>:</p><div class="md-code"><span class="md-lang">verilog</span><pre><code>i1r &lt;= ul * rul ;   i2r &lt;= vl * rvl ;   i3r &lt;= wl * rwl ;   // 8b x 7b -&gt; 15b
+assign r = (i1r + i2r + i3r) ;                              // shared reduction -&gt; r[6:0]</code></pre></div><ul><li><code>ul/vl/wl</code> are <code>reg[7:0]</code> (0..255) and <code>rul/rvl/rwl</code> are <code>reg[6:0]</code> (0..127) — <strong>both fit exactly in signed INT9</strong> when zero-extended. Products are exact in 15 bits.</li><li>Latency matches the hard block exactly: today the products register on <code>clk</code> and the adder is combinational, so <code>r</code> settles one cycle after the operand registers. <code>int_sop_4</code> registers <code>result</code> on <code>clk</code>, valid 1 cycle after operands — identical.</li><li><code>i1r/i2r/i3r</code> have <strong>no other consumers</strong> (verified by search); <code>r</code> → <code>blr</code> → <code>temp_shadedata{a,b,c}[20:14]</code>, a live output.</li></ul><p><strong>Rejected: <code>matmult</code> (lines 335–350).</strong> Its 16-bit operands exceed INT9, and each row sums <em>pre-truncated</em> products (<code>am11[30:15] + ...</code>), so fusing into a full-precision SOP changes the computed value. <code>Cx/Cy/Cz</code> are also three separate reductions.</p><p><strong>Not fused:</strong> the <code>g</code> and <code>b</code> channels (2877–2882) feed <em>separate</em> reductions (<code>g</code>, <code>b</code>) and must stay independent.</p><hr><p>TIER: T2<br>REGIONS: bilinearintrp.$mul$raygentop.v:2874$348, bilinearintrp.$mul$raygentop.v:2875$349, bilinearintrp.$mul$raygentop.v:2876$350<br>SHARED_REDUCTION: <code>assign r = (i1r + i2r + i3r)</code> in module <code>bilinearintrp</code> — the 7-bit red-channel output <code>r</code>, which drives <code>blr</code> in <code>resultwriter</code> and is packed into <code>temp_shadedata{a,b,c}[20:14]</code><br>MAPPING:</p><div class="md-code"><pre><code>clk       &lt;- clk                       // module's only clock
 reset     &lt;- 1'b0                      // bilinearintrp has no reset port; hold inactive
 mode_sigs &lt;- sop_4_mode encoding (constant)
 ax        &lt;- {1'b0, ul}       (8b unsigned -&gt; 9b)   ay &lt;- {2'b00, rul}   // term 1: ul*rul  (was i1r)
@@ -906,57 +740,7 @@ cx        &lt;- {1'b0, wl}                             cy &lt;- {2'b00, rwl}   /
 dx        &lt;- 9'd0                                   dy &lt;- 9'd0           // 4th term unused, tied 0
 chainin   &lt;- 64'd0                                                       // no cascade
 result    -&gt; assign r = result[6:0];                                     // real consumer
-chainout  -&gt; left unused (declared wire, no load)
-```
-PLAN:
-1. Instantiate one `int_sop_4` inside `bilinearintrp`, fed directly from the existing `ul/vl/wl` and `rul/rvl/rwl` registers (which stay — they are also used elsewhere, e.g. `ul` feeds the texture address path, and `wl &lt;= 8'hFF - u - v` is a real pipeline stage).
-2. Delete the now-dead `reg[14:0] i1r, i2r, i3r` declarations and their three assignments in the `always @(posedge clk)` block; replace `assign r = (i1r + i2r + i3r);` with `assign r = result[6:0];`.
-3. Everything else is untouched: the module port list, the `selectuv` mux, the `g` and `b` channels (their own products and reductions remain in RTL), and all downstream consumers of `r`/`blr`.
-4. **Introduced operations/datatypes: NONE.** Same unsigned integer multiply-accumulate, same operand values, same latency, same output width.
-
-**Risks / correctness notes:**
-- *Truncation equivalence.* Today the sum is evaluated in 15-bit context (max exact sum is 3·255·127 = 97155, which wraps mod 2^15) and then truncated to `r[6:0]`. Wrapping at bit 15 cannot disturb bits [6:0], so `r` is exactly `exact_sum[6:0]` — matching `result[6:0]` from a 64-bit accumulator. Safe, but this is the one thing to re-verify in simulation.
-- *Signedness.* `int_sop_4` is INT9 (signed −256..255). All operands are zero-extended non-negative values, so products and the sum are positive and the signed/unsigned distinction is immaterial. Must not sign-extend `ul` (bit 7 set for values ≥128 would become negative).
-- *Reset tie-off.* The module has no reset; tying `reset` to `1'b0` means `result` is never cleared — matching current behavior, where `i1r/i2r/i3r` also have no reset. If the block's `reset` is active-low, invert this tie-off.
-- *Utilization asymmetry.* Only 3 of 4 term slots are used (`d*` tied to 0), so one multiplier in the block is idle. The `g` and `b` channels cannot legally fill it — they are distinct reductions. If more coverage is wanted, instantiate two more blocks (one per channel) rather than merging channels.
-- *Lint.* Removing `i1r/i2r/i3r` may leave unused-signal warnings if any testbench or waveform script references them by name.
-
-Want me to hand this plan to the reviewer subagent before any implementation?
-
-Work iteratively IN THIS SESSION: after each edit, run `bash check.sh raygentop.v` and read its output; if it does not synthesize, fix the RTL and check again. Do NOT run place-and-route or any VTR/vpr command — that is verified separately. Stop when check.sh reports it synthesizes cleanly with the intended arithmetic.</pre><div class="label">response</div><pre class="response">I'll start by examining the region in the source file.Prior accepted run confirms the approach and that no blackbox stub is needed. Let me implement the plan.Now the three edits:Synthesizes. Let me verify the arithmetic census directly (the check script's `\s` grep printed nothing, so I want to confirm what's actually there).`int_sop_4` is instantiated and in the hierarchy. Let me confirm the delta against the pristine source:Delta is exactly right. Let me verify the diff is confined to the intended region:Done. `check.sh` reports clean synthesis and the arithmetic census confirms the intended fusion.
-
-## What I changed
-
-A single localized rewrite inside `bilinearintrp` (raygentop.v ~2802–2897), exactly per the plan:
-
-1. **Removed** `reg[14:0] i1r, i2r, i3r` and their three assignments in the `always @(posedge clk)` block.
-2. **Instantiated** one `int_sop_4` fed directly from the existing `ul/vl/wl` and `rul/rvl/rwl` pipeline registers, with all 14 input ports driven (unused 4th term `dx`/`dy` and `chainin` tied to 0, `reset` tied to `1'b0` since the module has no reset).
-3. **Rewired the real consumer**: `assign r = sop_result_r[6:0];` — `r` still drives `blr` in `resultwriter` into `temp_shadedata{a,b,c}[20:14]`.
-
-The `g` and `b` channels, the `selectuv` mux, the port list, and every other module are byte-identical — the diff touches only those three hunks.
-
-## Verification
-
-Cell census vs. the pristine source shows the delta is precisely the fused region and nothing else:
-
-| cell | before | after |
-|---|---|---|
-| `$mul` | 18 | **15** (−3 red products) |
-| `$add` | 27 | **25** (−2 adders of the 3-input reduction) |
-| `$dff` | 38 | **35** (−3 product registers) |
-| `int_sop_4` | — | **1** |
-
-All other cell counts unchanged. `bilinearintrp` remains in the hierarchy, and no dangling references to the removed regs survive.
-
-## Correctness notes worth flagging
-
-- **Bit-exactness holds.** The original sum was evaluated in 15-bit context (max exact value 3·255·127 = 97155 wraps mod 2¹⁵) then truncated to `r[6:0]`. Since 2¹⁵ ≡ 0 (mod 2⁷), the wrap cannot disturb bits [6:0], so `r` is identical to `result[6:0]` from the block's 64-bit accumulator.
-- **Signedness is safe** because I *zero*-extended: `ul`≤255 → `9'b011111111` is still positive in signed INT9, and `rul`≤127 likewise. Sign-extending `ul` would have been a real bug for values ≥128.
-- **Latency is preserved** — products registered + combinational adder (1 cycle) maps onto the block's registered `result` (1 cycle).
-- **One idle lane:** only 3 of 4 term slots are used. The `g`/`b` channels can't legally fill it since they are distinct reductions; more coverage would need two additional blocks.
-- **Untested assumption:** `reset` is tied `1'b0` assuming active-high. If the block's reset is active-low, this holds it permanently in reset and must be inverted — the arch XML's port semantics are worth confirming.
-
-Note I did not run place-and-route, per your instruction. Would you like me to hand this to the reviewer subagent?</pre><details class="inner"><summary>tool events <span class="meta">20 recorded, 0 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> ls -la</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+chainout  -&gt; left unused (declared wire, no load)</code></pre></div><p>PLAN:</p><ol><li>Instantiate one <code>int_sop_4</code> inside <code>bilinearintrp</code>, fed directly from the existing <code>ul/vl/wl</code> and <code>rul/rvl/rwl</code> registers (which stay — they are also used elsewhere, e.g. <code>ul</code> feeds the texture address path, and <code>wl &lt;= 8'hFF - u - v</code> is a real pipeline stage).</li><li>Delete the now-dead <code>reg[14:0] i1r, i2r, i3r</code> declarations and their three assignments in the <code>always @(posedge clk)</code> block; replace <code>assign r = (i1r + i2r + i3r);</code> with <code>assign r = result[6:0];</code>.</li><li>Everything else is untouched: the module port list, the <code>selectuv</code> mux, the <code>g</code> and <code>b</code> channels (their own products and reductions remain in RTL), and all downstream consumers of <code>r</code>/<code>blr</code>.</li><li><strong>Introduced operations/datatypes: NONE.</strong> Same unsigned integer multiply-accumulate, same operand values, same latency, same output width.</li></ol><p><strong>Risks / correctness notes:</strong></p><ul><li><em>Truncation equivalence.</em> Today the sum is evaluated in 15-bit context (max exact sum is 3·255·127 = 97155, which wraps mod 2^15) and then truncated to <code>r[6:0]</code>. Wrapping at bit 15 cannot disturb bits [6:0], so <code>r</code> is exactly <code>exact_sum[6:0]</code> — matching <code>result[6:0]</code> from a 64-bit accumulator. Safe, but this is the one thing to re-verify in simulation.</li><li><em>Signedness.</em> <code>int_sop_4</code> is INT9 (signed −256..255). All operands are zero-extended non-negative values, so products and the sum are positive and the signed/unsigned distinction is immaterial. Must not sign-extend <code>ul</code> (bit 7 set for values ≥128 would become negative).</li><li><em>Reset tie-off.</em> The module has no reset; tying <code>reset</code> to <code>1'b0</code> means <code>result</code> is never cleared — matching current behavior, where <code>i1r/i2r/i3r</code> also have no reset. If the block's <code>reset</code> is active-low, invert this tie-off.</li><li><em>Utilization asymmetry.</em> Only 3 of 4 term slots are used (<code>d*</code> tied to 0), so one multiplier in the block is idle. The <code>g</code> and <code>b</code> channels cannot legally fill it — they are distinct reductions. If more coverage is wanted, instantiate two more blocks (one per channel) rather than merging channels.</li><li><em>Lint.</em> Removing <code>i1r/i2r/i3r</code> may leave unused-signal warnings if any testbench or waveform script references them by name.</li></ul><p>Want me to hand this plan to the reviewer subagent before any implementation?</p><p>Work iteratively IN THIS SESSION: after each edit, run <code>bash check.sh raygentop.v</code> and read its output; if it does not synthesize, fix the RTL and check again. Do NOT run place-and-route or any VTR/vpr command — that is verified separately. Stop when check.sh reports it synthesizes cleanly with the intended arithmetic.</p></div><div class="label">response</div><div class="md response"><p class="md-note">5 paragraph breaks restored by the export, where the recorder joined text blocks with no separator.</p><p>I'll start by examining the region in the source file.</p><p>Prior accepted run confirms the approach and that no blackbox stub is needed. Let me implement the plan.</p><p>Now the three edits:</p><p>Synthesizes. Let me verify the arithmetic census directly (the check script's <code>\s</code> grep printed nothing, so I want to confirm what's actually there).<code>int_sop_4</code> is instantiated and in the hierarchy. Let me confirm the delta against the pristine source:</p><p>Delta is exactly right. Let me verify the diff is confined to the intended region:</p><p>Done. <code>check.sh</code> reports clean synthesis and the arithmetic census confirms the intended fusion.</p><div class="mdh mdh2">What I changed</div><p>A single localized rewrite inside <code>bilinearintrp</code> (raygentop.v ~2802–2897), exactly per the plan:</p><ol><li><strong>Removed</strong> <code>reg[14:0] i1r, i2r, i3r</code> and their three assignments in the <code>always @(posedge clk)</code> block.</li><li><strong>Instantiated</strong> one <code>int_sop_4</code> fed directly from the existing <code>ul/vl/wl</code> and <code>rul/rvl/rwl</code> pipeline registers, with all 14 input ports driven (unused 4th term <code>dx</code>/<code>dy</code> and <code>chainin</code> tied to 0, <code>reset</code> tied to <code>1'b0</code> since the module has no reset).</li><li><strong>Rewired the real consumer</strong>: <code>assign r = sop_result_r[6:0];</code> — <code>r</code> still drives <code>blr</code> in <code>resultwriter</code> into <code>temp_shadedata{a,b,c}[20:14]</code>.</li></ol><p>The <code>g</code> and <code>b</code> channels, the <code>selectuv</code> mux, the port list, and every other module are byte-identical — the diff touches only those three hunks.</p><div class="mdh mdh2">Verification</div><p>Cell census vs. the pristine source shows the delta is precisely the fused region and nothing else:</p><div class="md-tw"><table><thead><tr><th>cell</th><th>before</th><th>after</th></tr></thead><tbody><tr><td><code>$mul</code></td><td>18</td><td><strong>15</strong> (−3 red products)</td></tr><tr><td><code>$add</code></td><td>27</td><td><strong>25</strong> (−2 adders of the 3-input reduction)</td></tr><tr><td><code>$dff</code></td><td>38</td><td><strong>35</strong> (−3 product registers)</td></tr><tr><td><code>int_sop_4</code></td><td>—</td><td><strong>1</strong></td></tr></tbody></table></div><p>All other cell counts unchanged. <code>bilinearintrp</code> remains in the hierarchy, and no dangling references to the removed regs survive.</p><div class="mdh mdh2">Correctness notes worth flagging</div><ul><li><strong>Bit-exactness holds.</strong> The original sum was evaluated in 15-bit context (max exact value 3·255·127 = 97155 wraps mod 2¹⁵) then truncated to <code>r[6:0]</code>. Since 2¹⁵ ≡ 0 (mod 2⁷), the wrap cannot disturb bits [6:0], so <code>r</code> is identical to <code>result[6:0]</code> from the block's 64-bit accumulator.</li><li><strong>Signedness is safe</strong> because I <em>zero</em>-extended: <code>ul</code>≤255 → <code>9'b011111111</code> is still positive in signed INT9, and <code>rul</code>≤127 likewise. Sign-extending <code>ul</code> would have been a real bug for values ≥128.</li><li><strong>Latency is preserved</strong> — products registered + combinational adder (1 cycle) maps onto the block's registered <code>result</code> (1 cycle).</li><li><strong>One idle lane:</strong> only 3 of 4 term slots are used. The <code>g</code>/<code>b</code> channels can't legally fill it since they are distinct reductions; more coverage would need two additional blocks.</li><li><strong>Untested assumption:</strong> <code>reset</code> is tied <code>1'b0</code> assuming active-high. If the block's reset is active-low, this holds it permanently in reset and must be inverted — the arch XML's port semantics are worth confirming.</li></ul><p>Note I did not run place-and-route, per your instruction. Would you like me to hand this to the reviewer subagent?</p></div><details class="inner"><summary>tool events <span class="meta">20 recorded, 0 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> ls -la</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
  "command": "ls -la"
 }</pre><div class="label">output</div><pre class="plain">total 96
 drwxrwxr-x 2 samu samu  4096 Aug 27 15:34 .
@@ -1481,123 +1265,7 @@ Time spent: 30% 6x opt_expr (0 sec), 18% 5x opt_merge (0 sec), ...
 </pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> bash check.sh raygentop.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
  "command": "bash check.sh raygentop.v"
 }</pre><div class="label">output</div><pre class="plain">OK: synthesizes cleanly
-</pre></div></details></div></div></details></div></details><details class="call"><summary>Call 4 · <b>reviewer:acceptance</b> · anthropic/claude-opus-5 · <span class="ok">ok</span> <span class="meta">in 26 · out 6421 · reasoning 0 · cache read 197327 · cache write 22429 · 118.6 s</span></summary><div class="body"><div class="label">prompt</div><pre class="prompt">You are an INDEPENDENT ACCEPTANCE REVIEWER — the gate of record for whether an adapted design is
-a LEGITIMATE member of its benchmark suite. You did NOT plan or write this edit. Judge only what
-is in front of you. Your verdict is final and fully automated; there is no human backstop, so err
-toward rejecting anything you cannot positively ground.
-
-FRAMING — refute by default. Your job is to find why this adaptation is NOT a legitimate suite
-member. Assume it is contrived until the evidence shows otherwise. A rewrite that merely "makes
-the mode appear in the netlist" is NOT sufficient — the mode must do real work the original
-workload actually implied.
-
-This case has already passed the deterministic structural, provenance, and (for T3) evidence
-gates — do not re-litigate those mechanically. Your judgement is the *legitimacy* call they
-cannot make: would a real designer of THIS workload ship this, or is it a mode-island / fabricated
-dot-product / gratuitous variant dressed up to pass?
-
-REJECT if any of these hold:
-- (a) FABRICATED TERMS — a fused N-term product/sum aggregates operands that did not genuinely
-  share a reduction in the original; the "dot product" is manufactured to fill the mode's arity.
-- (b) MODE ISLAND / DEAD WORK — the mode's result does not flow to the design's real outputs, or
-  is wired to constants / a sink that the rest of the design ignores.
-- (c) ROLE BREAK — the adapted region no longer plays the workload role the witness recorded
-  (e.g. a control-path multiply repurposed as a fake datapath MAC).
-- (d) UNGROUNDED VARIANT (T3) — the precision/algorithm variant is not the one the cited sibling
-  design evidences; the adaptation drifts to a workload character the suite does not contain.
-
-ACCEPT if the adaptation is sound: the mapped arithmetic genuinely existed, the fused terms really
-shared a reduction, the mode's output drives the original consumers, and the workload role is
-preserved. Legitimate adaptation need not be optimal — only real.
-
-You MUST ground your verdict: cite the specific preserved role (from the witness), the real
-region(s)/reduction the mode maps onto, and — for T3 — the sibling evidence axis. A verdict you
-cannot ground is a REJECT.
-
---- ADAPTATION UNDER REVIEW ---
-Target mode: sop_4_mode   Tier: T2
-Region witness (the 'before'): role 'bilinearintrp', operation 'sop', datatype int8,
-  regions ['bilinearintrp.$mul$raygentop.v:2874$348', 'bilinearintrp.$mul$raygentop.v:2875$349', 'bilinearintrp.$mul$raygentop.v:2876$350'], shared reduction '`assign r = (i1r + i2r + i3r)` in module `bilinearintrp` — the 7-bit red-channel output `r`, which drives `blr` in `resultwriter` and is packed into `temp_shadedata{a,b,c}[20:14]`', downstream consumers ['bilinearintrp'].
-Manifest (the 'after'): introduced operations [], introduced datatypes
-  [], intended consumers ['bilinearintrp'].
-Deterministic gates: PASSED. Evidence floor: no variant introduced (T1/T2).
-Packed netlist: target mode present = True.
-
---- EDIT DIFF ---
---- outputs/adapt/vtr_demo/raygentop/sop_4_mode/20260827-153207-b498fe/edit/.pristine/raygentop/raygentop.v	2026-08-16 18:14:11.414163698 -0700
-+++ outputs/adapt/vtr_demo/raygentop/sop_4_mode/20260827-153207-b498fe/edit/raygentop/raygentop.v	2026-08-27 15:35:19.798617856 -0700
-@@ -2802,9 +2802,8 @@
-         reg[14:0] i1g; 
-         reg[14:0] i2g; 
-         reg[14:0] i3g; 
--        reg[14:0] i1r; 
--        reg[14:0] i2r; 
--        reg[14:0] i3r; 
-+        wire[63:0] sop_result_r; 
-+        wire[63:0] sop_chainout_r; 
-         reg[6:0] rul; 
-         reg[6:0] rvl; 
-         reg[6:0] rwl; 
-@@ -2871,9 +2870,6 @@
-            bul &lt;= bu ; 
-            bvl &lt;= bv ; 
-            bwl &lt;= bw ; 
--           i1r &lt;= ul * rul ; 
--           i2r &lt;= vl * rvl ; 
--           i3r &lt;= wl * rwl ; 
-            i1g &lt;= ul * gul ; 
-            i2g &lt;= vl * gvl ; 
-            i3g &lt;= wl * gwl ; 
-@@ -2881,7 +2877,24 @@
-            i2b &lt;= vl * bvl ; 
-            i3b &lt;= wl * bwl ;  
-         end 
--        assign r = (i1r + i2r + i3r) ;
-+        // Fused red-channel sum-of-products: r = ul*rul + vl*rvl + wl*rwl
-+        // (was: i1r/i2r/i3r product registers + shared 3-input adder).
-+        // Operands are unsigned (ul/vl/wl 8b, rul/rvl/rwl 7b) so they are
-+        // zero-extended into the INT9 ports; result registers on clk, giving
-+        // the same 1-cycle operand-to-r latency as the original pipeline.
-+        int_sop_4 sop_r (
-+           .clk(clk),
-+           .reset(1'b0),
-+           .mode_sigs(12'b0),
-+           .ax({1'b0, ul}),   .ay({2'b0, rul}),
-+           .bx({1'b0, vl}),   .by({2'b0, rvl}),
-+           .cx({1'b0, wl}),   .cy({2'b0, rwl}),
-+           .dx(9'b0),         .dy(9'b0),
-+           .chainin(64'b0),
-+           .result(sop_result_r),
-+           .chainout(sop_chainout_r)
-+        );
-+        assign r = sop_result_r[6:0] ;
-         assign g = (i1g + i2g + i3g) ;
-         assign b = (i1b + i2b + i3b) ;
-      endmodule
-
-
-Your FIRST line must be exactly 'ACCEPT' or 'REJECT'. Then, on the following lines, state the
-grounding (role preserved / real region mapped / sibling evidence) or the specific violation
-(a/b/c/d) and what makes it illegitimate.
-
-Read these files in this directory: raygentop.v</pre><div class="label">response</div><pre class="response">I'll examine the actual file before judging.ACCEPT
-
-**Role preserved (witness → code).** The witness records role `bilinearintrp`, operation `sop`, int8. Lines 2762–2900 are still the barycentric color-interpolation module: `u`/`v` are selected by `selectuv`, `wl &lt;= 8'hFF - u - v` forms the third barycentric weight, and the red vertex attributes `ru/rv/rw` are still registered into `rul/rvl/rwl` (lines 2864–2866) and fed to the block. The adapted region is doing exactly the same datapath job — weighted interpolation of a per-vertex color — not a control-path multiply dressed up as a MAC. No (c).
-
-**Real reduction, not a fabricated dot product.** The pristine code was `i1r &lt;= ul*rul; i2r &lt;= vl*rvl; i3r &lt;= wl*rwl;` followed by `assign r = (i1r + i2r + i3r);` — three products that genuinely shared one adder in the original source. The fused instance maps exactly those three (x,y) pairs onto `ax/ay`, `bx/by`, `cx/cy`. Critically, the 4th slot is **tied off** (`dx=dy=9'b0`, `chainin=64'b0`) rather than filled by dragging in an unrelated product (e.g. a green/blue term that never shared this reduction). That is the honest use of an over-arity block. No (a).
-
-**Output reaches real design outputs.** `r` → port `r` of `bilinearintrp` → `blr` at the `bilinearimp` instantiation (line 2012) → `temp_shadedata{a,b,c}[20:14]` (lines 2267, 2425, 2484) → `shadedataa &lt;= temp_shadedataa` (line 2048) → bit-sliced onto the module's outputs (lines 2053+). Exactly the consumer chain the witness recorded. Not a mode island. No (b).
-
-**T2 — no variant introduced**, so (d) is not applicable; the manifest correctly declares empty introduced ops/datatypes.
-
-**Independent checks I ran:**
-- No orphaned `i1r/i2r/i3r` remain (only a comment reference); the removed regs left no dangling logic.
-- Operand extension is value-correct: `ul/vl/wl` are 8b unsigned → `{1'b0,ul}` is a non-negative INT9; `rul/rvl/rwl` are 7b → `{2'b0,rul}`. Products and sum are unchanged.
-- Truncation matches the original: `r` is 7 bits, so the pristine `i1r+i2r+i3r` was already truncated to its low 7 bits; `sop_result_r[6:0]` reproduces this bit-exactly.
-- Latency claim in the comment holds: with nonblocking updates, the pristine `i1r` at N+1 was `ul(N)*rul(N)`, and a clk-registered SOP result at N+1 is the same — one operand-to-`r` stage either way.
-- Elaboration: `iverilog` with a stubbed `int_sop_4` elaborates the whole top cleanly; the only unresolved module is `single_port_ram`, expected for the `_no_mem` variant.
-
-**Non-blocking observation (not grounds for rejection):** only the red channel is hardened; `g` and `b` keep their soft `i1g+i2g+i3g` / `i1b+i2b+i3b` adders. A production designer would likely map all three identical channels. But the witness scoped the region to the red-channel reduction only, and asymmetric/partial hardening is suboptimal rather than contrived — it does not manufacture terms, break the role, or orphan the result.</pre><details class="inner"><summary>tool events <span class="meta">17 recorded, 1 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> ls -la; find . -name "raygentop.v" 2&gt;/dev/null</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+</pre></div></details></div></div></details></div></details><details class="call"><summary>Call 4 · <b>reviewer:acceptance</b> · anthropic/claude-opus-5 · <span class="ok">ok</span> <span class="meta">in 26 · out 6421 · reasoning 0 · cache read 197327 · cache write 22429 · 118.6 s</span></summary><div class="body"><div class="label">prompt</div><div class="md prompt"><p>You are an INDEPENDENT ACCEPTANCE REVIEWER — the gate of record for whether an adapted design is<br>a LEGITIMATE member of its benchmark suite. You did NOT plan or write this edit. Judge only what<br>is in front of you. Your verdict is final and fully automated; there is no human backstop, so err<br>toward rejecting anything you cannot positively ground.</p><p>FRAMING — refute by default. Your job is to find why this adaptation is NOT a legitimate suite<br>member. Assume it is contrived until the evidence shows otherwise. A rewrite that merely "makes<br>the mode appear in the netlist" is NOT sufficient — the mode must do real work the original<br>workload actually implied.</p><p>This case has already passed the deterministic structural, provenance, and (for T3) evidence<br>gates — do not re-litigate those mechanically. Your judgement is the <em>legitimacy</em> call they<br>cannot make: would a real designer of THIS workload ship this, or is it a mode-island / fabricated<br>dot-product / gratuitous variant dressed up to pass?</p><p>REJECT if any of these hold:</p><ul><li>(a) FABRICATED TERMS — a fused N-term product/sum aggregates operands that did not genuinely<br> share a reduction in the original; the "dot product" is manufactured to fill the mode's arity.</li><li>(b) MODE ISLAND / DEAD WORK — the mode's result does not flow to the design's real outputs, or<br> is wired to constants / a sink that the rest of the design ignores.</li><li>(c) ROLE BREAK — the adapted region no longer plays the workload role the witness recorded<br> (e.g. a control-path multiply repurposed as a fake datapath MAC).</li><li>(d) UNGROUNDED VARIANT (T3) — the precision/algorithm variant is not the one the cited sibling<br> design evidences; the adaptation drifts to a workload character the suite does not contain.</li></ul><p>ACCEPT if the adaptation is sound: the mapped arithmetic genuinely existed, the fused terms really<br>shared a reduction, the mode's output drives the original consumers, and the workload role is<br>preserved. Legitimate adaptation need not be optimal — only real.</p><p>You MUST ground your verdict: cite the specific preserved role (from the witness), the real<br>region(s)/reduction the mode maps onto, and — for T3 — the sibling evidence axis. A verdict you<br>cannot ground is a REJECT.</p><p>--- ADAPTATION UNDER REVIEW ---<br>Target mode: sop_4_mode   Tier: T2<br>Region witness (the 'before'): role 'bilinearintrp', operation 'sop', datatype int8,<br>  regions ['bilinearintrp.$mul$raygentop.v:2874$348', 'bilinearintrp.$mul$raygentop.v:2875$349', 'bilinearintrp.$mul$raygentop.v:2876$350'], shared reduction '<code>assign r = (i1r + i2r + i3r)</code> in module <code>bilinearintrp</code> — the 7-bit red-channel output <code>r</code>, which drives <code>blr</code> in <code>resultwriter</code> and is packed into <code>temp_shadedata{a,b,c}[20:14]</code>', downstream consumers ['bilinearintrp'].<br>Manifest (the 'after'): introduced operations [], introduced datatypes<br>  [], intended consumers ['bilinearintrp'].<br>Deterministic gates: PASSED. Evidence floor: no variant introduced (T1/T2).<br>Packed netlist: target mode present = True.</p><p>--- EDIT DIFF ---<br>--- outputs/adapt/vtr_demo/raygentop/sop_4_mode/20260827-153207-b498fe/edit/.pristine/raygentop/raygentop.v	2026-08-16 18:14:11.414163698 -0700<br>+++ outputs/adapt/vtr_demo/raygentop/sop_4_mode/20260827-153207-b498fe/edit/raygentop/raygentop.v	2026-08-27 15:35:19.798617856 -0700<br>@@ -2802,9 +2802,8 @@<br>         reg[14:0] i1g; <br>         reg[14:0] i2g; <br>         reg[14:0] i3g; </p><ul><li>reg[14:0] i1r; </li><li>reg[14:0] i2r; </li><li>reg[14:0] i3r; </li><li>wire[63:0] sop_result_r; </li><li><p>wire[63:0] sop_chainout_r; <br>        reg[6:0] rul; <br>        reg[6:0] rvl; <br>        reg[6:0] rwl; <br>@@ -2871,9 +2870,6 @@<br>           bul &lt;= bu ; <br>           bvl &lt;= bv ; <br>           bwl &lt;= bw ; </p></li><li>i1r &lt;= ul * rul ; </li><li>i2r &lt;= vl * rvl ; </li><li><p>i3r &lt;= wl * rwl ; <br>           i1g &lt;= ul * gul ; <br>           i2g &lt;= vl * gvl ; <br>           i3g &lt;= wl * gwl ; <br>@@ -2881,7 +2877,24 @@<br>           i2b &lt;= vl * bvl ; <br>           i3b &lt;= wl * bwl ;  <br>        end </p></li><li>assign r = (i1r + i2r + i3r) ;</li><li>// Fused red-channel sum-of-products: r = ul*rul + vl*rvl + wl*rwl</li><li>// (was: i1r/i2r/i3r product registers + shared 3-input adder).</li><li>// Operands are unsigned (ul/vl/wl 8b, rul/rvl/rwl 7b) so they are</li><li>// zero-extended into the INT9 ports; result registers on clk, giving</li><li>// the same 1-cycle operand-to-r latency as the original pipeline.</li><li>int_sop_4 sop_r (</li><li>.clk(clk),</li><li>.reset(1'b0),</li><li>.mode_sigs(12'b0),</li><li>.ax({1'b0, ul}),   .ay({2'b0, rul}),</li><li>.bx({1'b0, vl}),   .by({2'b0, rvl}),</li><li>.cx({1'b0, wl}),   .cy({2'b0, rwl}),</li><li>.dx(9'b0),         .dy(9'b0),</li><li>.chainin(64'b0),</li><li>.result(sop_result_r),</li><li>.chainout(sop_chainout_r)</li><li>);</li><li><p>assign r = sop_result_r[6:0] ;<br>        assign g = (i1g + i2g + i3g) ;<br>        assign b = (i1b + i2b + i3b) ;<br>     endmodule</p></li></ul><p>Your FIRST line must be exactly 'ACCEPT' or 'REJECT'. Then, on the following lines, state the<br>grounding (role preserved / real region mapped / sibling evidence) or the specific violation<br>(a/b/c/d) and what makes it illegitimate.</p><p>Read these files in this directory: raygentop.v</p></div><div class="label">response</div><div class="md response"><p class="md-note">1 paragraph break restored by the export, where the recorder joined text blocks with no separator.</p><p>I'll examine the actual file before judging.</p><p>ACCEPT</p><p><strong>Role preserved (witness → code).</strong> The witness records role <code>bilinearintrp</code>, operation <code>sop</code>, int8. Lines 2762–2900 are still the barycentric color-interpolation module: <code>u</code>/<code>v</code> are selected by <code>selectuv</code>, <code>wl &lt;= 8'hFF - u - v</code> forms the third barycentric weight, and the red vertex attributes <code>ru/rv/rw</code> are still registered into <code>rul/rvl/rwl</code> (lines 2864–2866) and fed to the block. The adapted region is doing exactly the same datapath job — weighted interpolation of a per-vertex color — not a control-path multiply dressed up as a MAC. No (c).</p><p><strong>Real reduction, not a fabricated dot product.</strong> The pristine code was <code>i1r &lt;= ul*rul; i2r &lt;= vl*rvl; i3r &lt;= wl*rwl;</code> followed by <code>assign r = (i1r + i2r + i3r);</code> — three products that genuinely shared one adder in the original source. The fused instance maps exactly those three (x,y) pairs onto <code>ax/ay</code>, <code>bx/by</code>, <code>cx/cy</code>. Critically, the 4th slot is <strong>tied off</strong> (<code>dx=dy=9'b0</code>, <code>chainin=64'b0</code>) rather than filled by dragging in an unrelated product (e.g. a green/blue term that never shared this reduction). That is the honest use of an over-arity block. No (a).</p><p><strong>Output reaches real design outputs.</strong> <code>r</code> → port <code>r</code> of <code>bilinearintrp</code> → <code>blr</code> at the <code>bilinearimp</code> instantiation (line 2012) → <code>temp_shadedata{a,b,c}[20:14]</code> (lines 2267, 2425, 2484) → <code>shadedataa &lt;= temp_shadedataa</code> (line 2048) → bit-sliced onto the module's outputs (lines 2053+). Exactly the consumer chain the witness recorded. Not a mode island. No (b).</p><p><strong>T2 — no variant introduced</strong>, so (d) is not applicable; the manifest correctly declares empty introduced ops/datatypes.</p><p><strong>Independent checks I ran:</strong></p><ul><li>No orphaned <code>i1r/i2r/i3r</code> remain (only a comment reference); the removed regs left no dangling logic.</li><li>Operand extension is value-correct: <code>ul/vl/wl</code> are 8b unsigned → <code>{1'b0,ul}</code> is a non-negative INT9; <code>rul/rvl/rwl</code> are 7b → <code>{2'b0,rul}</code>. Products and sum are unchanged.</li><li>Truncation matches the original: <code>r</code> is 7 bits, so the pristine <code>i1r+i2r+i3r</code> was already truncated to its low 7 bits; <code>sop_result_r[6:0]</code> reproduces this bit-exactly.</li><li>Latency claim in the comment holds: with nonblocking updates, the pristine <code>i1r</code> at N+1 was <code>ul(N)*rul(N)</code>, and a clk-registered SOP result at N+1 is the same — one operand-to-<code>r</code> stage either way.</li><li>Elaboration: <code>iverilog</code> with a stubbed <code>int_sop_4</code> elaborates the whole top cleanly; the only unresolved module is <code>single_port_ram</code>, expected for the <code>_no_mem</code> variant.</li></ul><p><strong>Non-blocking observation (not grounds for rejection):</strong> only the red channel is hardened; <code>g</code> and <code>b</code> keep their soft <code>i1g+i2g+i3g</code> / <code>i1b+i2b+i3b</code> adders. A production designer would likely map all three identical channels. But the witness scoped the region to the red-channel reduction only, and asymmetric/partial hardening is suboptimal rather than contrived — it does not manufacture terms, break the role, or orphan the result.</p></div><details class="inner"><summary>tool events <span class="meta">17 recorded, 1 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> ls -la; find . -name "raygentop.v" 2&gt;/dev/null</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
  "command": "ls -la; find . -name \"raygentop.v\" 2&gt;/dev/null"
 }</pre><div class="label">output</div><pre class="plain">total 92
 drwx------ 2 samu samu  4096 Aug 27 15:36 .
