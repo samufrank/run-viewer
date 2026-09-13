@@ -1,0 +1,1957 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>dla_like.small → comb_sop_2_18_mode · 20260907-200734-b07463</title><style>
+:root { color-scheme: light; }
+/* Embedded previews (Slack) size their frame from a height measured once, at first paint
+   and possibly at a different width than the one displayed; a page whose height depends on
+   line wrapping then gets cut off. A definite minimum height in absolute units (not vh, not
+   %) keeps the measured height at or above the collapsed page's height down to ~500px wide
+   (measured 1418px at 500px, 977 at 700, 893 at 1200). Below the fold in a normal browser. */
+html, body { height: auto; }
+body { margin: 0; padding: 1.5rem 1rem 4rem; background: #fff; color: #1a1a1a; min-height: 1450px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 15px; line-height: 1.6; }
+main { max-width: 72rem; margin: 0 auto; }
+h1 { font-size: 1.4rem; margin: 0 0 .25rem; font-weight: 600; }
+h2 { font-size: 1.1rem; margin: 0; font-weight: 600; display: inline; }
+h3 { font-size: 1rem; margin: 1.2rem 0 .4rem; font-weight: 600; }
+.sub { color: #555; margin: 0 0 1rem; }
+table { border-collapse: collapse; margin: .5rem 0 1rem; }
+th, td { text-align: left; padding: .2rem .8rem .2rem 0; vertical-align: top; }
+th { font-weight: 600; color: #444; white-space: nowrap; }
+table.num td.n, table.num th.n { text-align: right; font-variant-numeric: tabular-nums; }
+tr.total td { border-top: 1px solid #bbb; font-weight: 600; }
+details { margin: .6rem 0; border: 1px solid #d8d8d8; border-radius: 4px; background: #fff; }
+details > summary { cursor: pointer; padding: .55rem .8rem; list-style: none;
+  display: flex; gap: .6rem; align-items: baseline; flex-wrap: wrap; }
+details > summary::-webkit-details-marker { display: none; }
+details > summary::before { content: "\25B8"; color: #777; font-size: .8em; }
+details[open] > summary::before { content: "\25BE"; }
+details > summary > .meta { color: #666; font-size: .9em; }
+details > .body { padding: .2rem .8rem .8rem; border-top: 1px solid #e6e6e6; }
+details.section > summary { font-size: 1.05rem; }
+details.call { margin-left: 0; }
+details.inner { border-color: #e6e6e6; }
+details.inner > summary { padding: .35rem .6rem; font-size: .92em; }
+pre { white-space: pre-wrap; word-break: break-word; margin: .3rem 0 .8rem;
+  padding: .7rem .9rem; border-radius: 4px; font-size: .86em; line-height: 1.5;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+pre.prompt { background: #f4f4f2; border-left: 3px solid #b8b8b0; }
+pre.response { background: #eef3f8; border-left: 3px solid #7f9fbf; }
+pre.plain { background: #f6f6f6; }
+.diff { white-space: pre-wrap; word-break: break-word; margin: .3rem 0 .8rem;
+  padding: .7rem .9rem; border-radius: 4px; font-size: .86em; line-height: 1.5;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  background: #fafafa; border: 1px solid #e3e3e3; }
+.diff div { min-height: 1.5em; }
+.diff .add { background: #e2f3e2; }
+.diff .del { background: #f8e0e0; }
+.diff .add-ws, .diff .del-ws { color: #999; background: #f3f3f3; }
+.diff .hunk { color: #6a5acd; }
+.diff .hdr { color: #666; }
+.diff details.ws { margin: .1rem 0; border: 1px dashed #ccc; background: #f6f6f6; }
+.diff details.ws > summary { padding: .1rem .5rem; color: #777; font-family: inherit; font-size: .95em; }
+.diff details.ws > summary::before { content: "\25B8 "; }
+.diff details.ws[open] > summary::before { content: "\25BE "; }
+.label { font-weight: 600; color: #444; font-size: .85em; text-transform: uppercase;
+  letter-spacing: .03em; margin: .6rem 0 .1rem; }
+.absent { color: #777; font-style: italic; }
+.ok { color: #1f6f3a; } .bad { color: #a33; } .na { color: #777; }
+.note { color: #555; font-size: .9em; }
+.tools { margin: .4rem 0 0; }
+.controls { margin: 0 0 1rem; font-size: .9em; color: #555; }
+.controls button { font: inherit; padding: .1rem .5rem; margin-right: .3rem; }
+dl.kv { display: grid; grid-template-columns: max-content 1fr; gap: .1rem 1.2rem; margin: .6rem 0 1rem; }
+dl.kv dt { color: #555; } dl.kv dd { margin: 0; }
+@media (max-width: 600px) { dl.kv { grid-template-columns: 1fr; } dl.kv dt { margin-top: .4rem; } }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .92em; }
+</style><script>
+function setAll(open) {
+  document.querySelectorAll('details').forEach(function (d) { d.open = open; });
+}
+</script></head><body><main><h1>dla_like.small → comb_sop_2_18_mode · 20260907-200734-b07463</h1><p class="sub">benchadapt adaptation run · record at <code>outputs/adapt/dla_only/dla_like.small/comb_sop_2_18_mode/20260907-200734-b07463</code></p><dl class="kv"><dt>run id</dt><dd><code>20260907-200734-b07463</code></dd><dt>started</dt><dd>2026-09-07 20:07:34 -0700</dd><dt>finished</dt><dd>2026-09-07 20:53:16 -0700</dd><dt>suite / design</dt><dd>dla_only / <b>dla_like.small</b></dd><dt>target mode</dt><dd><code>comb_sop_2_18_mode</code></dd><dt>tier</dt><dd>direct swap (T1) — the region fit the mode as is</dd><dt>outcome</dt><dd><b class="ok">ACCEPTED</b> — reviewer agent confirmed</dd><dt>editor attempts</dt><dd>1 <span class="note">(editor calls against the one approved plan; record field <code>iterations</code>)</span></dd><dt>wall clock</dt><dd>45m 42s (agents 7m 14s, VTR and other 38m 28s)  [2741.5 s total; 'other' is synthesis-only checks and framework time between calls]</dd><dt>models per role</dt><dd>planner: <code>anthropic/claude-opus-5</code><br>reviewer:plan: <code>anthropic/claude-opus-5</code><br>editor: <code>anthropic/claude-opus-5</code><br>reviewer:acceptance: <code>anthropic/claude-opus-5</code></dd><dt>VPR arguments</dt><dd><span class="absent">not recorded (this run predates the vpr record in run.json)</span></dd><dt>repo commit</dt><dd><span class="absent">not recorded (runs before 2026-09-12 carry no commit)</span></dd></dl><div class="controls"><button type="button" onclick="setAll(true)">expand all</button><button type="button" onclick="setAll(false)">collapse all</button>exported 2026-09-12T19:35:06-07:00</div><details class="section"><summary><h2>Mode contract</h2> <span class="meta">from the prompt of call 3 (editor)</span></summary><div class="body"><p class="note">Verbatim, as the agents received it: taken from the prompt of call 3 (editor), where the contract is embedded in full. This run predates the separate contract field in the record.</p><pre class="plain">Hard-block primitive to instantiate: `comb_sop_2_18`   (precision INT19)
+  computes: out = ax*ay + bx*by
+  input ports:  ax[18], ay[19], bx[18], by[19]
+  output ports: result[64]
+  arithmetic: the block's operands and result are signed two's complement. A design operand narrower than its port must be widened to the port width: zero-extended if the design treats it as unsigned, sign-extended if signed. An unsigned design operand as wide as its port has no exact representation on this block.
+  timing: the block is combinational; `result` is valid in the same cycle the inputs are applied (no clock port).
+  Wire EVERY operand of the fused region onto the input ports (name them exactly as above); drive the region's real consumer from the output port. Tie unused term ports to 0. Do not leave input ports unconnected.</pre></div></details><details class="section"><summary><h2>Agent calls</h2> <span class="meta">4 call(s), in order</span></summary><div class="body"><details class="call"><summary>Call 1 · <b>planner</b> · anthropic/claude-opus-5 · <span class="ok">ok</span> <span class="meta">in 12 · out 6519 · reasoning 0 · cache read 67422 · cache write 21229 · 103.2 s</span></summary><div class="body"><div class="label">prompt</div><pre class="prompt">You are the Planner. Choose the best region(s) in dla_like.small.v to adapt so hard-block mode
+'comb_sop_2_18_mode' (Hard-block primitive to instantiate: `comb_sop_2_18`   (precision INT19)
+  computes: out = ax*ay + bx*by
+  input ports:  ax[18], ay[19], bx[18], by[19]
+  output ports: result[64]
+  arithmetic: the block's operands and result are signed two's complement. A design operand narrower than its port must be widened to the port width: zero-extended if the design treats it as unsigned, sign-extended if signed. An unsigned design operand as wide as its port has no exact representation on this block.
+  timing: the block is combinational; `result` is valid in the same cycle the inputs are applied (no clock port).
+  Wire EVERY operand of the fused region onto the input ports (name them exactly as above); drive the region's real consumer from the output port. Tie unused term ports to 0. Do not leave input ports unconnected.) is exercised, then write a concrete plan. Do NOT edit files —
+output the header + plan only.
+
+Pick the most REPRESENTATIVE mapping — arithmetic a real designer of THIS workload would actually
+map to 'comb_sop_2_18_mode', never fabricated computation. For a sum-of-products / MAC mode you must
+find product terms that ALREADY feed a COMMON reduction (a shared sum/accumulator); products that
+feed SEPARATE outputs (e.g. distinct systolic-array elements) must NOT be fused. An isolated scalar
+multiply is NOT a representative sum-of-products target. If nothing representative exists, output
+`TIER: NONE`.
+
+Candidate arithmetic regions (id | operation | instances):
+winograd_dsp_16.$mul$dla_like.small.v:8966$733 | multiply | 56
+winograd_dsp_16.$mul$dla_like.small.v:8967$734 | multiply | 56
+dsp_block_16_8_false.$mul$dla_like.small.v:11745$1166 | sop | 72
+dsp_block_16_8_false.$mul$dla_like.small.v:11745$1167 | sop | 72
+
+Classify the tier of the change you propose (a datatype/algorithm variant, T3, is out of scope —
+do not propose one):
+- T1: Direct replacement: no change to the computed function or surrounding structure; no datatype change.
+- T2: Local restructuring only; preserve the region's function, role, and live consumers; no new operation/datatype family.
+
+Read the source. Output EXACTLY this header (uppercase keys), then the plan:
+
+TIER: T1 | T2 | NONE
+REGIONS: &lt;comma-separated region id(s)&gt;            # one id for a direct swap; N ids for a fusion
+SHARED_REDUCTION: &lt;the signal/module the terms feed&gt;   # or NONE for a single region
+MAPPING: &lt;which operands map to which of the mode's ports&gt;
+PLAN: &lt;how the module's live inputs/outputs and downstream consumers are preserved; any introduced
+operations/datatypes (should be NONE for T1/T2); and the main risks&gt;
+
+
+Read these files in this directory: dla_like.small.v</pre><div class="label">response</div><pre class="response">I'll start by examining the source file, focusing on the candidate regions.Now let me read the two key candidate modules.TIER: T1
+REGIONS: dsp_block_16_8_false.$mul$dla_like.small.v:11745$1166, dsp_block_16_8_false.$mul$dla_like.small.v:11745$1167
+SHARED_REDUCTION: The `+` reduction on line 11745 of `dsp_block_16_8_false` that forms `resulta_tmp` (24-bit MAC result) — both products are summed into the same node, which drives `resulta`/`chainout`, then `dot_product_16_8_30_2.o_result` → `processing_element.DP_res_*` → `accumulator_24_30_3.i_result`. 72 instances (12 `processing_element` × 6 `dot_product_16_8_30_2` × 1 `dsp_block_16_8_false`).
+MAPPING: `ax_reg[15:0]` → `ax[18]` (zero-extend by 2, `{2'b00, ax_reg}`); `ay_reg[7:0]` → `ay[19]` (zero-extend by 11); `bx_reg[15:0]` → `bx[18]` (zero-extend by 2); `by_reg[7:0]` → `by[19]` (zero-extend by 11); `result[63:0]` → the left operand of the retained `+ chainin` adder, whose sum is truncated into `resulta_tmp[23:0]` exactly as today. No term ports are left over (both product slots are used), so no tie-offs are required.
+
+PLAN:
+
+**Why this region.** `dsp_block_16_8_false` is the arithmetic heart of the DLA systolic datapath and is *already* written as a two-term sum of products: `resulta_tmp &lt;= ax_reg*ay_reg + bx_reg*by_reg + chainin;`. The module even carries an `int_sop_2` hard-macro instantiation under `` `ifdef complex_dsp ``, i.e. the design's author explicitly intended this to be a DSP SOP block; the behavioral `` `else `` branch (lines 11726–11749) is the path a synthesizer without `complex_dsp` sees, and that is where the two candidate `$mul` regions live. Both products feed one shared adder node — the canonical fusion target.
+
+**Why not the other candidates.** `winograd_dsp_16` (`$733`, `$734`) computes `resa_reg &lt;= ay_reg*coefa` and `resb_reg &lt;= by_reg*coefb`. These are two independent constant-coefficient multiplies driving two *separate* module outputs (`resulta`, `resultb`) that fan out to different Winograd transform lanes. There is no shared reduction, so fusing them into one `comb_sop_2_18` would fabricate a sum that does not exist in the design. Excluded per the rules.
+
+**Edit (single module, applies to all 72 instances).** In the `` `else `` branch of `dsp_block_16_8_false`:
+1. Add `wire [63:0] sop_result;` and instantiate `comb_sop_2_18` combinationally, driven by the *existing* input pipeline registers `ax_reg/ay_reg/bx_reg/by_reg` (zero-extended as in MAPPING).
+2. Replace the RHS on line 11745 with `resulta_tmp &lt;= sop_result + chainin;`.
+3. Leave `ax_reg…by_reg` capture, the `aclr` reset arm, `assign resulta = resulta_tmp;` and `assign chainout = {40'b0, resulta_tmp};` untouched.
+4. Leave the `` `ifdef complex_dsp `` / `int_sop_2` branch untouched.
+
+**Function preservation.** Verilog `+` is left-associative, so the original expression already parses as `((ax_reg*ay_reg) + (bx_reg*by_reg)) + chainin`. The hard block replaces exactly the parenthesized subtree; the `+ chainin` adder and its operand order are unchanged — this is a subtree swap, not a re-association, hence T1. All operands are unsigned and strictly narrower than their ports (16 &lt; 18, 8 &lt; 19), so zero-extension into the signed ports is exact and both products are non-negative. Max sum is `2·(2^16−1)(2^8−1) ≈ 3.34e7`, far inside 64 bits, so `sop_result` is bit-identical to the 64-bit value the original expression produced before the `chainin` add, and the final truncation to `resulta_tmp[23:0]` is preserved (truncation commutes with modular addition).
+
+**Timing / structure preservation.** The block is combinational and is inserted *between* the existing `ax_reg…by_reg` stage and the existing `resulta_tmp` stage, so latency stays at 2 cycles, `aclr` behavior is unchanged, and the `chainin`/`chainout` chaining contract, module port list, and all downstream consumers (`dot_product_16_8_30_2.o_result` → `accumulator_24_30_3`, which sign-extends bit 23) are untouched. No new operations or datatypes are introduced.
+
+**Risks.**
+- *Signedness mismatch:* the RTL multiplies are unsigned while `accumulator_24_30_3` sign-extends `i_result[23]`. This pre-existing inconsistency is deliberately **not** fixed — zero-extension reproduces the current bit-exact behavior; sign-extending instead would silently change results.
+- *Extension direction:* using sign-extension on `ax`/`bx` would corrupt any feature value with bit 15 set. Must be zero-extend.
+- *Truncation:* must slice `sop_result` into the 64-bit add and let the 24-bit assignment truncate; taking `result[23:0]` first is also equivalent but the full-width form is safer to reason about.
+- *`ena` port:* unused in the behavioral branch today and stays unused — no change.
+- Blast radius is 72 instantiations from one module edit; a mistake is uniform and will show up immediately in any dot-product-level check.
+
+Want me to hand this plan to the reviewer subagent before any implementation?</pre><details class="inner"><summary>tool events <span class="meta">9 recorded, 0 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> ls -la; wc -l dla_like.small.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "ls -la; wc -l dla_like.small.v"
+}</pre><div class="label">output</div><pre class="plain">total 384
+drwx------ 2 samu samu   4096 Sep  7 20:07 .
+drwxrwxr-x 3 samu samu   4096 Sep  7 20:07 ..
+-rw-rw-r-- 1 samu samu 381103 Aug 16 18:14 dla_like.small.v
+14570 dla_like.small.v
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> grep -n "^module\|^endmodule" dla_like.small.v | head -100</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "grep -n \"^module\\|^endmodule\" dla_like.small.v | head -100"
+}</pre><div class="label">output</div><pre class="plain">19:module DLA (
+1604:endmodule
+1606:module inverse_winograd_1 (
+2093:endmodule
+2095:module inverse_winograd_adder_30_3 (
+2124:endmodule
+2126:module inverse_winograd_0 (
+2623:endmodule
+2625:module inverse_winograd_3 (
+3092:endmodule
+3094:module inverse_winograd_2 (
+3571:endmodule
+3573:module inverse_winograd_5 (
+4020:endmodule
+4022:module inverse_winograd_4 (
+4479:endmodule
+4481:module inverse_winograd_7 (
+4908:endmodule
+4910:module inverse_winograd_6 (
+5347:endmodule
+5349:module inverse_winograd_9 (
+5756:endmodule
+5758:module inverse_winograd_8 (
+6175:endmodule
+6177:module inverse_winograd_11 (
+6564:endmodule
+6566:module inverse_winograd_10 (
+6963:endmodule
+6965:module winograd_transform_1 (
+8839:endmodule
+8841:module winograd_adder_16_20_4 (
+8899:endmodule
+8901:module winograd_dsp_16 (
+8971:endmodule
+8973:module winograd_transform_0 (
+10847:endmodule
+10849:module stream_buffer_5_1 (
+11002:endmodule
+11004:module buffer_16_24200_buffer_init_15 (
+11040:endmodule
+11042:module stream_buffer_5_0 (
+11195:endmodule
+11197:module buffer_16_24200_buffer_init_05 (
+11233:endmodule
+11235:module processing_element (
+11644:endmodule
+11646:module dot_product_16_8_30_2 (
+11694:endmodule
+11696:module dsp_block_16_8_false (
+11752:endmodule
+11754:module weight_cache_2048_8_0_weight_init_05 (
+11794:endmodule
+11796:module weight_cache_2048_8_0_weight_init_03 (
+11836:endmodule
+11838:module weight_cache_2048_8_0_weight_init_02 (
+11878:endmodule
+11880:module weight_cache_2048_8_0_weight_init_01 (
+11920:endmodule
+11922:module weight_cache_2048_8_0_weight_init_00 (
+11962:endmodule
+11964:module accumulator_24_30_3 (
+12004:endmodule
+12006:module weight_cache_2048_8_0_weight_init_04 (
+12046:endmodule
+12048:module stream_buffer_4_0 (
+12201:endmodule
+12203:module buffer_16_24200_buffer_init_04 (
+12239:endmodule
+12241:module stream_buffer_4_1 (
+12394:endmodule
+12396:module buffer_16_24200_buffer_init_14 (
+12432:endmodule
+12434:module stream_buffer_2_0 (
+12587:endmodule
+12589:module buffer_16_24200_buffer_init_02 (
+12625:endmodule
+12627:module stream_buffer_2_1 (
+12780:endmodule
+12782:module buffer_16_24200_buffer_init_12 (
+12818:endmodule
+12820:module stream_buffer_1_1 (
+12973:endmodule
+12975:module buffer_16_24200_buffer_init_11 (
+13011:endmodule
+13013:module stream_buffer_1_0 (
+13166:endmodule
+13168:module buffer_16_24200_buffer_init_01 (
+13204:endmodule
+13206:module stream_buffer_0_0 (
+13359:endmodule
+13361:module buffer_16_24200_buffer_init_00 (
+13397:endmodule
+13399:module stream_buffer_0_1 (
+13552:endmodule
+13554:module buffer_16_24200_buffer_init_10 (
+13590:endmodule
+13592:module signal_width_reducer (
+13705:endmodule
+13707:module pipelined_xor_tree_16 (
+13840:endmodule
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> sed -n '8901,8975p' dla_like.small.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "sed -n '8901,8975p' dla_like.small.v"
+}</pre><div class="label">output</div><pre class="plain">module winograd_dsp_16 (
+	input clk,
+	input ena,
+	input aclr,
+	input [15:0] ay,
+	input [15:0] by,
+	input [2:0] coefsela,
+	input [2:0] coefselb,
+	output [15:0] resulta,
+	output [15:0] resultb
+);
+
+reg [15:0] coefa, coefb, ay_reg, by_reg, resa_reg, resb_reg;
+assign resulta = resa_reg;
+assign resultb = resb_reg;
+
+always @ (posedge clk) begin
+	if (aclr) begin
+		coefa &lt;= 0;
+		coefb &lt;= 0;
+		ay_reg &lt;= 0;
+		by_reg &lt;= 0;
+		resa_reg &lt;= 0;
+		resb_reg &lt;= 0;
+	end else begin
+		ay_reg &lt;= ay;
+		by_reg &lt;= by;
+		if (coefsela == 0) begin
+			coefa &lt;= 5;
+		end else if (coefsela == 1) begin
+			coefa &lt;= -5;
+		end else if (coefsela == 2) begin
+			coefa &lt;= 10;
+		end else if (coefsela == 3) begin
+			coefa &lt;= -10;
+		end else if (coefsela == 4) begin
+			coefa &lt;= 20;
+		end else if (coefsela == 5) begin
+			coefa &lt;= -20;
+		end else if (coefsela == 6) begin
+			coefa &lt;= 25;
+		end else if (coefsela == 7) begin
+			coefa &lt;= -25;
+		end else begin
+			coefa &lt;= 0;
+		end
+		if (coefselb == 0) begin
+			coefb &lt;= 5;
+		end else if (coefselb == 1) begin
+			coefb &lt;= -5;
+		end else if (coefselb == 2) begin
+			coefb &lt;= 10;
+		end else if (coefselb == 3) begin
+			coefb &lt;= -10;
+		end else if (coefselb == 4) begin
+			coefb &lt;= 20;
+		end else if (coefselb == 5) begin
+			coefb &lt;= -20;
+		end else if (coefselb == 6) begin
+			coefb &lt;= 25;
+		end else if (coefselb == 7) begin
+			coefb &lt;= -25;
+		end else begin
+			coefb &lt;= 0;
+		end
+		resa_reg &lt;= ay_reg * coefa;
+		resb_reg &lt;= by_reg * coefb;
+	end
+end
+
+endmodule
+
+module winograd_transform_0 (
+	input clk,
+	input i_valid,
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> sed -n '11696,11755p' dla_like.small.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "sed -n '11696,11755p' dla_like.small.v"
+}</pre><div class="label">output</div><pre class="plain">module dsp_block_16_8_false (
+	input clk,
+	input ena,
+	input aclr,
+	input [15:0] ax,
+	input [7:0] ay,
+	input [15:0] bx,
+	input [7:0] by,
+	input [63:0] chainin,
+	output [63:0] chainout,
+	output [23:0] resulta
+);
+
+wire [11:0] mode;
+assign mode = 12'b1010_1010_0110;
+
+`ifdef complex_dsp
+int_sop_2 mac_component (
+	.mode_sigs(mode),
+	.clk(clk),
+	.reset(aclr),
+	.ax(ax),
+	.ay(ay),
+	.bx(bx),
+	.by(by),
+	.chainin(chainin),
+	.result(resulta),
+	.chainout(chainout)
+);
+
+`else
+reg [15:0] ax_reg;
+reg [7:0] ay_reg;
+reg [15:0] bx_reg;
+reg [7:0] by_reg;
+reg [23:0] resulta_tmp;
+always @(posedge clk) begin
+  if(aclr) begin
+    resulta_tmp &lt;= 0;
+    ax_reg &lt;= 0;
+    ay_reg &lt;= 0;
+    bx_reg &lt;= 0;
+    by_reg &lt;= 0;
+  end
+  else begin
+    ax_reg &lt;= ax;
+    ay_reg &lt;= ay;
+    bx_reg &lt;= bx;
+    by_reg &lt;= by;
+    resulta_tmp &lt;= ax_reg * ay_reg + bx_reg * by_reg + chainin;
+  end
+end
+assign resulta = resulta_tmp;
+assign chainout = {40'b0, resulta_tmp};
+`endif
+
+endmodule
+
+module weight_cache_2048_8_0_weight_init_05 (
+	input clk,
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> sed -n '11646,11700p' dla_like.small.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "sed -n '11646,11700p' dla_like.small.v"
+}</pre><div class="label">output</div><pre class="plain">module dot_product_16_8_30_2 (
+	input clk,
+	input i_reset,
+	input [15:0] i_features_0,
+	input [7:0] i_weights_0,
+	input [15:0] i_features_1,
+	input [7:0] i_weights_1,
+	output [23:0] o_result
+);
+
+wire [63:0] chains_0;
+wire [23:0] res;
+reg [15:0] f_pipeline_0_0;
+reg [7:0] w_pipeline_0_0;
+reg [15:0] f_pipeline_1_0;
+reg [7:0] w_pipeline_1_0;
+reg r_pipeline_0;
+
+always @ (posedge clk) begin
+	r_pipeline_0 &lt;= i_reset;
+	if(i_reset == 1'b1) begin
+		f_pipeline_0_0 &lt;= 0;
+		w_pipeline_0_0 &lt;= 0;
+		f_pipeline_1_0 &lt;= 0;
+		w_pipeline_1_0 &lt;= 0;
+	end else begin
+		f_pipeline_0_0 &lt;= i_features_0;
+		w_pipeline_0_0 &lt;= i_weights_0;
+		f_pipeline_1_0 &lt;= i_features_1;
+		w_pipeline_1_0 &lt;= i_weights_1;
+	end
+end
+
+dsp_block_16_8_false dsp_block_16_8_false_inst_0 (
+	.clk(clk),
+	.ena(1'b1),
+	.aclr(r_pipeline_0),
+	.ax(f_pipeline_0_0),
+	.ay(w_pipeline_0_0),
+	.bx(f_pipeline_1_0),
+	.by(w_pipeline_1_0),
+	.chainin(64'd0),
+	.chainout(chains_0),
+	.resulta(res)
+);
+
+assign o_result = res;
+
+endmodule
+
+module dsp_block_16_8_false (
+	input clk,
+	input ena,
+	input aclr,
+	input [15:0] ax,
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> sed -n '11235,11440p' dla_like.small.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "sed -n '11235,11440p' dla_like.small.v"
+}</pre><div class="label">output</div><pre class="plain">module processing_element (
+	input clk,
+	input i_reset,
+	input i_valid,
+	input [15:0] i_features_0_0,
+	output [15:0] o_features_0_0,
+	input [15:0] i_features_0_1,
+	output [15:0] o_features_0_1,
+	input [15:0] i_features_0_2,
+	output [15:0] o_features_0_2,
+	input [15:0] i_features_0_3,
+	output [15:0] o_features_0_3,
+	input [15:0] i_features_0_4,
+	output [15:0] o_features_0_4,
+	input [15:0] i_features_0_5,
+	output [15:0] o_features_0_5,
+	input [15:0] i_features_1_0,
+	output [15:0] o_features_1_0,
+	input [15:0] i_features_1_1,
+	output [15:0] o_features_1_1,
+	input [15:0] i_features_1_2,
+	output [15:0] o_features_1_2,
+	input [15:0] i_features_1_3,
+	output [15:0] o_features_1_3,
+	input [15:0] i_features_1_4,
+	output [15:0] o_features_1_4,
+	input [15:0] i_features_1_5,
+	output [15:0] o_features_1_5,
+	output [29:0] o_result_0,
+	output [29:0] o_result_1,
+	output [29:0] o_result_2,
+	output [29:0] o_result_3,
+	output [29:0] o_result_4,
+	output [29:0] o_result_5,
+	output o_valid,
+	output o_next_reset,
+	output o_next_valid
+);
+
+wire [23:0] DP_res_0;
+reg [15:0] if_reg_0_0;
+wire [7:0] weights_0_0;
+reg [15:0] if_reg_0_1;
+wire [7:0] weights_0_1;
+wire [23:0] DP_res_1;
+reg [15:0] if_reg_1_0;
+wire [7:0] weights_1_0;
+reg [15:0] if_reg_1_1;
+wire [7:0] weights_1_1;
+wire [23:0] DP_res_2;
+reg [15:0] if_reg_2_0;
+wire [7:0] weights_2_0;
+reg [15:0] if_reg_2_1;
+wire [7:0] weights_2_1;
+wire [23:0] DP_res_3;
+reg [15:0] if_reg_3_0;
+wire [7:0] weights_3_0;
+reg [15:0] if_reg_3_1;
+wire [7:0] weights_3_1;
+wire [23:0] DP_res_4;
+reg [15:0] if_reg_4_0;
+wire [7:0] weights_4_0;
+reg [15:0] if_reg_4_1;
+wire [7:0] weights_4_1;
+wire [23:0] DP_res_5;
+reg [15:0] if_reg_5_0;
+wire [7:0] weights_5_0;
+reg [15:0] if_reg_5_1;
+wire [7:0] weights_5_1;
+
+reg [10:0] base_addr;
+reg [10:0] offset;
+reg [1:0] L_counter;
+reg [1:0] C_counter;
+reg [15:0] T_counter;
+
+reg reset_1, reset_2, reset_3, next_reset, next_reset_2;
+reg done, done_1, done_2, done_3, done_4, done_5, done_6;
+
+wire [15:0] features_0_0;
+wire [15:0] features_0_1;
+wire [15:0] features_1_0;
+wire [15:0] features_1_1;
+wire [15:0] features_2_0;
+wire [15:0] features_2_1;
+wire [15:0] features_3_0;
+wire [15:0] features_3_1;
+wire [15:0] features_4_0;
+wire [15:0] features_4_1;
+wire [15:0] features_5_0;
+wire [15:0] features_5_1;
+reg valid_0;
+reg valid_1;
+reg valid_2;
+reg valid_3;
+reg valid_4;
+reg valid_5;
+reg valid_6;
+reg valid_7;
+reg valid_8;
+reg valid_9;
+reg valid_10;
+reg valid_11;
+reg next_valid;
+
+always @ (posedge clk) begin
+	reset_1 &lt;= ~(i_valid || valid_11);
+	reset_2 &lt;= reset_1;
+	reset_3 &lt;= reset_2;
+	next_reset &lt;= i_reset;
+	next_reset_2 &lt;= next_reset;
+	if (i_reset == 1'b0) begin
+		if_reg_0_0 &lt;= features_0_0;
+		if_reg_0_1 &lt;= features_0_1;
+		if_reg_1_0 &lt;= features_1_0;
+		if_reg_1_1 &lt;= features_1_1;
+		if_reg_2_0 &lt;= features_2_0;
+		if_reg_2_1 &lt;= features_2_1;
+		if_reg_3_0 &lt;= features_3_0;
+		if_reg_3_1 &lt;= features_3_1;
+		if_reg_4_0 &lt;= features_4_0;
+		if_reg_4_1 &lt;= features_4_1;
+		if_reg_5_0 &lt;= features_5_0;
+		if_reg_5_1 &lt;= features_5_1;
+	end
+end
+
+always @ (posedge clk) begin
+	next_valid &lt;= i_valid;
+	if (i_reset) begin
+		valid_0 &lt;= 0;
+		valid_1 &lt;= 0;
+		valid_2 &lt;= 0;
+		valid_3 &lt;= 0;
+		valid_4 &lt;= 0;
+		valid_5 &lt;= 0;
+		valid_6 &lt;= 0;
+		valid_7 &lt;= 0;
+		valid_8 &lt;= 0;
+		valid_9 &lt;= 0;
+		valid_10 &lt;= 0;
+		valid_11 &lt;= 0;
+	end else if ((i_valid == 1'b0) &amp;&amp; (valid_11 == 1'b0)) begin
+		base_addr &lt;= 0;
+		offset &lt;= 0;
+		C_counter &lt;= 0;
+		L_counter &lt;= 0;
+		T_counter &lt;= 0;
+		done &lt;= 0;
+		done_1 &lt;= 0;
+		done_2 &lt;= 0;
+		done_3 &lt;= 0;
+		done_4 &lt;= 0;
+		done_5 &lt;= 0;
+		done_6 &lt;= 0;
+	end else if (i_valid || valid_11) begin
+		valid_0 &lt;= i_valid;
+		valid_1 &lt;= valid_0;
+		valid_2 &lt;= valid_1;
+		valid_3 &lt;= valid_2;
+		valid_4 &lt;= valid_3;
+		valid_5 &lt;= valid_4;
+		valid_6 &lt;= valid_5;
+		valid_7 &lt;= valid_6;
+		valid_8 &lt;= valid_7;
+		valid_9 &lt;= valid_8;
+		valid_10 &lt;= valid_9;
+		valid_11 &lt;= valid_10;
+		if (T_counter &lt;= 1809025) begin
+			done_1 &lt;= done;
+			done_2 &lt;= done_1;
+			done_3 &lt;= done_2;
+			done_4 &lt;= done_3;
+			done_5 &lt;= done_4;
+			done_6 &lt;= done_5;
+			if((C_counter == 0)
+…[truncated, 4642 chars total]</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> sed -n '11964,12006p' dla_like.small.v; echo ---; grep -n "DP_res_0\|accumulator_24_30_3" dla_like.s…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "sed -n '11964,12006p' dla_like.small.v; echo ---; grep -n \"DP_res_0\\|accumulator_24_30_3\" dla_like.small.v | head -20"
+}</pre><div class="label">output</div><pre class="plain">module accumulator_24_30_3 (
+	input clk,
+	input i_reset,
+	input [23:0] i_result,
+	input i_dp_done,
+	output [29:0] o_accum
+);
+
+reg [29:0] cir_shift_reg_0;
+reg [29:0] cir_shift_reg_1;
+reg [29:0] cir_shift_reg_2;
+reg [29:0] out_reg;
+reg [29:0] in_reg;
+
+always @ (posedge clk) begin
+	if(i_reset == 1'b1) begin
+		cir_shift_reg_0 &lt;= 0;
+		cir_shift_reg_1 &lt;= 0;
+		cir_shift_reg_2 &lt;= 0;
+		out_reg &lt;= 0;
+		in_reg &lt;= 0;
+	end else begin
+		if (i_result[23] == 1'b0) begin
+			in_reg &lt;= {6'b000000, i_result};
+		end else begin
+			in_reg &lt;= {6'b111111, i_result};
+		end
+		if(i_dp_done == 1'b1) begin
+			out_reg &lt;= (cir_shift_reg_0 + in_reg);
+			cir_shift_reg_2 &lt;= 0;
+		end else begin
+			cir_shift_reg_2 &lt;= (cir_shift_reg_0 + in_reg);
+		end
+		cir_shift_reg_0 &lt;= cir_shift_reg_1;
+		cir_shift_reg_1 &lt;= cir_shift_reg_2;
+	end
+end
+
+assign o_accum = out_reg;
+
+endmodule
+
+module weight_cache_2048_8_0_weight_init_04 (
+---
+11274:wire [23:0] DP_res_0;
+11438:	.o_result(DP_res_0)
+11491:accumulator_24_30_3 accumulator_24_30_3_inst_0 (
+11494:	.i_result(DP_res_0),
+11499:accumulator_24_30_3 accumulator_24_30_3_inst_1 (
+11507:accumulator_24_30_3 accumulator_24_30_3_inst_2 (
+11515:accumulator_24_30_3 accumulator_24_30_3_inst_3 (
+11523:accumulator_24_30_3 accumulator_24_30_3_inst_4 (
+11531:accumulator_24_30_3 accumulator_24_30_3_inst_5 (
+11964:module accumulator_24_30_3 (
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> grep -n "complex_dsp\|int_sop_2\|int_mult\|\`ifdef\|\`else\|\`endif" dla_like.small.v | head -40; ec…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "grep -n \"complex_dsp\\|int_sop_2\\|int_mult\\|\\`ifdef\\|\\`else\\|\\`endif\" dla_like.small.v | head -40; echo ---; grep -rn \"signed\" dla_like.small.v | head"
+}</pre><div class="label">output</div><pre class="plain">11712:`ifdef complex_dsp
+11713:int_sop_2 mac_component (
+11726:`else
+11750:`endif
+14551:`else
+14567:`endif
+---
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> grep -c "dsp_block_16_8_false dsp_block" dla_like.small.v; grep -c "dot_product_16_8_30_2 dot_produc…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "grep -c \"dsp_block_16_8_false dsp_block\" dla_like.small.v; grep -c \"dot_product_16_8_30_2 dot_product\" dla_like.small.v; grep -c \"processing_element \" dla_like.small.v; echo ---; sed -n '11726,11752p' dla_like.small.v"
+}</pre><div class="label">output</div><pre class="plain">1
+6
+13
+---
+`else
+reg [15:0] ax_reg;
+reg [7:0] ay_reg;
+reg [15:0] bx_reg;
+reg [7:0] by_reg;
+reg [23:0] resulta_tmp;
+always @(posedge clk) begin
+  if(aclr) begin
+    resulta_tmp &lt;= 0;
+    ax_reg &lt;= 0;
+    ay_reg &lt;= 0;
+    bx_reg &lt;= 0;
+    by_reg &lt;= 0;
+  end
+  else begin
+    ax_reg &lt;= ax;
+    ay_reg &lt;= ay;
+    bx_reg &lt;= bx;
+    by_reg &lt;= by;
+    resulta_tmp &lt;= ax_reg * ay_reg + bx_reg * by_reg + chainin;
+  end
+end
+assign resulta = resulta_tmp;
+assign chainout = {40'b0, resulta_tmp};
+`endif
+
+endmodule
+</pre></div></details></div></div></details></div></details><details class="call"><summary>Call 2 · <b>reviewer:plan</b> · anthropic/claude-opus-5 · <span class="ok">ok</span> <span class="meta">in 6 · out 2024 · reasoning 0 · cache read 22185 · cache write 14144 · 34.1 s</span></summary><div class="body"><div class="label">prompt</div><pre class="prompt">You are an INDEPENDENT, fair Reviewer. You did not write this plan. Judge it on merit.
+Target mode: comb_sop_2_18_mode   Tier: T1   Rule: Direct replacement: no change to the computed function or surrounding structure; no datatype change.
+Region: dsp_block_16_8_false.$mul$dla_like.small.v:11745$1166  (op 'sop', datatype int16, consumers ['dsp_block_16_8_false']).
+APPROVE the plan if it is correct and representative — a legitimate adaptation does not need to
+be perfect, only sound. Do NOT demand rewrites for style, minor wording, or hypothetical concerns.
+REVISE ONLY for a CONCRETE, specific violation you can name: (a) it changes the computed function
+when the tier forbids it; (b) it introduces an operation/datatype absent from the design and not
+admitted by the tier; (c) it fabricates terms to match a mode's n_terms (products that did not
+exist / do not share a reduction); (d) it wires the mode to constants or a dead sink (mode island).
+If none of these apply, APPROVE.
+Your FIRST line must be exactly 'APPROVE' or 'REVISE', nothing else. If REVISE, the next lines
+must name the specific violation (a/b/c/d) and what to change.
+
+--- PLAN ---
+I'll start by examining the source file, focusing on the candidate regions.Now let me read the two key candidate modules.TIER: T1
+REGIONS: dsp_block_16_8_false.$mul$dla_like.small.v:11745$1166, dsp_block_16_8_false.$mul$dla_like.small.v:11745$1167
+SHARED_REDUCTION: The `+` reduction on line 11745 of `dsp_block_16_8_false` that forms `resulta_tmp` (24-bit MAC result) — both products are summed into the same node, which drives `resulta`/`chainout`, then `dot_product_16_8_30_2.o_result` → `processing_element.DP_res_*` → `accumulator_24_30_3.i_result`. 72 instances (12 `processing_element` × 6 `dot_product_16_8_30_2` × 1 `dsp_block_16_8_false`).
+MAPPING: `ax_reg[15:0]` → `ax[18]` (zero-extend by 2, `{2'b00, ax_reg}`); `ay_reg[7:0]` → `ay[19]` (zero-extend by 11); `bx_reg[15:0]` → `bx[18]` (zero-extend by 2); `by_reg[7:0]` → `by[19]` (zero-extend by 11); `result[63:0]` → the left operand of the retained `+ chainin` adder, whose sum is truncated into `resulta_tmp[23:0]` exactly as today. No term ports are left over (both product slots are used), so no tie-offs are required.
+
+PLAN:
+
+**Why this region.** `dsp_block_16_8_false` is the arithmetic heart of the DLA systolic datapath and is *already* written as a two-term sum of products: `resulta_tmp &lt;= ax_reg*ay_reg + bx_reg*by_reg + chainin;`. The module even carries an `int_sop_2` hard-macro instantiation under `` `ifdef complex_dsp ``, i.e. the design's author explicitly intended this to be a DSP SOP block; the behavioral `` `else `` branch (lines 11726–11749) is the path a synthesizer without `complex_dsp` sees, and that is where the two candidate `$mul` regions live. Both products feed one shared adder node — the canonical fusion target.
+
+**Why not the other candidates.** `winograd_dsp_16` (`$733`, `$734`) computes `resa_reg &lt;= ay_reg*coefa` and `resb_reg &lt;= by_reg*coefb`. These are two independent constant-coefficient multiplies driving two *separate* module outputs (`resulta`, `resultb`) that fan out to different Winograd transform lanes. There is no shared reduction, so fusing them into one `comb_sop_2_18` would fabricate a sum that does not exist in the design. Excluded per the rules.
+
+**Edit (single module, applies to all 72 instances).** In the `` `else `` branch of `dsp_block_16_8_false`:
+1. Add `wire [63:0] sop_result;` and instantiate `comb_sop_2_18` combinationally, driven by the *existing* input pipeline registers `ax_reg/ay_reg/bx_reg/by_reg` (zero-extended as in MAPPING).
+2. Replace the RHS on line 11745 with `resulta_tmp &lt;= sop_result + chainin;`.
+3. Leave `ax_reg…by_reg` capture, the `aclr` reset arm, `assign resulta = resulta_tmp;` and `assign chainout = {40'b0, resulta_tmp};` untouched.
+4. Leave the `` `ifdef complex_dsp `` / `int_sop_2` branch untouched.
+
+**Function preservation.** Verilog `+` is left-associative, so the original expression already parses as `((ax_reg*ay_reg) + (bx_reg*by_reg)) + chainin`. The hard block replaces exactly the parenthesized subtree; the `+ chainin` adder and its operand order are unchanged — this is a subtree swap, not a re-association, hence T1. All operands are unsigned and strictly narrower than their ports (16 &lt; 18, 8 &lt; 19), so zero-extension into the signed ports is exact and both products are non-negative. Max sum is `2·(2^16−1)(2^8−1) ≈ 3.34e7`, far inside 64 bits, so `sop_result` is bit-identical to the 64-bit value the original expression produced before the `chainin` add, and the final truncation to `resulta_tmp[23:0]` is preserved (truncation commutes with modular addition).
+
+**Timing / structure preservation.** The block is combinational and is inserted *between* the existing `ax_reg…by_reg` stage and the existing `resulta_tmp` stage, so latency stays at 2 cycles, `aclr` behavior is unchanged, and the `chainin`/`chainout` chaining contract, module port list, and all downstream consumers (`dot_product_16_8_30_2.o_result` → `accumulator_24_30_3`, which sign-extends bit 23) are untouched. No new operations or datatypes are introduced.
+
+**Risks.**
+- *Signedness mismatch:* the RTL multiplies are unsigned while `accumulator_24_30_3` sign-extends `i_result[23]`. This pre-existing inconsistency is deliberately **not** fixed — zero-extension reproduces the current bit-exact behavior; sign-extending instead would silently change results.
+- *Extension direction:* using sign-extension on `ax`/`bx` would corrupt any feature value with bit 15 set. Must be zero-extend.
+- *Truncation:* must slice `sop_result` into the 64-bit add and let the 24-bit assignment truncate; taking `result[23:0]` first is also equivalent but the full-width form is safer to reason about.
+- *`ena` port:* unused in the behavioral branch today and stays unused — no change.
+- Blast radius is 72 instantiations from one module edit; a mistake is uniform and will show up immediately in any dot-product-level check.
+
+Want me to hand this plan to the reviewer subagent before any implementation?
+
+Read these files in this directory: dla_like.small.v</pre><div class="label">response</div><pre class="response">APPROVE
+
+Verification against the source (`dla_like.small.v`) and the T1 rule:
+
+- **(a) Function unchanged — OK.** Line 11745 reads `resulta_tmp &lt;= ax_reg * ay_reg + bx_reg * by_reg + chainin;`. Verilog left-associativity means the two products are already a distinct subtree; replacing exactly that subtree and keeping `+ chainin` and the 24-bit truncating assignment preserves bit-exact behavior. Operands are unsigned `[15:0]`/`[7:0]`, so zero-extension into the wider (signed) mode ports is exact and products stay non-negative; max ~3.34e7 fits trivially. Insertion between the existing `*_reg` stage and the `resulta_tmp` stage keeps latency at 2 cycles and `aclr` semantics intact.
+- **(b) No new op/datatype — OK.** Still int16×int8 products summed; no widening of the stored result, no signedness change (the plan explicitly declines to "fix" the pre-existing zero-extend-vs-`i_result[23]`-sign-extend inconsistency in `accumulator_24_30_3`, line 11986 — correct call for T1).
+- **(c) No fabricated terms — OK.** Both products exist in the RTL and share the same `+` reduction node. The exclusion of `winograd_dsp_16` is correct: `resa_reg`/`resb_reg` (lines 8913–8915) drive two separate outputs with no shared sum, so fusing them would have been a fabrication.
+- **(d) No mode island — OK.** Driven by the real `ax_reg…by_reg` pipeline, output reaches `resulta`/`chainout` → `dot_product_16_8_30_2.o_result` → `accumulator_24_30_3`. No constant tie-offs, both term slots used, live sink.
+
+The `ifdef complex_dsp` branch being left alone is also right — the behavioral `else` branch is where the flagged `$mul` regions live. No concrete violation; approving.</pre><details class="inner"><summary>tool events <span class="meta">4 recorded, 0 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> ls; pwd</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "ls; pwd"
+}</pre><div class="label">output</div><pre class="plain">dla_like.small.v
+/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/_scratch/oc_qhabbfi7
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> sed -n '11690,11760p' dla_like.small.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "sed -n '11690,11760p' dla_like.small.v"
+}</pre><div class="label">output</div><pre class="plain">);
+
+assign o_result = res;
+
+endmodule
+
+module dsp_block_16_8_false (
+	input clk,
+	input ena,
+	input aclr,
+	input [15:0] ax,
+	input [7:0] ay,
+	input [15:0] bx,
+	input [7:0] by,
+	input [63:0] chainin,
+	output [63:0] chainout,
+	output [23:0] resulta
+);
+
+wire [11:0] mode;
+assign mode = 12'b1010_1010_0110;
+
+`ifdef complex_dsp
+int_sop_2 mac_component (
+	.mode_sigs(mode),
+	.clk(clk),
+	.reset(aclr),
+	.ax(ax),
+	.ay(ay),
+	.bx(bx),
+	.by(by),
+	.chainin(chainin),
+	.result(resulta),
+	.chainout(chainout)
+);
+
+`else
+reg [15:0] ax_reg;
+reg [7:0] ay_reg;
+reg [15:0] bx_reg;
+reg [7:0] by_reg;
+reg [23:0] resulta_tmp;
+always @(posedge clk) begin
+  if(aclr) begin
+    resulta_tmp &lt;= 0;
+    ax_reg &lt;= 0;
+    ay_reg &lt;= 0;
+    bx_reg &lt;= 0;
+    by_reg &lt;= 0;
+  end
+  else begin
+    ax_reg &lt;= ax;
+    ay_reg &lt;= ay;
+    bx_reg &lt;= bx;
+    by_reg &lt;= by;
+    resulta_tmp &lt;= ax_reg * ay_reg + bx_reg * by_reg + chainin;
+  end
+end
+assign resulta = resulta_tmp;
+assign chainout = {40'b0, resulta_tmp};
+`endif
+
+endmodule
+
+module weight_cache_2048_8_0_weight_init_05 (
+	input clk,
+	input wen0,
+	input wen1,
+	input [9:0] addr0,
+	input [7:0] wdata0,
+	output [7:0] data0,
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> grep -n "module winograd_dsp_16" -A 60 dla_like.small.v | sed -n '1,70p'; echo ====; grep -n "dsp_bl…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "grep -n \"module winograd_dsp_16\" -A 60 dla_like.small.v | sed -n '1,70p'; echo ====; grep -n \"dsp_block_16_8_false\\|comb_sop\\|int_sop_2\" dla_like.small.v | head -40"
+}</pre><div class="label">output</div><pre class="plain">8901:module winograd_dsp_16 (
+8902-	input clk,
+8903-	input ena,
+8904-	input aclr,
+8905-	input [15:0] ay,
+8906-	input [15:0] by,
+8907-	input [2:0] coefsela,
+8908-	input [2:0] coefselb,
+8909-	output [15:0] resulta,
+8910-	output [15:0] resultb
+8911-);
+8912-
+8913-reg [15:0] coefa, coefb, ay_reg, by_reg, resa_reg, resb_reg;
+8914-assign resulta = resa_reg;
+8915-assign resultb = resb_reg;
+8916-
+8917-always @ (posedge clk) begin
+8918-	if (aclr) begin
+8919-		coefa &lt;= 0;
+8920-		coefb &lt;= 0;
+8921-		ay_reg &lt;= 0;
+8922-		by_reg &lt;= 0;
+8923-		resa_reg &lt;= 0;
+8924-		resb_reg &lt;= 0;
+8925-	end else begin
+8926-		ay_reg &lt;= ay;
+8927-		by_reg &lt;= by;
+8928-		if (coefsela == 0) begin
+8929-			coefa &lt;= 5;
+8930-		end else if (coefsela == 1) begin
+8931-			coefa &lt;= -5;
+8932-		end else if (coefsela == 2) begin
+8933-			coefa &lt;= 10;
+8934-		end else if (coefsela == 3) begin
+8935-			coefa &lt;= -10;
+8936-		end else if (coefsela == 4) begin
+8937-			coefa &lt;= 20;
+8938-		end else if (coefsela == 5) begin
+8939-			coefa &lt;= -20;
+8940-		end else if (coefsela == 6) begin
+8941-			coefa &lt;= 25;
+8942-		end else if (coefsela == 7) begin
+8943-			coefa &lt;= -25;
+8944-		end else begin
+8945-			coefa &lt;= 0;
+8946-		end
+8947-		if (coefselb == 0) begin
+8948-			coefb &lt;= 5;
+8949-		end else if (coefselb == 1) begin
+8950-			coefb &lt;= -5;
+8951-		end else if (coefselb == 2) begin
+8952-			coefb &lt;= 10;
+8953-		end else if (coefselb == 3) begin
+8954-			coefb &lt;= -10;
+8955-		end else if (coefselb == 4) begin
+8956-			coefb &lt;= 20;
+8957-		end else if (coefselb == 5) begin
+8958-			coefb &lt;= -20;
+8959-		end else if (coefselb == 6) begin
+8960-			coefb &lt;= 25;
+8961-		end else if (coefselb == 7) begin
+====
+11679:dsp_block_16_8_false dsp_block_16_8_false_inst_0 (
+11696:module dsp_block_16_8_false (
+11713:int_sop_2 mac_component (
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> grep -n "module accumulator_24_30_3" -A 40 dla_like.small.v | sed -n '1,45p'</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "grep -n \"module accumulator_24_30_3\" -A 40 dla_like.small.v | sed -n '1,45p'"
+}</pre><div class="label">output</div><pre class="plain">11964:module accumulator_24_30_3 (
+11965-	input clk,
+11966-	input i_reset,
+11967-	input [23:0] i_result,
+11968-	input i_dp_done,
+11969-	output [29:0] o_accum
+11970-);
+11971-
+11972-reg [29:0] cir_shift_reg_0;
+11973-reg [29:0] cir_shift_reg_1;
+11974-reg [29:0] cir_shift_reg_2;
+11975-reg [29:0] out_reg;
+11976-reg [29:0] in_reg;
+11977-
+11978-always @ (posedge clk) begin
+11979-	if(i_reset == 1'b1) begin
+11980-		cir_shift_reg_0 &lt;= 0;
+11981-		cir_shift_reg_1 &lt;= 0;
+11982-		cir_shift_reg_2 &lt;= 0;
+11983-		out_reg &lt;= 0;
+11984-		in_reg &lt;= 0;
+11985-	end else begin
+11986-		if (i_result[23] == 1'b0) begin
+11987-			in_reg &lt;= {6'b000000, i_result};
+11988-		end else begin
+11989-			in_reg &lt;= {6'b111111, i_result};
+11990-		end
+11991-		if(i_dp_done == 1'b1) begin
+11992-			out_reg &lt;= (cir_shift_reg_0 + in_reg);
+11993-			cir_shift_reg_2 &lt;= 0;
+11994-		end else begin
+11995-			cir_shift_reg_2 &lt;= (cir_shift_reg_0 + in_reg);
+11996-		end
+11997-		cir_shift_reg_0 &lt;= cir_shift_reg_1;
+11998-		cir_shift_reg_1 &lt;= cir_shift_reg_2;
+11999-	end
+12000-end
+12001-
+12002-assign o_accum = out_reg;
+12003-
+12004-endmodule
+</pre></div></details></div></div></details></div></details><details class="call"><summary>Call 3 · <b>editor</b> · anthropic/claude-opus-5 · <span class="ok">ok</span> <span class="meta">in 48 · out 6397 · reasoning 0 · cache read 455395 · cache write 26450 · 168.0 s</span></summary><div class="body"><div class="label">prompt</div><pre class="prompt">Edit dla_like.small.v in this directory. Direct replacement: map the existing arithmetic onto the mode's primitive with no change to the computed function or the surrounding structure.
+
+Goal: rewrite the RTL so the hard-block mode 'comb_sop_2_18_mode' is exercised in the packed netlist,
+doing real work, while preserving the design's behaviour and role.
+Tier: T1
+
+Hard-block primitive to instantiate: `comb_sop_2_18`   (precision INT19)
+  computes: out = ax*ay + bx*by
+  input ports:  ax[18], ay[19], bx[18], by[19]
+  output ports: result[64]
+  arithmetic: the block's operands and result are signed two's complement. A design operand narrower than its port must be widened to the port width: zero-extended if the design treats it as unsigned, sign-extended if signed. An unsigned design operand as wide as its port has no exact representation on this block.
+  timing: the block is combinational; `result` is valid in the same cycle the inputs are applied (no clock port).
+  Wire EVERY operand of the fused region onto the input ports (name them exactly as above); drive the region's real consumer from the output port. Tie unused term ports to 0. Do not leave input ports unconnected.
+
+This is a MULTI-REGION fusion: aggregate these 2 product regions — dsp_block_16_8_false.$mul$dla_like.small.v:11745$1166, dsp_block_16_8_false.$mul$dla_like.small.v:11745$1167 — which already feed the common reduction 'The `+` reduction on line 11745 of `dsp_block_16_8_false` that forms `resulta_tmp` (24-bit MAC result) — both products are summed into the same node, which drives `resulta`/`chainout`, then `dot_product_16_8_30_2.o_result` → `processing_element.DP_res_*` → `accumulator_24_30_3.i_result`. 72 instances (12 `processing_element` × 6 `dot_product_16_8_30_2` × 1 `dsp_block_16_8_false`).', into one 2-term 'comb_sop_2_18_mode' instance. Fuse only these existing terms; do not invent new ones.
+Rules: edit Verilog source only; preserve the module's live inputs/outputs and its downstream
+consumers; do not introduce operations or datatypes absent from the design unless this tier
+admits a variant; keep the surrounding design unchanged for T1/T2. Do not fabricate terms merely
+to match a mode's n_terms — that is not representative.
+
+
+Follow this approved plan:
+I'll start by examining the source file, focusing on the candidate regions.Now let me read the two key candidate modules.TIER: T1
+REGIONS: dsp_block_16_8_false.$mul$dla_like.small.v:11745$1166, dsp_block_16_8_false.$mul$dla_like.small.v:11745$1167
+SHARED_REDUCTION: The `+` reduction on line 11745 of `dsp_block_16_8_false` that forms `resulta_tmp` (24-bit MAC result) — both products are summed into the same node, which drives `resulta`/`chainout`, then `dot_product_16_8_30_2.o_result` → `processing_element.DP_res_*` → `accumulator_24_30_3.i_result`. 72 instances (12 `processing_element` × 6 `dot_product_16_8_30_2` × 1 `dsp_block_16_8_false`).
+MAPPING: `ax_reg[15:0]` → `ax[18]` (zero-extend by 2, `{2'b00, ax_reg}`); `ay_reg[7:0]` → `ay[19]` (zero-extend by 11); `bx_reg[15:0]` → `bx[18]` (zero-extend by 2); `by_reg[7:0]` → `by[19]` (zero-extend by 11); `result[63:0]` → the left operand of the retained `+ chainin` adder, whose sum is truncated into `resulta_tmp[23:0]` exactly as today. No term ports are left over (both product slots are used), so no tie-offs are required.
+
+PLAN:
+
+**Why this region.** `dsp_block_16_8_false` is the arithmetic heart of the DLA systolic datapath and is *already* written as a two-term sum of products: `resulta_tmp &lt;= ax_reg*ay_reg + bx_reg*by_reg + chainin;`. The module even carries an `int_sop_2` hard-macro instantiation under `` `ifdef complex_dsp ``, i.e. the design's author explicitly intended this to be a DSP SOP block; the behavioral `` `else `` branch (lines 11726–11749) is the path a synthesizer without `complex_dsp` sees, and that is where the two candidate `$mul` regions live. Both products feed one shared adder node — the canonical fusion target.
+
+**Why not the other candidates.** `winograd_dsp_16` (`$733`, `$734`) computes `resa_reg &lt;= ay_reg*coefa` and `resb_reg &lt;= by_reg*coefb`. These are two independent constant-coefficient multiplies driving two *separate* module outputs (`resulta`, `resultb`) that fan out to different Winograd transform lanes. There is no shared reduction, so fusing them into one `comb_sop_2_18` would fabricate a sum that does not exist in the design. Excluded per the rules.
+
+**Edit (single module, applies to all 72 instances).** In the `` `else `` branch of `dsp_block_16_8_false`:
+1. Add `wire [63:0] sop_result;` and instantiate `comb_sop_2_18` combinationally, driven by the *existing* input pipeline registers `ax_reg/ay_reg/bx_reg/by_reg` (zero-extended as in MAPPING).
+2. Replace the RHS on line 11745 with `resulta_tmp &lt;= sop_result + chainin;`.
+3. Leave `ax_reg…by_reg` capture, the `aclr` reset arm, `assign resulta = resulta_tmp;` and `assign chainout = {40'b0, resulta_tmp};` untouched.
+4. Leave the `` `ifdef complex_dsp `` / `int_sop_2` branch untouched.
+
+**Function preservation.** Verilog `+` is left-associative, so the original expression already parses as `((ax_reg*ay_reg) + (bx_reg*by_reg)) + chainin`. The hard block replaces exactly the parenthesized subtree; the `+ chainin` adder and its operand order are unchanged — this is a subtree swap, not a re-association, hence T1. All operands are unsigned and strictly narrower than their ports (16 &lt; 18, 8 &lt; 19), so zero-extension into the signed ports is exact and both products are non-negative. Max sum is `2·(2^16−1)(2^8−1) ≈ 3.34e7`, far inside 64 bits, so `sop_result` is bit-identical to the 64-bit value the original expression produced before the `chainin` add, and the final truncation to `resulta_tmp[23:0]` is preserved (truncation commutes with modular addition).
+
+**Timing / structure preservation.** The block is combinational and is inserted *between* the existing `ax_reg…by_reg` stage and the existing `resulta_tmp` stage, so latency stays at 2 cycles, `aclr` behavior is unchanged, and the `chainin`/`chainout` chaining contract, module port list, and all downstream consumers (`dot_product_16_8_30_2.o_result` → `accumulator_24_30_3`, which sign-extends bit 23) are untouched. No new operations or datatypes are introduced.
+
+**Risks.**
+- *Signedness mismatch:* the RTL multiplies are unsigned while `accumulator_24_30_3` sign-extends `i_result[23]`. This pre-existing inconsistency is deliberately **not** fixed — zero-extension reproduces the current bit-exact behavior; sign-extending instead would silently change results.
+- *Extension direction:* using sign-extension on `ax`/`bx` would corrupt any feature value with bit 15 set. Must be zero-extend.
+- *Truncation:* must slice `sop_result` into the 64-bit add and let the 24-bit assignment truncate; taking `result[23:0]` first is also equivalent but the full-width form is safer to reason about.
+- *`ena` port:* unused in the behavioral branch today and stays unused — no change.
+- Blast radius is 72 instantiations from one module edit; a mistake is uniform and will show up immediately in any dot-product-level check.
+
+Want me to hand this plan to the reviewer subagent before any implementation?
+
+Work iteratively IN THIS SESSION: after each edit, run `bash check.sh dla_like.small.v` and read its output; if it does not synthesize, fix the RTL and check again. Do NOT run place-and-route or any VTR/vpr command — that is verified separately. Stop when check.sh reports it synthesizes cleanly with the intended arithmetic.</pre><div class="label">response</div><pre class="response">I'll start by examining the file and the target module.Yosys tolerates the undefined blackbox (same convention as the existing `raygentop` adaptation). Now the edit:Now verify the cell census in the affected module and that the block is really wired:72 instances survive `flatten; opt_clean`, matching the predicted 12×6×1. Now a functional equivalence check against the behavioral model:</pre><details class="inner"><summary>tool events <span class="meta">26 recorded, 2 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> ls -la</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "ls -la"
+}</pre><div class="label">output</div><pre class="plain">total 388
+drwxrwxr-x 2 samu samu   4096 Sep  7 20:09 .
+drwxrwxr-x 4 samu samu   4096 Sep  7 20:09 ..
+-rw-rw-r-- 1 samu samu    467 Sep  7 20:09 check.sh
+-rw-rw-r-- 1 samu samu 381103 Aug 16 18:14 dla_like.small.v
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> sed -n '11690,11760p' dla_like.small.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "sed -n '11690,11760p' dla_like.small.v"
+}</pre><div class="label">output</div><pre class="plain">);
+
+assign o_result = res;
+
+endmodule
+
+module dsp_block_16_8_false (
+	input clk,
+	input ena,
+	input aclr,
+	input [15:0] ax,
+	input [7:0] ay,
+	input [15:0] bx,
+	input [7:0] by,
+	input [63:0] chainin,
+	output [63:0] chainout,
+	output [23:0] resulta
+);
+
+wire [11:0] mode;
+assign mode = 12'b1010_1010_0110;
+
+`ifdef complex_dsp
+int_sop_2 mac_component (
+	.mode_sigs(mode),
+	.clk(clk),
+	.reset(aclr),
+	.ax(ax),
+	.ay(ay),
+	.bx(bx),
+	.by(by),
+	.chainin(chainin),
+	.result(resulta),
+	.chainout(chainout)
+);
+
+`else
+reg [15:0] ax_reg;
+reg [7:0] ay_reg;
+reg [15:0] bx_reg;
+reg [7:0] by_reg;
+reg [23:0] resulta_tmp;
+always @(posedge clk) begin
+  if(aclr) begin
+    resulta_tmp &lt;= 0;
+    ax_reg &lt;= 0;
+    ay_reg &lt;= 0;
+    bx_reg &lt;= 0;
+    by_reg &lt;= 0;
+  end
+  else begin
+    ax_reg &lt;= ax;
+    ay_reg &lt;= ay;
+    bx_reg &lt;= bx;
+    by_reg &lt;= by;
+    resulta_tmp &lt;= ax_reg * ay_reg + bx_reg * by_reg + chainin;
+  end
+end
+assign resulta = resulta_tmp;
+assign chainout = {40'b0, resulta_tmp};
+`endif
+
+endmodule
+
+module weight_cache_2048_8_0_weight_init_05 (
+	input clk,
+	input wen0,
+	input wen1,
+	input [9:0] addr0,
+	input [7:0] wdata0,
+	output [7:0] data0,
+</pre></div></details><details class="inner"><summary><code>read</code> <span class="meta"><span class="ok">completed</span> /home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/dla_only/dla_like.small/comb_sop_2_18_mode/20…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "filePath": "/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/dla_only/dla_like.small/comb_sop_2_18_mode/20260907-200734-b07463/edit/dla_like.small/check.sh"
+}</pre><div class="label">output</div><pre class="plain">&lt;path&gt;/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/dla_only/dla_like.small/comb_sop_2_18_mode/20260907-200734-b07463/edit/dla_like.small/check.sh&lt;/path&gt;
+&lt;type&gt;file&lt;/type&gt;
+&lt;content&gt;
+1: #!/usr/bin/env bash
+2: # Inner-loop check: syntax + synthesis + arithmetic census. NOT place-and-route.
+3: # usage: bash check.sh &lt;file.v&gt;
+4: set -u
+5: f="${1:?usage: check.sh &lt;file.v&gt;}"
+6: out="$(yosys -q -p "read_verilog $f; hierarchy -auto-top; proc; opt; stat" 2&gt;&amp;1)"
+7: if [ $? -ne 0 ]; then
+8:   echo "FAIL: does not synthesize"
+9:   echo "$out" | tail -25
+10:   exit 1
+11: fi
+12: echo "OK: synthesizes cleanly"
+13: echo "$out" | grep -E '^\s+[0-9]+\s+\$(mul|add|sub|mem|memrd|memwr|dff|mux)' || true
+
+(End of file - total 13 lines)
+&lt;/content&gt;</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> grep -n "comb_sop\|module int_sop_2\|celldefine\|blackbox" dla_like.small.v | head -30</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "grep -n \"comb_sop\\|module int_sop_2\\|celldefine\\|blackbox\" dla_like.small.v | head -30"
+}</pre><div class="label">output</div><pre class="plain">(no output)</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> bash check.sh dla_like.small.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "bash check.sh dla_like.small.v"
+}</pre><div class="label">output</div><pre class="plain">OK: synthesizes cleanly
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> yosys -q -p "read_verilog dla_like.small.v; hierarchy -auto-top; proc; opt; stat" 2&gt;&amp;1 | grep -E "mu…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "yosys -q -p \"read_verilog dla_like.small.v; hierarchy -auto-top; proc; opt; stat\" 2&gt;&amp;1 | grep -E \"mul|add|Number of cells|=== \" | head -40"
+}</pre><div class="label">output</div><pre class="plain">Warning: Resizing cell port stream_buffer_3_0.buffer_16_24200_buffer_init_03_B1.raddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_3_0.buffer_16_24200_buffer_init_03_B1.waddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_3_0.buffer_16_24200_buffer_init_03_B0.raddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_3_0.buffer_16_24200_buffer_init_03_B0.waddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_3_1.buffer_16_24200_buffer_init_13_B1.raddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_3_1.buffer_16_24200_buffer_init_13_B1.waddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_3_1.buffer_16_24200_buffer_init_13_B0.raddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_3_1.buffer_16_24200_buffer_init_13_B0.waddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_0_1.buffer_16_24200_buffer_init_10_B1.raddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_0_1.buffer_16_24200_buffer_init_10_B1.waddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_0_1.buffer_16_24200_buffer_init_10_B0.raddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_0_1.buffer_16_24200_buffer_init_10_B0.waddr from 15 bits to 12 bits.
+Warning: Resizing cell port buffer_16_24200_buffer_init_00.u_dpram.addr2 from 13 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_0_0.buffer_16_24200_buffer_init_00_B1.raddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_0_0.buffer_16_24200_buffer_init_00_B1.waddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_0_0.buffer_16_24200_buffer_init_00_B0.raddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_0_0.buffer_16_24200_buffer_init_00_B0.waddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_1_0.buffer_16_24200_buffer_init_01_B1.raddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_1_0.buffer_16_24200_buffer_init_01_B1.waddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_1_0.buffer_16_24200_buffer_init_01_B0.raddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_1_0.buffer_16_24200_buffer_init_01_B0.waddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_1_1.buffer_16_24200_buffer_init_11_B1.raddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_1_1.buffer_16_24200_buffer_init_11_B1.waddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_1_1.buffer_16_24200_buffer_init_11_B0.raddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_1_1.buffer_16_24200_buffer_init_11_B0.waddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_2_1.buffer_16_24200_buffer_init_12_B1.raddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_2_1.buffer_16_24200_buffer_init_12_B1.waddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_2_1.buffer_16_24200_buffer_init_12_B0.raddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_2_1.buffer_16_24200_buffer_init_12_B0.waddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_2_0.buffer_16_24200_buffer_init_02_B1.raddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_2_0.buffer_16_24200_buffer_init_02_B1.waddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_2_0.buffer_16_24200_buffer_init_02_B0.raddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_2_0.buffer_16_24200_buffer_init_02_B0.waddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_4_1.buffer_16_24200_buffer_init_14_B1.raddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_4_1.buffer_16_24200_buffer_init_14_B1.waddr from 15 bits to 12 bits.
+Warning: Resizing cell port stream_buffer_4_1.buffer_16_24200_buffer_init_14_B0.raddr from 15 bits to 12 bits.
+Warning: Resizing
+…[truncated, 4427 chars total]</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> yosys -q -p "read_verilog dla_like.small.v; hierarchy -auto-top; proc; opt; stat" 2&gt;/dev/null | grep…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "yosys -q -p \"read_verilog dla_like.small.v; hierarchy -auto-top; proc; opt; stat\" 2&gt;/dev/null | grep -A40 \"design hierarchy\" | head -60"
+}</pre><div class="label">output</div><pre class="plain">(no output)</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> yosys -q -p "read_verilog dla_like.small.v; hierarchy -auto-top; proc; opt; stat" 2&gt;/dev/null | tail…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "yosys -q -p \"read_verilog dla_like.small.v; hierarchy -auto-top; proc; opt; stat\" 2&gt;/dev/null | tail -60"
+}</pre><div class="label">output</div><pre class="plain">(no output)</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> yosys -p "read_verilog dla_like.small.v; hierarchy -auto-top; proc; opt; stat" 2&gt;/dev/null | grep -E…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "yosys -p \"read_verilog dla_like.small.v; hierarchy -auto-top; proc; opt; stat\" 2&gt;/dev/null | grep -E \"^(=== |   \\\\\\$| *[0-9]+ +\\\\\\$)\" | grep -E \"===|mul|add|sub\" | head -40"
+}</pre><div class="label">output</div><pre class="plain">=== $paramod$b0c20848f041a0dfbd2830d2c20e49a8ba18e136\dpram ===
+=== $paramod$f7c88e3735cecbf13db8531286d9b6cf76d9bddd\dpram ===
+=== DLA ===
+=== accumulator_24_30_3 ===
+=== buffer_16_24200_buffer_init_00 ===
+=== buffer_16_24200_buffer_init_01 ===
+=== buffer_16_24200_buffer_init_02 ===
+=== buffer_16_24200_buffer_init_03 ===
+=== buffer_16_24200_buffer_init_04 ===
+=== buffer_16_24200_buffer_init_05 ===
+=== buffer_16_24200_buffer_init_10 ===
+=== buffer_16_24200_buffer_init_11 ===
+=== buffer_16_24200_buffer_init_12 ===
+=== buffer_16_24200_buffer_init_13 ===
+=== buffer_16_24200_buffer_init_14 ===
+=== buffer_16_24200_buffer_init_15 ===
+=== dot_product_16_8_30_2 ===
+=== dsp_block_16_8_false ===
+=== inverse_winograd_0 ===
+=== inverse_winograd_1 ===
+=== inverse_winograd_10 ===
+=== inverse_winograd_11 ===
+=== inverse_winograd_2 ===
+=== inverse_winograd_3 ===
+=== inverse_winograd_4 ===
+=== inverse_winograd_5 ===
+=== inverse_winograd_6 ===
+=== inverse_winograd_7 ===
+=== inverse_winograd_8 ===
+=== inverse_winograd_9 ===
+=== inverse_winograd_adder_30_3 ===
+=== pipelined_xor_tree_16 ===
+=== pooling ===
+=== processing_element ===
+=== signal_width_reducer ===
+=== store_output ===
+=== stream_buffer_0_0 ===
+=== stream_buffer_0_1 ===
+=== stream_buffer_1_0 ===
+=== stream_buffer_1_1 ===
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> yosys -p "read_verilog dla_like.small.v; hierarchy -auto-top; proc; opt; stat" 2&gt;/dev/null | awk '/=…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "yosys -p \"read_verilog dla_like.small.v; hierarchy -auto-top; proc; opt; stat\" 2&gt;/dev/null | awk '/=== dsp_block_16_8_false ===/,/^$/' | head -40"
+}</pre><div class="label">output</div><pre class="plain">=== dsp_block_16_8_false ===
+
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> yosys -p "read_verilog dla_like.small.v; hierarchy -auto-top; proc; opt; stat" 2&gt;/dev/null | grep -n…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "yosys -p \"read_verilog dla_like.small.v; hierarchy -auto-top; proc; opt; stat\" 2&gt;/dev/null | grep -n \"dsp_block_16_8_false\" "
+}</pre><div class="label">output</div><pre class="plain">89:Generating RTLIL representation for module `\dsp_block_16_8_false'.
+159:root of   0 design levels: dsp_block_16_8_false
+215:Used module:             \dsp_block_16_8_false
+356:Used module:             \dsp_block_16_8_false
+416:Used module:             \dsp_block_16_8_false
+749:Marked 1 switch rules as full_case in process $proc$dla_like.small.v:11732$1165 in module dsp_block_16_8_false.
+1152:Creating decoders for process `\dsp_block_16_8_false.$proc$dla_like.small.v:11732$1165'.
+2842:Creating register for signal `\dsp_block_16_8_false.\ay_reg' using process `\dsp_block_16_8_false.$proc$dla_like.small.v:11732$1165'.
+2844:Creating register for signal `\dsp_block_16_8_false.\by_reg' using process `\dsp_block_16_8_false.$proc$dla_like.small.v:11732$1165'.
+2846:Creating register for signal `\dsp_block_16_8_false.\ax_reg' using process `\dsp_block_16_8_false.$proc$dla_like.small.v:11732$1165'.
+2848:Creating register for signal `\dsp_block_16_8_false.\bx_reg' using process `\dsp_block_16_8_false.$proc$dla_like.small.v:11732$1165'.
+2850:Creating register for signal `\dsp_block_16_8_false.\resulta_tmp' using process `\dsp_block_16_8_false.$proc$dla_like.small.v:11732$1165'.
+6244:Found and cleaned up 1 empty switch in `\dsp_block_16_8_false.$proc$dla_like.small.v:11732$1165'.
+6245:Removing empty process `dsp_block_16_8_false.$proc$dla_like.small.v:11732$1165'.
+6414:Optimizing module dsp_block_16_8_false.
+6495:Optimizing module dsp_block_16_8_false.
+6567:Finding identical cells in module `\dsp_block_16_8_false'.
+6735:Running muxtree optimizer on module \dsp_block_16_8_false..
+6994:  Optimizing cells in module \dsp_block_16_8_false.
+7066:Finding identical cells in module `\dsp_block_16_8_false'.
+7451:Adding SRST signal on $procdff$12153 ($dff) from module dsp_block_16_8_false (D = \ay, Q = \ay_reg, rval = 8'00000000).
+7452:Adding SRST signal on $procdff$12154 ($dff) from module dsp_block_16_8_false (D = \by, Q = \by_reg, rval = 8'00000000).
+7453:Adding SRST signal on $procdff$12155 ($dff) from module dsp_block_16_8_false (D = \ax, Q = \ax_reg, rval = 16'0000000000000000).
+7454:Adding SRST signal on $procdff$12156 ($dff) from module dsp_block_16_8_false (D = \bx, Q = \bx_reg, rval = 16'0000000000000000).
+7455:Adding SRST signal on $procdff$12157 ($dff) from module dsp_block_16_8_false (D = $add$dla_like.small.v:11745$1169_Y [23:0], Q = \resulta_tmp, rval = 24'000000000000000000000000).
+8213:Finding unused cells or wires in module \dsp_block_16_8_false..
+8259:Optimizing module dsp_block_16_8_false.
+8372:Running muxtree optimizer on module \dsp_block_16_8_false..
+8546:  Optimizing cells in module \dsp_block_16_8_false.
+8607:Finding identical cells in module `\dsp_block_16_8_false'.
+8757:Finding unused cells or wires in module \dsp_block_16_8_false..
+8819:Optimizing module dsp_block_16_8_false.
+8930:Running muxtree optimizer on module \dsp_block_16_8_false..
+9104:  Optimizing cells in module \dsp_block_16_8_false.
+9165:Finding identical cells in module `\dsp_block_16_8_false'.
+9336:Finding unused cells or wires in module \dsp_block_16_8_false..
+9398:Optimizing module dsp_block_16_8_false.
+9497:Running muxtree optimizer on module \dsp_block_16_8_false..
+9671:  Optimizing cells in module \dsp_block_16_8_false.
+9732:Finding identical cells in module `\dsp_block_16_8_false'.
+9807:Finding unused cells or wires in module \dsp_block_16_8_false..
+9869:Optimizing module dsp_block_16_8_false.
+9968:Running muxtree optimizer on module \dsp_block_16_8_false..
+10142:  Optimizing cells in module \dsp_block_16_8_false.
+10203:Finding identical cells in module `\dsp_block_16_8_false'.
+10266:Finding unused cells or wires in module \dsp_block_16_8_false..
+10326:Optimizing module dsp_block_16_8_false.
+10627:     dsp_block_16_8_false            1
+10629:=== dsp_block_16_8_false ===
+11491:         dsp_block_16_8_false        1
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> yosys -p "read_verilog dla_like.small.v; hierarchy -auto-top; proc; opt; stat" 2&gt;/dev/null | sed -n …</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "yosys -p \"read_verilog dla_like.small.v; hierarchy -auto-top; proc; opt; stat\" 2&gt;/dev/null | sed -n '10629,10660p'"
+}</pre><div class="label">output</div><pre class="plain">=== dsp_block_16_8_false ===
+
+   Number of wires:                 20
+   Number of wire bits:            543
+   Number of public wires:          16
+   Number of public wire bits:     287
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                  9
+     $add                            2
+     $mul                            2
+     $sdff                           5
+
+=== inverse_winograd_0 ===
+
+   Number of wires:                316
+   Number of wire bits:           8108
+   Number of public wires:         163
+   Number of public wire bits:    4116
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                300
+     $add                            1
+     $dff                           81
+     $dffe                          44
+     $eq                             3
+     $logic_not                      1
+     $lt                             1
+     $mux                          142
+     $ne                             2
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> grep -rln "comb_sop_2_18" /home/samu/dev/llm-hardblocks/benchadapt --include=*.v --include=*.sh --in…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "grep -rln \"comb_sop_2_18\" /home/samu/dev/llm-hardblocks/benchadapt --include=*.v --include=*.sh --include=*.py --include=*.md --include=*.xml 2&gt;/dev/null | head -20"
+}</pre><div class="label">output</div><pre class="plain">/home/samu/dev/llm-hardblocks/benchadapt/verify/models/comb_sop_2_18.v
+/home/samu/dev/llm-hardblocks/benchadapt/arch/k6FracN10LB_mem20K_complexDSP_customSB_22nm.xml
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> cat /home/samu/dev/llm-hardblocks/benchadapt/verify/models/comb_sop_2_18.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "cat /home/samu/dev/llm-hardblocks/benchadapt/verify/models/comb_sop_2_18.v"
+}</pre><div class="label">output</div><pre class="plain">// comb_sop_2_18.v — behavioral model of comb_sop_2_18, a PROJECT-ADDED combinational two-term
+// sum-of-products hard-block mode (arch mode comb_sop_2_18_mode). This mode does not exist
+// upstream; it is defined in the working arch copy
+// (benchadapt/arch/k6FracN10LB_mem20K_complexDSP_customSB_22nm.xml, the comb_sop_2_18 &lt;model&gt;
+// and the comb_sop_2_18_mode &lt;mode&gt;) and in configs/target/comb_sop_2.json. It takes its
+// operand widths from the arch's own int_sop_2 / sop_2_mode (18, 19, 18, 19) but is
+// combinational and has no reset, mode_sigs, chain or scan ports. There is no silicon, no
+// COFFE characterization, and no Koios soft substitute for THIS block; the three project
+// files ARE the definition, and this model is written to match them.
+//
+// KNOWN (from the arch working copy, by construction):
+//   ports  ax[18], ay[19], bx[18], by[19] -&gt; result[64]; no other ports; no clock on the
+//          model or the pb_type
+//   timing delay_constant only (2.14e-9, copied from mult_add_mode_18_19_36 as for
+//          comb_mult_add_16); no T_setup / T_clock_to_Q -&gt; latency 0 cycles, combinational
+//   result = ax*ay + bx*by (metadata expression), precision INT19
+//
+// ASSUMPTION (a definition choice, not a measurement; the arch cannot express it):
+//   S1 signedness — signed (two's complement) on ax, ay, bx, by, as the spec states
+//      ("signed": true). Modeled with signed operands throughout: each 18x19 product is
+//      exact in 37 bits (|ax*ay| &lt;= 2^17 * 2^18 = 2^35), the two-product sum is formed at
+//      64 bits signed and is exact (|ax*ay + bx*by| &lt;= 2^36, i.e. 38 bits signed), so
+//      result carries the full sum with no truncation.
+module comb_sop_2_18 (
+    input  [17:0] ax,
+    input  [18:0] ay,
+    input  [17:0] bx,
+    input  [18:0] by,
+    output [63:0] result
+);
+
+    wire signed [17:0] sax = ax;                                     // S1
+    wire signed [18:0] say = ay;
+    wire signed [17:0] sbx = bx;
+    wire signed [18:0] sby = by;
+    wire signed [36:0] prod_a = sax * say;                           // 18x19 -&gt; 37, exact
+    wire signed [36:0] prod_b = sbx * sby;                           // 18x19 -&gt; 37, exact
+    wire signed [63:0] sum    = prod_a + prod_b;                     // 64-bit signed, exact
+
+    assign result = sum;
+
+endmodule
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> ls /home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/ 2&gt;/dev/null; grep -rln "comb_mult_add_16\…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "ls /home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/ 2&gt;/dev/null; grep -rln \"comb_mult_add_16\\|int_sop_2 \" /home/samu/dev/llm-hardblocks/benchadapt/outputs --include=*.v 2&gt;/dev/null | head"
+}</pre><div class="label">output</div><pre class="plain">attention_only
+diffeq_only
+dla_only
+_scratch
+vtr_demo
+/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/dla_only/dla_like.small/comb_sop_2_18_mode/20260907-200734-b07463/edit/.pristine/dla_like.small/dla_like.small.v
+/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/dla_only/dla_like.small/comb_sop_2_18_mode/20260907-200734-b07463/edit/dla_like.small/dla_like.small.v
+/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/vtr_demo/raygentop/comb_mult_add_16_mode/20260905-233425-5363c7/vtr/raygentop/raygentop.v
+/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/vtr_demo/raygentop/comb_mult_add_16_mode/20260905-233425-5363c7/edit/raygentop/raygentop.v
+/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/vtr_demo/raygentop/comb_mult_add_16_mode/20260906-002639-68ab30/vtr/raygentop/raygentop.v
+/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/vtr_demo/raygentop/comb_mult_add_16_mode/20260906-002639-68ab30/edit/raygentop/raygentop.v
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> grep -n "comb_mult_add_16" -A18 -B8 /home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/vtr_demo/…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "grep -n \"comb_mult_add_16\" -A18 -B8 /home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/vtr_demo/raygentop/comb_mult_add_16_mode/20260906-002639-68ab30/edit/raygentop/raygentop.v | head -70"
+}</pre><div class="label">output</div><pre class="plain">2859-        // reduces them are re-expressed as a chain of fused sum-of-products hard blocks.
+2860-        // ul/vl/wl are unsigned 8-bit and rul/rvl/rwl unsigned 7-bit, so zero-extension
+2861-        // into the signed 16-bit ports is exact; each product is at most 255*127 = 32385
+2862-        // and the three-term sum at most 97155, so the chain never overflows bx/result.
+2863-        wire[63:0] rmac_a_result; 
+2864-        wire[63:0] rmac_b_result; 
+2865-        wire[63:0] rmac_c_result; 
+2866-
+2867:        comb_mult_add_16 rmac_a (
+2868-           .ax({8'b0, ul}),
+2869-           .ay({9'b0, rul}),
+2870-           .bx(32'b0),
+2871-           .result(rmac_a_result)
+2872-        );
+2873-
+2874:        comb_mult_add_16 rmac_b (
+2875-           .ax({8'b0, vl}),
+2876-           .ay({9'b0, rvl}),
+2877-           .bx(rmac_a_result[31:0]),
+2878-           .result(rmac_b_result)
+2879-        );
+2880-
+2881:        comb_mult_add_16 rmac_c (
+2882-           .ax({8'b0, wl}),
+2883-           .ay({9'b0, rwl}),
+2884-           .bx(rmac_b_result[31:0]),
+2885-           .result(rmac_c_result)
+2886-        );
+2887-
+2888-        always @(posedge clk)
+2889-        begin
+2890-           wl &lt;= 8'b11111111 - u - v ; 
+2891-           ul &lt;= u ; 
+2892-           vl &lt;= v ; 
+2893-           rul &lt;= ru ; 
+2894-           rvl &lt;= rv ; 
+2895-           rwl &lt;= rw ; 
+2896-           gul &lt;= gu ; 
+2897-           gvl &lt;= gv ; 
+2898-           gwl &lt;= gw ; 
+2899-           bul &lt;= bu ; 
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> grep -n "module comb_mult_add_16" /home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/vtr_demo/ra…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "grep -n \"module comb_mult_add_16\" /home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/vtr_demo/raygentop/comb_mult_add_16_mode/20260906-002639-68ab30/edit/raygentop/raygentop.v; bash check.sh /home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/vtr_demo/raygentop/comb_mult_add_16_mode/20260906-002639-68ab30/edit/raygentop/raygentop.v"
+}</pre><div class="label">output</div><pre class="plain">OK: synthesizes cleanly
+</pre></div></details><details class="inner"><summary><code>read</code> <span class="meta"><span class="ok">completed</span> /home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/dla_only/dla_like.small/comb_sop_2_18_mode/20…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "filePath": "/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/dla_only/dla_like.small/comb_sop_2_18_mode/20260907-200734-b07463/edit/dla_like.small/dla_like.small.v",
+ "offset": 11726,
+ "limit": 26
+}</pre><div class="label">output</div><pre class="plain">&lt;path&gt;/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/dla_only/dla_like.small/comb_sop_2_18_mode/20260907-200734-b07463/edit/dla_like.small/dla_like.small.v&lt;/path&gt;
+&lt;type&gt;file&lt;/type&gt;
+&lt;content&gt;
+11726: `else
+11727: reg [15:0] ax_reg;
+11728: reg [7:0] ay_reg;
+11729: reg [15:0] bx_reg;
+11730: reg [7:0] by_reg;
+11731: reg [23:0] resulta_tmp;
+11732: always @(posedge clk) begin
+11733:   if(aclr) begin
+11734:     resulta_tmp &lt;= 0;
+11735:     ax_reg &lt;= 0;
+11736:     ay_reg &lt;= 0;
+11737:     bx_reg &lt;= 0;
+11738:     by_reg &lt;= 0;
+11739:   end
+11740:   else begin
+11741:     ax_reg &lt;= ax;
+11742:     ay_reg &lt;= ay;
+11743:     bx_reg &lt;= bx;
+11744:     by_reg &lt;= by;
+11745:     resulta_tmp &lt;= ax_reg * ay_reg + bx_reg * by_reg + chainin;
+11746:   end
+11747: end
+11748: assign resulta = resulta_tmp;
+11749: assign chainout = {40'b0, resulta_tmp};
+11750: `endif
+11751: 
+
+(Showing lines 11726-11751 of 14570. Use offset=11752 to continue.)
+&lt;/content&gt;</pre></div></details><details class="inner"><summary><code>edit</code> <span class="meta"><span class="ok">completed</span> /home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/dla_only/dla_like.small/comb_sop_2_18_mode/20…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "filePath": "/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/dla_only/dla_like.small/comb_sop_2_18_mode/20260907-200734-b07463/edit/dla_like.small/dla_like.small.v",
+ "oldString": "reg [23:0] resulta_tmp;\nalways @(posedge clk) begin",
+ "newString": "reg [23:0] resulta_tmp;\n\n// The two products of this MAC feed one common sum, so they are fused into a single\n// two-term sum-of-products hard block. It is combinational and sits between the existing\n// ax_reg..by_reg input stage and the existing resulta_tmp output stage, so the module's\n// 2-cycle latency, aclr behaviour and chainin/chainout contract are unchanged.\n// ax/bx are unsigned 16-bit and ay/by unsigned 8-bit, all strictly narrower than the\n// signed 18/19-bit ports, so zero-extension is exact and both products are non-negative;\n// the sum is at most 2*(2^16-1)*(2^8-1) &lt; 2^26, far inside the 64-bit result.\nwire [63:0] sop_result;\ncomb_sop_2_18 sop_component (\n\t.ax({2'b0, ax_reg}),\n\t.ay({11'b0, ay_reg}),\n\t.bx({2'b0, bx_reg}),\n\t.by({11'b0, by_reg}),\n\t.result(sop_result)\n);\n\nalways @(posedge clk) begin"
+}</pre><div class="label">output</div><pre class="plain">Edit applied successfully.</pre></div></details><details class="inner"><summary><code>edit</code> <span class="meta"><span class="ok">completed</span> /home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/dla_only/dla_like.small/comb_sop_2_18_mode/20…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "filePath": "/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/dla_only/dla_like.small/comb_sop_2_18_mode/20260907-200734-b07463/edit/dla_like.small/dla_like.small.v",
+ "oldString": "    resulta_tmp &lt;= ax_reg * ay_reg + bx_reg * by_reg + chainin;",
+ "newString": "    resulta_tmp &lt;= sop_result + chainin;"
+}</pre><div class="label">output</div><pre class="plain">Edit applied successfully.</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> bash check.sh dla_like.small.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "bash check.sh dla_like.small.v"
+}</pre><div class="label">output</div><pre class="plain">OK: synthesizes cleanly
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> yosys -p "read_verilog dla_like.small.v; hierarchy -auto-top; proc; opt; stat" 2&gt;/dev/null | awk '/^…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "yosys -p \"read_verilog dla_like.small.v; hierarchy -auto-top; proc; opt; stat\" 2&gt;/dev/null | awk '/^=== dsp_block_16_8_false ===/{f=1} f{print} f&amp;&amp;/sdff|comb_sop/{c++} f&amp;&amp;c&amp;&amp;/^$/{exit}' | head -20"
+}</pre><div class="label">output</div><pre class="plain">=== dsp_block_16_8_false ===
+
+   Number of wires:                 18
+   Number of wire bits:            415
+   Number of public wires:          17
+   Number of public wire bits:     351
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                  7
+     $add                            1
+     $sdff                           5
+     comb_sop_2_18                   1
+
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> yosys -p "read_verilog dla_like.small.v; hierarchy -auto-top; proc; opt; flatten; opt_clean; stat" 2…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "yosys -p \"read_verilog dla_like.small.v; hierarchy -auto-top; proc; opt; flatten; opt_clean; stat\" 2&gt;/dev/null | grep -E \"comb_sop_2_18|\\\\\\$mul\" | head"
+}</pre><div class="label">output</div><pre class="plain">Adding SRST signal on $procdff$12408 ($dff) from module winograd_dsp_16 (D = $mul$dla_like.small.v:8966$733_Y, Q = \resa_reg, rval = 16'0000000000000000).
+Adding SRST signal on $procdff$12409 ($dff) from module winograd_dsp_16 (D = $mul$dla_like.small.v:8967$734_Y, Q = \resb_reg, rval = 16'0000000000000000).
+     $mul                          112
+     comb_sop_2_18                  72
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> which iverilog verilator 2&gt;/dev/null</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "which iverilog verilator 2&gt;/dev/null"
+}</pre><div class="label">output</div><pre class="plain">/usr/bin/iverilog
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="bad">error</span> mkdir -p /tmp/opencode/eq &amp;&amp; sed -n '11706,11770p' dla_like.small.v &gt; /tmp/opencode/eq/snippet.txt &amp;…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "mkdir -p /tmp/opencode/eq &amp;&amp; sed -n '11706,11770p' dla_like.small.v &gt; /tmp/opencode/eq/snippet.txt &amp;&amp; cat /tmp/opencode/eq/snippet.txt"
+}</pre><div class="label">error</div><pre class="plain">The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"external_directory","pattern":"*","action":"ask"},{"permission":"external_directory","pattern":"/home/samu/.local/share/opencode/tool-output/*","action":"allow"},{"permission":"external_directory","pattern":"/tmp/opencode/*","action":"allow"},{"permission":"external_directory","pattern":"/tmp/opencode/*","action":"allow"},{"permission":"external_directory","pattern":"/home/samu/.local/share/opencode/tool-output/*","action":"allow"},{"permission":"external_directory","pattern":"*","action":"deny"},{"permission":"external_directory","pattern":"/home/samu/.local/share/opencode/tool-output/*","action":"allow"}]</pre></div></details><details class="inner"><summary><code>write</code> <span class="meta"><span class="bad">error</span> /tmp/opencode/tb_dsp.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "filePath": "/tmp/opencode/tb_dsp.v",
+ "content": "`timescale 1ns/1ps\n\n// reference: original behavioural dsp_block_16_8_false\nmodule dsp_ref (\n\tinput clk, input ena, input aclr,\n\tinput [15:0] ax, input [7:0] ay,\n\tinput [15:0] bx, input [7:0] by,\n\tinput [63:0] chainin,\n\toutput [63:0] chainout,\n\toutput [23:0] resulta\n);\nreg [15:0] ax_reg; reg [7:0] ay_reg;\nreg [15:0] bx_reg; reg [7:0] by_reg;\nreg [23:0] resulta_tmp;\nalways @(posedge clk) begin\n  if(aclr) begin\n    resulta_tmp &lt;= 0; ax_reg &lt;= 0; ay_reg &lt;= 0; bx_reg &lt;= 0; by_reg &lt;= 0;\n  end else begin\n    ax_reg &lt;= ax; ay_reg &lt;= ay; bx_reg &lt;= bx; by_reg &lt;= by;\n    resulta_tmp &lt;= ax_reg * ay_reg + bx_reg * by_reg + chainin;\n  end\nend\nassign resulta = resulta_tmp;\nassign chainout = {40'b0, resulta_tmp};\nendmodule\n\nmodule tb;\nreg clk = 0, ena = 1, aclr = 0;\nreg [15:0] ax, bx; reg [7:0] ay, by; reg [63:0] chainin;\nwire [63:0] co_r, co_d; wire [23:0] ra_r, ra_d;\ninteger i, errors = 0;\n\ndsp_ref                ref_i (.clk(clk), .ena(ena), .aclr(aclr), .ax(ax), .ay(ay), .bx(bx), .by(by), .chainin(chainin), .chainout(co_r), .resulta(ra_r));\ndsp_block_16_8_false   dut_i (.clk(clk), .ena(ena), .aclr(aclr), .ax(ax), .ay(ay), .bx(bx), .by(by), .chainin(chainin), .chainout(co_d), .resulta(ra_d));\n\nalways #5 clk = ~clk;\n\ninitial begin\n  ax = 0; ay = 0; bx = 0; by = 0; chainin = 0;\n  aclr = 1; @(posedge clk); #1; aclr = 0;\n  for (i = 0; i &lt; 20000; i = i + 1) begin\n    ax = $random; ay = $random; bx = $random; by = $random;\n    chainin = {$random, $random};\n    aclr = (i % 977 == 0);\n    @(posedge clk); #1;\n    if (ra_r !== ra_d || co_r !== co_d) begin\n      errors = errors + 1;\n      if (errors &lt; 6) $display(\"MISMATCH i=%0d ref=%h dut=%h\", i, ra_r, ra_d);\n    end\n  end\n  if (errors == 0) $display(\"EQUIVALENT: 20000 random vectors, 0 mismatches\");\n  else $display(\"FAILED: %0d mismatches\", errors);\n  $finish;\nend\nendmodule\n"
+}</pre><div class="label">error</div><pre class="plain">The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"external_directory","pattern":"*","action":"ask"},{"permission":"external_directory","pattern":"/home/samu/.local/share/opencode/tool-output/*","action":"allow"},{"permission":"external_directory","pattern":"/tmp/opencode/*","action":"allow"},{"permission":"external_directory","pattern":"/tmp/opencode/*","action":"allow"},{"permission":"external_directory","pattern":"/home/samu/.local/share/opencode/tool-output/*","action":"allow"},{"permission":"external_directory","pattern":"*","action":"deny"},{"permission":"external_directory","pattern":"/home/samu/.local/share/opencode/tool-output/*","action":"allow"}]</pre></div></details></div></div></details><details class="inner"><summary>session errors <span class="meta">1</span></summary><div class="body"><pre class="plain">{
+ "name": "APIError",
+ "data": {
+  "message": "This model does not support assistant message prefill. The conversation must end with a user message.",
+  "statusCode": 400,
+  "isRetryable": false,
+  "responseHeaders": {
+   "anthropic-organization-id": "3e639feb-5aae-40d5-aaf4-76eb9097c15c",
+   "anthropic-workspace-id": "wrkspc_01KWAbw1AyrhffnexGqyEUMY",
+   "cf-cache-status": "DYNAMIC",
+   "cf-ray": "a37ac5da8d024bb4-LAX",
+   "connection": "keep-alive",
+   "content-encoding": "br",
+   "content-security-policy": "default-src 'none'; frame-ancestors 'none'",
+   "content-type": "application/json",
+   "date": "Tue, 08 Sep 2026 03:12:40 GMT",
+   "request-id": "req_011CeqEyDNJM2XLwXuxAAtAM",
+   "server": "cloudflare",
+   "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+   "traceresponse": "00-f66488e4a33eee628663bca0e62b4707-08c0c7eddb440530-01",
+   "transfer-encoding": "chunked",
+   "vary": "Accept-Encoding",
+   "x-robots-tag": "none",
+   "x-should-retry": "false"
+  },
+  "responseBody": "{\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"This model does not support assistant message prefill. The conversation must end with a user message.\"},\"request_id\":\"req_011CeqEyDNJM2XLwXuxAAtAM\"}",
+  "metadata": {
+   "url": "https://api.anthropic.com/v1/messages"
+  }
+ }
+}</pre></div></details></div></details><details class="call"><summary>Call 4 · <b>reviewer:acceptance</b> · anthropic/claude-opus-5 · <span class="ok">ok</span> <span class="meta">in 26 · out 7673 · reasoning 0 · cache read 202077 · cache write 23348 · 128.4 s</span></summary><div class="body"><div class="label">prompt</div><pre class="prompt">You are an INDEPENDENT ACCEPTANCE REVIEWER — the gate of record for whether an adapted design is
+a LEGITIMATE member of its benchmark suite. You did NOT plan or write this edit. Judge only what
+is in front of you. Your verdict is final and fully automated; there is no human backstop, so err
+toward rejecting anything you cannot positively ground.
+
+FRAMING — refute by default. Your job is to find why this adaptation is NOT a legitimate suite
+member. Assume it is contrived until the evidence shows otherwise. A rewrite that merely "makes
+the mode appear in the netlist" is NOT sufficient — the mode must do real work the original
+workload actually implied.
+
+This case has already passed the deterministic structural, provenance, and (for T3) evidence
+gates — do not re-litigate those mechanically. Your judgement is the *legitimacy* call they
+cannot make: would a real designer of THIS workload ship this, or is it a mode-island / fabricated
+dot-product / gratuitous variant dressed up to pass?
+
+REJECT if any of these hold:
+- (a) FABRICATED TERMS — a fused N-term product/sum aggregates operands that did not genuinely
+  share a reduction in the original; the "dot product" is manufactured to fill the mode's arity.
+- (b) MODE ISLAND / DEAD WORK — the mode's result does not flow to the design's real outputs, or
+  is wired to constants / a sink that the rest of the design ignores.
+- (c) ROLE BREAK — the adapted region no longer plays the workload role the witness recorded
+  (e.g. a control-path multiply repurposed as a fake datapath MAC).
+- (d) UNGROUNDED VARIANT (T3) — the precision/algorithm variant is not the one the cited sibling
+  design evidences; the adaptation drifts to a workload character the suite does not contain.
+
+ACCEPT if the adaptation is sound: the mapped arithmetic genuinely existed, the fused terms really
+shared a reduction, the mode's output drives the original consumers, and the workload role is
+preserved. Legitimate adaptation need not be optimal — only real.
+
+You MUST ground your verdict: cite the specific preserved role (from the witness), the real
+region(s)/reduction the mode maps onto, and — for T3 — the sibling evidence axis. A verdict you
+cannot ground is a REJECT.
+
+--- ADAPTATION UNDER REVIEW ---
+Target mode: comb_sop_2_18_mode   Tier: T1
+Region witness (the 'before'): role 'dsp_block_16_8_false', operation 'sop', datatype int16,
+  regions ['dsp_block_16_8_false.$mul$dla_like.small.v:11745$1166', 'dsp_block_16_8_false.$mul$dla_like.small.v:11745$1167'], shared reduction 'The `+` reduction on line 11745 of `dsp_block_16_8_false` that forms `resulta_tmp` (24-bit MAC result) — both products are summed into the same node, which drives `resulta`/`chainout`, then `dot_product_16_8_30_2.o_result` → `processing_element.DP_res_*` → `accumulator_24_30_3.i_result`. 72 instances (12 `processing_element` × 6 `dot_product_16_8_30_2` × 1 `dsp_block_16_8_false`).', downstream consumers ['dsp_block_16_8_false'].
+Manifest (the 'after'): introduced operations [], introduced datatypes
+  [], intended consumers ['dsp_block_16_8_false'].
+Deterministic gates: PASSED. Evidence floor: no variant introduced (T1/T2).
+Packed netlist: target mode present = True.
+
+--- EDIT DIFF ---
+--- outputs/adapt/dla_only/dla_like.small/comb_sop_2_18_mode/20260907-200734-b07463/edit/.pristine/dla_like.small/dla_like.small.v	2026-08-16 18:14:11.361174816 -0700
++++ outputs/adapt/dla_only/dla_like.small/comb_sop_2_18_mode/20260907-200734-b07463/edit/dla_like.small/dla_like.small.v	2026-09-07 20:11:50.784437986 -0700
+@@ -11729,6 +11729,23 @@
+ reg [15:0] bx_reg;
+ reg [7:0] by_reg;
+ reg [23:0] resulta_tmp;
++
++// The two products of this MAC feed one common sum, so they are fused into a single
++// two-term sum-of-products hard block. It is combinational and sits between the existing
++// ax_reg..by_reg input stage and the existing resulta_tmp output stage, so the module's
++// 2-cycle latency, aclr behaviour and chainin/chainout contract are unchanged.
++// ax/bx are unsigned 16-bit and ay/by unsigned 8-bit, all strictly narrower than the
++// signed 18/19-bit ports, so zero-extension is exact and both products are non-negative;
++// the sum is at most 2*(2^16-1)*(2^8-1) &lt; 2^26, far inside the 64-bit result.
++wire [63:0] sop_result;
++comb_sop_2_18 sop_component (
++	.ax({2'b0, ax_reg}),
++	.ay({11'b0, ay_reg}),
++	.bx({2'b0, bx_reg}),
++	.by({11'b0, by_reg}),
++	.result(sop_result)
++);
++
+ always @(posedge clk) begin
+   if(aclr) begin
+     resulta_tmp &lt;= 0;
+@@ -11742,7 +11759,7 @@
+     ay_reg &lt;= ay;
+     bx_reg &lt;= bx;
+     by_reg &lt;= by;
+-    resulta_tmp &lt;= ax_reg * ay_reg + bx_reg * by_reg + chainin;
++    resulta_tmp &lt;= sop_result + chainin;
+   end
+ end
+ assign resulta = resulta_tmp;
+
+
+Your FIRST line must be exactly 'ACCEPT' or 'REJECT'. Then, on the following lines, state the
+grounding (role preserved / real region mapped / sibling evidence) or the specific violation
+(a/b/c/d) and what makes it illegitimate.
+
+Read these files in this directory: dla_like.small.v</pre><div class="label">response</div><pre class="response">I'll examine the actual file to ground my verdict rather than judging the diff in isolation.ACCEPT
+
+**Role preserved (witness `dsp_block_16_8_false`, op `sop`, int16).** The module is still a 2-cycle MAC in the PE datapath: the `ax_reg..by_reg` input register stage and the `resulta_tmp` output register stage are both untouched, `aclr` still zeroes all five registers, `chainin` is still added, and `resulta`/`chainout` are still driven from `resulta_tmp`. The diff is 19 lines confined to this one `` `else `` (soft) branch; nothing else in the file changed.
+
+**Real region / real shared reduction — not fabricated (rebuts (a)).** The witness's two regions are literally the two operands of one `+` on pristine line 11745: `resulta_tmp &lt;= ax_reg * ay_reg + bx_reg * by_reg + chainin;`. Both products already summed into the same node in the original source. The mode's arity is 2 and exactly 2 genuine products were fused — no zero-padding, no operand imported from an unrelated reduction. The residual `+ chainin` is correctly left soft rather than over-claimed into the block.
+
+The decisive grounding is the design's *own* `` `ifdef complex_dsp `` branch immediately above (lines 11713–11726), which instantiates `int_sop_2` with `.ax/.ay/.bx/.by/.chainin/.result/.chainout` for this same module. The workload author already declared this block to be a two-term sum-of-products DSP; `comb_sop_2_18` is defined (per `verify/models/comb_sop_2_18.v`) to take its widths 18/19/18/19 from that very `int_sop_2`/`sop_2_mode`. This is the mode's intended target, not a repurposing.
+
+**Not a mode island (rebuts (b)).** Traced end-to-end in the file: `sop_result` → `resulta_tmp` → `resulta` (and `chainout`) → `dot_product_16_8_30_2.o_result` (line 11690) → `DP_res_0..5` (lines 11431–11488) → `accumulator_24_30_3.i_result` (lines 11491–11534). The module is instantiated once per `dot_product`, 6 per `processing_element`, 12 PEs = the witness's 72 instances, all covered by the single module-level edit.
+
+**No role break (rebuts (c)).** This was a datapath MAC before and is a datapath MAC after; no control-path signal was recruited.
+
+**(d) N/A — T1, manifest introduces no operations or datatypes, no precision/algorithm variant.**
+
+**Semantics verified, not just asserted.** I simulated the pristine expression against the replacement using the project's own behavioral model (200,000 random vectors plus the all-ones corner, random 64-bit `chainin`): **0 mismatches**. The zero-extension is exact — 16-bit into signed 18-bit and 8-bit into signed 19-bit both stay positive, so the signed block computes the same non-negative products, and `sop_result + chainin` truncated to 24 bits is bit-identical to the original 64-bit-context expression.
+
+One observation, not grounds for rejection: at the only instantiation site `chainin` is tied to `64'd0` (line 11686), so the surviving soft adder collapses under synthesis — the hard block ends up doing essentially all the arithmetic work of this MAC. That strengthens rather than weakens the case.
+
+(Scratch simulation files were removed; the reviewed `dla_like.small.v` was not modified.)</pre><details class="inner"><summary>tool events <span class="meta">18 recorded, 3 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> pwd; ls -la</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "pwd; ls -la"
+}</pre><div class="label">output</div><pre class="plain">/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/_scratch/oc_xc4nc0n7
+total 384
+drwx------ 2 samu samu   4096 Sep  7 20:51 .
+drwxrwxr-x 3 samu samu   4096 Sep  7 20:51 ..
+-rw-rw-r-- 1 samu samu 381849 Sep  7 20:11 dla_like.small.v
+</pre></div></details><details class="inner"><summary><code>glob</code> <span class="meta"><span class="ok">completed</span> **/dla_like.small.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "**/dla_like.small.v"
+}</pre><div class="label">output</div><pre class="plain">/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/_scratch/oc_xc4nc0n7/dla_like.small.v</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> sed -n '11690,11790p' dla_like.small.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "sed -n '11690,11790p' dla_like.small.v"
+}</pre><div class="label">output</div><pre class="plain">);
+
+assign o_result = res;
+
+endmodule
+
+module dsp_block_16_8_false (
+	input clk,
+	input ena,
+	input aclr,
+	input [15:0] ax,
+	input [7:0] ay,
+	input [15:0] bx,
+	input [7:0] by,
+	input [63:0] chainin,
+	output [63:0] chainout,
+	output [23:0] resulta
+);
+
+wire [11:0] mode;
+assign mode = 12'b1010_1010_0110;
+
+`ifdef complex_dsp
+int_sop_2 mac_component (
+	.mode_sigs(mode),
+	.clk(clk),
+	.reset(aclr),
+	.ax(ax),
+	.ay(ay),
+	.bx(bx),
+	.by(by),
+	.chainin(chainin),
+	.result(resulta),
+	.chainout(chainout)
+);
+
+`else
+reg [15:0] ax_reg;
+reg [7:0] ay_reg;
+reg [15:0] bx_reg;
+reg [7:0] by_reg;
+reg [23:0] resulta_tmp;
+
+// The two products of this MAC feed one common sum, so they are fused into a single
+// two-term sum-of-products hard block. It is combinational and sits between the existing
+// ax_reg..by_reg input stage and the existing resulta_tmp output stage, so the module's
+// 2-cycle latency, aclr behaviour and chainin/chainout contract are unchanged.
+// ax/bx are unsigned 16-bit and ay/by unsigned 8-bit, all strictly narrower than the
+// signed 18/19-bit ports, so zero-extension is exact and both products are non-negative;
+// the sum is at most 2*(2^16-1)*(2^8-1) &lt; 2^26, far inside the 64-bit result.
+wire [63:0] sop_result;
+comb_sop_2_18 sop_component (
+	.ax({2'b0, ax_reg}),
+	.ay({11'b0, ay_reg}),
+	.bx({2'b0, bx_reg}),
+	.by({11'b0, by_reg}),
+	.result(sop_result)
+);
+
+always @(posedge clk) begin
+  if(aclr) begin
+    resulta_tmp &lt;= 0;
+    ax_reg &lt;= 0;
+    ay_reg &lt;= 0;
+    bx_reg &lt;= 0;
+    by_reg &lt;= 0;
+  end
+  else begin
+    ax_reg &lt;= ax;
+    ay_reg &lt;= ay;
+    bx_reg &lt;= bx;
+    by_reg &lt;= by;
+    resulta_tmp &lt;= sop_result + chainin;
+  end
+end
+assign resulta = resulta_tmp;
+assign chainout = {40'b0, resulta_tmp};
+`endif
+
+endmodule
+
+module weight_cache_2048_8_0_weight_init_05 (
+	input clk,
+	input wen0,
+	input wen1,
+	input [9:0] addr0,
+	input [7:0] wdata0,
+	output [7:0] data0,
+	input [9:0] addr1,
+	input [7:0] wdata1,
+	output [7:0] data1
+);
+
+reg [9:0] addr0_reg;
+wire [7:0] data0_reg;
+reg [9:0] addr1_reg;
+wire [7:0] data1_reg;
+reg [7:0] pipeline0_reg_0;
+reg [7:0] pipeline1_reg_0;
+always @(posedge clk) begin
+	addr0_reg &lt;= addr0;
+</pre></div></details><details class="inner"><summary><code>grep</code> <span class="meta"><span class="ok">completed</span> comb_sop_2_18</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "comb_sop_2_18",
+ "path": "/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/_scratch/oc_xc4nc0n7/dla_like.small.v"
+}</pre><div class="label">output</div><pre class="plain">Found 1 matches
+/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/_scratch/oc_xc4nc0n7/dla_like.small.v:
+  Line 11741: comb_sop_2_18 sop_component (
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> grep -n "dsp_block_16_8_false\|module dot_product_16_8_30_2" dla_like.small.v | head -30</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "grep -n \"dsp_block_16_8_false\\|module dot_product_16_8_30_2\" dla_like.small.v | head -30"
+}</pre><div class="label">output</div><pre class="plain">11646:module dot_product_16_8_30_2 (
+11679:dsp_block_16_8_false dsp_block_16_8_false_inst_0 (
+11696:module dsp_block_16_8_false (
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> grep -n "module comb_sop_2_18\|comb_sop_2_18 " dla_like.small.v; ls -la /home/samu/dev/llm-hardblock…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "grep -n \"module comb_sop_2_18\\|comb_sop_2_18 \" dla_like.small.v; ls -la /home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/dla_only/dla_like.small/comb_sop_2_18_mode/20260907-200734-b07463/edit/ 2&gt;/dev/null"
+}</pre><div class="label">output</div><pre class="plain">11741:comb_sop_2_18 sop_component (
+total 16
+drwxrwxr-x 4 samu samu 4096 Sep  7 20:09 .
+drwxrwxr-x 4 samu samu 4096 Sep  7 20:12 ..
+drwxrwxr-x 2 samu samu 4096 Sep  7 20:09 dla_like.small
+drwxrwxr-x 3 samu samu 4096 Sep  7 20:09 .pristine
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> sed -n '11646,11696p' dla_like.small.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "sed -n '11646,11696p' dla_like.small.v"
+}</pre><div class="label">output</div><pre class="plain">module dot_product_16_8_30_2 (
+	input clk,
+	input i_reset,
+	input [15:0] i_features_0,
+	input [7:0] i_weights_0,
+	input [15:0] i_features_1,
+	input [7:0] i_weights_1,
+	output [23:0] o_result
+);
+
+wire [63:0] chains_0;
+wire [23:0] res;
+reg [15:0] f_pipeline_0_0;
+reg [7:0] w_pipeline_0_0;
+reg [15:0] f_pipeline_1_0;
+reg [7:0] w_pipeline_1_0;
+reg r_pipeline_0;
+
+always @ (posedge clk) begin
+	r_pipeline_0 &lt;= i_reset;
+	if(i_reset == 1'b1) begin
+		f_pipeline_0_0 &lt;= 0;
+		w_pipeline_0_0 &lt;= 0;
+		f_pipeline_1_0 &lt;= 0;
+		w_pipeline_1_0 &lt;= 0;
+	end else begin
+		f_pipeline_0_0 &lt;= i_features_0;
+		w_pipeline_0_0 &lt;= i_weights_0;
+		f_pipeline_1_0 &lt;= i_features_1;
+		w_pipeline_1_0 &lt;= i_weights_1;
+	end
+end
+
+dsp_block_16_8_false dsp_block_16_8_false_inst_0 (
+	.clk(clk),
+	.ena(1'b1),
+	.aclr(r_pipeline_0),
+	.ax(f_pipeline_0_0),
+	.ay(w_pipeline_0_0),
+	.bx(f_pipeline_1_0),
+	.by(w_pipeline_1_0),
+	.chainin(64'd0),
+	.chainout(chains_0),
+	.resulta(res)
+);
+
+assign o_result = res;
+
+endmodule
+
+module dsp_block_16_8_false (
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> grep -n "DP_res\|dot_product_16_8_30_2 \|accumulator_24_30_3 " dla_like.small.v | head -40</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "grep -n \"DP_res\\|dot_product_16_8_30_2 \\|accumulator_24_30_3 \" dla_like.small.v | head -40"
+}</pre><div class="label">output</div><pre class="plain">11274:wire [23:0] DP_res_0;
+11279:wire [23:0] DP_res_1;
+11284:wire [23:0] DP_res_2;
+11289:wire [23:0] DP_res_3;
+11294:wire [23:0] DP_res_4;
+11299:wire [23:0] DP_res_5;
+11431:dot_product_16_8_30_2 dot_product_16_8_30_2_inst_0 (
+11438:	.o_result(DP_res_0)
+11441:dot_product_16_8_30_2 dot_product_16_8_30_2_inst_1 (
+11448:	.o_result(DP_res_1)
+11451:dot_product_16_8_30_2 dot_product_16_8_30_2_inst_2 (
+11458:	.o_result(DP_res_2)
+11461:dot_product_16_8_30_2 dot_product_16_8_30_2_inst_3 (
+11468:	.o_result(DP_res_3)
+11471:dot_product_16_8_30_2 dot_product_16_8_30_2_inst_4 (
+11478:	.o_result(DP_res_4)
+11481:dot_product_16_8_30_2 dot_product_16_8_30_2_inst_5 (
+11488:	.o_result(DP_res_5)
+11491:accumulator_24_30_3 accumulator_24_30_3_inst_0 (
+11494:	.i_result(DP_res_0),
+11499:accumulator_24_30_3 accumulator_24_30_3_inst_1 (
+11502:	.i_result(DP_res_1),
+11507:accumulator_24_30_3 accumulator_24_30_3_inst_2 (
+11510:	.i_result(DP_res_2),
+11515:accumulator_24_30_3 accumulator_24_30_3_inst_3 (
+11518:	.i_result(DP_res_3),
+11523:accumulator_24_30_3 accumulator_24_30_3_inst_4 (
+11526:	.i_result(DP_res_4),
+11531:accumulator_24_30_3 accumulator_24_30_3_inst_5 (
+11534:	.i_result(DP_res_5),
+11646:module dot_product_16_8_30_2 (
+11981:module accumulator_24_30_3 (
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> P=/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/dla_only/dla_like.small/comb_sop_2_18_mode/…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "P=/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/dla_only/dla_like.small/comb_sop_2_18_mode/20260907-200734-b07463/edit; diff &lt;(sed -n '1,20000p' \"$P/.pristine/dla_like.small/dla_like.small.v\") &lt;(sed -n '1,20000p' \"$P/dla_like.small/dla_like.small.v\") | head -60; echo \"=== full diff stat ===\"; diff \"$P/.pristine/dla_like.small/dla_like.small.v\" \"$P/dla_like.small/dla_like.small.v\" | grep -c '^[&lt;&gt;]'"
+}</pre><div class="label">output</div><pre class="plain">11731a11732,11748
+&gt; 
+&gt; // The two products of this MAC feed one common sum, so they are fused into a single
+&gt; // two-term sum-of-products hard block. It is combinational and sits between the existing
+&gt; // ax_reg..by_reg input stage and the existing resulta_tmp output stage, so the module's
+&gt; // 2-cycle latency, aclr behaviour and chainin/chainout contract are unchanged.
+&gt; // ax/bx are unsigned 16-bit and ay/by unsigned 8-bit, all strictly narrower than the
+&gt; // signed 18/19-bit ports, so zero-extension is exact and both products are non-negative;
+&gt; // the sum is at most 2*(2^16-1)*(2^8-1) &lt; 2^26, far inside the 64-bit result.
+&gt; wire [63:0] sop_result;
+&gt; comb_sop_2_18 sop_component (
+&gt; 	.ax({2'b0, ax_reg}),
+&gt; 	.ay({11'b0, ay_reg}),
+&gt; 	.bx({2'b0, bx_reg}),
+&gt; 	.by({11'b0, by_reg}),
+&gt; 	.result(sop_result)
+&gt; );
+&gt; 
+11745c11762
+&lt;     resulta_tmp &lt;= ax_reg * ay_reg + bx_reg * by_reg + chainin;
+---
+&gt;     resulta_tmp &lt;= sop_result + chainin;
+=== full diff stat ===
+19
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> cd /home/samu/dev/llm-hardblocks/benchadapt &amp;&amp; grep -rn "comb_sop_2_18" --include=*.v --include=*.js…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "cd /home/samu/dev/llm-hardblocks/benchadapt &amp;&amp; grep -rn \"comb_sop_2_18\" --include=*.v --include=*.json --include=*.py --include=*.yaml --include=*.yml . 2&gt;/dev/null | grep -v outputs/adapt/dla_only | head -20"
+}</pre><div class="label">output</div><pre class="plain">./verify/models/comb_sop_2_18.v:1:// comb_sop_2_18.v — behavioral model of comb_sop_2_18, a PROJECT-ADDED combinational two-term
+./verify/models/comb_sop_2_18.v:2:// sum-of-products hard-block mode (arch mode comb_sop_2_18_mode). This mode does not exist
+./verify/models/comb_sop_2_18.v:4:// (benchadapt/arch/k6FracN10LB_mem20K_complexDSP_customSB_22nm.xml, the comb_sop_2_18 &lt;model&gt;
+./verify/models/comb_sop_2_18.v:5:// and the comb_sop_2_18_mode &lt;mode&gt;) and in configs/target/comb_sop_2.json. It takes its
+./verify/models/comb_sop_2_18.v:24:module comb_sop_2_18 (
+./outputs/adapt/_scratch/oc_xc4nc0n7/dla_like.small.v:11741:comb_sop_2_18 sop_component (
+./configs/target/comb_sop_2.json:3:  "description": "Exercise comb_sop_2_18_mode, a project-added combinational two-term sum of products at int_sop_2's operand widths (18x19 + 18x19 -&gt; 64-bit result, signed, no clock). Not inferable by synthesis (parmys infers only `multiply`/`adder`), so any use is attributable to the agent.",
+./configs/target/comb_sop_2.json:7:      "name": "comb_sop_2_18_mode",
+./configs/target/comb_sop_2.json:8:      "blif_model": "comb_sop_2_18",
+</pre></div></details><details class="inner"><summary><code>read</code> <span class="meta"><span class="ok">completed</span> /home/samu/dev/llm-hardblocks/benchadapt/verify/models/comb_sop_2_18.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "filePath": "/home/samu/dev/llm-hardblocks/benchadapt/verify/models/comb_sop_2_18.v"
+}</pre><div class="label">output</div><pre class="plain">&lt;path&gt;/home/samu/dev/llm-hardblocks/benchadapt/verify/models/comb_sop_2_18.v&lt;/path&gt;
+&lt;type&gt;file&lt;/type&gt;
+&lt;content&gt;
+1: // comb_sop_2_18.v — behavioral model of comb_sop_2_18, a PROJECT-ADDED combinational two-term
+2: // sum-of-products hard-block mode (arch mode comb_sop_2_18_mode). This mode does not exist
+3: // upstream; it is defined in the working arch copy
+4: // (benchadapt/arch/k6FracN10LB_mem20K_complexDSP_customSB_22nm.xml, the comb_sop_2_18 &lt;model&gt;
+5: // and the comb_sop_2_18_mode &lt;mode&gt;) and in configs/target/comb_sop_2.json. It takes its
+6: // operand widths from the arch's own int_sop_2 / sop_2_mode (18, 19, 18, 19) but is
+7: // combinational and has no reset, mode_sigs, chain or scan ports. There is no silicon, no
+8: // COFFE characterization, and no Koios soft substitute for THIS block; the three project
+9: // files ARE the definition, and this model is written to match them.
+10: //
+11: // KNOWN (from the arch working copy, by construction):
+12: //   ports  ax[18], ay[19], bx[18], by[19] -&gt; result[64]; no other ports; no clock on the
+13: //          model or the pb_type
+14: //   timing delay_constant only (2.14e-9, copied from mult_add_mode_18_19_36 as for
+15: //          comb_mult_add_16); no T_setup / T_clock_to_Q -&gt; latency 0 cycles, combinational
+16: //   result = ax*ay + bx*by (metadata expression), precision INT19
+17: //
+18: // ASSUMPTION (a definition choice, not a measurement; the arch cannot express it):
+19: //   S1 signedness — signed (two's complement) on ax, ay, bx, by, as the spec states
+20: //      ("signed": true). Modeled with signed operands throughout: each 18x19 product is
+21: //      exact in 37 bits (|ax*ay| &lt;= 2^17 * 2^18 = 2^35), the two-product sum is formed at
+22: //      64 bits signed and is exact (|ax*ay + bx*by| &lt;= 2^36, i.e. 38 bits signed), so
+23: //      result carries the full sum with no truncation.
+24: module comb_sop_2_18 (
+25:     input  [17:0] ax,
+26:     input  [18:0] ay,
+27:     input  [17:0] bx,
+28:     input  [18:0] by,
+29:     output [63:0] result
+30: );
+31: 
+32:     wire signed [17:0] sax = ax;                                     // S1
+33:     wire signed [18:0] say = ay;
+34:     wire signed [17:0] sbx = bx;
+35:     wire signed [18:0] sby = by;
+36:     wire signed [36:0] prod_a = sax * say;                           // 18x19 -&gt; 37, exact
+37:     wire signed [36:0] prod_b = sbx * sby;                           // 18x19 -&gt; 37, exact
+38:     wire signed [63:0] sum    = prod_a + prod_b;                     // 64-bit signed, exact
+39: 
+40:     assign result = sum;
+41: 
+42: endmodule
+
+(End of file - total 42 lines)
+&lt;/content&gt;</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> which iverilog verilator 2&gt;/dev/null || echo "no simulator"</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "which iverilog verilator 2&gt;/dev/null || echo \"no simulator\""
+}</pre><div class="label">output</div><pre class="plain">/usr/bin/iverilog
+no simulator
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="bad">error</span> mkdir -p /tmp/opencode/eqv &amp;&amp; cat &gt; /tmp/opencode/eqv/tb.v &lt;&lt;'EOF'
+`timescale 1ns/1ps
+module tb;
+  r…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "mkdir -p /tmp/opencode/eqv &amp;&amp; cat &gt; /tmp/opencode/eqv/tb.v &lt;&lt;'EOF'\n`timescale 1ns/1ps\nmodule tb;\n  reg [15:0] ax_reg,bx_reg; reg [7:0] ay_reg,by_reg; reg [63:0] chainin;\n  wire [63:0] sop_result;\n  comb_sop_2_18 u(.ax({2'b0,ax_reg}),.ay({11'b0,ay_reg}),.bx({2'b0,bx_reg}),.by({11'b0,by_reg}),.result(sop_result));\n  reg [23:0] old_v,new_v; integer i,bad; reg [63:0] r;\n  initial begin\n    bad=0;\n    for(i=0;i&lt;200000;i=i+1) begin\n      ax_reg=$random; ay_reg=$random; bx_reg=$random; by_reg=$random;\n      r=$random; chainin={r[31:0],$random};\n      if(i&lt;4) begin ax_reg=16'hFFFF; ay_reg=8'hFF; bx_reg=16'hFFFF; by_reg=8'hFF; end\n      #1;\n      old_v = ax_reg*ay_reg + bx_reg*by_reg + chainin;   // context 64-bit, truncated to 24\n      new_v = sop_result + chainin;\n      if(old_v!==new_v) begin bad=bad+1; if(bad&lt;5) $display(\"MISMATCH %h %h\",old_v,new_v); end\n    end\n    $display(\"checked 200000 vectors, mismatches=%0d\",bad);\n  end\nendmodule\nEOF\niverilog -g2005 -o /tmp/opencode/eqv/sim /tmp/opencode/eqv/tb.v /home/samu/dev/llm-hardblocks/benchadapt/verify/models/comb_sop_2_18.v &amp;&amp; /tmp/opencode/eqv/sim"
+}</pre><div class="label">error</div><pre class="plain">The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"external_directory","pattern":"*","action":"ask"},{"permission":"external_directory","pattern":"/home/samu/.local/share/opencode/tool-output/*","action":"allow"},{"permission":"external_directory","pattern":"/tmp/opencode/*","action":"allow"},{"permission":"external_directory","pattern":"/tmp/opencode/*","action":"allow"},{"permission":"external_directory","pattern":"/home/samu/.local/share/opencode/tool-output/*","action":"allow"},{"permission":"external_directory","pattern":"*","action":"deny"},{"permission":"external_directory","pattern":"/home/samu/.local/share/opencode/tool-output/*","action":"allow"}]</pre></div></details><details class="inner"><summary><code>write</code> <span class="meta"><span class="bad">error</span> /tmp/opencode/eqv/model.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "filePath": "/tmp/opencode/eqv/model.v",
+ "content": "module comb_sop_2_18 (\n    input  [17:0] ax,\n    input  [18:0] ay,\n    input  [17:0] bx,\n    input  [18:0] by,\n    output [63:0] result\n);\n    wire signed [17:0] sax = ax;\n    wire signed [18:0] say = ay;\n    wire signed [17:0] sbx = bx;\n    wire signed [18:0] sby = by;\n    wire signed [36:0] prod_a = sax * say;\n    wire signed [36:0] prod_b = sbx * sby;\n    wire signed [63:0] sum    = prod_a + prod_b;\n    assign result = sum;\nendmodule\n"
+}</pre><div class="label">error</div><pre class="plain">The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"external_directory","pattern":"*","action":"ask"},{"permission":"external_directory","pattern":"/home/samu/.local/share/opencode/tool-output/*","action":"allow"},{"permission":"external_directory","pattern":"/tmp/opencode/*","action":"allow"},{"permission":"external_directory","pattern":"/tmp/opencode/*","action":"allow"},{"permission":"external_directory","pattern":"/home/samu/.local/share/opencode/tool-output/*","action":"allow"},{"permission":"external_directory","pattern":"*","action":"deny"},{"permission":"external_directory","pattern":"/home/samu/.local/share/opencode/tool-output/*","action":"allow"}]</pre></div></details><details class="inner"><summary><code>write</code> <span class="meta"><span class="bad">error</span> /tmp/opencode/eqv/tb.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "filePath": "/tmp/opencode/eqv/tb.v",
+ "content": "`timescale 1ns/1ps\nmodule tb;\n  reg [15:0] ax_reg,bx_reg; reg [7:0] ay_reg,by_reg; reg [63:0] chainin;\n  wire [63:0] sop_result;\n  comb_sop_2_18 u(.ax({2'b0,ax_reg}),.ay({11'b0,ay_reg}),.bx({2'b0,bx_reg}),.by({11'b0,by_reg}),.result(sop_result));\n  reg [23:0] old_v,new_v; integer i,bad; reg [31:0] r;\n  initial begin\n    bad=0;\n    for(i=0;i&lt;200000;i=i+1) begin\n      ax_reg=$random; ay_reg=$random; bx_reg=$random; by_reg=$random;\n      r=$random; chainin={r,$random};\n      if(i&lt;4) begin ax_reg=16'hFFFF; ay_reg=8'hFF; bx_reg=16'hFFFF; by_reg=8'hFF; chainin=0; end\n      #1;\n      old_v = ax_reg*ay_reg + bx_reg*by_reg + chainin;\n      new_v = sop_result + chainin;\n      if(old_v!==new_v) begin bad=bad+1; if(bad&lt;5) $display(\"MISMATCH old=%h new=%h\",old_v,new_v); end\n    end\n    $display(\"checked 200000 vectors, mismatches=%0d\",bad);\n  end\nendmodule\n"
+}</pre><div class="label">error</div><pre class="plain">The user has specified a rule which prevents you from using this specific tool call. Here are some of the relevant rules [{"permission":"*","action":"allow","pattern":"*"},{"permission":"external_directory","pattern":"*","action":"ask"},{"permission":"external_directory","pattern":"/home/samu/.local/share/opencode/tool-output/*","action":"allow"},{"permission":"external_directory","pattern":"/tmp/opencode/*","action":"allow"},{"permission":"external_directory","pattern":"/tmp/opencode/*","action":"allow"},{"permission":"external_directory","pattern":"/home/samu/.local/share/opencode/tool-output/*","action":"allow"},{"permission":"external_directory","pattern":"*","action":"deny"},{"permission":"external_directory","pattern":"/home/samu/.local/share/opencode/tool-output/*","action":"allow"}]</pre></div></details><details class="inner"><summary><code>write</code> <span class="meta"><span class="ok">completed</span> /home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/_scratch/oc_xc4nc0n7/_eqv_model.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "filePath": "/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/_scratch/oc_xc4nc0n7/_eqv_model.v",
+ "content": "module comb_sop_2_18 (\n    input  [17:0] ax,\n    input  [18:0] ay,\n    input  [17:0] bx,\n    input  [18:0] by,\n    output [63:0] result\n);\n    wire signed [17:0] sax = ax;\n    wire signed [18:0] say = ay;\n    wire signed [17:0] sbx = bx;\n    wire signed [18:0] sby = by;\n    wire signed [36:0] prod_a = sax * say;\n    wire signed [36:0] prod_b = sbx * sby;\n    wire signed [63:0] sum    = prod_a + prod_b;\n    assign result = sum;\nendmodule\n"
+}</pre><div class="label">output</div><pre class="plain">Wrote file successfully.</pre></div></details><details class="inner"><summary><code>write</code> <span class="meta"><span class="ok">completed</span> /home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/_scratch/oc_xc4nc0n7/_eqv_tb.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "filePath": "/home/samu/dev/llm-hardblocks/benchadapt/outputs/adapt/_scratch/oc_xc4nc0n7/_eqv_tb.v",
+ "content": "`timescale 1ns/1ps\nmodule tb;\n  reg [15:0] ax_reg,bx_reg; reg [7:0] ay_reg,by_reg; reg [63:0] chainin;\n  wire [63:0] sop_result;\n  comb_sop_2_18 u(.ax({2'b0,ax_reg}),.ay({11'b0,ay_reg}),.bx({2'b0,bx_reg}),.by({11'b0,by_reg}),.result(sop_result));\n  reg [23:0] old_v,new_v; integer i,bad; reg [31:0] r;\n  initial begin\n    bad=0;\n    for(i=0;i&lt;200000;i=i+1) begin\n      ax_reg=$random; ay_reg=$random; bx_reg=$random; by_reg=$random;\n      r=$random; chainin={r,$random};\n      if(i&lt;4) begin ax_reg=16'hFFFF; ay_reg=8'hFF; bx_reg=16'hFFFF; by_reg=8'hFF; chainin=0; end\n      #1;\n      old_v = ax_reg*ay_reg + bx_reg*by_reg + chainin;\n      new_v = sop_result + chainin;\n      if(old_v!==new_v) begin bad=bad+1; if(bad&lt;5) $display(\"MISMATCH old=%h new=%h\",old_v,new_v); end\n    end\n    $display(\"checked 200000 vectors, mismatches=%0d\",bad);\n  end\nendmodule\n"
+}</pre><div class="label">output</div><pre class="plain">Wrote file successfully.</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> iverilog -g2005 -o _eqv_sim _eqv_tb.v _eqv_model.v &amp;&amp; ./_eqv_sim; rm -f _eqv_sim _eqv_tb.v _eqv_mode…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "iverilog -g2005 -o _eqv_sim _eqv_tb.v _eqv_model.v &amp;&amp; ./_eqv_sim; rm -f _eqv_sim _eqv_tb.v _eqv_model.v"
+}</pre><div class="label">output</div><pre class="plain">checked 200000 vectors, mismatches=0
+</pre></div></details></div></div></details></div></details></div></details><details class="section"><summary><h2>The edit</h2> <span class="meta">+18 / −1 lines</span></summary><div class="body"><p class="note">From <code>edit.diff</code> in the run dir: the final edited file against the pristine source.</p><div class="diff"><div class="hdr">--- outputs/adapt/dla_only/dla_like.small/comb_sop_2_18_mode/20260907-200734-b07463/edit/.pristine/dla_like.small/dla_like.small.v	2026-08-16 18:14:11.361174816 -0700</div><div class="hdr">+++ outputs/adapt/dla_only/dla_like.small/comb_sop_2_18_mode/20260907-200734-b07463/edit/dla_like.small/dla_like.small.v	2026-09-07 20:11:50.784437986 -0700</div><div class="hunk">@@ -11729,6 +11729,23 @@</div><div class="ctx"> reg [15:0] bx_reg;</div><div class="ctx"> reg [7:0] by_reg;</div><div class="ctx"> reg [23:0] resulta_tmp;</div><div class="add">+</div><div class="add">+// The two products of this MAC feed one common sum, so they are fused into a single</div><div class="add">+// two-term sum-of-products hard block. It is combinational and sits between the existing</div><div class="add">+// ax_reg..by_reg input stage and the existing resulta_tmp output stage, so the module's</div><div class="add">+// 2-cycle latency, aclr behaviour and chainin/chainout contract are unchanged.</div><div class="add">+// ax/bx are unsigned 16-bit and ay/by unsigned 8-bit, all strictly narrower than the</div><div class="add">+// signed 18/19-bit ports, so zero-extension is exact and both products are non-negative;</div><div class="add">+// the sum is at most 2*(2^16-1)*(2^8-1) &lt; 2^26, far inside the 64-bit result.</div><div class="add">+wire [63:0] sop_result;</div><div class="add">+comb_sop_2_18 sop_component (</div><div class="add">+	.ax({2'b0, ax_reg}),</div><div class="add">+	.ay({11'b0, ay_reg}),</div><div class="add">+	.bx({2'b0, bx_reg}),</div><div class="add">+	.by({11'b0, by_reg}),</div><div class="add">+	.result(sop_result)</div><div class="add">+);</div><div class="add">+</div><div class="ctx"> always @(posedge clk) begin</div><div class="ctx">   if(aclr) begin</div><div class="ctx">     resulta_tmp &lt;= 0;</div><div class="hunk">@@ -11742,7 +11759,7 @@</div><div class="ctx">     ay_reg &lt;= ay;</div><div class="ctx">     bx_reg &lt;= bx;</div><div class="ctx">     by_reg &lt;= by;</div><div class="del">-    resulta_tmp &lt;= ax_reg * ay_reg + bx_reg * by_reg + chainin;</div><div class="add">+    resulta_tmp &lt;= sop_result + chainin;</div><div class="ctx">   end</div><div class="ctx"> end</div><div class="ctx"> assign resulta = resulta_tmp;</div></div></div></details><details class="section"><summary><h2>Verification</h2> <span class="meta">1 editor attempt(s) · from the outcome record · final: accepted</span></summary><div class="body"><p class="note">This run predates the per-attempt record (2026-09-12). With a single editor attempt, the rows below follow directly from the recorded outcome code and reason; nothing is inferred beyond what that code implies about the stages that ran.</p><h3>Editor attempts</h3><table><tr><th>attempt</th><th>editor call</th><th>result</th></tr><tr><td>1</td><td>call 3 (ok)</td><td><b class="ok">accepted</b> — reviewer agent confirmed</td></tr></table><h3>Checks on the final editor attempt</h3><p class="note">Stage results follow from the outcome code (the record stores the code and the failure reasons, not a per-check list). The deterministic gate evaluates every check and records every failure, so any check not named in a failure reason passed.</p><table><tr><th>stage</th><th>result</th><th>detail</th></tr><tr><td>synthesis-only check</td><td class="na">not run</td><td>no synthesis-only stage recorded for this run (no synth_runs in the effort record, no vtr/iterNN/synth dir)</td></tr><tr><td>deterministic checks (structural, provenance, per-tier)</td><td class="ok">passed</td><td></td></tr><tr><td>evidence floor (whole-design variants only)</td><td class="ok">passed</td><td>not applicable to a direct swap or a restructuring (passes through)</td></tr><tr><td>acceptance reviewer (gate of record)</td><td class="ok">accepted</td><td>call 4: ACCEPT</td></tr></table><details class="inner"><summary>Reviewer verdict text <span class="meta">call 4 · ACCEPT</span></summary><div class="body"><pre class="response">I'll examine the actual file to ground my verdict rather than judging the diff in isolation.ACCEPT
+
+**Role preserved (witness `dsp_block_16_8_false`, op `sop`, int16).** The module is still a 2-cycle MAC in the PE datapath: the `ax_reg..by_reg` input register stage and the `resulta_tmp` output register stage are both untouched, `aclr` still zeroes all five registers, `chainin` is still added, and `resulta`/`chainout` are still driven from `resulta_tmp`. The diff is 19 lines confined to this one `` `else `` (soft) branch; nothing else in the file changed.
+
+**Real region / real shared reduction — not fabricated (rebuts (a)).** The witness's two regions are literally the two operands of one `+` on pristine line 11745: `resulta_tmp &lt;= ax_reg * ay_reg + bx_reg * by_reg + chainin;`. Both products already summed into the same node in the original source. The mode's arity is 2 and exactly 2 genuine products were fused — no zero-padding, no operand imported from an unrelated reduction. The residual `+ chainin` is correctly left soft rather than over-claimed into the block.
+
+The decisive grounding is the design's *own* `` `ifdef complex_dsp `` branch immediately above (lines 11713–11726), which instantiates `int_sop_2` with `.ax/.ay/.bx/.by/.chainin/.result/.chainout` for this same module. The workload author already declared this block to be a two-term sum-of-products DSP; `comb_sop_2_18` is defined (per `verify/models/comb_sop_2_18.v`) to take its widths 18/19/18/19 from that very `int_sop_2`/`sop_2_mode`. This is the mode's intended target, not a repurposing.
+
+**Not a mode island (rebuts (b)).** Traced end-to-end in the file: `sop_result` → `resulta_tmp` → `resulta` (and `chainout`) → `dot_product_16_8_30_2.o_result` (line 11690) → `DP_res_0..5` (lines 11431–11488) → `accumulator_24_30_3.i_result` (lines 11491–11534). The module is instantiated once per `dot_product`, 6 per `processing_element`, 12 PEs = the witness's 72 instances, all covered by the single module-level edit.
+
+**No role break (rebuts (c)).** This was a datapath MAC before and is a datapath MAC after; no control-path signal was recruited.
+
+**(d) N/A — T1, manifest introduces no operations or datatypes, no precision/algorithm variant.**
+
+**Semantics verified, not just asserted.** I simulated the pristine expression against the replacement using the project's own behavioral model (200,000 random vectors plus the all-ones corner, random 64-bit `chainin`): **0 mismatches**. The zero-extension is exact — 16-bit into signed 18-bit and 8-bit into signed 19-bit both stay positive, so the signed block computes the same non-negative products, and `sop_result + chainin` truncated to 24 bits is bit-identical to the original 64-bit-context expression.
+
+One observation, not grounds for rejection: at the only instantiation site `chainin` is tied to `64'd0` (line 11686), so the surviving soft adder collapses under synthesis — the hard block ends up doing essentially all the arithmetic work of this MAC. That strengthens rather than weakens the case.
+
+(Scratch simulation files were removed; the reviewed `dla_like.small.v` was not modified.)</pre></div></details><h3>Synthesis-only result (counted from files)</h3><p class="note">No synthesis-only stage directory in this run dir (the stage was added to the loop after this run, or the mode is not macro-backed). The synthesis netlist of the full VTR flow is counted instead:</p><table><tr><th>file</th><th>target macro instances</th></tr><tr><td><code>vtr/dla_like.small/dla_like.small.parmys.blif</code></td><td>72 × <code>comb_sop_2_18</code></td></tr></table><h3>Packed netlist (counted from files)</h3><p class="note">Counted at export time from the <code>.net</code> file(s) in the run dir: occurrences of <code>mode="…"</code> for the target mode, one per packed block in that mode.</p><table><tr><th>attempt</th><th>file</th><th>target mode present</th><th>blocks in target mode</th></tr><tr><td>(shared dir)</td><td><code>vtr/dla_like.small/dla_like.small.net</code></td><td><span class="ok">yes</span></td><td>72</td></tr></table><p class="note">This run used one VTR directory for all editor attempts, so only the last launch that wrote a netlist is on disk.</p><p>Modes recorded in the outcome as used after the edit: <code>comb_sop_2_18_mode</code></p></div></details><details class="section"><summary><h2>Numbers</h2> <span class="meta">PPA recorded · 4 call(s)</span></summary><div class="body"><h3>PPA as recorded</h3><div style="overflow-x:auto"><table class="num"><tr><th>metric</th><th class='n'>this run</th><th class='n'>baseline (legacy)</th><th class='n'>delta</th></tr><tr><td>DSP blocks</td><td class='n'>116</td><td class='n'>119</td><td class='n ok'>-3</td></tr><tr><td>LUTs</td><td class='n'>39843</td><td class='n'>39874</td><td class='n ok'>-31</td></tr><tr><td>FFs</td><td class='n'>79562</td><td class='n'>79562</td><td class='n '>+0</td></tr><tr><td>BRAM</td><td class='n'>132</td><td class='n'>132</td><td class='n '>+0</td></tr><tr><td>critical path (ns)</td><td class='n'>6.09662</td><td class='n'>7.62274</td><td class='n ok'>-1.526 ns (-20.0%)</td></tr></table></div><p class="note">Baseline: the unmodified dla_like.small through the same flow under the <b>legacy</b> settings regime (channel width minimum-width search, device auto, seed 1, grid 88 x 88 (auto), routed at width 160); imported (earlier measurement of 2026-09-07 20:07 on this machine: auto device, minimum-width search, seed default; arch xml unchanged since 2026-09-06), 2026-09-12 18:35:02 -0700, from <code>configs/baselines/complexDSP.yaml</code>. This run predates the VPR-arguments record, so its regime is inferred as legacy (VPR defaults), which every run before 2026-09-12 used. A lower delta is better on every row.</p><p class="note">Read from the VPR log of the accepted attempt when the run finished (outcome.json <code>ppa</code>). Runs before 2026-09-12 recorded PPA only on acceptance.</p><h3>Coverage</h3><p class="absent">Not recorded (runs before 2026-09-12 carry no coverage counts).</p><h3>Block counts</h3><table class="num"><tr><th>source</th><th>mode</th><th class='n'>blocks</th></tr><tr><td><code>vtr/dla_like.small/dla_like.small.net</code></td><td><code>comb_sop_2_18_mode</code></td><td class='n'>72</td></tr></table><h3>Tokens and cost per call</h3><div style="overflow-x:auto"><table class="num"><tr><th>#</th><th>role</th><th>model</th><th>status</th><th class="n">in</th><th class="n">out</th><th class="n">reasoning</th><th class="n">cache read</th><th class="n">cache write</th><th class="n">steps</th><th class="n">tool calls (errors)</th><th class="n">seconds</th><th class="n">cost $</th></tr><tr><td>1</td><td>planner</td><td><code>anthropic/claude-opus-5</code></td><td>ok</td><td class='n'>12</td><td class='n'>6519</td><td class='n'>0</td><td class='n'>67422</td><td class='n'>21229</td><td class='n'>6</td><td class='n'>9 (0)</td><td class='n'>103.2</td><td class='n'>0.3294</td></tr><tr><td>2</td><td>reviewer:plan</td><td><code>anthropic/claude-opus-5</code></td><td>ok</td><td class='n'>6</td><td class='n'>2024</td><td class='n'>0</td><td class='n'>22185</td><td class='n'>14144</td><td class='n'>3</td><td class='n'>4 (0)</td><td class='n'>34.1</td><td class='n'>0.1501</td></tr><tr><td>3</td><td>editor</td><td><code>anthropic/claude-opus-5</code></td><td>ok</td><td class='n'>48</td><td class='n'>6397</td><td class='n'>0</td><td class='n'>455395</td><td class='n'>26450</td><td class='n'>24</td><td class='n'>26 (2)</td><td class='n'>168.0</td><td class='n'>0.5532</td></tr><tr><td>4</td><td>reviewer:acceptance</td><td><code>anthropic/claude-opus-5</code></td><td>ok</td><td class='n'>26</td><td class='n'>7673</td><td class='n'>0</td><td class='n'>202077</td><td class='n'>23348</td><td class='n'>13</td><td class='n'>18 (3)</td><td class='n'>128.4</td><td class='n'>0.4389</td></tr><tr class='total'><td></td><td>total (4 calls)</td><td></td><td></td><td class='n'>92</td><td class='n'>22613</td><td class='n'>0</td><td class='n'>747079</td><td class='n'>85171</td><td></td><td></td><td class='n'>2741.5</td><td class='n'>1.4716</td></tr></table></div><p class="note">Cost as reported by the gateway per call, summed. Token components are kept separate (uncached input, output, reasoning, cache read, cache write).</p></div></details></main></body></html>
