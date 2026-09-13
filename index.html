@@ -1,0 +1,23 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>runs</title>
+<style>
+body { font: 16px/1.6 system-ui, sans-serif; max-width: 46rem; margin: 3rem auto; padding: 0 1rem; }
+li { margin: .4rem 0; }
+code { font-size: .9em; color: #666; }
+</style>
+<h1>runs</h1>
+<ul id="l"></ul>
+<script>
+const runs = [
+ "dla_like.small_comb_sop_2_18_mode_20260907-200734-b07463",
+ "raygentop_comb_mult_add_16_mode_20260906-002639-68ab30",
+ "raygentop_comb_mult_add_16_mode_20260905-233425-5363c7",
+ "raygentop_comb_mult_add_16_mode_20260912-174718-9ca8d3",
+];
+document.getElementById("l").innerHTML = runs.map(r => {
+  const p = r.split("_");
+  const id = p.pop();
+  return `<li><a href="${r}.html">${r.replace("_"+id,"")}</a> <code>${id}</code></li>`;
+}).join("");
+</script>
