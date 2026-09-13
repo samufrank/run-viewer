@@ -1,23 +1,25 @@
-<!doctype html>
-<meta charset="utf-8">
-<title>runs</title>
-<style>
-body { font: 16px/1.6 system-ui, sans-serif; max-width: 46rem; margin: 3rem auto; padding: 0 1rem; }
-li { margin: .4rem 0; }
-code { font-size: .9em; color: #666; }
-</style>
-<h1>runs</h1>
-<ul id="l"></ul>
-<script>
-const runs = [
- "dla_like.small_comb_sop_2_18_mode_20260907-200734-b07463",
- "raygentop_comb_mult_add_16_mode_20260906-002639-68ab30",
- "raygentop_comb_mult_add_16_mode_20260905-233425-5363c7",
- "raygentop_comb_mult_add_16_mode_20260912-174718-9ca8d3",
-];
-document.getElementById("l").innerHTML = runs.map(r => {
-  const p = r.split("_");
-  const id = p.pop();
-  return `<li><a href="${r}.html">${r.replace("_"+id,"")}</a> <code>${id}</code></li>`;
-}).join("");
-</script>
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Adaptation runs</title><style>
+:root { color-scheme: light; }
+html, body { height: auto; }
+body { margin: 0; padding: 1.5rem 1rem 3rem; background: #fff; color: #1a1a1a;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 15px; line-height: 1.5; }
+main { max-width: 80rem; margin: 0 auto; }
+h1 { font-size: 1.4rem; margin: 0 0 .3rem; font-weight: 600; }
+p.sub { color: #555; margin: 0 0 1.2rem; }
+.wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; }
+th, td { text-align: left; padding: .45rem .6rem; vertical-align: top; border-bottom: 1px solid #e3e3e3; }
+th { font-weight: 600; color: #444; white-space: nowrap; background: #fafafa; }
+td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+td.nw { white-space: nowrap; }
+td.desc { min-width: 18rem; }
+td.eq { min-width: 12rem; }
+a { color: #1a4d8f; }
+.ok { color: #1f6f3a; font-weight: 600; } .bad { color: #a33; font-weight: 600; }
+.tag { display: inline-block; font-size: .8em; color: #555; border: 1px solid #ccc; border-radius: 3px; padding: 0 .35rem; margin-left: .3rem; }
+.muted { color: #888; }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .9em; }
+p.foot { color: #666; font-size: .9em; margin-top: 1.2rem; }
+</style></head><body><main><h1>Adaptation runs</h1><p class="sub">One row per run of the benchadapt closed loop, newest first; each row links to the full export (contract, every agent call, the diff, verification, numbers). Outcome, attempts, wall clock and blocks come from the run record; the description and the equivalence column are maintained by hand.</p><div class="wrap"><table><thead><tr><th>date</th><th>design</th><th>mode</th><th>outcome</th><th>attempts</th><th>models</th><th>wall</th><th>blocks</th><th>regime</th><th>equivalence</th><th>what it was for</th></tr></thead><tbody><tr><td class="nw">2026-09-12</td><td class="nw"><a href="raygentop_comb_mult_add_16_mode_20260912-174718-9ca8d3.html">raygentop</a></td><td class="nw"><code>comb_mult_add_16_mode</code><br><span class="muted">needs restructuring</span></td><td class="nw"><span class="ok">accepted</span></td><td class="n">2</td><td class="nw">GPT</td><td class="n">4m 12s</td><td class="n">1</td><td class="nw">current</td><td class="eq">not checked</td><td class="desc">First run recorded with the per-attempt log (GPT roster); accepted on the second attempt after the reviewer rejected the first.</td></tr><tr><td class="nw">2026-09-07</td><td class="nw"><a href="dla_like.small_comb_sop_2_18_mode_20260907-200734-b07463.html">dla_like.small</a></td><td class="nw"><code>comb_sop_2_18_mode</code><br><span class="muted">direct swap</span></td><td class="nw"><span class="ok">accepted</span></td><td class="n">1</td><td class="nw">Claude</td><td class="n">45m 42s</td><td class="n">72</td><td class="nw">legacy*</td><td class="eq">bit-exact in simulation (200k vectors); LEC proven, 73/73 points</td><td class="desc">Direct swap of all 72 MAC sites in dla_like.small onto comb_sop_2_18; the Koios result shown to advisors.</td></tr><tr><td class="nw">2026-09-06</td><td class="nw"><a href="raygentop_comb_mult_add_16_mode_20260906-002639-68ab30.html">raygentop</a></td><td class="nw"><code>comb_mult_add_16_mode</code><br><span class="muted">needs restructuring</span></td><td class="nw"><span class="ok">accepted</span></td><td class="n">1</td><td class="nw">Claude</td><td class="n">8m 7s</td><td class="n">3</td><td class="nw">legacy*</td><td class="eq">bit- and cycle-exact in simulation; LEC proven, 166/166 points</td><td class="desc">Claude roster; three chained comb_mult_add_16 blocks over the red channel of bilinearintrp; the raygentop result shown to advisors.</td></tr><tr><td class="nw">2026-09-05</td><td class="nw"><a href="raygentop_comb_mult_add_16_mode_20260905-233425-5363c7.html">raygentop</a></td><td class="nw"><code>comb_mult_add_16_mode</code><br><span class="muted">needs restructuring</span></td><td class="nw"><span class="bad">rejected</span> <code>gate_failed</code></td><td class="n">4</td><td class="nw">GPT</td><td class="n">4m 44s</td><td class="n">1</td><td class="nw">legacy*</td><td class="eq">simulation: r and b exact, g wrong (term skew); LEC left 7 g bits unproven</td><td class="desc">GPT roster, same design and mode; rejected after four attempts at a gate no edit could satisfy (a single region labelled as a fusion); the edit was also wrong on the green channel (term skew).</td></tr><tr><td class="nw">2026-08-27</td><td class="nw"><a href="raygentop_sop_4_mode_20260827-153207-b498fe.html">raygentop</a></td><td class="nw"><code>sop_4_mode</code><br><span class="muted">needs restructuring</span></td><td class="nw"><span class="ok">accepted</span></td><td class="n">1</td><td class="nw">Claude</td><td class="n">6m 39s</td><td class="n">1</td><td class="nw">legacy*</td><td class="eq">cycle-exact in simulation</td><td class="desc">Controlled Claude re-run after the contract latency fix, same design and mode; cycle-exact where the pre-fix edits were one cycle late.</td></tr><tr><td class="nw">2026-08-27</td><td class="nw"><a href="raygentop_sop_4_mode_20260827-152947-8d3f03.html">raygentop</a></td><td class="nw"><code>sop_4_mode</code><br><span class="muted">needs restructuring</span></td><td class="nw"><span class="ok">accepted</span></td><td class="n">1</td><td class="nw">GPT</td><td class="n">2m 6s</td><td class="n">1</td><td class="nw">legacy*</td><td class="eq">cycle-exact in simulation; LEC proven against the 1-stage model, 166/166 points</td><td class="desc">Controlled GPT re-run after the contract latency fix; the sop_4 rewrite of bilinearintrp r that the LEC study was built on.</td></tr></tbody></table></div><p class="foot">regime: the VPR settings the run was measured under (legacy = auto device, minimum-width search, seed 1; current = fixed width 300, koios_extra_small, seed 1; a star marks a run recorded before the settings were written to the record). blocks: packed blocks in the target mode. attempts: editor calls against the one approved plan. Generated 2026-09-12 20:37 -0700.</p></main></body></html>

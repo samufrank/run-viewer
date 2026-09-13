@@ -1,0 +1,31 @@
+# Hand-maintained, read by `benchadapt publish` when it regenerates index.html.
+# One entry per run id. Fields:
+#   description: one line saying what the run was for, or what it established
+#   equivalence: whether the rewrite was independently checked against the original,
+#                and how (blank or absent = not checked)
+# A run with no entry still appears in the index, with blank description and equivalence
+# cells. Keep lines short; the index shows them verbatim.
+
+20260912-174718-9ca8d3:
+  description: "First run recorded with the per-attempt log (GPT roster); accepted on the second attempt after the reviewer rejected the first."
+  equivalence: "not checked"
+
+20260907-200734-b07463:
+  description: "Direct swap of all 72 MAC sites in dla_like.small onto comb_sop_2_18; the Koios result shown to advisors."
+  equivalence: "bit-exact in simulation (200k vectors); LEC proven, 73/73 points"
+
+20260906-002639-68ab30:
+  description: "Claude roster; three chained comb_mult_add_16 blocks over the red channel of bilinearintrp; the raygentop result shown to advisors."
+  equivalence: "bit- and cycle-exact in simulation; LEC proven, 166/166 points"
+
+20260905-233425-5363c7:
+  description: "GPT roster, same design and mode; rejected after four attempts at a gate no edit could satisfy (a single region labelled as a fusion); the edit was also wrong on the green channel (term skew)."
+  equivalence: "simulation: r and b exact, g wrong (term skew); LEC left 7 g bits unproven"
+
+20260827-152947-8d3f03:
+  description: "Controlled GPT re-run after the contract latency fix; the sop_4 rewrite of bilinearintrp r that the LEC study was built on."
+  equivalence: "cycle-exact in simulation; LEC proven against the 1-stage model, 166/166 points"
+
+20260827-153207-b498fe:
+  description: "Controlled Claude re-run after the contract latency fix, same design and mode; cycle-exact where the pre-fix edits were one cycle late."
+  equivalence: "cycle-exact in simulation"
