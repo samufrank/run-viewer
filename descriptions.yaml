@@ -6,9 +6,13 @@
 # A run with no entry still appears in the index, with blank description and equivalence
 # cells. Keep lines short; the index shows them verbatim.
 
+20260912-211952-6553b1:
+  description: "Claude roster, same design and mode as 2026-09-06; nine blocks across all three channels rather than three over red only. The plan varies run to run."
+  equivalence: "bit- and cycle-exact in simulation on all three channels, including four overflow vectors; LEC proven, 124/124 points"
+
 20260912-174718-9ca8d3:
-  description: "First run recorded with the per-attempt log (GPT roster); accepted on the second attempt after the reviewer rejected the first."
-  equivalence: "not checked"
+  description: "First with per-attempt log. GPT roster; one block fusing two of red's three products, with delayed operand copies keeping the terms aligned. Rejected on the first attempt, which mixed cycles."
+  equivalence: "bit- and cycle-exact in simulation, including a ramp where every input changes each cycle; LEC proven, 180/180 points"
 
 20260907-200734-b07463:
   description: "Direct swap of all 72 MAC sites in dla_like.small onto comb_sop_2_18; the Koios result shown to advisors."
@@ -19,8 +23,8 @@
   equivalence: "bit- and cycle-exact in simulation; LEC proven, 166/166 points"
 
 20260905-233425-5363c7:
-  description: "GPT roster, same design and mode; rejected after four attempts at a gate no edit could satisfy (a single region labelled as a fusion); the edit was also wrong on the green channel (term skew)."
-  equivalence: "simulation: r and b exact, g wrong (term skew); LEC left 7 g bits unproven"
+  description: "GPT roster, same design and mode; rejected after four attempts at a check no edit could satisfy (a single region labelled as a fusion); the edit was also wrong on the green channel."
+  equivalence: "simulation: r and b exact, g wrong; LEC left 7 g bits unproven"
 
 20260827-152947-8d3f03:
   description: "Controlled GPT re-run after the contract latency fix; the sop_4 rewrite of bilinearintrp r that the LEC study was built on."
