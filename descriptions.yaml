@@ -10,6 +10,15 @@
 # where the run's point is a comparison between models. Runs that are otherwise alike are
 # distinguished by something that actually happened in them.
 
+20260914-001612-e388bf:
+  description: "Third without the inherited prompt, the same nine sites and nine blocks again; its editor simulated its own edit against a model of the block it wrote in scratch before check.sh ever ran."
+
+20260914-000834-9be831:
+  description: "Second without the inherited prompt, nine sites and nine blocks; its editor wrote a testbench and a Python driver into scratch to check the edit itself, and its plan reviewer read the top-level consumers before approving."
+
+20260914-000233-ef78a2:
+  description: "First of three runs with the inherited assistant prompt removed from every agent: the same nine sites and nine blocks as the three runs before it, so the framing that prompt carried was not what chose them. Its edit kept 58 more flip-flops than the other two and came out 1.3 ns slower."
+
 20260913-201714-642729:
   description: "Third of the three, establishing that the nine-region choice repeats at this prompt set; its planner reached for ripgrep and fell back, and its reviewer probed with three successive find patterns."
   equivalence: "cycle-exact in simulation on all three channels, latency matched by impulse probe; LEC proven, 124/124 points"
