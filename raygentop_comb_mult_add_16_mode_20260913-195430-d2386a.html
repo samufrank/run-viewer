@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>raygentop → comb_mult_add_16_mode · 20260913-195430-d2386a</title><style>
+:root { color-scheme: light; }
+/* Embedded previews (Slack) size their frame from a height measured once, at first paint
+   and possibly at a different width than the one displayed; a page whose height depends on
+   line wrapping then gets cut off. A definite minimum height in absolute units (not vh, not
+   %) keeps the measured height at or above the collapsed page's height down to ~500px wide
+   (measured 1418px at 500px, 977 at 700, 893 at 1200). Below the fold in a normal browser. */
+html, body { height: auto; }
+body { margin: 0; padding: 1.5rem 1rem 4rem; background: #fff; color: #1a1a1a; min-height: 1450px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 15px; line-height: 1.6; }
+main { max-width: 72rem; margin: 0 auto; }
+h1 { font-size: 1.4rem; margin: 0 0 .25rem; font-weight: 600; }
+h2 { font-size: 1.1rem; margin: 0; font-weight: 600; display: inline; }
+h3 { font-size: 1rem; margin: 1.2rem 0 .4rem; font-weight: 600; }
+.sub { color: #555; margin: 0 0 1rem; }
+table { border-collapse: collapse; margin: .5rem 0 1rem; }
+th, td { text-align: left; padding: .2rem .8rem .2rem 0; vertical-align: top; }
+th { font-weight: 600; color: #444; white-space: nowrap; }
+table.num td.n, table.num th.n { text-align: right; font-variant-numeric: tabular-nums; }
+tr.total td { border-top: 1px solid #bbb; font-weight: 600; }
+details { margin: .6rem 0; border: 1px solid #d8d8d8; border-radius: 4px; background: #fff; }
+details > summary { cursor: pointer; padding: .55rem .8rem; list-style: none;
+  display: flex; gap: .6rem; align-items: baseline; flex-wrap: wrap; }
+details > summary::-webkit-details-marker { display: none; }
+details > summary::before { content: "\25B8"; color: #777; font-size: .8em; }
+details[open] > summary::before { content: "\25BE"; }
+details > summary > .meta { color: #666; font-size: .9em; }
+details > .body { padding: .2rem .8rem .8rem; border-top: 1px solid #e6e6e6; }
+details.section > summary { font-size: 1.05rem; }
+details.call { margin-left: 0; }
+details.inner { border-color: #e6e6e6; }
+details.inner > summary { padding: .35rem .6rem; font-size: .92em; }
+pre { white-space: pre-wrap; word-break: break-word; margin: .3rem 0 .8rem;
+  padding: .7rem .9rem; border-radius: 4px; font-size: .86em; line-height: 1.5;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+pre.prompt { background: #f4f4f2; border-left: 3px solid #b8b8b0; }
+pre.response { background: #eef3f8; border-left: 3px solid #7f9fbf; }
+pre.plain { background: #f6f6f6; }
+/* A prompt or response with its Markdown rendered. The tint and the left rule are the same
+   as the plain form above, so a rendered block still reads as quoted agent traffic and not
+   as the page's own prose; only the inside is laid out instead of shown as source. */
+.md { margin: .3rem 0 .8rem; padding: .6rem .9rem; border-radius: 4px; font-size: .93em;
+  overflow-wrap: break-word; }
+.md.prompt { background: #f4f4f2; border-left: 3px solid #b8b8b0; }
+.md.response { background: #eef3f8; border-left: 3px solid #7f9fbf; }
+.md > :first-child { margin-top: 0; } .md > :last-child { margin-bottom: 0; }
+.md p { margin: .5rem 0; }
+.md ul, .md ol { margin: .5rem 0; padding-left: 1.5rem; }
+.md li { margin: .15rem 0; }
+.md ul.md-litnum { list-style: none; padding-left: .8rem; }
+.md .md-num { color: #555; }
+.md blockquote { margin: .5rem 0; padding: .1rem .8rem; border-left: 2px solid #c4c4c4;
+  color: #444; }
+.md hr { border: 0; border-top: 1px solid #d5d5d5; margin: .8rem 0; }
+.md code { background: rgba(0,0,0,.055); padding: .05em .3em; border-radius: 3px; }
+.md .mdh { font-weight: 600; margin: .9rem 0 .35rem; line-height: 1.3; }
+.md .mdh1 { font-size: 1.12em; } .md .mdh2 { font-size: 1.07em; }
+.md .mdh3 { font-size: 1.02em; } .md .mdh4, .md .mdh5, .md .mdh6 { font-size: 1em; }
+/* A fenced block is a box inside the response, and must not widen or escape it: it wraps,
+   and scrolls sideways only within its own frame. */
+.md .md-code { margin: .5rem 0; border: 1px solid #dcdcdc; border-radius: 4px;
+  background: #fbfbfa; max-width: 100%; overflow: hidden; }
+.md .md-lang { display: block; padding: .15rem .6rem; border-bottom: 1px solid #e6e6e6;
+  color: #666; font-size: .8em; letter-spacing: .03em; }
+.md .md-code > pre { margin: 0; background: none; border: 0; border-radius: 0;
+  padding: .55rem .7rem; max-width: 100%; overflow-x: auto; white-space: pre-wrap;
+  word-break: break-word; }
+.md .md-code > pre > code { background: none; padding: 0; }
+.md .md-tw { overflow-x: auto; max-width: 100%; margin: .5rem 0; }
+.md .md-tw table { border-collapse: collapse; }
+.md .md-tw th, .md .md-tw td { border: 1px solid #dedede; padding: .2rem .5rem;
+  white-space: normal; }
+.md .md-note { color: #666; font-size: .85em; font-style: italic; margin: 0 0 .5rem; }
+ul.paths { margin: .2rem 0; padding-left: 1.2rem; }
+ul.paths li { margin: .1rem 0; word-break: break-all; }
+.diff { white-space: pre-wrap; word-break: break-word; margin: .3rem 0 .8rem;
+  padding: .7rem .9rem; border-radius: 4px; font-size: .86em; line-height: 1.5;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  background: #fafafa; border: 1px solid #e3e3e3; }
+.diff div { min-height: 1.5em; }
+.diff .add { background: #e2f3e2; }
+.diff .del { background: #f8e0e0; }
+.diff .add-ws, .diff .del-ws { color: #999; background: #f3f3f3; }
+.diff .hunk { color: #6a5acd; }
+.diff .hdr { color: #666; }
+.diff details.ws { margin: .1rem 0; border: 1px dashed #ccc; background: #f6f6f6; }
+.diff details.ws > summary { padding: .1rem .5rem; color: #777; font-family: inherit; font-size: .95em; }
+.diff details.ws > summary::before { content: "\25B8 "; }
+.diff details.ws[open] > summary::before { content: "\25BE "; }
+.label { font-weight: 600; color: #444; font-size: .85em; text-transform: uppercase;
+  letter-spacing: .03em; margin: .6rem 0 .1rem; }
+.absent { color: #777; font-style: italic; }
+.ok { color: #1f6f3a; } .bad { color: #a33; } .na { color: #777; }
+.note { color: #555; font-size: .9em; }
+.tools { margin: .4rem 0 0; }
+.controls { margin: 0 0 1rem; font-size: .9em; color: #555; }
+.controls button { font: inherit; padding: .1rem .5rem; margin-right: .3rem; }
+dl.kv { display: grid; grid-template-columns: max-content 1fr; gap: .1rem 1.2rem; margin: .6rem 0 1rem; }
+dl.kv dt { color: #555; } dl.kv dd { margin: 0; }
+@media (max-width: 600px) { dl.kv { grid-template-columns: 1fr; } dl.kv dt { margin-top: .4rem; } }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .92em; }
+</style><script>
+function setAll(open) {
+  document.querySelectorAll('details').forEach(function (d) { d.open = open; });
+}
+</script></head><body><main><h1>raygentop → comb_mult_add_16_mode · 20260913-195430-d2386a</h1><p class="sub">benchadapt adaptation run · record at <code>outputs/adapt/vtr_demo/raygentop/comb_mult_add_16_mode/20260913-195430-d2386a</code></p><dl class="kv"><dt>run id</dt><dd><code>20260913-195430-d2386a</code></dd><dt>started</dt><dd>2026-09-13 19:54:30 -0700</dd><dt>finished</dt><dd>2026-09-13 20:01:03 -0700</dd><dt>suite / design</dt><dd>vtr_demo / <b>raygentop</b></dd><dt>target mode</dt><dd><code>comb_mult_add_16_mode</code></dd><dt>tier</dt><dd>needs restructuring (T2) — the region did not fit the mode as is</dd><dt>outcome</dt><dd><b class="ok">ACCEPTED</b> — reviewer agent confirmed</dd><dt>editor attempts</dt><dd>1 <span class="note">(editor calls against the one approved plan; record field <code>iterations</code>)</span></dd><dt>wall clock</dt><dd>6m 33s (agents 5m 49s, VTR and other 43s)  [392.6 s total; 'other' is synthesis-only checks and framework time between calls]</dd><dt>models per role</dt><dd>planner: <code>anthropic/claude-opus-5</code><br>reviewer:plan: <code>anthropic/claude-opus-5</code><br>editor: <code>anthropic/claude-opus-5</code><br>reviewer:acceptance: <code>anthropic/claude-opus-5</code></dd><dt>VPR arguments</dt><dd>channel width 300 · device koios_extra_small · seed 1 <span class="note">(from run.json)</span></dd><dt>repo commit</dt><dd><code>439a0fe3b51b</code> <span class="bad">with uncommitted changes to tracked files</span></dd><dt>agent reads</dt><dd>none outside the agents' own working directories <span class="note">(paths each agent named outside its own working directory, computed from the tool events; its own scratch excluded)</span></dd><dt>prompt set</dt><dd><code>cea07cb25821</code> <span class="note">(sha256 over 6 templates in src/agents and 10 inline pieces; full value in run.json <code>prompt_set</code>)</span></dd></dl><div class="controls"><button type="button" onclick="setAll(true)">expand all</button><button type="button" onclick="setAll(false)">collapse all</button>exported 2026-09-13T20:04:26-07:00</div><details class="section"><summary><h2>Mode contract</h2> <span class="meta">recorded (outcome.json contract field)</span></summary><div class="body"><p class="note">Verbatim, as recorded with the run and sent to the agents.</p><pre class="plain">Hard-block primitive to instantiate: `comb_mult_add_16`   (precision INT16)
+  computes: out = ax*ay + bx
+  input ports:  ax[16], ay[16], bx[32]
+  output ports: result[64]
+  arithmetic: the block's operands and result are signed two's complement. A design operand narrower than its port must be widened to the port width: zero-extended if the design treats it as unsigned, sign-extended if signed. An unsigned design operand as wide as its port has no exact representation on this block.
+  timing: the block is combinational; `result` is valid in the same cycle the inputs are applied (no clock port).
+  Wire EVERY operand of the fused region onto the input ports (name them exactly as above); drive the region's real consumer from the output port. Tie unused term ports to 0. Do not leave input ports unconnected.</pre></div></details><details class="section"><summary><h2>Agent calls</h2> <span class="meta">4 call(s), in order</span></summary><div class="body"><details class="call"><summary>Call 1 · <b>planner</b> · anthropic/claude-opus-5 · <span class="ok">ok</span> <span class="meta">in 10 · out 7850 · reasoning 0 · cache read 56073 · cache write 20500 · 134.4 s</span></summary><div class="body"><div class="label">prompt</div><div class="md prompt"><p>You are the Planner. Choose the best region(s) in raygentop.v to adapt so hard-block mode<br>'comb_mult_add_16_mode' (Hard-block primitive to instantiate: <code>comb_mult_add_16</code>   (precision INT16)<br>  computes: out = ax*ay + bx<br>  input ports:  ax[16], ay[16], bx[32]<br>  output ports: result[64]<br>  arithmetic: the block's operands and result are signed two's complement. A design operand narrower than its port must be widened to the port width: zero-extended if the design treats it as unsigned, sign-extended if signed. An unsigned design operand as wide as its port has no exact representation on this block.<br>  timing: the block is combinational; <code>result</code> is valid in the same cycle the inputs are applied (no clock port).<br>  Wire EVERY operand of the fused region onto the input ports (name them exactly as above); drive the region's real consumer from the output port. Tie unused term ports to 0. Do not leave input ports unconnected.) is exercised, then write a concrete plan. Do NOT edit files —<br>output the header + plan only.</p><p>Pick the most REPRESENTATIVE mapping — arithmetic a real designer of THIS workload would actually<br>map to 'comb_mult_add_16_mode', never fabricated computation. For a sum-of-products / MAC mode you must<br>find product terms that ALREADY feed a COMMON reduction (a shared sum/accumulator); products that<br>feed SEPARATE outputs (e.g. distinct systolic-array elements) must NOT be fused. An isolated scalar<br>multiply is NOT a representative sum-of-products target. If nothing representative exists, output<br><code>TIER: NONE</code>.</p><p>Candidate arithmetic regions (id | operation | instances):<br>bilinearintrp.$mul$raygentop.v:2874$348 | multiply | 1<br>bilinearintrp.$mul$raygentop.v:2875$349 | multiply | 1<br>bilinearintrp.$mul$raygentop.v:2876$350 | multiply | 1<br>bilinearintrp.$mul$raygentop.v:2877$351 | multiply | 1<br>bilinearintrp.$mul$raygentop.v:2878$352 | multiply | 1<br>bilinearintrp.$mul$raygentop.v:2879$353 | multiply | 1<br>bilinearintrp.$mul$raygentop.v:2880$354 | multiply | 1<br>bilinearintrp.$mul$raygentop.v:2881$355 | multiply | 1<br>bilinearintrp.$mul$raygentop.v:2882$356 | multiply | 1<br>matmult.$mul$raygentop.v:335$15 | multiply | 1<br>matmult.$mul$raygentop.v:336$16 | multiply | 1<br>matmult.$mul$raygentop.v:337$17 | multiply | 1<br>matmult.$mul$raygentop.v:338$18 | multiply | 1<br>matmult.$mul$raygentop.v:339$19 | multiply | 1<br>matmult.$mul$raygentop.v:340$20 | multiply | 1<br>matmult.$mul$raygentop.v:341$21 | multiply | 1<br>matmult.$mul$raygentop.v:342$22 | multiply | 1<br>matmult.$mul$raygentop.v:343$23 | multiply | 1</p><p>Classify the tier of the change you propose (a datatype/algorithm variant, T3, is out of scope —<br>do not propose one):</p><ul><li>T1: Direct replacement: no change to the computed function or surrounding structure; no datatype change.</li><li>T2: Local restructuring only; preserve the region's function, role, and live consumers; no new operation/datatype family.</li></ul><p>Read the source. Output EXACTLY this header (uppercase keys), then the plan:</p><p>TIER: T1 | T2 | NONE<br>REGIONS: &lt;comma-separated region id(s)&gt;            # one id for a direct swap; N ids for a fusion<br>SHARED_REDUCTION: &lt;the signal/module the terms feed&gt;   # or NONE for a single region<br>MAPPING: &lt;which operands map to which of the mode's ports&gt;<br>PLAN: &lt;how the module's live inputs/outputs and downstream consumers are preserved; any introduced<br>operations/datatypes (should be NONE for T1/T2); and the main risks&gt;</p><p>Output rules: no preamble before the TIER line — read the source first, then write. You<br>are one step of an automated pipeline: a reviewer runs automatically on this plan, you<br>cannot invoke it, and no human reads your output, so do not end with a question or an<br>offer.</p><p>Read these files in this directory: raygentop.v</p></div><div class="label">response</div><div class="md response"><p class="md-note">1 paragraph break restored by the export, where the recorder joined text blocks with no separator.</p><p>I'll read the source first.</p><p>TIER: T2<br>REGIONS: bilinearintrp.$mul$raygentop.v:2874$348, bilinearintrp.$mul$raygentop.v:2875$349, bilinearintrp.$mul$raygentop.v:2876$350, bilinearintrp.$mul$raygentop.v:2877$351, bilinearintrp.$mul$raygentop.v:2878$352, bilinearintrp.$mul$raygentop.v:2879$353, bilinearintrp.$mul$raygentop.v:2880$354, bilinearintrp.$mul$raygentop.v:2881$355, bilinearintrp.$mul$raygentop.v:2882$356<br>SHARED_REDUCTION: Three separate 3-term barycentric dot products inside <code>bilinearintrp</code> (raygentop.v:2884-2886): <code>assign r = i1r + i2r + i3r</code> (regions $348,$349,$350), <code>assign g = i1g + i2g + i3g</code> (regions $351,$352,$353), <code>assign b = i1b + i2b + i3b</code> (regions $354,$355,$356). Each reduction is fused independently; no product is ever moved across colour channels.</p><p>MAPPING:<br>Per channel C in {r, g, b}, the existing three product terms <code>ul*Cul</code>, <code>vl*Cvl</code>, <code>wl*Cwl</code> are mapped onto a 3-deep chain of <code>comb_mult_add_16</code> instances (9 instances total, 3 per reduction). All operands are unsigned and strictly narrower than the 16-bit ports (<code>ul</code>/<code>vl</code>/<code>wl</code> are 8-bit, <code>Cul</code>/<code>Cvl</code>/<code>Cwl</code> are 7-bit), so they are zero-extended into the signed ports and always land in the non-negative half of INT16 — the mapping is exact, not an approximation.</p><p>Red channel (green/blue identical with gu/gv/gw, bu/bv/bw):</p><ul><li><code>mac_r0</code>: ax = {8'b0, wl}, ay = {9'b0, rwl}, bx = 32'd0 (head of chain, unused addend tied to 0), result → wire <code>pr0[63:0]</code> = wl*rwl.</li><li><code>mac_r1</code>: ax = {8'b0, vl}, ay = {9'b0, rvl}, bx = pr0[31:0], result → wire <code>pr1[63:0]</code> = vl*rvl + wl*rwl.</li><li><code>mac_r2</code>: ax = {8'b0, ul}, ay = {9'b0, rul}, bx = pr1[31:0], result → wire <code>pr2[63:0]</code> = ul*rul + vl*rvl + wl*rwl (the complete reduction).</li><li><code>pr2[16:0]</code> is captured by a new 17-bit register <code>sumr</code> in the same <code>always @(posedge clk)</code> block that formerly held <code>i1r/i2r/i3r</code>; <code>assign r = sumr[6:0]</code>.</li></ul><p>PLAN:</p><ol><li>Delete the nine <code>i1r/i2r/i3r/i1g/.../i3b</code> 15-bit product registers and their nine <code>&lt;=</code> multiply statements (lines 2874-2882). Replace them with three 17-bit registers <code>sumr</code>, <code>sumg</code>, <code>sumb</code>, each assigned the corresponding chain output inside the same clocked block, driven by the same operand values (<code>ul</code>, <code>vl</code>, <code>wl</code>, <code>rul</code>…<code>bwl</code>) already registered one cycle earlier at lines 2863-2873. Those latching statements are untouched, so the operand pipeline stage is unchanged.</li><li>Replace <code>assign r/g/b = i1+i2+i3</code> with <code>assign r = sumr[6:0];</code> <code>assign g = sumg[6:0];</code> <code>assign b = sumb[6:0];</code>.</li><li>Live interface preservation: module ports (<code>u01a</code>…<code>v10c</code>, <code>selectuv</code>, <code>ru</code>…<code>bw</code>, <code>r</code>, <code>g</code>, <code>b</code>, <code>clk</code>) are unchanged, so the instantiation <code>bilinearintrp bilinearimp (…, blr, blg, blb, clk)</code> at raygentop.v:2012 needs no edit. Downstream consumers <code>blr/blg/blb</code> (packed into <code>temp_shadedata{a,b,c}[20:0]</code> at lines 2265-2267, 2423-2425, 2482-2484, and <code>blb/blg</code> feeding <code>linearmap</code> at line 2011) see bit-identical values on identical cycles.</li><li>Cycle-accuracy argument: today the three products are registered at edge N and summed combinationally after edge N; after the change the sum of the same three products (same operand values, same edge) is registered at edge N and <code>r</code> is a direct slice of that register. Both produce the final value in the window after edge N — one pipeline stage in, one stage out, no latency change. Bit-exactness: the original expression is evaluated at 15-bit width and truncated to the 7-bit output, i.e. <code>r</code> = low 7 bits of the true sum; the fused chain computes the true sum exactly (max 3·255·127 = 97155, well inside the 32-bit <code>bx</code> and 64-bit <code>result</code> paths) and takes the same low 7 bits. Carry-in/truncation semantics are therefore identical, not merely "close".</li><li>Introduced operations/datatypes: NONE. No new arithmetic family, no signed/unsigned reinterpretation of any design value (zero-extension of unsigned operands into the signed ports is the documented exact widening), no width change on any live signal. Every <code>comb_mult_add_16</code> port is driven: <code>bx</code> is tied to 32'd0 only on the head of each chain; <code>ax</code>/<code>ay</code> always carry a real operand.</li><li>Why not <code>matmult</code> (regions $15…$23), despite it also being a 3-term dot product: (a) its operands <code>Ax/Ay/Az</code> and <code>m11…m33</code> are 16-bit unsigned values multiplied with Verilog <code>*</code> — an unsigned operand exactly as wide as the 16-bit signed port has no exact representation on this block; (b) its reduction at lines 2348-2350 sums <em>truncated</em> slices <code>am[30:15]</code> of the registered products, so folding an add into the multiply (which adds full-width products before truncation) changes the result by the carry out of the discarded low 15 bits. Both make a function-preserving T1/T2 mapping impossible there, so <code>matmult</code> is deliberately left alone.</li><li>Risks: (i) Stage-1 combinational depth grows from one 8×7 multiply to multiply + two 32-bit adds chained through three hard blocks — Fmax on the <code>bilinearintrp</code> product stage may drop; if it becomes critical, the chain per channel can be shortened to two blocks (one <code>comb_mult_add_16</code> fusing two terms, third product left as-is) with no change to the exactness argument. (ii) Synthesis of <code>pr1[31:0]</code> feeding <code>bx</code> must not be inferred as a signed/unsigned mismatch — values are provably &lt; 2^17 so the two's-complement interpretation is positive in all cases. (iii) The removed <code>i1*/i2*/i3*</code> regs must be scrubbed everywhere (they have no other readers in the file — verified: only lines 2884-2886), otherwise synthesis leaves dangling registers.</li></ol></div><details class="inner"><summary>tool events <span class="meta">6 recorded, 0 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> wc -l /work/raygentop.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "wc -l /work/raygentop.v"
+}</pre><div class="label">output</div><pre class="plain">2978 /work/raygentop.v
+</pre></div></details><details class="inner"><summary><code>grep</code> <span class="meta"><span class="ok">completed</span> module |endmodule</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "module |endmodule",
+ "path": "/work/raygentop.v"
+}</pre><div class="label">output</div><pre class="plain">Found 30 matches
+/work/raygentop.v:
+  Line 1:  module paj_raygentop_hierarchy_no_mem (rgwant_addr, rgwant_data, rgread_ready, rgaddr_ready, rgdata_ready, rgwant_read, rgdatain, rgdataout, rgaddrin, rgCont, rgStat, rgCfgData, rgwant_CfgData, rgCfgData_ready, tm3_sram_data_in, tm3_sram_data_out, tm3_sram_addr, tm3_sram_we, tm3_sram_oe, tm3_sram_adsp, clk, fbdata, fbdatavalid, fbnextscanline, raygroup01, raygroupvalid01, busy01, raygroup10, raygroupvalid10, busy10, globalreset, rgData, rgAddr, rgWE, rgAddrValid, rgDone, rgResultData, rgResultReady, rgResultSource);
+
+  Line 190:  endmodule
+
+  Line 193: module delay1x3 (datain, dataout, clk);
+
+  Line 213:  endmodule
+
+  Line 222:  module onlyonecycle (trigger, output_xhdl0, globalreset, clk);
+
+  Line 296:  endmodule
+
+  Line 298: module matmult (Ax, Ay, Az, m11, m12, m13, m21, m22, m23, m31, m32, m33, Cx, Cy, Cz, clk);
+
+  Line 352:  endmodule
+
+  Line 357: module rgconfigmemory (CfgAddr, CfgData, CfgData_Ready, want_CfgData, origx, origy, origz, m11, m12, m13, m21, m22, m23, m31, m32, m33, bkcolour, texinfo, globalreset, clk);
+
+  Line 542:  endmodule
+
+  Line 546:  module spram21x4 (we, dataout, datain, clk);
+
+  Line 580:  endmodule
+
+  Line 593: module rgsramcontroller (want_addr, addr_ready, addrin, want_data, data_ready, datain, want_read, read_ready, dataout, dirReady, wantDir, sramdatal, addr, wantwriteback, writebackack, writebackdata, writebackaddr, fbdata, fbnextscanline, fbdatavalid, fbpage, shadedata, triID, wantshadedata, shadedataready, texeladdr, texel, wanttexel, texelready, tm3_sram_data_in, tm3_sram_data_out, tm3_sram_addr, tm3_sram_we, tm3_sram_oe, tm3_sram_adsp, globalreset, clk);
+
+  Line 1028:  endmodule
+
+  Line 1041:  module raysend (as, ack, addr, dir, origx, origy, origz, rgData, rgAddr, rgWE, rgAddrValid, rgDone, globalreset, clk, statepeek);
+
+  Line 1257:  endmodule
+
+  Line 1265:  module raygencont (go, initcount, busyout, cycles, nextaddr, nas0, nas1, page, dirReady, wantDir, dirIn, addrIn, as, addr, ack, dir, raygroup0, raygroupvalid0, busy0, raygroup1, raygroupvalid1, busy1, globalreset, clk, statepeek);
+
+  Line 1615:  endmodule
+
+  Line 1624:  module resultrecieve (valid01, valid10, id01a, id01b, id01c, id10a, id10b, id10c, hit01a, hit01b, hit01c, hit10a, hit10b, hit10c, u01a, u01b, u01c, v01a, v01b, v01c, u10a, u10b, u10c, v10a, v10b, v10c, rgResultData, rgResultReady, rgResultSource, globalreset, clk);
+
+  Line 1892:  endmodule
+
+  Line 1908:  module resultwriter (valid01, valid10, id01a, id01b, id01c, id10a, id10b, id10c, hit01a, hit01b, hit01c, hit10a, hit10b, hit10c, u01a, u01b, u01c, v01a, v01b, v01c, u10a, u10b, u10c, v10a, v10b, v10c, addr, as01, as10, bkcolour, shadedata, triID, wantshadedata, shadedataready, texinfo, texaddr, texeladdr, texel, wanttexel, texelready, dataout, addrout, write, ack, globalreset, clk);
+
+  Line 2638:  endmodule
+
+  Line 2654:  module col16to21 (dataline, texelselect, r, g, b);
+
+  Line 2691:  endmodule
+
+  Line 2692:  module linearmap (u, v, start, addr, texelselect, factor, enable, clk);
+
+  Line 2761:  endmodule
+
+  Line 2762:      module bilinearintrp (u01a, u01b, u01c, v01a, v01b, v01c, u10a, u10b, u10c, v10a, v10b, v10c, selectuv, ru, rv, rw, gu, gv, gw, bu, bv, bw, r, g, b, clk);
+
+  Line 2887:      endmodule
+
+  Line 2891: module fifo3 (datain, writeen, dataout, shiften, globalreset, clk);
+
+  Line 2977:  endmodule
+</pre></div></details><details class="inner"><summary><code>read</code> <span class="meta"><span class="ok">completed</span> /work/raygentop.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "filePath": "/work/raygentop.v",
+ "offset": 296,
+ "limit": 60
+}</pre><div class="label">output</div><pre class="plain">&lt;path&gt;/work/raygentop.v&lt;/path&gt;
+&lt;type&gt;file&lt;/type&gt;
+&lt;content&gt;
+296:  endmodule
+297: 
+298: module matmult (Ax, Ay, Az, m11, m12, m13, m21, m22, m23, m31, m32, m33, Cx, Cy, Cz, clk);
+299: 
+300:     input[16 - 1:0] Ax; 
+301:     input[16 - 1:0] Ay; 
+302:     input[16 - 1:0] Az; 
+303:     input[16 - 1:0] m11; 
+304:     input[16 - 1:0] m12; 
+305: 
+306:     input[16 - 1:0] m13; 
+307:     input[16 - 1:0] m21; 
+308:     input[16 - 1:0] m22; 
+309:     input[16 - 1:0] m23; 
+310:     input[16 - 1:0] m31; 
+311:     input[16 - 1:0] m32; 
+312:     input[16 - 1:0] m33; 
+313:     output[16 - 1:0] Cx; 
+314:     reg[16 - 1:0] Cx;
+315:     output[16 - 1:0] Cy; 
+316:     reg[16 - 1:0] Cy;
+317:     output[16 - 1:0] Cz; 
+318: 
+319:     reg[16 - 1:0] Cz;
+320:     input clk; 
+321: 
+322:     reg[16 + 16 - 1:0] am11; 
+323:     reg[16 + 16 - 1:0] am12; 
+324:     reg[16 + 16 - 1:0] am13; 
+325:     reg[16 + 16 - 1:0] am21; 
+326:     reg[16 + 16 - 1:0] am22; 
+327:     reg[16 + 16 - 1:0] am23; 
+328:     reg[16 + 16 - 1:0] am31; 
+329:     reg[16 + 16 - 1:0] am32; 
+330:     reg[16 + 16 - 1:0] am33; 
+331: 
+332: 
+333:     always @(posedge clk)
+334:     begin
+335:        am11 &lt;= Ax * m11 ; 
+336:        am12 &lt;= Ay * m12 ; 
+337:        am13 &lt;= Az * m13 ; 
+338:        am21 &lt;= Ax * m21 ; 
+339:        am22 &lt;= Ay * m22 ; 
+340:        am23 &lt;= Az * m23 ; 
+341:        am31 &lt;= Ax * m31 ; 
+342:        am32 &lt;= Ay * m32 ; 
+343:        am33 &lt;= Az * m33 ; 
+344: 
+345:        //      Cx &lt;= (am11 + am12 + am13) (`widthA+`widthB-2 downto `widthB-1);
+346:        //      Cy &lt;= (am21 + am22 + am23) (`widthA+`widthB-2 downto `widthB-1);
+347:        //      Cz &lt;= (am31 + am32 + am33) (`widthA+`widthB-2 downto `widthB-1);
+348:        Cx &lt;= (am11[16+16-2:16-1] + am12[16+16-2:16-1] + am13[16+16-2:16-1]) ; 
+349:        Cy &lt;= (am21[16+16-2:16-1] + am22[16+16-2:16-1] + am23[16+16-2:16-1]); 
+350:        Cz &lt;= (am31[16+16-2:16-1] + am32[16+16-2:16-1] + am33[16+16-2:16-1]) ;  
+351:     end 
+352:  endmodule
+353: 
+354:     
+355:     
+
+(Showing lines 296-355 of 2978. Use offset=356 to continue.)
+&lt;/content&gt;</pre></div></details><details class="inner"><summary><code>read</code> <span class="meta"><span class="ok">completed</span> /work/raygentop.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "filePath": "/work/raygentop.v",
+ "offset": 2762,
+ "limit": 130
+}</pre><div class="label">output</div><pre class="plain">&lt;path&gt;/work/raygentop.v&lt;/path&gt;
+&lt;type&gt;file&lt;/type&gt;
+&lt;content&gt;
+2762:      module bilinearintrp (u01a, u01b, u01c, v01a, v01b, v01c, u10a, u10b, u10c, v10a, v10b, v10c, selectuv, ru, rv, rw, gu, gv, gw, bu, bv, bw, r, g, b, clk);
+2763: 
+2764:         input[7:0] u01a; 
+2765:         input[7:0] u01b; 
+2766:         input[7:0] u01c; 
+2767:         input[7:0] v01a; 
+2768:         input[7:0] v01b; 
+2769:         input[7:0] v01c; 
+2770:         input[7:0] u10a; 
+2771:         input[7:0] u10b; 
+2772:         input[7:0] u10c; 
+2773:         input[7:0] v10a; 
+2774:         input[7:0] v10b; 
+2775:         input[7:0] v10c; 
+2776:         input[2:0] selectuv; 
+2777:         input[6:0] ru; 
+2778:         input[6:0] rv; 
+2779:         input[6:0] rw; 
+2780:         input[6:0] gu; 
+2781:         input[6:0] gv; 
+2782:         input[6:0] gw; 
+2783:         input[6:0] bu; 
+2784:         input[6:0] bv; 
+2785:         input[6:0] bw; 
+2786:         output[6:0] r; 
+2787:         wire[6:0] r;
+2788:         output[6:0] g; 
+2789:         wire[6:0] g;
+2790:         output[6:0] b; 
+2791:         wire[6:0] b;
+2792:         input clk; 
+2793: 
+2794:         reg[7:0] u; 
+2795:         reg[7:0] v; 
+2796:         reg[7:0] ul; 
+2797:         reg[7:0] vl; 
+2798:         reg[7:0] wl; 
+2799:         reg[14:0] i1b; 
+2800:         reg[14:0] i2b; 
+2801:         reg[14:0] i3b; 
+2802:         reg[14:0] i1g; 
+2803:         reg[14:0] i2g; 
+2804:         reg[14:0] i3g; 
+2805:         reg[14:0] i1r; 
+2806:         reg[14:0] i2r; 
+2807:         reg[14:0] i3r; 
+2808:         reg[6:0] rul; 
+2809:         reg[6:0] rvl; 
+2810:         reg[6:0] rwl; 
+2811:         reg[6:0] gul; 
+2812:         reg[6:0] gvl; 
+2813:         reg[6:0] gwl; 
+2814:         reg[6:0] bul; 
+2815:         reg[6:0] bvl; 
+2816:         reg[6:0] bwl; 
+2817: 
+2818:         always @(selectuv or u01a or u01b or u01c or v01a or v01b or v01c or u10a or 
+2819:                  u10b or u10c or v10a or v10b or v10c)
+2820:         begin
+2821:            case (selectuv)
+2822:               3'b000 :
+2823:                        begin
+2824:                           u = u01a ; 
+2825:                           v = v01a ; 
+2826:                        end
+2827:               3'b001 :
+2828:                        begin
+2829:                           u = u01b ; 
+2830: 						 v = v01b ; 
+2831:                        end
+2832:               3'b010 :
+2833:                        begin
+2834:                           u = u01c ; 
+2835:                           v = v01c ; 
+2836:                        end
+2837:               3'b100 :
+2838:                        begin
+2839:                           u = u10a ; 
+2840:                           v = v10a ; 
+2841:                        end
+2842:               3'b101 :
+2843:                        begin
+2844:                           u = u10b ; 
+2845:                           v = v10b ; 
+2846:                        end
+2847:               3'b110 :
+2848:                        begin
+2849:                           u = u10c ; 
+2850:                           v = v10c ; 
+2851:                        end
+2852:               default :
+2853:                        begin
+2854:                           u = 0;
+2855:                           v = 0;
+2856:                        end
+2857:            endcase 
+2858:         end 
+2859: 
+2860:         always @(posedge clk)
+2861:         begin
+2862:            wl &lt;= 8'b11111111 - u - v ; 
+2863:            ul &lt;= u ; 
+2864:            vl &lt;= v ; 
+2865:            rul &lt;= ru ; 
+2866:            rvl &lt;= rv ; 
+2867:            rwl &lt;= rw ; 
+2868:            gul &lt;= gu ; 
+2869:            gvl &lt;= gv ; 
+2870:            gwl &lt;= gw ; 
+2871:            bul &lt;= bu ; 
+2872:            bvl &lt;= bv ; 
+2873:            bwl &lt;= bw ; 
+2874:            i1r &lt;= ul * rul ; 
+2875:            i2r &lt;= vl * rvl ; 
+2876:            i3r &lt;= wl * rwl ; 
+2877:            i1g &lt;= ul * gul ; 
+2878:            i2g &lt;= vl * gvl ; 
+2879:            i3g &lt;= wl * gwl ; 
+2880:            i1b &lt;= ul * 
+…[truncated, 4425 chars total]</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> grep -n "bilinearintrp\|colour\|\.r(\|\.g(\|\.b(" /work/raygentop.v | sed -n '1,60p'</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "grep -n \"bilinearintrp\\|colour\\|\\.r(\\|\\.g(\\|\\.b(\" /work/raygentop.v | sed -n '1,60p'"
+}</pre><div class="label">output</div><pre class="plain">144:    wire[20:0] bkcolour; 
+180:    rgconfigmemory ConfigMemoryInst (rgCfgData[31:28], rgCfgData[27:0], rgCfgData_ready, wantcfg, origx, origy, origz, m11, m12, m13, m21, m22, m23, m31, m32, m33, bkcolour, texinfo, globalreset, clk); 
+188:    resultwriter resultwriteinst (valid01, valid10, id01a, id01b, id01c, id10a, id10b, id10c, hit01a, hit01b, hit01c, hit10a, hit10b, hit10c, u01a, u01b, u01c, v01a, v01b, v01c, u10a, u10b, u10c, v10a, v10b, v10c, nextaddr01, nas01, nas10, bkcolour, shadedata, triID, wantshadedata, shadedataready, texinfo, texaddr, texeladdr, texel, wanttexel, texelready, writebackdata, writebackaddr, wantwriteback, writebackack, debugglobalreset, clk);
+357:module rgconfigmemory (CfgAddr, CfgData, CfgData_Ready, want_CfgData, origx, origy, origz, m11, m12, m13, m21, m22, m23, m31, m32, m33, bkcolour, texinfo, globalreset, clk);
+389:    output[20:0] bkcolour; 
+390:    reg[20:0] bkcolour;
+413:    reg[20:0] temp_bkcolour;
+437:          bkcolour &lt;= 0;
+454:          bkcolour &lt;= bkcolour;
+524:                                           temp_bkcolour = CfgData[20:0] ; 
+1908: module resultwriter (valid01, valid10, id01a, id01b, id01c, id10a, id10b, id10c, hit01a, hit01b, hit01c, hit10a, hit10b, hit10c, u01a, u01b, u01c, v01a, v01b, v01c, u10a, u10b, u10c, v10a, v10b, v10c, addr, as01, as10, bkcolour, shadedata, triID, wantshadedata, shadedataready, texinfo, texaddr, texeladdr, texel, wanttexel, texelready, dataout, addrout, write, ack, globalreset, clk);
+1941:    input[20:0] bkcolour; 
+2012:    bilinearintrp bilinearimp (u01a, u01b, u01c, v01a, v01b, v01c, u10a, u10b, u10c, v10a, v10b, v10c, selectuv, shadedata[41:35], shadedata[62:56], shadedata[20:14], shadedata[34:28], shadedata[55:49], shadedata[13:7], shadedata[27:21], shadedata[48:42], shadedata[6:0], blr, blg, blb, clk); 
+2206:                            temp_shadedataa = bkcolour ; 
+2539:                            temp_shadedatab = bkcolour ; 
+2595:                            temp_shadedatac = bkcolour ; 
+2762:     module bilinearintrp (u01a, u01b, u01c, v01a, v01b, v01c, u10a, u10b, u10c, v10a, v10b, v10c, selectuv, ru, rv, rw, gu, gv, gw, bu, bv, bw, r, g, b, clk);
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> grep -n "blr\|blg\|blb" /work/raygentop.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "grep -n \"blr\\|blg\\|blb\" /work/raygentop.v"
+}</pre><div class="label">output</div><pre class="plain">1990:    wire[6:0] blr; 
+1991:    wire[6:0] blg; 
+1992:    wire[6:0] blb; 
+2011:    linearmap linearmapinst (blb, blg, texinfol[17:0], texeladdr, texelselect, texinfol[20:18], lmenable, clk); 
+2012:    bilinearintrp bilinearimp (u01a, u01b, u01c, v01a, v01b, v01c, u10a, u10b, u10c, v10a, v10b, v10c, selectuv, shadedata[41:35], shadedata[62:56], shadedata[20:14], shadedata[34:28], shadedata[55:49], shadedata[13:7], shadedata[27:21], shadedata[48:42], shadedata[6:0], blr, blg, blb, clk); 
+2265:                         temp_shadedataa[6:0] = blb ; 
+2266:                         temp_shadedataa[13:7] = blg ; 
+2267:                         temp_shadedataa[20:14] = blr ; 
+2423:                         temp_shadedatab[6:0] = blb ; 
+2424:                         temp_shadedatab[13:7] = blg ; 
+2425:                         temp_shadedatab[20:14] = blr ; 
+2482:                         temp_shadedatac[6:0] = blb ; 
+2483:                         temp_shadedatac[13:7] = blg ; 
+2484:                         temp_shadedatac[20:14] = blr ; 
+</pre></div></details></div></div></details></div></details><details class="call"><summary>Call 2 · <b>reviewer:plan</b> · anthropic/claude-opus-5 · <span class="ok">ok</span> <span class="meta">in 10 · out 3034 · reasoning 0 · cache read 56136 · cache write 6884 · 49.1 s</span></summary><div class="body"><div class="label">prompt</div><div class="md prompt"><p class="md-note">1 paragraph break restored by the export, where the recorder joined text blocks with no separator.</p><p>You are an INDEPENDENT, fair Reviewer. You did not write this plan. Judge it on merit.<br>Target mode: comb_mult_add_16_mode   Tier: T2   Rule: Local restructuring only; preserve the region's function, role, and live consumers; no new operation/datatype family.<br>Regions the plan selects (9): bilinearintrp.$mul$raygentop.v:2874$348, bilinearintrp.$mul$raygentop.v:2875$349, bilinearintrp.$mul$raygentop.v:2876$350, bilinearintrp.$mul$raygentop.v:2877$351, bilinearintrp.$mul$raygentop.v:2878$352, bilinearintrp.$mul$raygentop.v:2879$353, bilinearintrp.$mul$raygentop.v:2880$354, bilinearintrp.$mul$raygentop.v:2881$355, bilinearintrp.$mul$raygentop.v:2882$356<br>  (op 'multiply', datatype int8, consumers ['bilinearintrp']).<br>APPROVE the plan if it is correct and representative — a legitimate adaptation does not need to<br>be perfect, only sound. Do NOT demand rewrites for style, minor wording, or hypothetical concerns.<br>REVISE ONLY for a CONCRETE, specific violation you can name: (a) it changes the computed function<br>when the tier forbids it; (b) it introduces an operation/datatype absent from the design and not<br>admitted by the tier; (c) it fabricates terms to match a mode's n_terms (products that did not<br>exist / do not share a reduction); (d) it wires the mode to constants or a dead sink (mode island).<br>If none of these apply, APPROVE.<br>Your FIRST line must be exactly 'APPROVE' or 'REVISE', nothing else. If REVISE, the next lines<br>must name the specific violation (a/b/c/d) and what to change.<br>Output rules: no preamble before the verdict line — verify first, then write. Your<br>verdict is applied automatically and no human reads it, so do not end with a question<br>or an offer.</p><p>--- PLAN ---<br>I'll read the source first.</p><p>TIER: T2<br>REGIONS: bilinearintrp.$mul$raygentop.v:2874$348, bilinearintrp.$mul$raygentop.v:2875$349, bilinearintrp.$mul$raygentop.v:2876$350, bilinearintrp.$mul$raygentop.v:2877$351, bilinearintrp.$mul$raygentop.v:2878$352, bilinearintrp.$mul$raygentop.v:2879$353, bilinearintrp.$mul$raygentop.v:2880$354, bilinearintrp.$mul$raygentop.v:2881$355, bilinearintrp.$mul$raygentop.v:2882$356<br>SHARED_REDUCTION: Three separate 3-term barycentric dot products inside <code>bilinearintrp</code> (raygentop.v:2884-2886): <code>assign r = i1r + i2r + i3r</code> (regions $348,$349,$350), <code>assign g = i1g + i2g + i3g</code> (regions $351,$352,$353), <code>assign b = i1b + i2b + i3b</code> (regions $354,$355,$356). Each reduction is fused independently; no product is ever moved across colour channels.</p><p>MAPPING:<br>Per channel C in {r, g, b}, the existing three product terms <code>ul*Cul</code>, <code>vl*Cvl</code>, <code>wl*Cwl</code> are mapped onto a 3-deep chain of <code>comb_mult_add_16</code> instances (9 instances total, 3 per reduction). All operands are unsigned and strictly narrower than the 16-bit ports (<code>ul</code>/<code>vl</code>/<code>wl</code> are 8-bit, <code>Cul</code>/<code>Cvl</code>/<code>Cwl</code> are 7-bit), so they are zero-extended into the signed ports and always land in the non-negative half of INT16 — the mapping is exact, not an approximation.</p><p>Red channel (green/blue identical with gu/gv/gw, bu/bv/bw):</p><ul><li><code>mac_r0</code>: ax = {8'b0, wl}, ay = {9'b0, rwl}, bx = 32'd0 (head of chain, unused addend tied to 0), result → wire <code>pr0[63:0]</code> = wl*rwl.</li><li><code>mac_r1</code>: ax = {8'b0, vl}, ay = {9'b0, rvl}, bx = pr0[31:0], result → wire <code>pr1[63:0]</code> = vl*rvl + wl*rwl.</li><li><code>mac_r2</code>: ax = {8'b0, ul}, ay = {9'b0, rul}, bx = pr1[31:0], result → wire <code>pr2[63:0]</code> = ul*rul + vl*rvl + wl*rwl (the complete reduction).</li><li><code>pr2[16:0]</code> is captured by a new 17-bit register <code>sumr</code> in the same <code>always @(posedge clk)</code> block that formerly held <code>i1r/i2r/i3r</code>; <code>assign r = sumr[6:0]</code>.</li></ul><p>PLAN:</p><ol><li>Delete the nine <code>i1r/i2r/i3r/i1g/.../i3b</code> 15-bit product registers and their nine <code>&lt;=</code> multiply statements (lines 2874-2882). Replace them with three 17-bit registers <code>sumr</code>, <code>sumg</code>, <code>sumb</code>, each assigned the corresponding chain output inside the same clocked block, driven by the same operand values (<code>ul</code>, <code>vl</code>, <code>wl</code>, <code>rul</code>…<code>bwl</code>) already registered one cycle earlier at lines 2863-2873. Those latching statements are untouched, so the operand pipeline stage is unchanged.</li><li>Replace <code>assign r/g/b = i1+i2+i3</code> with <code>assign r = sumr[6:0];</code> <code>assign g = sumg[6:0];</code> <code>assign b = sumb[6:0];</code>.</li><li>Live interface preservation: module ports (<code>u01a</code>…<code>v10c</code>, <code>selectuv</code>, <code>ru</code>…<code>bw</code>, <code>r</code>, <code>g</code>, <code>b</code>, <code>clk</code>) are unchanged, so the instantiation <code>bilinearintrp bilinearimp (…, blr, blg, blb, clk)</code> at raygentop.v:2012 needs no edit. Downstream consumers <code>blr/blg/blb</code> (packed into <code>temp_shadedata{a,b,c}[20:0]</code> at lines 2265-2267, 2423-2425, 2482-2484, and <code>blb/blg</code> feeding <code>linearmap</code> at line 2011) see bit-identical values on identical cycles.</li><li>Cycle-accuracy argument: today the three products are registered at edge N and summed combinationally after edge N; after the change the sum of the same three products (same operand values, same edge) is registered at edge N and <code>r</code> is a direct slice of that register. Both produce the final value in the window after edge N — one pipeline stage in, one stage out, no latency change. Bit-exactness: the original expression is evaluated at 15-bit width and truncated to the 7-bit output, i.e. <code>r</code> = low 7 bits of the true sum; the fused chain computes the true sum exactly (max 3·255·127 = 97155, well inside the 32-bit <code>bx</code> and 64-bit <code>result</code> paths) and takes the same low 7 bits. Carry-in/truncation semantics are therefore identical, not merely "close".</li><li>Introduced operations/datatypes: NONE. No new arithmetic family, no signed/unsigned reinterpretation of any design value (zero-extension of unsigned operands into the signed ports is the documented exact widening), no width change on any live signal. Every <code>comb_mult_add_16</code> port is driven: <code>bx</code> is tied to 32'd0 only on the head of each chain; <code>ax</code>/<code>ay</code> always carry a real operand.</li><li>Why not <code>matmult</code> (regions $15…$23), despite it also being a 3-term dot product: (a) its operands <code>Ax/Ay/Az</code> and <code>m11…m33</code> are 16-bit unsigned values multiplied with Verilog <code>*</code> — an unsigned operand exactly as wide as the 16-bit signed port has no exact representation on this block; (b) its reduction at lines 2348-2350 sums <em>truncated</em> slices <code>am[30:15]</code> of the registered products, so folding an add into the multiply (which adds full-width products before truncation) changes the result by the carry out of the discarded low 15 bits. Both make a function-preserving T1/T2 mapping impossible there, so <code>matmult</code> is deliberately left alone.</li><li>Risks: (i) Stage-1 combinational depth grows from one 8×7 multiply to multiply + two 32-bit adds chained through three hard blocks — Fmax on the <code>bilinearintrp</code> product stage may drop; if it becomes critical, the chain per channel can be shortened to two blocks (one <code>comb_mult_add_16</code> fusing two terms, third product left as-is) with no change to the exactness argument. (ii) Synthesis of <code>pr1[31:0]</code> feeding <code>bx</code> must not be inferred as a signed/unsigned mismatch — values are provably &lt; 2^17 so the two's-complement interpretation is positive in all cases. (iii) The removed <code>i1*/i2*/i3*</code> regs must be scrubbed everywhere (they have no other readers in the file — verified: only lines 2884-2886), otherwise synthesis leaves dangling registers.</li></ol><p>Read these files in this directory: raygentop.v</p></div><div class="label">response</div><div class="md response"><p class="md-note">1 paragraph break restored by the export, where the recorder joined text blocks with no separator.</p><p>I'll verify the plan against the actual source before judging.</p><p>APPROVE</p><p>Verification performed against <code>/work/raygentop.v</code>:</p><ul><li><strong>Regions are real and correctly located.</strong> Lines 2874–2882 are exactly the nine <code>i1r/i2r/i3r/i1g/…/i3b &lt;= ul*rul</code> … statements; <code>$348</code>→2874 and <code>$356</code>→2882 match the named regions. All nine are <code>*</code> operations on <code>ul/vl/wl</code> (8-bit) × <code>rul…bwl</code> (7-bit) registers declared at 2794–2816.</li><li><strong>(c) No fabricated terms.</strong> The three per-channel products genuinely share a reduction at 2884–2886 (<code>assign r = (i1r+i2r+i3r)</code> etc.). The plan keeps each channel's chain separate and never mixes products across r/g/b, so each 3-deep MAC chain corresponds to a real existing dot product.</li><li><strong>(a) Function preserved.</strong> <code>ul*rul</code> ≤ 255·127 = 32385 fits the 15-bit <code>i*</code> regs exactly, so no information is lost pre-sum. The original <code>assign r</code> evaluates at 15-bit width (self-determined max of the operands) and truncates to <code>r[6:0]</code>; the low 7 bits of a mod-2^15 sum equal the low 7 bits of the true sum, which is what the exact 3-term chain (max 97155 &lt; 2^17) also yields. Timing is also preserved: because the products use non-blocking assignment from <code>ul/vl/wl</code>, <code>i*</code> captured at edge N already reflects the pre-edge operand registers, so capturing the combinational chain of the same pre-edge registers into <code>sumr</code> at edge N leaves <code>r</code> valid in the identical cycle window. One stage in, one stage out.</li><li><strong>(b) No new op/datatype family.</strong> Multiply and add both already exist in the region and its reduction. Operands are unsigned 8-/7-bit zero-extended into the 16-bit ports ({8'b0,wl}, {9'b0,rwl} = 16 bits each), which is an exact widening with no sign reinterpretation of any design value.</li><li><strong>(d) Not a mode island.</strong> Outputs reach live consumers: <code>bilinearintrp</code> at 2012 drives <code>blr/blg/blb</code>, consumed at 2266–2267, 2424–2425, 2483–2484 and by <code>linearmap</code> at 2011. Ports are unchanged so no caller edit is needed. The only constant is <code>bx = 32'd0</code> on the head of each chain — a standard accumulator seed on an instance whose <code>ax</code>/<code>ay</code> carry real operands and whose result feeds the next live stage; not a constant-fed island.</li><li>The <code>matmult</code> exclusion rationale (2348–2350 sums truncated <code>am[30:15]</code> slices, so fusing the add pre-truncation would change results) is accurate and appropriately conservative.</li></ul><p>The stated Fmax risk and the dangling-register cleanup note are engineering caveats, not tier violations. No instance of (a), (b), (c), or (d) applies.</p></div><details class="inner"><summary>tool events <span class="meta">4 recorded, 0 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> ls /work; wc -l /work/raygentop.v 2&gt;/dev/null</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "ls /work; wc -l /work/raygentop.v 2&gt;/dev/null"
+}</pre><div class="label">output</div><pre class="plain">raygentop.v
+2978 /work/raygentop.v
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> sed -n '2820,2900p' /work/raygentop.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "sed -n '2820,2900p' /work/raygentop.v"
+}</pre><div class="label">output</div><pre class="plain">        begin
+           case (selectuv)
+              3'b000 :
+                       begin
+                          u = u01a ; 
+                          v = v01a ; 
+                       end
+              3'b001 :
+                       begin
+                          u = u01b ; 
+						 v = v01b ; 
+                       end
+              3'b010 :
+                       begin
+                          u = u01c ; 
+                          v = v01c ; 
+                       end
+              3'b100 :
+                       begin
+                          u = u10a ; 
+                          v = v10a ; 
+                       end
+              3'b101 :
+                       begin
+                          u = u10b ; 
+                          v = v10b ; 
+                       end
+              3'b110 :
+                       begin
+                          u = u10c ; 
+                          v = v10c ; 
+                       end
+              default :
+                       begin
+                          u = 0;
+                          v = 0;
+                       end
+           endcase 
+        end 
+
+        always @(posedge clk)
+        begin
+           wl &lt;= 8'b11111111 - u - v ; 
+           ul &lt;= u ; 
+           vl &lt;= v ; 
+           rul &lt;= ru ; 
+           rvl &lt;= rv ; 
+           rwl &lt;= rw ; 
+           gul &lt;= gu ; 
+           gvl &lt;= gv ; 
+           gwl &lt;= gw ; 
+           bul &lt;= bu ; 
+           bvl &lt;= bv ; 
+           bwl &lt;= bw ; 
+           i1r &lt;= ul * rul ; 
+           i2r &lt;= vl * rvl ; 
+           i3r &lt;= wl * rwl ; 
+           i1g &lt;= ul * gul ; 
+           i2g &lt;= vl * gvl ; 
+           i3g &lt;= wl * gwl ; 
+           i1b &lt;= ul * bul ; 
+           i2b &lt;= vl * bvl ; 
+           i3b &lt;= wl * bwl ;  
+        end 
+        assign r = (i1r + i2r + i3r) ;
+        assign g = (i1g + i2g + i3g) ;
+        assign b = (i1b + i2b + i3b) ;
+     endmodule
+
+
+
+module fifo3 (datain, writeen, dataout, shiften, globalreset, clk);
+
+    input[18 - 1:0] datain; 
+    input writeen; 
+    output[18 - 1:0] dataout; 
+    wire[18 - 1:0] dataout;
+    input shiften; 
+    input globalreset; 
+    input clk; 
+
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> sed -n '2760,2822p' /work/raygentop.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "sed -n '2760,2822p' /work/raygentop.v"
+}</pre><div class="label">output</div><pre class="plain">    end 
+ endmodule
+     module bilinearintrp (u01a, u01b, u01c, v01a, v01b, v01c, u10a, u10b, u10c, v10a, v10b, v10c, selectuv, ru, rv, rw, gu, gv, gw, bu, bv, bw, r, g, b, clk);
+
+        input[7:0] u01a; 
+        input[7:0] u01b; 
+        input[7:0] u01c; 
+        input[7:0] v01a; 
+        input[7:0] v01b; 
+        input[7:0] v01c; 
+        input[7:0] u10a; 
+        input[7:0] u10b; 
+        input[7:0] u10c; 
+        input[7:0] v10a; 
+        input[7:0] v10b; 
+        input[7:0] v10c; 
+        input[2:0] selectuv; 
+        input[6:0] ru; 
+        input[6:0] rv; 
+        input[6:0] rw; 
+        input[6:0] gu; 
+        input[6:0] gv; 
+        input[6:0] gw; 
+        input[6:0] bu; 
+        input[6:0] bv; 
+        input[6:0] bw; 
+        output[6:0] r; 
+        wire[6:0] r;
+        output[6:0] g; 
+        wire[6:0] g;
+        output[6:0] b; 
+        wire[6:0] b;
+        input clk; 
+
+        reg[7:0] u; 
+        reg[7:0] v; 
+        reg[7:0] ul; 
+        reg[7:0] vl; 
+        reg[7:0] wl; 
+        reg[14:0] i1b; 
+        reg[14:0] i2b; 
+        reg[14:0] i3b; 
+        reg[14:0] i1g; 
+        reg[14:0] i2g; 
+        reg[14:0] i3g; 
+        reg[14:0] i1r; 
+        reg[14:0] i2r; 
+        reg[14:0] i3r; 
+        reg[6:0] rul; 
+        reg[6:0] rvl; 
+        reg[6:0] rwl; 
+        reg[6:0] gul; 
+        reg[6:0] gvl; 
+        reg[6:0] gwl; 
+        reg[6:0] bul; 
+        reg[6:0] bvl; 
+        reg[6:0] bwl; 
+
+        always @(selectuv or u01a or u01b or u01c or v01a or v01b or v01c or u10a or 
+                 u10b or u10c or v10a or v10b or v10c)
+        begin
+           case (selectuv)
+              3'b000 :
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> grep -n "i1r &lt;=\|i3b &lt;=\|assign r = (i1r\|bilinearintrp bilinearimp\|blr\|blg" /work/raygentop.v | h…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "grep -n \"i1r &lt;=\\|i3b &lt;=\\|assign r = (i1r\\|bilinearintrp bilinearimp\\|blr\\|blg\" /work/raygentop.v | head -40"
+}</pre><div class="label">output</div><pre class="plain">1990:    wire[6:0] blr; 
+1991:    wire[6:0] blg; 
+2011:    linearmap linearmapinst (blb, blg, texinfol[17:0], texeladdr, texelselect, texinfol[20:18], lmenable, clk); 
+2012:    bilinearintrp bilinearimp (u01a, u01b, u01c, v01a, v01b, v01c, u10a, u10b, u10c, v10a, v10b, v10c, selectuv, shadedata[41:35], shadedata[62:56], shadedata[20:14], shadedata[34:28], shadedata[55:49], shadedata[13:7], shadedata[27:21], shadedata[48:42], shadedata[6:0], blr, blg, blb, clk); 
+2266:                         temp_shadedataa[13:7] = blg ; 
+2267:                         temp_shadedataa[20:14] = blr ; 
+2424:                         temp_shadedatab[13:7] = blg ; 
+2425:                         temp_shadedatab[20:14] = blr ; 
+2483:                         temp_shadedatac[13:7] = blg ; 
+2484:                         temp_shadedatac[20:14] = blr ; 
+2874:           i1r &lt;= ul * rul ; 
+2882:           i3b &lt;= wl * bwl ;  
+2884:        assign r = (i1r + i2r + i3r) ;
+</pre></div></details></div></div></details></div></details><details class="call"><summary>Call 3 · <b>editor</b> · anthropic/claude-opus-5 · <span class="ok">ok</span> <span class="meta">in 18 · out 3994 · reasoning 0 · cache read 134595 · cache write 11688 · 57.5 s</span></summary><div class="body"><div class="label">prompt</div><div class="md prompt"><p class="md-note">1 paragraph break restored by the export, where the recorder joined text blocks with no separator.</p><p>Edit raygentop.v in this directory. Local restructuring: re-express the region (e.g. a multiply array + adder tree as a fused sum-of-products) to reach the mode; preserve the region's function and role, keep the rest of the design unchanged, wire the mode's real consumers.</p><p>Goal: rewrite the RTL so the hard-block mode 'comb_mult_add_16_mode' is exercised in the packed netlist,<br>doing real work, while preserving the design's behaviour and role.<br>Tier: T2</p><p>Hard-block primitive to instantiate: <code>comb_mult_add_16</code>   (precision INT16)<br>  computes: out = ax*ay + bx<br>  input ports:  ax[16], ay[16], bx[32]<br>  output ports: result[64]<br>  arithmetic: the block's operands and result are signed two's complement. A design operand narrower than its port must be widened to the port width: zero-extended if the design treats it as unsigned, sign-extended if signed. An unsigned design operand as wide as its port has no exact representation on this block.<br>  timing: the block is combinational; <code>result</code> is valid in the same cycle the inputs are applied (no clock port).<br>  Wire EVERY operand of the fused region onto the input ports (name them exactly as above); drive the region's real consumer from the output port. Tie unused term ports to 0. Do not leave input ports unconnected.</p><p>Regions selected by the approved plan: 9 — bilinearintrp.$mul$raygentop.v:2874$348, bilinearintrp.$mul$raygentop.v:2875$349, bilinearintrp.$mul$raygentop.v:2876$350, bilinearintrp.$mul$raygentop.v:2877$351, bilinearintrp.$mul$raygentop.v:2878$352, bilinearintrp.$mul$raygentop.v:2879$353, bilinearintrp.$mul$raygentop.v:2880$354, bilinearintrp.$mul$raygentop.v:2881$355, bilinearintrp.$mul$raygentop.v:2882$356. They already feed the common reduction 'Three separate 3-term barycentric dot products inside <code>bilinearintrp</code> (raygentop.v:2884-2886): <code>assign r = i1r + i2r + i3r</code> (regions $348,$349,$350), <code>assign g = i1g + i2g + i3g</code> (regions $351,$352,$353), <code>assign b = i1b + i2b + i3b</code> (regions $354,$355,$356). Each reduction is fused independently; no product is ever moved across colour channels.'. Each 'comb_mult_add_16_mode' block fuses 1 product term(s); the plan below states how the 9 regions map onto block instances. Fuse only these existing terms; do not invent new ones.<br>Rules: edit Verilog source only; preserve the module's live inputs/outputs and its downstream<br>consumers; do not introduce operations or datatypes absent from the design unless this tier<br>admits a variant; keep the surrounding design unchanged for T1/T2. Do not fabricate terms merely<br>to match a mode's n_terms — that is not representative.<br>Output rules: your edit is verified automatically and no human reads this, so do not<br>end with a question or an offer; state what you changed and stop.</p><p>Follow this approved plan:<br>I'll read the source first.</p><p>TIER: T2<br>REGIONS: bilinearintrp.$mul$raygentop.v:2874$348, bilinearintrp.$mul$raygentop.v:2875$349, bilinearintrp.$mul$raygentop.v:2876$350, bilinearintrp.$mul$raygentop.v:2877$351, bilinearintrp.$mul$raygentop.v:2878$352, bilinearintrp.$mul$raygentop.v:2879$353, bilinearintrp.$mul$raygentop.v:2880$354, bilinearintrp.$mul$raygentop.v:2881$355, bilinearintrp.$mul$raygentop.v:2882$356<br>SHARED_REDUCTION: Three separate 3-term barycentric dot products inside <code>bilinearintrp</code> (raygentop.v:2884-2886): <code>assign r = i1r + i2r + i3r</code> (regions $348,$349,$350), <code>assign g = i1g + i2g + i3g</code> (regions $351,$352,$353), <code>assign b = i1b + i2b + i3b</code> (regions $354,$355,$356). Each reduction is fused independently; no product is ever moved across colour channels.</p><p>MAPPING:<br>Per channel C in {r, g, b}, the existing three product terms <code>ul*Cul</code>, <code>vl*Cvl</code>, <code>wl*Cwl</code> are mapped onto a 3-deep chain of <code>comb_mult_add_16</code> instances (9 instances total, 3 per reduction). All operands are unsigned and strictly narrower than the 16-bit ports (<code>ul</code>/<code>vl</code>/<code>wl</code> are 8-bit, <code>Cul</code>/<code>Cvl</code>/<code>Cwl</code> are 7-bit), so they are zero-extended into the signed ports and always land in the non-negative half of INT16 — the mapping is exact, not an approximation.</p><p>Red channel (green/blue identical with gu/gv/gw, bu/bv/bw):</p><ul><li><code>mac_r0</code>: ax = {8'b0, wl}, ay = {9'b0, rwl}, bx = 32'd0 (head of chain, unused addend tied to 0), result → wire <code>pr0[63:0]</code> = wl*rwl.</li><li><code>mac_r1</code>: ax = {8'b0, vl}, ay = {9'b0, rvl}, bx = pr0[31:0], result → wire <code>pr1[63:0]</code> = vl*rvl + wl*rwl.</li><li><code>mac_r2</code>: ax = {8'b0, ul}, ay = {9'b0, rul}, bx = pr1[31:0], result → wire <code>pr2[63:0]</code> = ul*rul + vl*rvl + wl*rwl (the complete reduction).</li><li><code>pr2[16:0]</code> is captured by a new 17-bit register <code>sumr</code> in the same <code>always @(posedge clk)</code> block that formerly held <code>i1r/i2r/i3r</code>; <code>assign r = sumr[6:0]</code>.</li></ul><p>PLAN:</p><ol><li>Delete the nine <code>i1r/i2r/i3r/i1g/.../i3b</code> 15-bit product registers and their nine <code>&lt;=</code> multiply statements (lines 2874-2882). Replace them with three 17-bit registers <code>sumr</code>, <code>sumg</code>, <code>sumb</code>, each assigned the corresponding chain output inside the same clocked block, driven by the same operand values (<code>ul</code>, <code>vl</code>, <code>wl</code>, <code>rul</code>…<code>bwl</code>) already registered one cycle earlier at lines 2863-2873. Those latching statements are untouched, so the operand pipeline stage is unchanged.</li><li>Replace <code>assign r/g/b = i1+i2+i3</code> with <code>assign r = sumr[6:0];</code> <code>assign g = sumg[6:0];</code> <code>assign b = sumb[6:0];</code>.</li><li>Live interface preservation: module ports (<code>u01a</code>…<code>v10c</code>, <code>selectuv</code>, <code>ru</code>…<code>bw</code>, <code>r</code>, <code>g</code>, <code>b</code>, <code>clk</code>) are unchanged, so the instantiation <code>bilinearintrp bilinearimp (…, blr, blg, blb, clk)</code> at raygentop.v:2012 needs no edit. Downstream consumers <code>blr/blg/blb</code> (packed into <code>temp_shadedata{a,b,c}[20:0]</code> at lines 2265-2267, 2423-2425, 2482-2484, and <code>blb/blg</code> feeding <code>linearmap</code> at line 2011) see bit-identical values on identical cycles.</li><li>Cycle-accuracy argument: today the three products are registered at edge N and summed combinationally after edge N; after the change the sum of the same three products (same operand values, same edge) is registered at edge N and <code>r</code> is a direct slice of that register. Both produce the final value in the window after edge N — one pipeline stage in, one stage out, no latency change. Bit-exactness: the original expression is evaluated at 15-bit width and truncated to the 7-bit output, i.e. <code>r</code> = low 7 bits of the true sum; the fused chain computes the true sum exactly (max 3·255·127 = 97155, well inside the 32-bit <code>bx</code> and 64-bit <code>result</code> paths) and takes the same low 7 bits. Carry-in/truncation semantics are therefore identical, not merely "close".</li><li>Introduced operations/datatypes: NONE. No new arithmetic family, no signed/unsigned reinterpretation of any design value (zero-extension of unsigned operands into the signed ports is the documented exact widening), no width change on any live signal. Every <code>comb_mult_add_16</code> port is driven: <code>bx</code> is tied to 32'd0 only on the head of each chain; <code>ax</code>/<code>ay</code> always carry a real operand.</li><li>Why not <code>matmult</code> (regions $15…$23), despite it also being a 3-term dot product: (a) its operands <code>Ax/Ay/Az</code> and <code>m11…m33</code> are 16-bit unsigned values multiplied with Verilog <code>*</code> — an unsigned operand exactly as wide as the 16-bit signed port has no exact representation on this block; (b) its reduction at lines 2348-2350 sums <em>truncated</em> slices <code>am[30:15]</code> of the registered products, so folding an add into the multiply (which adds full-width products before truncation) changes the result by the carry out of the discarded low 15 bits. Both make a function-preserving T1/T2 mapping impossible there, so <code>matmult</code> is deliberately left alone.</li><li>Risks: (i) Stage-1 combinational depth grows from one 8×7 multiply to multiply + two 32-bit adds chained through three hard blocks — Fmax on the <code>bilinearintrp</code> product stage may drop; if it becomes critical, the chain per channel can be shortened to two blocks (one <code>comb_mult_add_16</code> fusing two terms, third product left as-is) with no change to the exactness argument. (ii) Synthesis of <code>pr1[31:0]</code> feeding <code>bx</code> must not be inferred as a signed/unsigned mismatch — values are provably &lt; 2^17 so the two's-complement interpretation is positive in all cases. (iii) The removed <code>i1*/i2*/i3*</code> regs must be scrubbed everywhere (they have no other readers in the file — verified: only lines 2884-2886), otherwise synthesis leaves dangling registers.</li></ol><p>Work iteratively IN THIS SESSION: after each edit, run <code>bash check.sh raygentop.v</code> and read its output; if it does not synthesize, fix the RTL and check again. Do NOT run place-and-route or any VTR/vpr command — that is verified separately. Stop when check.sh reports it synthesizes cleanly and its cell census shows the intended arithmetic. Then state what you changed. You are one step of an automated pipeline: your edit is verified automatically and no human reads this, so do not end with a question or an offer.</p></div><div class="label">response</div><div class="md response"><p class="md-note">2 paragraph breaks restored by the export, where the recorder joined text blocks with no separator.</p><p>I'll start by reading the relevant source region.</p><p>Now I'll make the edits.</p><p>I edited only the <code>bilinearintrp</code> module in <code>/work/raygentop.v</code>.</p><p><strong>What changed</strong></p><ol><li><strong>Declarations</strong> (was lines 2799–2807): removed the nine 15-bit product registers <code>i1r/i2r/i3r/i1g/i2g/i3g/i1b/i2b/i3b</code>. Added three 17-bit accumulator registers <code>sumr/sumg/sumb</code> and nine 64-bit wires <code>prr0..prr2</code>, <code>prg0..prg2</code>, <code>prb0..prb2</code> for the hard-block outputs.</li><li><strong>Clocked block</strong> (was lines 2874–2882): the nine <code>&lt;= ul*rul</code> … <code>&lt;= wl*bwl</code> multiply statements were replaced by <code>sumr &lt;= prr2[16:0]</code>, <code>sumg &lt;= prg2[16:0]</code>, <code>sumb &lt;= prb2[16:0]</code>. The operand-latching statements above them (<code>ul/vl/wl/rul…bwl</code>) are untouched, so the operand pipeline stage is unchanged.</li><li><p><strong>Fused region</strong>: nine <code>comb_mult_add_16</code> instances, three per colour channel, chained so each channel computes its full 3-term barycentric dot product:</p><ul><li><code>mac_C0</code>: <code>ax={8'b0,wl}</code>, <code>ay={9'b0,Cwl}</code>, <code>bx=32'b0</code> (chain head, unused addend tied to 0)</li><li><code>mac_C1</code>: <code>ax={8'b0,vl}</code>, <code>ay={9'b0,Cvl}</code>, <code>bx=prC0[31:0]</code></li><li><code>mac_C2</code>: <code>ax={8'b0,ul}</code>, <code>ay={9'b0,Cul}</code>, <code>bx=prC1[31:0]</code> → the complete reduction</li></ul></li></ol><p>   Every operand of each fused region is on a real port; no input port is left unconnected. All operands are unsigned and narrower than their ports (8-bit <code>ul/vl/wl</code>, 7-bit <code>Cul/Cvl/Cwl</code>), so zero-extension into the signed INT16 ports is exact and every value lands in the non-negative half.</p><ol start="4"><li><strong>Consumers</strong> (was lines 2884–2886): <code>assign r/g/b = (i1+i2+i3)</code> became <code>assign r = sumr[6:0]; assign g = sumg[6:0]; assign b = sumb[6:0];</code> — the mode's real consumers are driven from <code>result</code>. Module ports and all downstream users (<code>blr/blg/blb</code> into <code>temp_shadedata*</code> and <code>linearmap</code>) are unchanged, same latency (one register stage), and bit-identical since the max sum 3·255·127 = 97155 fits well inside the 32-bit <code>bx</code>/64-bit <code>result</code> path and the same low 7 bits are taken.</li></ol><p><strong>Verification</strong>: <code>bash check.sh raygentop.v</code> reports <code>OK: synthesizes cleanly</code> with no yosys warnings or errors. The cell census shows <code>comb_mult_add_16 = 9</code> and <code>$mul = 9</code> — the nine soft multipliers that remain are <code>matmult</code>'s, which the plan deliberately excludes (its 16-bit unsigned operands have no exact representation on this signed block, and its reduction sums truncated slices).</p></div><details class="inner"><summary>tool events <span class="meta">9 recorded, 0 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> ls /work</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "ls /work"
+}</pre><div class="label">output</div><pre class="plain">check.sh
+raygentop.v
+</pre></div></details><details class="inner"><summary><code>read</code> <span class="meta"><span class="ok">completed</span> /work/raygentop.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "filePath": "/work/raygentop.v",
+ "offset": 2830,
+ "limit": 80
+}</pre><div class="label">output</div><pre class="plain">&lt;path&gt;/work/raygentop.v&lt;/path&gt;
+&lt;type&gt;file&lt;/type&gt;
+&lt;content&gt;
+2830: 						 v = v01b ; 
+2831:                        end
+2832:               3'b010 :
+2833:                        begin
+2834:                           u = u01c ; 
+2835:                           v = v01c ; 
+2836:                        end
+2837:               3'b100 :
+2838:                        begin
+2839:                           u = u10a ; 
+2840:                           v = v10a ; 
+2841:                        end
+2842:               3'b101 :
+2843:                        begin
+2844:                           u = u10b ; 
+2845:                           v = v10b ; 
+2846:                        end
+2847:               3'b110 :
+2848:                        begin
+2849:                           u = u10c ; 
+2850:                           v = v10c ; 
+2851:                        end
+2852:               default :
+2853:                        begin
+2854:                           u = 0;
+2855:                           v = 0;
+2856:                        end
+2857:            endcase 
+2858:         end 
+2859: 
+2860:         always @(posedge clk)
+2861:         begin
+2862:            wl &lt;= 8'b11111111 - u - v ; 
+2863:            ul &lt;= u ; 
+2864:            vl &lt;= v ; 
+2865:            rul &lt;= ru ; 
+2866:            rvl &lt;= rv ; 
+2867:            rwl &lt;= rw ; 
+2868:            gul &lt;= gu ; 
+2869:            gvl &lt;= gv ; 
+2870:            gwl &lt;= gw ; 
+2871:            bul &lt;= bu ; 
+2872:            bvl &lt;= bv ; 
+2873:            bwl &lt;= bw ; 
+2874:            i1r &lt;= ul * rul ; 
+2875:            i2r &lt;= vl * rvl ; 
+2876:            i3r &lt;= wl * rwl ; 
+2877:            i1g &lt;= ul * gul ; 
+2878:            i2g &lt;= vl * gvl ; 
+2879:            i3g &lt;= wl * gwl ; 
+2880:            i1b &lt;= ul * bul ; 
+2881:            i2b &lt;= vl * bvl ; 
+2882:            i3b &lt;= wl * bwl ;  
+2883:         end 
+2884:         assign r = (i1r + i2r + i3r) ;
+2885:         assign g = (i1g + i2g + i3g) ;
+2886:         assign b = (i1b + i2b + i3b) ;
+2887:      endmodule
+2888: 
+2889: 
+2890: 
+2891: module fifo3 (datain, writeen, dataout, shiften, globalreset, clk);
+2892: 
+2893:     input[18 - 1:0] datain; 
+2894:     input writeen; 
+2895:     output[18 - 1:0] dataout; 
+2896:     wire[18 - 1:0] dataout;
+2897:     input shiften; 
+2898:     input globalreset; 
+2899:     input clk; 
+2900: 
+2901:     reg[18 - 1:0] data0; 
+2902:     reg[18 - 1:0] data1; 
+2903:     reg[18 - 1:0] data2; 
+2904: 
+2905:     reg[1:0] pos; 
+2906: 
+2907:     assign dataout = data0 ;
+2908: 
+2909:     always @(posedge clk)
+
+(Showing lines 2830-2909 of 2978. Use offset=2910 to continue.)
+&lt;/content&gt;</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> grep -n "module bilinearintrp" -A 80 /work/raygentop.v | head -100; echo ---; cat /work/check.sh</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "grep -n \"module bilinearintrp\" -A 80 /work/raygentop.v | head -100; echo ---; cat /work/check.sh"
+}</pre><div class="label">output</div><pre class="plain">2762:     module bilinearintrp (u01a, u01b, u01c, v01a, v01b, v01c, u10a, u10b, u10c, v10a, v10b, v10c, selectuv, ru, rv, rw, gu, gv, gw, bu, bv, bw, r, g, b, clk);
+2763-
+2764-        input[7:0] u01a; 
+2765-        input[7:0] u01b; 
+2766-        input[7:0] u01c; 
+2767-        input[7:0] v01a; 
+2768-        input[7:0] v01b; 
+2769-        input[7:0] v01c; 
+2770-        input[7:0] u10a; 
+2771-        input[7:0] u10b; 
+2772-        input[7:0] u10c; 
+2773-        input[7:0] v10a; 
+2774-        input[7:0] v10b; 
+2775-        input[7:0] v10c; 
+2776-        input[2:0] selectuv; 
+2777-        input[6:0] ru; 
+2778-        input[6:0] rv; 
+2779-        input[6:0] rw; 
+2780-        input[6:0] gu; 
+2781-        input[6:0] gv; 
+2782-        input[6:0] gw; 
+2783-        input[6:0] bu; 
+2784-        input[6:0] bv; 
+2785-        input[6:0] bw; 
+2786-        output[6:0] r; 
+2787-        wire[6:0] r;
+2788-        output[6:0] g; 
+2789-        wire[6:0] g;
+2790-        output[6:0] b; 
+2791-        wire[6:0] b;
+2792-        input clk; 
+2793-
+2794-        reg[7:0] u; 
+2795-        reg[7:0] v; 
+2796-        reg[7:0] ul; 
+2797-        reg[7:0] vl; 
+2798-        reg[7:0] wl; 
+2799-        reg[14:0] i1b; 
+2800-        reg[14:0] i2b; 
+2801-        reg[14:0] i3b; 
+2802-        reg[14:0] i1g; 
+2803-        reg[14:0] i2g; 
+2804-        reg[14:0] i3g; 
+2805-        reg[14:0] i1r; 
+2806-        reg[14:0] i2r; 
+2807-        reg[14:0] i3r; 
+2808-        reg[6:0] rul; 
+2809-        reg[6:0] rvl; 
+2810-        reg[6:0] rwl; 
+2811-        reg[6:0] gul; 
+2812-        reg[6:0] gvl; 
+2813-        reg[6:0] gwl; 
+2814-        reg[6:0] bul; 
+2815-        reg[6:0] bvl; 
+2816-        reg[6:0] bwl; 
+2817-
+2818-        always @(selectuv or u01a or u01b or u01c or v01a or v01b or v01c or u10a or 
+2819-                 u10b or u10c or v10a or v10b or v10c)
+2820-        begin
+2821-           case (selectuv)
+2822-              3'b000 :
+2823-                       begin
+2824-                          u = u01a ; 
+2825-                          v = v01a ; 
+2826-                       end
+2827-              3'b001 :
+2828-                       begin
+2829-                          u = u01b ; 
+2830-						 v = v01b ; 
+2831-                       end
+2832-              3'b010 :
+2833-                       begin
+2834-                          u = u01c ; 
+2835-                          v = v01c ; 
+2836-                       end
+2837-              3'b100 :
+2838-                       begin
+2839-                          u = u10a ; 
+2840-                          v = v10a ; 
+2841-                       end
+2842-              3'b101 :
+---
+#!/usr/bin/env bash
+# Inner-loop check: syntax + elaboration + cell census. NOT place-and-route.
+# usage: bash check.sh &lt;file.v&gt;
+# Runs plain yosys (read_verilog; hierarchy; proc; opt; stat) on the one file: no arch, no
+# parmys, no hard-block library. Prints one pass/fail line, then the cell census of the whole
+# design (the last "Number of cells" table yosys prints): soft arithmetic as $mul/$add/$sub,
+# registers as $dff*/$sdff*, memories as $mem*, muxes as $mux/$pmux, and every instantiated
+# module by name, which is where a hard-block instantiation such as comb_mult_add_16 shows up
+# with its instance count.
+set -u
+f="${1:?usage: check.sh &lt;file.v&gt;}"
+out="$(yosys -p "read_verilog $f; hierarchy -auto-top; proc; opt; stat" 2&gt;&amp;1)"
+rc=$?
+if [ $rc -ne 0 ]; then
+  echo "FAIL: does not synthesize (yosys exit $rc)"
+  echo "$out" | grep -iE 'error|warning' | tail -15
+  echo "$out" | tail -10
+  exit 1
+fi
+echo "OK: synthesizes cleanly"
+echo "Cell census (yosys stat, whole design):"
+echo "$out" | awk '/Number of cells:/{buf=$0 "\n"; on=1; next}
+                   on &amp;&amp; /^[[:space:]]+[$A-Za-z_][^[:space:]]*[[:space:]]+[0-9]+[[:space:]]*$/ {buf=buf $0 "\n"; next}
+                   on {on=0}
+                   END{printf "%s", buf}' \
+  | grep -E 'Number of cells|^[[:space:]]+(\$(mul|add|sub|mem|memrd|memwr|dff|dffe|sdff|sdffe|adff|adffe|mux|pmux)|[A-Za-z_])' || true
+…[truncated, 4001 chars total]</pre></div></details><details class="inner"><summary><code>edit</code> <span class="meta"><span class="ok">completed</span> /work/raygentop.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "filePath": "/work/raygentop.v",
+ "oldString": "        reg[14:0] i1b; \n        reg[14:0] i2b; \n        reg[14:0] i3b; \n        reg[14:0] i1g; \n        reg[14:0] i2g; \n        reg[14:0] i3g; \n        reg[14:0] i1r; \n        reg[14:0] i2r; \n        reg[14:0] i3r; \n        reg[6:0] rul; ",
+ "newString": "        reg[16:0] sumr; \n        reg[16:0] sumg; \n        reg[16:0] sumb; \n        wire[63:0] prr0; \n        wire[63:0] prr1; \n        wire[63:0] prr2; \n        wire[63:0] prg0; \n        wire[63:0] prg1; \n        wire[63:0] prg2; \n        wire[63:0] prb0; \n        wire[63:0] prb1; \n        wire[63:0] prb2; \n        reg[6:0] rul; "
+}</pre><div class="label">output</div><pre class="plain">Edit applied successfully.</pre></div></details><details class="inner"><summary><code>edit</code> <span class="meta"><span class="ok">completed</span> /work/raygentop.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "filePath": "/work/raygentop.v",
+ "oldString": "           i1r &lt;= ul * rul ; \n           i2r &lt;= vl * rvl ; \n           i3r &lt;= wl * rwl ; \n           i1g &lt;= ul * gul ; \n           i2g &lt;= vl * gvl ; \n           i3g &lt;= wl * gwl ; \n           i1b &lt;= ul * bul ; \n           i2b &lt;= vl * bvl ; \n           i3b &lt;= wl * bwl ;  \n        end \n        assign r = (i1r + i2r + i3r) ;\n        assign g = (i1g + i2g + i3g) ;\n        assign b = (i1b + i2b + i3b) ;",
+ "newString": "           sumr &lt;= prr2[16:0] ; \n           sumg &lt;= prg2[16:0] ; \n           sumb &lt;= prb2[16:0] ;  \n        end \n\n        // Red channel: ul*rul + vl*rvl + wl*rwl fused onto three comb_mult_add_16 blocks.\n        comb_mult_add_16 mac_r0 (.ax({8'b0, wl}), .ay({9'b0, rwl}), .bx(32'b0),        .result(prr0));\n        comb_mult_add_16 mac_r1 (.ax({8'b0, vl}), .ay({9'b0, rvl}), .bx(prr0[31:0]),   .result(prr1));\n        comb_mult_add_16 mac_r2 (.ax({8'b0, ul}), .ay({9'b0, rul}), .bx(prr1[31:0]),   .result(prr2));\n\n        // Green channel: ul*gul + vl*gvl + wl*gwl\n        comb_mult_add_16 mac_g0 (.ax({8'b0, wl}), .ay({9'b0, gwl}), .bx(32'b0),        .result(prg0));\n        comb_mult_add_16 mac_g1 (.ax({8'b0, vl}), .ay({9'b0, gvl}), .bx(prg0[31:0]),   .result(prg1));\n        comb_mult_add_16 mac_g2 (.ax({8'b0, ul}), .ay({9'b0, gul}), .bx(prg1[31:0]),   .result(prg2));\n\n        // Blue channel: ul*bul + vl*bvl + wl*bwl\n        comb_mult_add_16 mac_b0 (.ax({8'b0, wl}), .ay({9'b0, bwl}), .bx(32'b0),        .result(prb0));\n        comb_mult_add_16 mac_b1 (.ax({8'b0, vl}), .ay({9'b0, bvl}), .bx(prb0[31:0]),   .result(prb1));\n        comb_mult_add_16 mac_b2 (.ax({8'b0, ul}), .ay({9'b0, bul}), .bx(prb1[31:0]),   .result(prb2));\n\n        assign r = sumr[6:0] ;\n        assign g = sumg[6:0] ;\n        assign b = sumb[6:0] ;"
+}</pre><div class="label">output</div><pre class="plain">Edit applied successfully.</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> bash check.sh raygentop.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "bash check.sh raygentop.v",
+ "workdir": "/work"
+}</pre><div class="label">output</div><pre class="plain">OK: synthesizes cleanly
+Cell census (yosys stat, whole design):
+check.sh: line 25: awk: command not found
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> yosys -p "read_verilog raygentop.v; hierarchy -auto-top; proc; opt; stat" 2&gt;&amp;1 | tail -60</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "yosys -p \"read_verilog raygentop.v; hierarchy -auto-top; proc; opt; stat\" 2&gt;&amp;1 | tail -60",
+ "workdir": "/work"
+}</pre><div class="label">output</div><pre class="plain">   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:                  2
+     $dff                            1
+     single_port_ram                 1
+
+=== design hierarchy ===
+
+   paj_raygentop_hierarchy_no_mem      1
+     delay1x3                        1
+     matmult                         1
+     onlyonecycle                    1
+     raygencont                      1
+     raysend                         1
+     resultrecieve                   1
+     resultwriter                    1
+       bilinearintrp                 1
+       col16to21                     1
+       fifo3                         2
+       linearmap                     1
+     rgconfigmemory                  1
+       spram21x4                     1
+     rgsramcontroller                1
+
+   Number of wires:               1832
+   Number of wire bits:           9819
+   Number of public wires:         537
+   Number of public wire bits:    6554
+   Number of memories:               0
+   Number of memory bits:            0
+   Number of processes:              0
+   Number of cells:               1542
+     $add                           21
+     $and                          735
+     $dff                           32
+     $dffe                           4
+     $dlatch                       102
+     $eq                            84
+     $gt                             1
+     $logic_and                     12
+     $logic_not                     12
+     $mul                            9
+     $mux                          126
+     $ne                            10
+     $not                           96
+     $or                            11
+     $pmux                          36
+     $reduce_and                     8
+     $reduce_bool                    5
+     $reduce_or                    138
+     $sdff                          75
+     $sdffe                          8
+     $sub                            7
+     comb_mult_add_16                9
+     single_port_ram                 1
+
+End of script. Logfile hash: 7052b9f6a8, CPU: user 0.83s system 0.01s, MEM: 36.57 MB peak
+Yosys 0.33 (git sha1 2584903a060)
+Time spent: 30% 6x opt_expr (0 sec), 18% 5x opt_merge (0 sec), ...
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> grep -nE "i1r|i2r|i3r|i1g|i2g|i3g|i1b|i2b|i3b" raygentop.v; echo "exit=$?"; yosys -p "read_verilog r…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "grep -nE \"i1r|i2r|i3r|i1g|i2g|i3g|i1b|i2b|i3b\" raygentop.v; echo \"exit=$?\"; yosys -p \"read_verilog raygentop.v; hierarchy -auto-top; proc; opt\" 2&gt;&amp;1 | grep -iE \"warning|error\" | sort | uniq -c | head -20",
+ "workdir": "/work"
+}</pre><div class="label">output</div><pre class="plain">exit=1
+</pre></div></details><details class="inner"><summary><code>read</code> <span class="meta"><span class="ok">completed</span> /work/raygentop.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "filePath": "/work/raygentop.v",
+ "offset": 2858,
+ "limit": 40
+}</pre><div class="label">output</div><pre class="plain">&lt;path&gt;/work/raygentop.v&lt;/path&gt;
+&lt;type&gt;file&lt;/type&gt;
+&lt;content&gt;
+2858:                           v = 0;
+2859:                        end
+2860:            endcase 
+2861:         end 
+2862: 
+2863:         always @(posedge clk)
+2864:         begin
+2865:            wl &lt;= 8'b11111111 - u - v ; 
+2866:            ul &lt;= u ; 
+2867:            vl &lt;= v ; 
+2868:            rul &lt;= ru ; 
+2869:            rvl &lt;= rv ; 
+2870:            rwl &lt;= rw ; 
+2871:            gul &lt;= gu ; 
+2872:            gvl &lt;= gv ; 
+2873:            gwl &lt;= gw ; 
+2874:            bul &lt;= bu ; 
+2875:            bvl &lt;= bv ; 
+2876:            bwl &lt;= bw ; 
+2877:            sumr &lt;= prr2[16:0] ; 
+2878:            sumg &lt;= prg2[16:0] ; 
+2879:            sumb &lt;= prb2[16:0] ;  
+2880:         end 
+2881: 
+2882:         // Red channel: ul*rul + vl*rvl + wl*rwl fused onto three comb_mult_add_16 blocks.
+2883:         comb_mult_add_16 mac_r0 (.ax({8'b0, wl}), .ay({9'b0, rwl}), .bx(32'b0),        .result(prr0));
+2884:         comb_mult_add_16 mac_r1 (.ax({8'b0, vl}), .ay({9'b0, rvl}), .bx(prr0[31:0]),   .result(prr1));
+2885:         comb_mult_add_16 mac_r2 (.ax({8'b0, ul}), .ay({9'b0, rul}), .bx(prr1[31:0]),   .result(prr2));
+2886: 
+2887:         // Green channel: ul*gul + vl*gvl + wl*gwl
+2888:         comb_mult_add_16 mac_g0 (.ax({8'b0, wl}), .ay({9'b0, gwl}), .bx(32'b0),        .result(prg0));
+2889:         comb_mult_add_16 mac_g1 (.ax({8'b0, vl}), .ay({9'b0, gvl}), .bx(prg0[31:0]),   .result(prg1));
+2890:         comb_mult_add_16 mac_g2 (.ax({8'b0, ul}), .ay({9'b0, gul}), .bx(prg1[31:0]),   .result(prg2));
+2891: 
+2892:         // Blue channel: ul*bul + vl*bvl + wl*bwl
+2893:         comb_mult_add_16 mac_b0 (.ax({8'b0, wl}), .ay({9'b0, bwl}), .bx(32'b0),        .result(prb0));
+2894:         comb_mult_add_16 mac_b1 (.ax({8'b0, vl}), .ay({9'b0, bvl}), .bx(prb0[31:0]),   .result(prb1));
+2895:         comb_mult_add_16 mac_b2 (.ax({8'b0, ul}), .ay({9'b0, bul}), .bx(prb1[31:0]),   .result(prb2));
+2896: 
+2897:         assign r = sumr[6:0] ;
+
+(Showing lines 2858-2897 of 2991. Use offset=2898 to continue.)
+&lt;/content&gt;</pre></div></details></div></div></details></div></details><details class="call"><summary>Call 4 · <b>reviewer:acceptance</b> · anthropic/claude-opus-5 · <span class="ok">ok</span> <span class="meta">in 14 · out 6651 · reasoning 0 · cache read 91571 · cache write 12840 · 108.2 s</span></summary><div class="body"><div class="label">prompt</div><div class="md prompt"><p>You are an INDEPENDENT ACCEPTANCE REVIEWER — the gate of record for whether an adapted design is<br>a LEGITIMATE member of its benchmark suite. You did NOT plan or write this edit. Judge only what<br>is in front of you. Your verdict is final and fully automated; there is no human backstop, so err<br>toward rejecting anything you cannot positively ground.</p><p>FRAMING — refute by default. Your job is to find why this adaptation is NOT a legitimate suite<br>member. Assume it is contrived until the evidence shows otherwise. A rewrite that merely "makes<br>the mode appear in the netlist" is NOT sufficient — the mode must do real work the original<br>workload actually implied.</p><p>This case has already passed the deterministic structural, provenance, and (for T3) evidence<br>gates — do not re-litigate those mechanically. Your judgement is the <em>legitimacy</em> call they<br>cannot make: would a real designer of THIS workload ship this, or is it a mode-island / fabricated<br>dot-product / gratuitous variant dressed up to pass?</p><p>REJECT if any of these hold:</p><ul><li>(a) FABRICATED TERMS — a fused N-term product/sum aggregates operands that did not genuinely<br> share a reduction in the original; the "dot product" is manufactured to fill the mode's arity.</li><li>(b) MODE ISLAND / DEAD WORK — the mode's result does not flow to the design's real outputs, or<br> is wired to constants / a sink that the rest of the design ignores.</li><li>(c) ROLE BREAK — the adapted region no longer plays the workload role the witness recorded<br> (e.g. a control-path multiply repurposed as a fake datapath MAC).</li><li>(d) UNGROUNDED VARIANT (T3) — the precision/algorithm variant is not the one the cited sibling<br> design evidences; the adaptation drifts to a workload character the suite does not contain.</li></ul><p>ACCEPT if the adaptation is sound: the mapped arithmetic genuinely existed, the fused terms really<br>shared a reduction, the mode's output drives the original consumers, and the workload role is<br>preserved. Legitimate adaptation need not be optimal — only real.</p><p>You MUST ground your verdict: cite the specific preserved role (from the witness), the real<br>region(s)/reduction the mode maps onto, and — for T3 — the sibling evidence axis. A verdict you<br>cannot ground is a REJECT.</p><p>--- ADAPTATION UNDER REVIEW ---<br>Target mode: comb_mult_add_16_mode   Tier: T2<br>Region witness (the 'before'): role 'bilinearintrp', operation 'multiply', datatype int8,<br>  regions ['bilinearintrp.$mul$raygentop.v:2874$348', 'bilinearintrp.$mul$raygentop.v:2875$349', 'bilinearintrp.$mul$raygentop.v:2876$350', 'bilinearintrp.$mul$raygentop.v:2877$351', 'bilinearintrp.$mul$raygentop.v:2878$352', 'bilinearintrp.$mul$raygentop.v:2879$353', 'bilinearintrp.$mul$raygentop.v:2880$354', 'bilinearintrp.$mul$raygentop.v:2881$355', 'bilinearintrp.$mul$raygentop.v:2882$356'], shared reduction 'Three separate 3-term barycentric dot products inside <code>bilinearintrp</code> (raygentop.v:2884-2886): <code>assign r = i1r + i2r + i3r</code> (regions $348,$349,$350), <code>assign g = i1g + i2g + i3g</code> (regions $351,$352,$353), <code>assign b = i1b + i2b + i3b</code> (regions $354,$355,$356). Each reduction is fused independently; no product is ever moved across colour channels.', downstream consumers ['bilinearintrp'].<br>Manifest (the 'after'): introduced operations [], introduced datatypes<br>  [], intended consumers ['bilinearintrp'].<br>Deterministic gates: PASSED. Evidence floor: no variant introduced (T1/T2).<br>Packed netlist: target mode present = True.</p><p>--- EDIT DIFF ---<br>--- outputs/adapt/vtr_demo/raygentop/comb_mult_add_16_mode/20260913-195430-d2386a/edit/.pristine/raygentop/raygentop.v	2026-08-16 18:14:11.414163698 -0700<br>+++ outputs/adapt/vtr_demo/raygentop/comb_mult_add_16_mode/20260913-195430-d2386a/edit/raygentop/raygentop.v	2026-09-13 19:58:03.982923220 -0700<br>@@ -2796,15 +2796,18 @@<br>         reg[7:0] ul; <br>         reg[7:0] vl; <br>         reg[7:0] wl; </p><ul><li>reg[14:0] i1b; </li><li>reg[14:0] i2b; </li><li>reg[14:0] i3b; </li><li>reg[14:0] i1g; </li><li>reg[14:0] i2g; </li><li>reg[14:0] i3g; </li><li>reg[14:0] i1r; </li><li>reg[14:0] i2r; </li><li>reg[14:0] i3r; </li><li>reg[16:0] sumr; </li><li>reg[16:0] sumg; </li><li>reg[16:0] sumb; </li><li>wire[63:0] prr0; </li><li>wire[63:0] prr1; </li><li>wire[63:0] prr2; </li><li>wire[63:0] prg0; </li><li>wire[63:0] prg1; </li><li>wire[63:0] prg2; </li><li>wire[63:0] prb0; </li><li>wire[63:0] prb1; </li><li><p>wire[63:0] prb2; <br>        reg[6:0] rul; <br>        reg[6:0] rvl; <br>        reg[6:0] rwl; <br>@@ -2871,19 +2874,29 @@<br>           bul &lt;= bu ; <br>           bvl &lt;= bv ; <br>           bwl &lt;= bw ; </p></li><li>i1r &lt;= ul * rul ; </li><li>i2r &lt;= vl * rvl ; </li><li>i3r &lt;= wl * rwl ; </li><li>i1g &lt;= ul * gul ; </li><li>i2g &lt;= vl * gvl ; </li><li>i3g &lt;= wl * gwl ; </li><li>i1b &lt;= ul * bul ; </li><li>i2b &lt;= vl * bvl ; </li><li>i3b &lt;= wl * bwl ;  </li><li>sumr &lt;= prr2[16:0] ; </li><li>sumg &lt;= prg2[16:0] ; </li><li><p>sumb &lt;= prb2[16:0] ;  <br>        end </p></li><li>assign r = (i1r + i2r + i3r) ;</li><li>assign g = (i1g + i2g + i3g) ;</li><li>assign b = (i1b + i2b + i3b) ;<br>+</li><li>// Red channel: ul*rul + vl*rvl + wl*rwl fused onto three comb_mult_add_16 blocks.</li><li>comb_mult_add_16 mac_r0 (.ax({8'b0, wl}), .ay({9'b0, rwl}), .bx(32'b0),        .result(prr0));</li><li>comb_mult_add_16 mac_r1 (.ax({8'b0, vl}), .ay({9'b0, rvl}), .bx(prr0[31:0]),   .result(prr1));</li><li>comb_mult_add_16 mac_r2 (.ax({8'b0, ul}), .ay({9'b0, rul}), .bx(prr1[31:0]),   .result(prr2));<br>+</li><li>// Green channel: ul*gul + vl*gvl + wl*gwl</li><li>comb_mult_add_16 mac_g0 (.ax({8'b0, wl}), .ay({9'b0, gwl}), .bx(32'b0),        .result(prg0));</li><li>comb_mult_add_16 mac_g1 (.ax({8'b0, vl}), .ay({9'b0, gvl}), .bx(prg0[31:0]),   .result(prg1));</li><li>comb_mult_add_16 mac_g2 (.ax({8'b0, ul}), .ay({9'b0, gul}), .bx(prg1[31:0]),   .result(prg2));<br>+</li><li>// Blue channel: ul*bul + vl*bvl + wl*bwl</li><li>comb_mult_add_16 mac_b0 (.ax({8'b0, wl}), .ay({9'b0, bwl}), .bx(32'b0),        .result(prb0));</li><li>comb_mult_add_16 mac_b1 (.ax({8'b0, vl}), .ay({9'b0, bvl}), .bx(prb0[31:0]),   .result(prb1));</li><li>comb_mult_add_16 mac_b2 (.ax({8'b0, ul}), .ay({9'b0, bul}), .bx(prb1[31:0]),   .result(prb2));<br>+</li><li>assign r = sumr[6:0] ;</li><li>assign g = sumg[6:0] ;</li><li><p>assign b = sumb[6:0] ;<br>     endmodule</p></li></ul><p>Your FIRST line must be exactly 'ACCEPT' or 'REJECT'. Then, on the following lines, state the<br>grounding (role preserved / real region mapped / sibling evidence) or the specific violation<br>(a/b/c/d) and what makes it illegitimate.<br>Output rules: no preamble before the verdict line — examine the file first, then write.<br>Your verdict is final and applied automatically, so do not end with a question or an<br>offer.</p><p>Read these files in this directory: raygentop.v</p></div><div class="label">response</div><div class="md response"><p class="md-note">1 paragraph break restored by the export, where the recorder joined text blocks with no separator.</p><p>I'll examine the actual file before rendering a verdict.</p><p>ACCEPT</p><p><strong>Grounding</strong></p><p><em>Role preserved (witness → file).</em> The witness records role <code>bilinearintrp</code> / operation <code>multiply</code> / int8, consumer <code>bilinearintrp</code>. In <code>/work/raygentop.v</code> the adapted region is still inside <code>module bilinearintrp</code> (line 2762), still consumes the same latched barycentric weights (<code>ul</code>, <code>vl</code>, <code>wl</code> from lines 2865–2867, where <code>wl &lt;= 8'b11111111 - u - v</code> is the genuine third barycentric coordinate) and the same latched per-vertex colour channels (<code>rul/rvl/rwl</code>, <code>gul/gvl/gwl</code>, <code>bul/bvl/bwl</code>, lines 2868–2876). It remains a datapath colour-interpolation MAC, not a repurposed control multiply. No role break (c).</p><p><em>Real reduction mapped — not fabricated (a).</em> The removed lines show the original reductions verbatim: <code>i1r &lt;= ul*rul; i2r &lt;= vl*rvl; i3r &lt;= wl*rwl;</code> → <code>assign r = (i1r + i2r + i3r)</code>, and identically for g and b. The nine witness regions <code>$348–$356</code> are exactly these nine products. The fusion respects the witness constraint that "no product is ever moved across colour channels": <code>mac_r{0,1,2}</code> carry only red operands, <code>mac_g*</code> only green, <code>mac_b*</code> only blue, and each chain's <code>bx</code> accumulator links only within its own channel (<code>prr0→prr1→prr2</code>). The arity is filled by terms that genuinely shared the reduction; nothing was borrowed from another channel or another reduction to reach three terms. The <code>bx(32'b0)</code> on <code>mac_r0/g0/b0</code> is the standard head-of-accumulation-chain idiom, not a constant-wired sink — its product <code>wl*rwl</code> propagates through the chain.</p><p><em>Not a mode island (b).</em> <code>prr2/prg2/prb2 → sumr/sumg/sumb</code> (lines 2877–2879) → <code>r/g/b</code> (2897–2899) → the module's original output ports → <code>blr/blg/blb</code> at the instantiation on line 2012 → <code>shadedata</code> writes at lines 2265–2267, 2423–2425, 2482–2484. The mode's result reaches the identical downstream consumers the original <code>assign r/g/b</code> fed. No dangling MAC outputs; every instantiated block's result is either chained or committed.</p><p><em>Semantics preserved.</em> Output width and truncation match the original: max value <code>255*127*3 = 97155 &lt; 2^17</code>, so <code>sum*[16:0]</code> holds the exact 3-term sum, and <code>r = sumr[6:0]</code> reproduces the original <code>assign r = i1r+i2r+i3r</code> truncation to <code>output[6:0]</code> bit-exactly (the original's 15-bit expression wrap does not disturb the low 7 bits). Latency is also unchanged at two register stages (inputs latched, then product/sum latched).</p><p><em>Tier.</em> T2 — manifest introduces no new operations or datatypes, so the T3 sibling-evidence axis does not apply and no variant drift is possible.</p><p><strong>Non-blocking observation</strong> (outside this gate, already covered by the passed structural/packing gate): the chain places three serial multiply-adds in one register-to-register path where the original had a single multiply plus a comb adder tree, and only <code>ax/ay/bx/result</code> are bound on each block. That is a QoR/port-binding matter for the model conformance check, not a legitimacy defect — the adaptation is real, not contrived.</p></div><details class="inner"><summary>tool events <span class="meta">6 recorded, 0 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> ls -la /work; find / -name "raygentop.v" -not -path "*/proc/*" 2&gt;/dev/null | head -50</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "ls -la /work; find / -name \"raygentop.v\" -not -path \"*/proc/*\" 2&gt;/dev/null | head -50"
+}</pre><div class="label">output</div><pre class="plain">total 88
+drwx------ 2 samu samu  4096 Sep 14 02:59 .
+drwxr-xr-x 9 samu samu   260 Sep 14 02:59 ..
+-rw-rw-r-- 1 samu samu 85822 Sep 14 02:58 raygentop.v
+/work/raygentop.v
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> grep -n "bilinearintrp\|comb_mult_add_16" /work/raygentop.v | head -60</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "grep -n \"bilinearintrp\\|comb_mult_add_16\" /work/raygentop.v | head -60"
+}</pre><div class="label">output</div><pre class="plain">2012:    bilinearintrp bilinearimp (u01a, u01b, u01c, v01a, v01b, v01c, u10a, u10b, u10c, v10a, v10b, v10c, selectuv, shadedata[41:35], shadedata[62:56], shadedata[20:14], shadedata[34:28], shadedata[55:49], shadedata[13:7], shadedata[27:21], shadedata[48:42], shadedata[6:0], blr, blg, blb, clk); 
+2762:     module bilinearintrp (u01a, u01b, u01c, v01a, v01b, v01c, u10a, u10b, u10c, v10a, v10b, v10c, selectuv, ru, rv, rw, gu, gv, gw, bu, bv, bw, r, g, b, clk);
+2882:        // Red channel: ul*rul + vl*rvl + wl*rwl fused onto three comb_mult_add_16 blocks.
+2883:        comb_mult_add_16 mac_r0 (.ax({8'b0, wl}), .ay({9'b0, rwl}), .bx(32'b0),        .result(prr0));
+2884:        comb_mult_add_16 mac_r1 (.ax({8'b0, vl}), .ay({9'b0, rvl}), .bx(prr0[31:0]),   .result(prr1));
+2885:        comb_mult_add_16 mac_r2 (.ax({8'b0, ul}), .ay({9'b0, rul}), .bx(prr1[31:0]),   .result(prr2));
+2888:        comb_mult_add_16 mac_g0 (.ax({8'b0, wl}), .ay({9'b0, gwl}), .bx(32'b0),        .result(prg0));
+2889:        comb_mult_add_16 mac_g1 (.ax({8'b0, vl}), .ay({9'b0, gvl}), .bx(prg0[31:0]),   .result(prg1));
+2890:        comb_mult_add_16 mac_g2 (.ax({8'b0, ul}), .ay({9'b0, gul}), .bx(prg1[31:0]),   .result(prg2));
+2893:        comb_mult_add_16 mac_b0 (.ax({8'b0, wl}), .ay({9'b0, bwl}), .bx(32'b0),        .result(prb0));
+2894:        comb_mult_add_16 mac_b1 (.ax({8'b0, vl}), .ay({9'b0, bvl}), .bx(prb0[31:0]),   .result(prb1));
+2895:        comb_mult_add_16 mac_b2 (.ax({8'b0, ul}), .ay({9'b0, bul}), .bx(prb1[31:0]),   .result(prb2));
+</pre></div></details><details class="inner"><summary><code>read</code> <span class="meta"><span class="ok">completed</span> /work/raygentop.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "filePath": "/work/raygentop.v",
+ "offset": 2755,
+ "limit": 150
+}</pre><div class="label">output</div><pre class="plain">&lt;path&gt;/work/raygentop.v&lt;/path&gt;
+&lt;type&gt;file&lt;/type&gt;
+&lt;content&gt;
+2755:                    begin
+2756:                       addr &lt;= start + ({13'b0000000000000, ul[6:2]}) + ({4'b0000, vl, 7'b0000000}) ; 
+2757: 
+2758:                    end
+2759:        endcase  
+2760:     end 
+2761:  endmodule
+2762:      module bilinearintrp (u01a, u01b, u01c, v01a, v01b, v01c, u10a, u10b, u10c, v10a, v10b, v10c, selectuv, ru, rv, rw, gu, gv, gw, bu, bv, bw, r, g, b, clk);
+2763: 
+2764:         input[7:0] u01a; 
+2765:         input[7:0] u01b; 
+2766:         input[7:0] u01c; 
+2767:         input[7:0] v01a; 
+2768:         input[7:0] v01b; 
+2769:         input[7:0] v01c; 
+2770:         input[7:0] u10a; 
+2771:         input[7:0] u10b; 
+2772:         input[7:0] u10c; 
+2773:         input[7:0] v10a; 
+2774:         input[7:0] v10b; 
+2775:         input[7:0] v10c; 
+2776:         input[2:0] selectuv; 
+2777:         input[6:0] ru; 
+2778:         input[6:0] rv; 
+2779:         input[6:0] rw; 
+2780:         input[6:0] gu; 
+2781:         input[6:0] gv; 
+2782:         input[6:0] gw; 
+2783:         input[6:0] bu; 
+2784:         input[6:0] bv; 
+2785:         input[6:0] bw; 
+2786:         output[6:0] r; 
+2787:         wire[6:0] r;
+2788:         output[6:0] g; 
+2789:         wire[6:0] g;
+2790:         output[6:0] b; 
+2791:         wire[6:0] b;
+2792:         input clk; 
+2793: 
+2794:         reg[7:0] u; 
+2795:         reg[7:0] v; 
+2796:         reg[7:0] ul; 
+2797:         reg[7:0] vl; 
+2798:         reg[7:0] wl; 
+2799:         reg[16:0] sumr; 
+2800:         reg[16:0] sumg; 
+2801:         reg[16:0] sumb; 
+2802:         wire[63:0] prr0; 
+2803:         wire[63:0] prr1; 
+2804:         wire[63:0] prr2; 
+2805:         wire[63:0] prg0; 
+2806:         wire[63:0] prg1; 
+2807:         wire[63:0] prg2; 
+2808:         wire[63:0] prb0; 
+2809:         wire[63:0] prb1; 
+2810:         wire[63:0] prb2; 
+2811:         reg[6:0] rul; 
+2812:         reg[6:0] rvl; 
+2813:         reg[6:0] rwl; 
+2814:         reg[6:0] gul; 
+2815:         reg[6:0] gvl; 
+2816:         reg[6:0] gwl; 
+2817:         reg[6:0] bul; 
+2818:         reg[6:0] bvl; 
+2819:         reg[6:0] bwl; 
+2820: 
+2821:         always @(selectuv or u01a or u01b or u01c or v01a or v01b or v01c or u10a or 
+2822:                  u10b or u10c or v10a or v10b or v10c)
+2823:         begin
+2824:            case (selectuv)
+2825:               3'b000 :
+2826:                        begin
+2827:                           u = u01a ; 
+2828:                           v = v01a ; 
+2829:                        end
+2830:               3'b001 :
+2831:                        begin
+2832:                           u = u01b ; 
+2833: 						 v = v01b ; 
+2834:                        end
+2835:               3'b010 :
+2836:                        begin
+2837:                           u = u01c ; 
+2838:                           v = v01c ; 
+2839:                        end
+2840:               3'b100 :
+2841:                        begin
+2842:                           u = u10a ; 
+2843:                           v = v10a ; 
+2844:                        end
+2845:               3'b101 :
+2846:                        begin
+2847:                           u = u10b ; 
+2848:                           v = v10b ; 
+2849:                        end
+2850:               3'b110 :
+2851:                        begin
+2852:                           u = u10c ; 
+2853:                           v = v10c ; 
+2854:                        end
+2855:               default :
+2856:                        begin
+2857:                           u = 0;
+2858:                           v = 0;
+2859:                        end
+2860:            endcase 
+2861:         end 
+2862: 
+2863:         always @(posedge clk)
+2864:         begin
+2865:            wl &lt;= 8'b11111111 - u - v ; 
+2866:            ul &lt;= u ; 
+2867:            vl &lt;= v ; 
+2868:            rul &lt;= ru ; 
+2869:            rvl &lt;= rv ; 
+2870:            rwl &lt;= rw ; 
+2871:            gul &lt;= gu ; 
+2872:            gvl &lt;= gv ; 
+2873:            gwl &lt;= 
+…[truncated, 5754 chars total]</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> grep -rn "module comb_mult_add_16\|comb_mult_add_16" /work/ 2&gt;/dev/null | grep -v "raygentop.v:28[89…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "grep -rn \"module comb_mult_add_16\\|comb_mult_add_16\" /work/ 2&gt;/dev/null | grep -v \"raygentop.v:28[89]\" | head -20; echo \"---consumers---\"; grep -n \"blr\\|blg\\|blb\" /work/raygentop.v | head -30"
+}</pre><div class="label">output</div><pre class="plain">---consumers---
+1990:    wire[6:0] blr; 
+1991:    wire[6:0] blg; 
+1992:    wire[6:0] blb; 
+2011:    linearmap linearmapinst (blb, blg, texinfol[17:0], texeladdr, texelselect, texinfol[20:18], lmenable, clk); 
+2012:    bilinearintrp bilinearimp (u01a, u01b, u01c, v01a, v01b, v01c, u10a, u10b, u10c, v10a, v10b, v10c, selectuv, shadedata[41:35], shadedata[62:56], shadedata[20:14], shadedata[34:28], shadedata[55:49], shadedata[13:7], shadedata[27:21], shadedata[48:42], shadedata[6:0], blr, blg, blb, clk); 
+2265:                         temp_shadedataa[6:0] = blb ; 
+2266:                         temp_shadedataa[13:7] = blg ; 
+2267:                         temp_shadedataa[20:14] = blr ; 
+2423:                         temp_shadedatab[6:0] = blb ; 
+2424:                         temp_shadedatab[13:7] = blg ; 
+2425:                         temp_shadedatab[20:14] = blr ; 
+2482:                         temp_shadedatac[6:0] = blb ; 
+2483:                         temp_shadedatac[13:7] = blg ; 
+2484:                         temp_shadedatac[20:14] = blr ; 
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> grep -rn "comb_mult_add" / --include=*.v --include=*.xml --include=*.json --include=*.md -l 2&gt;/dev/n…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "grep -rn \"comb_mult_add\" / --include=*.v --include=*.xml --include=*.json --include=*.md -l 2&gt;/dev/null | head -20"
+}</pre><div class="label">output</div><pre class="plain">/work/raygentop.v
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> cd /tmp/opencode &amp;&amp; which iverilog yosys verilator 2&gt;/dev/null; echo "--- leftovers ---"; grep -n "i…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "cd /tmp/opencode &amp;&amp; which iverilog yosys verilator 2&gt;/dev/null; echo \"--- leftovers ---\"; grep -n \"i1r\\|i2r\\|i3r\\|i1g\\|i1b\\|i2b\\|i3b\\|i2g\\|i3g\" /work/raygentop.v | head"
+}</pre><div class="label">output</div><pre class="plain">--- leftovers ---
+</pre></div></details></div></div></details></div></details></div></details><details class="section"><summary><h2>The edit</h2> <span class="meta">+34 / −21 lines</span></summary><div class="body"><p class="note">From <code>edit.diff</code> in the run dir: the final edited file against the pristine source.</p><div class="diff"><div class="hdr">--- outputs/adapt/vtr_demo/raygentop/comb_mult_add_16_mode/20260913-195430-d2386a/edit/.pristine/raygentop/raygentop.v	2026-08-16 18:14:11.414163698 -0700</div><div class="hdr">+++ outputs/adapt/vtr_demo/raygentop/comb_mult_add_16_mode/20260913-195430-d2386a/edit/raygentop/raygentop.v	2026-09-13 19:58:03.982923220 -0700</div><div class="hunk">@@ -2796,15 +2796,18 @@</div><div class="ctx">         reg[7:0] ul; </div><div class="ctx">         reg[7:0] vl; </div><div class="ctx">         reg[7:0] wl; </div><div class="del">-        reg[14:0] i1b; </div><div class="del">-        reg[14:0] i2b; </div><div class="del">-        reg[14:0] i3b; </div><div class="del">-        reg[14:0] i1g; </div><div class="del">-        reg[14:0] i2g; </div><div class="del">-        reg[14:0] i3g; </div><div class="del">-        reg[14:0] i1r; </div><div class="del">-        reg[14:0] i2r; </div><div class="del">-        reg[14:0] i3r; </div><div class="add">+        reg[16:0] sumr; </div><div class="add">+        reg[16:0] sumg; </div><div class="add">+        reg[16:0] sumb; </div><div class="add">+        wire[63:0] prr0; </div><div class="add">+        wire[63:0] prr1; </div><div class="add">+        wire[63:0] prr2; </div><div class="add">+        wire[63:0] prg0; </div><div class="add">+        wire[63:0] prg1; </div><div class="add">+        wire[63:0] prg2; </div><div class="add">+        wire[63:0] prb0; </div><div class="add">+        wire[63:0] prb1; </div><div class="add">+        wire[63:0] prb2; </div><div class="ctx">         reg[6:0] rul; </div><div class="ctx">         reg[6:0] rvl; </div><div class="ctx">         reg[6:0] rwl; </div><div class="hunk">@@ -2871,19 +2874,29 @@</div><div class="ctx">            bul &lt;= bu ; </div><div class="ctx">            bvl &lt;= bv ; </div><div class="ctx">            bwl &lt;= bw ; </div><div class="del">-           i1r &lt;= ul * rul ; </div><div class="del">-           i2r &lt;= vl * rvl ; </div><div class="del">-           i3r &lt;= wl * rwl ; </div><div class="del">-           i1g &lt;= ul * gul ; </div><div class="del">-           i2g &lt;= vl * gvl ; </div><div class="del">-           i3g &lt;= wl * gwl ; </div><div class="del">-           i1b &lt;= ul * bul ; </div><div class="del">-           i2b &lt;= vl * bvl ; </div><div class="del">-           i3b &lt;= wl * bwl ;  </div><div class="add">+           sumr &lt;= prr2[16:0] ; </div><div class="add">+           sumg &lt;= prg2[16:0] ; </div><div class="add">+           sumb &lt;= prb2[16:0] ;  </div><div class="ctx">         end </div><div class="del">-        assign r = (i1r + i2r + i3r) ;</div><div class="del">-        assign g = (i1g + i2g + i3g) ;</div><div class="del">-        assign b = (i1b + i2b + i3b) ;</div><div class="add">+</div><div class="add">+        // Red channel: ul*rul + vl*rvl + wl*rwl fused onto three comb_mult_add_16 blocks.</div><div class="add">+        comb_mult_add_16 mac_r0 (.ax({8'b0, wl}), .ay({9'b0, rwl}), .bx(32'b0),        .result(prr0));</div><div class="add">+        comb_mult_add_16 mac_r1 (.ax({8'b0, vl}), .ay({9'b0, rvl}), .bx(prr0[31:0]),   .result(prr1));</div><div class="add">+        comb_mult_add_16 mac_r2 (.ax({8'b0, ul}), .ay({9'b0, rul}), .bx(prr1[31:0]),   .result(prr2));</div><div class="add">+</div><div class="add">+        // Green channel: ul*gul + vl*gvl + wl*gwl</div><div class="add">+        comb_mult_add_16 mac_g0 (.ax({8'b0, wl}), .ay({9'b0, gwl}), .bx(32'b0),        .result(prg0));</div><div class="add">+        comb_mult_add_16 mac_g1 (.ax({8'b0, vl}), .ay({9'b0, gvl}), .bx(prg0[31:0]),   .result(prg1));</div><div class="add">+        comb_mult_add_16 mac_g2 (.ax({8'b0, ul}), .ay({9'b0, gul}), .bx(prg1[31:0]),   .result(prg2));</div><div class="add">+</div><div class="add">+        // Blue channel: ul*bul + vl*bvl + wl*bwl</div><div class="add">+        comb_mult_add_16 mac_b0 (.ax({8'b0, wl}), .ay({9'b0, bwl}), .bx(32'b0),        .result(prb0));</div><div class="add">+        comb_mult_add_16 mac_b1 (.ax({8'b0, vl}), .ay({9'b0, bvl}), .bx(prb0[31:0]),   .result(prb1));</div><div class="add">+        comb_mult_add_16 mac_b2 (.ax({8'b0, ul}), .ay({9'b0, bul}), .bx(prb1[31:0]),   .result(prb2));</div><div class="add">+</div><div class="add">+        assign r = sumr[6:0] ;</div><div class="add">+        assign g = sumg[6:0] ;</div><div class="add">+        assign b = sumb[6:0] ;</div><div class="ctx">      endmodule</div><div class="ctx"> </div><div class="ctx"> </div></div></div></details><details class="section"><summary><h2>Verification</h2> <span class="meta">1 editor attempt(s) · recorded per attempt · final: accepted</span></summary><div class="body"><p class="note"><b>Recorded.</b> Written by the loop as each editor attempt ended (<code>iterations.json</code>, copied into outcome.json as <code>iteration_log</code>); nothing here is reconstructed.</p><details class="inner" open><summary>Editor attempt 1 · <b class="ok">accepted</b> <span class="meta">2026-09-13 19:58:32 -0700 → 2026-09-13 20:01:03 -0700</span></summary><div class="body"><dl class="kv"><dt>editor call</dt><dd>call 3 · status ok · changed the file: True · diff against pristine non-empty: True · denied/failed tool calls: 0</dd><dt>synthesis-only check</dt><dd>ran · target macro emitted: <span class="ok">True</span> · <code>vtr/iter01/synth/raygentop</code></dd><dt>full VTR flow</dt><dd>ran · completed (packed .net written): <span class="ok">True</span> · <code>vtr/iter01/raygentop</code></dd><dt>blocks packed in target mode</dt><dd>9</dd><dt>evidence floor (whole-design variants only)</dt><dd><span class="ok">passed</span> · no variant introduced (direct swap or restructuring)</dd><dt>acceptance reviewer</dt><dd><span class="ok">accepted</span> [accepted] · call 4</dd><dt>result</dt><dd><b class="ok">accepted</b> — reviewer agent confirmed</dd></dl><div class="label">checks on the edit</div><table><tr><th>check</th><th>result</th><th>reason</th></tr><tr><td title="target_mode_packed">target mode present in the packed netlist</td><td><span class="ok">passed</span></td><td></td></tr><tr><td title="synth_pack_agree">synthesis and packing agree (macro emitted was packed)</td><td><span class="ok">passed</span></td><td></td></tr><tr><td title="no_out_of_family_operations">no operations introduced from another family</td><td><span class="ok">passed</span></td><td></td></tr><tr><td title="has_intended_consumers">the block drives real downstream consumers</td><td><span class="ok">passed</span></td><td></td></tr><tr><td title="multi_region_shared_reduction">fused regions declare the shared reduction they feed</td><td><span class="ok">passed</span></td><td></td></tr><tr><td title="multi_region_two_or_more_regions">a fusion names at least two real regions</td><td><span class="ok">passed</span></td><td></td></tr><tr><td title="t2_consumers_overlap">restructuring: still feeds the same part of the design</td><td><span class="ok">passed</span></td><td></td></tr><tr><td title="t2_datatype_family_unchanged">restructuring: datatype family unchanged</td><td><span class="ok">passed</span></td><td></td></tr></table><p class="note">PPA of this attempt: dsp 12 · lut 1076 · ff 904 · bram 1 · cpd 11.5018 ns</p><p class="note">artifacts: <code>edit/raygentop/raygentop.v</code> · <code>edit.diff</code></p></div></details><h3>Synthesis-only result (counted from files)</h3><table><tr><th>attempt</th><th>file</th><th>target macro instances</th></tr><tr><td>1</td><td><code>vtr/iter01/synth/raygentop/raygentop.parmys.blif</code></td><td>9 × <code>comb_mult_add_16</code></td></tr></table><h3>Packed netlist (counted from files)</h3><p class="note">Counted at export time from the <code>.net</code> file(s) in the run dir: occurrences of <code>mode="…"</code> for the target mode, one per packed block in that mode.</p><table><tr><th>attempt</th><th>file</th><th>target mode present</th><th>blocks in target mode</th></tr><tr><td>1</td><td><code>vtr/iter01/raygentop/raygentop.net</code></td><td><span class="ok">yes</span></td><td>9</td></tr></table><p>Modes recorded in the outcome as used after the edit: <code>comb_mult_add_16_mode</code></p></div></details><details class="section"><summary><h2>Numbers</h2> <span class="meta">PPA recorded · 4 call(s)</span></summary><div class="body"><h3>PPA as recorded</h3><div style="overflow-x:auto"><table class="num"><tr><th>metric</th><th class='n'>this run</th><th class='n'>baseline (current)</th><th class='n'>delta</th></tr><tr><td>DSP blocks</td><td class='n'>12</td><td class='n'>6</td><td class='n bad'>+6</td></tr><tr><td>LUTs</td><td class='n'>1076</td><td class='n'>1055</td><td class='n bad'>+21</td></tr><tr><td>FFs</td><td class='n'>904</td><td class='n'>946</td><td class='n ok'>-42</td></tr><tr><td>BRAM</td><td class='n'>1</td><td class='n'>1</td><td class='n '>+0</td></tr><tr><td>critical path (ns)</td><td class='n'>11.5018</td><td class='n'>4.84502</td><td class='n bad'>+6.657 ns (+137.4%)</td></tr></table></div><p class="note">Baseline: the unmodified raygentop through the same flow under the <b>current</b> settings regime (channel width 300, device koios_extra_small, seed 1, grid 90 x 90 (koios_extra_small), routed at width 300); measured, 2026-09-12 18:36:16 -0700, from <code>configs/baselines/complexDSP.yaml</code>. A lower delta is better on every row.</p><p class="note">Read from the VPR log of editor attempt 1, the last whose flow completed: the accepted variant (outcome.json <code>ppa</code>, <code>ppa_iteration</code>).</p><h3>Coverage</h3><table class="num"><tr><th>quantity</th><th class="n">value</th><th>what it counts</th></tr><tr><td>candidate regions offered</td><td class='n'>18</td><td class='note'>detected regions handed to the planner (one RTL expression each)</td></tr><tr><td>candidate instances</td><td class='n'>18</td><td class='note'>those regions times the elaborated instance count of their module</td></tr><tr><td>regions selected</td><td class='n'>9</td><td class='note'>regions the approved plan names</td></tr><tr><td>selected instances</td><td class='n'>9</td><td class='note'>selected regions times their module's instance count</td></tr><tr><td>terms per block</td><td class='n'>1</td><td class='note'>product terms one block of the mode fuses</td></tr><tr><td>blocks packed</td><td class='n'>9</td><td class='note'>packed blocks in the target mode (editor attempt 1)</td></tr></table><p class="note">Offered and packed are not the same unit: a candidate is a source region, a packed block is an elaborated instance, and one block can fuse several regions (or the editor can chain several blocks for one region), so they are recorded raw rather than as a ratio.</p><h3>Block counts</h3><table class="num"><tr><th>source</th><th>mode</th><th class='n'>blocks</th></tr><tr><td><code>vtr/iter01/raygentop/raygentop.net</code></td><td><code>comb_mult_add_16_mode</code></td><td class='n'>9</td></tr></table><h3>Tokens and cost per call</h3><div style="overflow-x:auto"><table class="num"><tr><th>#</th><th>role</th><th>model</th><th>status</th><th class="n">in</th><th class="n">out</th><th class="n">reasoning</th><th class="n">cache read</th><th class="n">cache write</th><th class="n">steps</th><th class="n">tool calls (errors)</th><th class="n">seconds</th><th class="n">cost $</th></tr><tr><td>1</td><td>planner</td><td><code>anthropic/claude-opus-5</code></td><td>ok</td><td class='n'>10</td><td class='n'>7850</td><td class='n'>0</td><td class='n'>56073</td><td class='n'>20500</td><td class='n'>5</td><td class='n'>6 (0)</td><td class='n'>134.4</td><td class='n'>0.3525</td></tr><tr><td>2</td><td>reviewer:plan</td><td><code>anthropic/claude-opus-5</code></td><td>ok</td><td class='n'>10</td><td class='n'>3034</td><td class='n'>0</td><td class='n'>56136</td><td class='n'>6884</td><td class='n'>5</td><td class='n'>4 (0)</td><td class='n'>49.1</td><td class='n'>0.1470</td></tr><tr><td>3</td><td>editor</td><td><code>anthropic/claude-opus-5</code></td><td>ok</td><td class='n'>18</td><td class='n'>3994</td><td class='n'>0</td><td class='n'>134595</td><td class='n'>11688</td><td class='n'>9</td><td class='n'>9 (0)</td><td class='n'>57.5</td><td class='n'>0.2403</td></tr><tr><td>4</td><td>reviewer:acceptance</td><td><code>anthropic/claude-opus-5</code></td><td>ok</td><td class='n'>14</td><td class='n'>6651</td><td class='n'>0</td><td class='n'>91571</td><td class='n'>12840</td><td class='n'>7</td><td class='n'>6 (0)</td><td class='n'>108.2</td><td class='n'>0.2924</td></tr><tr class='total'><td></td><td>total (4 calls)</td><td></td><td></td><td class='n'>52</td><td class='n'>21529</td><td class='n'>0</td><td class='n'>338375</td><td class='n'>51912</td><td></td><td></td><td class='n'>392.6</td><td class='n'>1.0321</td></tr></table></div><p class="note">Cost as reported by the gateway per call, summed. Token components are kept separate (uncached input, output, reasoning, cache read, cache write).</p></div></details><script type="application/json" id="run-summary">{"run_id": "20260913-195430-d2386a", "suite": "vtr_demo", "design": "raygentop", "mode": "comb_mult_add_16_mode", "started_at": "2026-09-13T19:54:30-07:00", "accepted": true, "outcome": "accepted", "tier": "T2", "editor_attempts": 1, "model_family": "Claude", "models": {"planner": "anthropic/claude-opus-5", "reviewer:plan": "anthropic/claude-opus-5", "editor": "anthropic/claude-opus-5", "reviewer:acceptance": "anthropic/claude-opus-5"}, "wall_seconds": 392.5780425799894, "blocks_packed": 9, "regime": "current", "archived": false, "file": "raygentop_comb_mult_add_16_mode_20260913-195430-d2386a.html"}</script></main></body></html>
