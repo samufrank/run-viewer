@@ -1,42 +1,55 @@
 # Hand-maintained, read by `benchadapt publish` when it regenerates index.html.
 # One entry per run id. Fields:
-#   description: one line saying what the run was for, or what it established
+#   description: one line saying what the run established, or what it is still on the index for
 #   equivalence: whether the rewrite was independently checked against the original,
 #                and how (blank or absent = not checked)
 # A run with no entry still appears in the index, with blank description and equivalence
 # cells. Keep lines short; the index shows them verbatim.
+#
+# Convention: the models column already names the roster, so a description names a model only
+# where the run's point is a comparison between models. Runs that are otherwise alike are
+# distinguished by something that actually happened in them.
 
-20260913-002957-033296:
-  description: "Claude roster, repeat of 2026-09-12 211952 at the same commit; same nine regions, same nine-block shape. Second of three control runs."
+20260913-201714-642729:
+  description: "Third run at the corrected prompt set and the second under the sandbox, establishing that the nine-region choice repeats there; its planner reached for ripgrep and fell back, and its reviewer probed with three successive find patterns."
+  equivalence: "cycle-exact in simulation on all three channels, latency matched by impulse probe; LEC proven, 124/124 points"
+
+20260913-195430-d2386a:
+  description: "First run with every agent call inside a bubblewrap sandbox; its acceptance reviewer searched the whole filesystem with find and a recursive grep from /, and both returned only its own working copy."
+  equivalence: "cycle-exact in simulation on all three channels; LEC proven, 124/124 points, with the three chains built in the reverse order and proving identical"
 
 20260913-003854-c7b4de:
-  description: "Claude roster, third control run at the same commit; same nine regions and shape again. The plan reviewer approved but the loop re-ran the planner, which is what surfaced the verdict-parse defect."
-  equivalence: "not checked"
+  description: "Third repeat at one commit, the same nine sites and the same chain shape again; the plan reviewer approved and the loop re-ran the planner anyway, which is where the verdict-parse defect surfaced."
+  equivalence: "cycle-exact in simulation on all three channels, latency matched by impulse probe; LEC proven, 124/124 points"
+
+20260913-002957-033296:
+  description: "Second repeat at the same commit, same nine sites and same shape; its editor wrote and ran a 20,000-vector check of its own edit, which survives in the run directory as _bl_tb.v."
+  equivalence: "cycle-exact in simulation on all three channels, latency matched by impulse probe; LEC proven, 124/124 points"
 
 20260912-211952-6553b1:
-  description: "Claude roster, same design and mode as 2026-09-06; nine blocks across all three channels rather than three over red only. The plan varies run to run."
+  description: "First of three repeats at one commit establishing that the planner takes all nine applicable sites: nine blocks across all three channels, where the 09-06 run had taken three over red alone."
   equivalence: "bit- and cycle-exact in simulation on all three channels, including four overflow vectors; LEC proven, 124/124 points"
 
 20260912-174718-9ca8d3:
-  description: "First with per-attempt log. GPT roster; one block fusing two of red's three products, with delayed operand copies keeping the terms aligned. Rejected on the first attempt, which mixed cycles."
+  description: "GPT against Claude on the same design and mode: one block fusing two of red's three products, with delayed operand copies keeping the terms aligned. The acceptance reviewer rejected the first attempt for summing a current-cycle product with a registered one."
   equivalence: "bit- and cycle-exact in simulation, including a ramp where every input changes each cycle; LEC proven, 180/180 points"
 
 20260907-200734-b07463:
-  description: "Direct swap of all 72 MAC sites in dla_like.small onto comb_sop_2_18; the Koios result shown to advisors."
+  description: "The Koios result: every one of the 72 sum-of-products sites in dla_like.small converted onto comb_sop_2_18 from a single module edit. Its acceptance reviewer checked 200,000 vectors against a model of the block it wrote itself."
   equivalence: "bit-exact in simulation (200k vectors); LEC proven, 73/73 points"
 
 20260906-002639-68ab30:
-  description: "Claude roster; three chained comb_mult_add_16 blocks over the red channel of bilinearintrp; the raygentop result shown to advisors."
+  description: "First rewrite proven equivalent: three chained comb_mult_add_16 blocks over the red channel of bilinearintrp. Both the editor and the acceptance reviewer simulated it against their own models of the block before the framework checked anything."
   equivalence: "bit- and cycle-exact in simulation; LEC proven, 166/166 points"
 
 20260905-233425-5363c7:
-  description: "GPT roster, same design and mode; rejected after four attempts at a check no edit could satisfy (a single region labelled as a fusion); the edit was also wrong on the green channel."
+  description: "Four editor attempts against a gate no edit could satisfy: the netlist aliasing labelled a single region a fusion, so the multi-region checks fired on every attempt. The rewrite was also wrong on the green channel."
   equivalence: "simulation: r and b exact, g wrong; LEC left 7 g bits unproven"
 
-20260827-152947-8d3f03:
-  description: "Controlled GPT re-run after the contract latency fix; the sop_4 rewrite of bilinearintrp r that the LEC study was built on."
-  equivalence: "cycle-exact in simulation; LEC proven against the 1-stage model, 166/166 points"
-
 20260827-153207-b498fe:
-  description: "Controlled Claude re-run after the contract latency fix, same design and mode; cycle-exact where the pre-fix edits were one cycle late."
-  equivalence: "cycle-exact in simulation"
+  description: "The Claude half of the controlled pair run once the mode contract was complete: the same single int_sop_4 rewrite as its GPT twin up to two wire names, and cycle-exact where the pre-fix edits had been a cycle late."
+  equivalence: "cycle-exact in simulation on all three channels; LEC proven, 166/166 points"
+
+20260827-152947-8d3f03:
+  description: "The GPT half of that controlled pair, and the rewrite the LEC study was built on: one int_sop_4 driving r directly, with the external register the pre-contract runs had added now gone."
+  equivalence: "cycle-exact in simulation; LEC proven against the 1-stage model, 166/166 points"
