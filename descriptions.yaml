@@ -14,6 +14,10 @@
   description: "Third run at the corrected prompt set and the second under the sandbox, establishing that the nine-region choice repeats there; its planner reached for ripgrep and fell back, and its reviewer probed with three successive find patterns."
   equivalence: "cycle-exact in simulation on all three channels, latency matched by impulse probe; LEC proven, 124/124 points"
 
+20260913-193020-ed0a74:
+  description: "Last run before the sandbox and the first at the corrected prompt set: the same nine sites as the two that follow, but its acceptance reviewer was refused a cat of a behavioral model copy under worknotes/ and read the same file with grep instead, along with an architecture copy. The read the sandbox was built to stop."
+  equivalence: "cycle-exact in simulation on all three channels, latency matched by impulse probe; LEC proven, 124/124 points"
+
 20260913-195430-d2386a:
   description: "First run with every agent call inside a bubblewrap sandbox; its acceptance reviewer searched the whole filesystem with find and a recursive grep from /, and both returned only its own working copy."
   equivalence: "cycle-exact in simulation on all three channels; LEC proven, 124/124 points, with the three chains built in the reverse order and proving identical"
