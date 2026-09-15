@@ -83,12 +83,12 @@
   equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 166/166; tb_equiv_bilin_rgb_run4.v, int_sop_4_model.v (1-stage)"
 20260915-001535-ffde1b:
   description: "First run on stereovision2, the coverage target: offered 83 candidates, the planner took the six non-zero taps of one vertical filter, fltr_compute_h1, as a chain of six comb_mult_add_16 blocks (36 packed over its six instances), and gave reasons for leaving the my_fir modules (16-bit unsigned operands) and fltr_compute_f1/f3/h4 (a 9-bit coefficient whose product reaches 2^16). The six-block chain sits in one cycle: critical path 11.61 to 22.54 ns against the koios_small baseline, dsp 224 to 260."
-  equivalence: "equivalent; sim 2038 cycles on fltr_compute_h1.dout, 0 mismatches (17 hand-derived vectors at the product and sum extremes matched, latency 3 edges both sides); LEC 32/32 (16 equiv_simple, 16 equiv_induct); tb_equiv_fltr.v (worknotes/coverage_targets/equiv_sv2), comb_mult_add_16.v"
+  equivalence: "equivalent; sim 2038 cycles on fltr_compute_h1.dout, 0 mismatches; LEC 32/32; tb_equiv_fltr.v, comb_mult_add_16.v"
 
 20260915-004011-e9ae9b:
   description: "Second stereovision2 run, same invocation: the planner moved to fltr_compute_f2 (five candidate taps plus the two shift taps it absorbed), a chain of seven comb_mult_add_16 blocks, 42 packed over six instances; f1/f3/h4 left on the 9-bit coefficient, my_fir not named. Critical path 11.61 to 26.10 ns against the koios_small baseline, dsp 224 to 289. The editor appended its own blackbox declaration of the block to the file."
-  equivalence: "equivalent; sim 2035 cycles on fltr_compute_f2.dout, 0 mismatches (14 hand-derived vectors at the product and sum extremes matched, latency 3 edges both sides); LEC 32/32 (16 equiv_simple, 16 equiv_induct); tb_equiv_fltr.v (worknotes/coverage_targets/equiv_sv2), comb_mult_add_16.v"
+  equivalence: "equivalent; sim 2035 cycles on fltr_compute_f2.dout, 0 mismatches; LEC 32/32; tb_equiv_fltr.v, comb_mult_add_16.v"
 
 20260915-004939-736294:
   description: "Third stereovision2 run, same invocation: fltr_compute_f2 again with the same seven-block chain, identical to run e9ae9b apart from instance names and comments; 42 blocks packed. The planner's exclusion list wrongly puts h1 and h3 (largest products 49215 and 37485) among the modules whose products exceed 2^16. Critical path 27.31 ns, dsp 300, the packer's answer to a netlist that differs only in names."
-  equivalence: "equivalent; the module edit is identical to run e9ae9b apart from names, so the same check applies: sim 2035 cycles on fltr_compute_f2.dout, 0 mismatches; LEC 32/32; tb_equiv_fltr.v, comb_mult_add_16.v"
+  equivalence: "equivalent; sim 2035 cycles on fltr_compute_f2.dout, 0 mismatches; LEC 32/32; tb_equiv_fltr.v, comb_mult_add_16.v"
