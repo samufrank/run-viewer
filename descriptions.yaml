@@ -14,7 +14,6 @@
 #     harness: the testbench file (benchadapt verify/equiv/) and the behavioral model file (verify/models/,
 #              with its stage variant where more than one exists). Run: verify/equiv/run_equiv.sh <run id>;
 #              its logs land in the run directory under equiv/
-#   commands per harness and per run: worknotes/equivalence_commands.md
 # A run with no entry still appears in the index, with blank description and equivalence
 # cells. Keep lines short; the index shows them verbatim.
 #
@@ -39,7 +38,7 @@
   equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 124/124; tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
 
 20260913-193020-ed0a74:
-  description: "First of the three runs at the corrected prompt set, and the last before the sandbox existed: the same nine sites as the two that follow, but its acceptance reviewer was refused a cat of a behavioral model copy under worknotes/ and read the same file with grep instead, along with an architecture copy. The read the sandbox was built to stop."
+  description: "First of the three runs at the corrected prompt set, and the last before the sandbox existed: the same nine sites as the two that follow, but its acceptance reviewer was refused a cat of a copy of the block's behavioral model kept in the developer's notes outside the repository, read the same file with grep instead, and read an architecture copy the same way. The read the sandbox was built to stop."
   equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 124/124; tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
 
 20260913-195430-d2386a:
