@@ -2,13 +2,14 @@
 # One entry per run id. Fields:
 #   description: one line saying what the run established, or what it is still on the index for
 #   equivalence: one line in a fixed shape, filled from the harness logs, never from memory:
-#     <verdict>; sim <n> <cycles|vectors> on <module>.<outputs> at +k, <m> mismatches; LEC <proven>/<points>[ (unproven on <signals>)]; <dir>/<testbench>, <model file>
-#     verdict: equivalent (0 mismatches and every LEC point proven) | partial (0 mismatches, LEC short or not run)
+#     <verdict>; sim <n> <cycles|vectors> on <module>.<outputs>, <m> mismatches; LEC <proven>/<points>[ (unproven on <signals>)]; <dir>/<testbench>, <model file>
+#     verdict: equivalent (0 mismatches and every LEC point proven) | inconclusive (0 mismatches, LEC short or not run)
 #              | not equivalent (any mismatch, whatever LEC said) | not checked
-#     sim: count and unit as the testbench reports them; <module>.<outputs> names the module the harness
-#          compares and its ports; +k is the cycle offset the count was taken at (the edit on cycle t against the original on cycle t-k; +0 = same cycle);
-#          <m> mismatches = checked cycles (or vectors) on which the named output differed, per output when
-#          more than one is listed
+#     sim: count and unit as the testbench reports them; <module>.<outputs> is the module the harness
+#          compares and its ports; <m> mismatches = checked cycles (or vectors) on which the named output
+#          differed from the original on the same cycle, per output when more than one is listed. A rewrite
+#          that is right a cycle late is not equivalent; say so in words in the mismatch clause
+#          ("505 mismatches; 0 with the original delayed one cycle") so the failure is legible.
 #     LEC: proven over total $equiv points from equiv_status; "LEC not run" when it was not; unproven signals listed
 #     harness: the worknotes directory and testbench file, then the behavioral model file (with its
 #              stage variant where more than one exists); the harness directory holds the logs
@@ -22,61 +23,61 @@
 
 20260914-001612-e388bf:
   description: "Third without the inherited prompt, the same nine sites and nine blocks again; its editor simulated its own edit against a model of the block it wrote in scratch before check.sh ever ran."
-  equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b at +0, 0 mismatches; LEC 124/124; comb_mult_add_run4/tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
+  equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 124/124; comb_mult_add_run4/tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
 
 20260914-000834-9be831:
   description: "Second without the inherited prompt, nine sites and nine blocks; its editor wrote a testbench and a Python driver into scratch to check the edit itself, and its plan reviewer read the top-level consumers before approving."
-  equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b at +0, 0 mismatches; LEC 124/124; comb_mult_add_run4/tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
+  equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 124/124; comb_mult_add_run4/tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
 
 20260914-000233-ef78a2:
   description: "First of three runs with the inherited assistant prompt removed from every agent: the same nine sites and nine blocks as the three runs before it, so the framing that prompt carried was not what chose them. Its edit kept 58 more flip-flops than the other two and came out 1.3 ns slower."
-  equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b at +0, 0 mismatches; LEC 124/124; comb_mult_add_run4/tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
+  equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 124/124; comb_mult_add_run4/tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
 
 20260913-201714-642729:
   description: "Third of the three, establishing that the nine-region choice repeats at this prompt set; its planner reached for ripgrep and fell back, and its reviewer probed with three successive find patterns."
-  equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b at +0, 0 mismatches; LEC 124/124; comb_mult_add_run4/tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
+  equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 124/124; comb_mult_add_run4/tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
 
 20260913-193020-ed0a74:
   description: "First of the three runs at the corrected prompt set, and the last before the sandbox existed: the same nine sites as the two that follow, but its acceptance reviewer was refused a cat of a behavioral model copy under worknotes/ and read the same file with grep instead, along with an architecture copy. The read the sandbox was built to stop."
-  equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b at +0, 0 mismatches; LEC 124/124; comb_mult_add_run4/tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
+  equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 124/124; comb_mult_add_run4/tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
 
 20260913-195430-d2386a:
   description: "Second of the three, and the first with every agent call inside a bubblewrap sandbox; its acceptance reviewer searched the whole filesystem with find and a recursive grep from /, and both returned only its own working copy."
-  equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b at +0, 0 mismatches; LEC 124/124; comb_mult_add_run4/tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
+  equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 124/124; comb_mult_add_run4/tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
 
 20260913-003854-c7b4de:
   description: "Third repeat at one commit, the same nine sites and the same chain shape again; the plan reviewer approved and the loop re-ran the planner anyway, which is where the verdict-parse defect surfaced."
-  equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b at +0, 0 mismatches; LEC 124/124; comb_mult_add_run4/tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
+  equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 124/124; comb_mult_add_run4/tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
 
 20260913-002957-033296:
   description: "Second repeat at the same commit, same nine sites and same shape; its editor wrote and ran a 20,000-vector check of its own edit, which survives in the run directory as _bl_tb.v."
-  equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b at +0, 0 mismatches; LEC 124/124; comb_mult_add_run4/tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
+  equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 124/124; comb_mult_add_run4/tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
 
 20260912-211952-6553b1:
   description: "First of three repeats at one commit establishing that the planner takes all nine applicable sites: nine blocks across all three channels, where the 09-06 run had taken three over red alone."
-  equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b at +0, 0 mismatches; LEC 124/124; comb_mult_add_run4/tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
+  equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 124/124; comb_mult_add_run4/tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
 
 20260912-174718-9ca8d3:
   description: "GPT against Claude on the same design and mode: one block fusing two of red's three products, with delayed operand copies keeping the terms aligned. The acceptance reviewer rejected the first attempt for summing a current-cycle product with a registered one."
-  equivalence: "equivalent; sim 598 cycles on bilinearintrp.r/g/b at +0, 0 mismatches; LEC 180/180; comb_mult_add_run4/tb_equiv_bilin_rgb_run4gpt.v, comb_mult_add_16.v"
+  equivalence: "equivalent; sim 598 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 180/180; comb_mult_add_run4/tb_equiv_bilin_rgb_run4gpt.v, comb_mult_add_16.v"
 
 20260907-200734-b07463:
   description: "The Koios result: every one of the 72 sum-of-products sites in dla_like.small converted onto comb_sop_2_18 from a single module edit. Its acceptance reviewer checked 200,000 vectors against a model of the block it wrote itself."
-  equivalence: "equivalent; sim 1030 cycles on dsp_block_16_8_false.resulta/chainout at +0, 0 mismatches; LEC 73/73; comb_sop_2_run1/tb_equiv_dsp_block.v, comb_sop_2_18.v"
+  equivalence: "equivalent; sim 1030 cycles on dsp_block_16_8_false.resulta/chainout, 0 mismatches; LEC 73/73; comb_sop_2_run1/tb_equiv_dsp_block.v, comb_sop_2_18.v"
 
 20260906-002639-68ab30:
   description: "First rewrite proven equivalent: three chained comb_mult_add_16 blocks over the red channel of bilinearintrp. Both the editor and the acceptance reviewer simulated it against their own models of the block before the framework checked anything."
-  equivalence: "equivalent; sim 526 cycles on bilinearintrp.r/g/b at +0, 0 mismatches; LEC 166/166; comb_mult_add_run3/tb_equiv_bilin_rgb.v, comb_mult_add_16.v"
+  equivalence: "equivalent; sim 526 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 166/166; comb_mult_add_run3/tb_equiv_bilin_rgb.v, comb_mult_add_16.v"
 
 20260905-233425-5363c7:
   description: "Four editor attempts against a gate no edit could satisfy: the netlist aliasing labelled a single region a fusion, so the multi-region checks fired on every attempt. The rewrite was also wrong on the green channel."
-  equivalence: "not equivalent; sim 526 cycles on bilinearintrp.r/g/b at +0, 473 mismatches on g (0 on r, 0 on b); LEC 173/180 (unproven on g); comb_mult_add_run1/tb_equiv_bilin_rgb.v, comb_mult_add_16.v"
+  equivalence: "not equivalent; sim 526 cycles on bilinearintrp.r/g/b, 473 mismatches on g (0 on r, 0 on b); LEC 173/180 (unproven on g); comb_mult_add_run1/tb_equiv_bilin_rgb.v, comb_mult_add_16.v"
 
 20260827-153207-b498fe:
   description: "The Claude half of the controlled pair run once the mode contract was complete: the same single int_sop_4 rewrite as its GPT twin up to two wire names, and cycle-exact where the pre-fix edits had been a cycle late."
-  equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b at +0, 0 mismatches; LEC 166/166; comb_mult_add_run4/tb_equiv_bilin_rgb_run4.v, int_sop_4_model.v (1-stage)"
+  equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 166/166; comb_mult_add_run4/tb_equiv_bilin_rgb_run4.v, int_sop_4_model.v (1-stage)"
 
 20260827-152947-8d3f03:
   description: "The GPT half of that controlled pair, and the rewrite the LEC study was built on: one int_sop_4 driving r directly, with the external register the pre-contract runs had added now gone."
 
-  equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b at +0, 0 mismatches; LEC 166/166; comb_mult_add_run4/tb_equiv_bilin_rgb_run4.v, int_sop_4_model.v (1-stage)"
+  equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 166/166; comb_mult_add_run4/tb_equiv_bilin_rgb_run4.v, int_sop_4_model.v (1-stage)"
