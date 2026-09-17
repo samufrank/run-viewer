@@ -92,3 +92,11 @@
 20260915-004939-736294:
   description: "Third stereovision2 run, same invocation: fltr_compute_f2 again with the same seven-block chain, identical to run e9ae9b apart from instance names and comments; 42 blocks packed. The planner's exclusion list wrongly puts h1 and h3 (largest products 49215 and 37485) among the modules whose products exceed 2^16. Critical path 27.31 ns, dsp 300, the packer's answer to a netlist that differs only in names."
   equivalence: "equivalent; sim 2035 cycles on fltr_compute_f2.dout, 0 mismatches; LEC 32/32; tb_equiv_fltr.v, comb_mult_add_16.v"
+
+20260915-181704-48be9b:
+  description: "Run on the chain-port revision of the mode (reverted 2026-09-16; this run's own arch copy has the ports): the planner chained the same nine blocks on chainout to chainin, VPR formed three placement macros and stacked each chain in one column, and the path came out at 14.05 ns against 11.67 through bx, because the arch charges 1.179 ns on each tile chain pin. See chain_ports_revision.md."
+  equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 124/124; tb_equiv_bilin_rgb_run4.v, comb_mult_add_16_chain.v"
+
+20260915-181712-52342f:
+  description: "Run on the chain-port revision of the mode (reverted 2026-09-16; this run's own arch copy has the ports): the planner fed the module's constant chainin port to the block and left chainout open, so no chain formed; 72 blocks, 6.07 ns against the 7.15 ns baseline. The editor deleted the shipped ifdef branch with int_sop_2. See chain_ports_revision.md."
+  equivalence: "equivalent; sim 1030 cycles on dsp_block_16_8_false.resulta/chainout, 0 mismatches; LEC 73/73; tb_equiv_dsp_block.v, comb_sop_2_18_chain.v"
