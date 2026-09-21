@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>stereovision2 → comb_mult_add_16_mode · 20260919-201925-b4d1b5</title><style>
+:root { color-scheme: light; }
+/* Embedded previews (Slack) size their frame from a height measured once, at first paint
+   and possibly at a different width than the one displayed; a page whose height depends on
+   line wrapping then gets cut off. A definite minimum height in absolute units (not vh, not
+   %) keeps the measured height at or above the collapsed page's height down to ~500px wide
+   (measured 1418px at 500px, 977 at 700, 893 at 1200). Below the fold in a normal browser. */
+html, body { height: auto; }
+body { margin: 0; padding: 1.5rem 1rem 4rem; background: #fff; color: #1a1a1a; min-height: 1450px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 15px; line-height: 1.6; }
+main { max-width: 72rem; margin: 0 auto; }
+h1 { font-size: 1.4rem; margin: 0 0 .25rem; font-weight: 600; }
+h2 { font-size: 1.1rem; margin: 0; font-weight: 600; display: inline; }
+h3 { font-size: 1rem; margin: 1.2rem 0 .4rem; font-weight: 600; }
+.sub { color: #555; margin: 0 0 1rem; }
+table { border-collapse: collapse; margin: .5rem 0 1rem; }
+th, td { text-align: left; padding: .2rem .8rem .2rem 0; vertical-align: top; }
+th { font-weight: 600; color: #444; white-space: nowrap; }
+table.num td.n, table.num th.n { text-align: right; font-variant-numeric: tabular-nums; }
+tr.total td { border-top: 1px solid #bbb; font-weight: 600; }
+details { margin: .6rem 0; border: 1px solid #d8d8d8; border-radius: 4px; background: #fff; }
+details > summary { cursor: pointer; padding: .55rem .8rem; list-style: none;
+  display: flex; gap: .6rem; align-items: baseline; flex-wrap: wrap; }
+details > summary::-webkit-details-marker { display: none; }
+details > summary::before { content: "\25B8"; color: #777; font-size: .8em; }
+details[open] > summary::before { content: "\25BE"; }
+details > summary > .meta { color: #666; font-size: .9em; }
+details > .body { padding: .2rem .8rem .8rem; border-top: 1px solid #e6e6e6; }
+details.section > summary { font-size: 1.05rem; }
+details.call { margin-left: 0; }
+details.inner { border-color: #e6e6e6; }
+details.inner > summary { padding: .35rem .6rem; font-size: .92em; }
+pre { white-space: pre-wrap; word-break: break-word; margin: .3rem 0 .8rem;
+  padding: .7rem .9rem; border-radius: 4px; font-size: .86em; line-height: 1.5;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+pre.prompt { background: #f4f4f2; border-left: 3px solid #b8b8b0; }
+pre.response { background: #eef3f8; border-left: 3px solid #7f9fbf; }
+pre.plain { background: #f6f6f6; }
+/* A prompt or response with its Markdown rendered. The tint and the left rule are the same
+   as the plain form above, so a rendered block still reads as quoted agent traffic and not
+   as the page's own prose; only the inside is laid out instead of shown as source. */
+.md { margin: .3rem 0 .8rem; padding: .6rem .9rem; border-radius: 4px; font-size: .93em;
+  overflow-wrap: break-word; }
+.md.prompt { background: #f4f4f2; border-left: 3px solid #b8b8b0; }
+.md.response { background: #eef3f8; border-left: 3px solid #7f9fbf; }
+.md > :first-child { margin-top: 0; } .md > :last-child { margin-bottom: 0; }
+.md p { margin: .5rem 0; }
+.md ul, .md ol { margin: .5rem 0; padding-left: 1.5rem; }
+.md li { margin: .15rem 0; }
+.md ul.md-litnum { list-style: none; padding-left: .8rem; }
+.md .md-num { color: #555; }
+.md blockquote { margin: .5rem 0; padding: .1rem .8rem; border-left: 2px solid #c4c4c4;
+  color: #444; }
+.md hr { border: 0; border-top: 1px solid #d5d5d5; margin: .8rem 0; }
+.md code { background: rgba(0,0,0,.055); padding: .05em .3em; border-radius: 3px; }
+.md .mdh { font-weight: 600; margin: .9rem 0 .35rem; line-height: 1.3; }
+.md .mdh1 { font-size: 1.12em; } .md .mdh2 { font-size: 1.07em; }
+.md .mdh3 { font-size: 1.02em; } .md .mdh4, .md .mdh5, .md .mdh6 { font-size: 1em; }
+/* A fenced block is a box inside the response, and must not widen or escape it: it wraps,
+   and scrolls sideways only within its own frame. */
+.md .md-code { margin: .5rem 0; border: 1px solid #dcdcdc; border-radius: 4px;
+  background: #fbfbfa; max-width: 100%; overflow: hidden; }
+.md .md-lang { display: block; padding: .15rem .6rem; border-bottom: 1px solid #e6e6e6;
+  color: #666; font-size: .8em; letter-spacing: .03em; }
+.md .md-code > pre { margin: 0; background: none; border: 0; border-radius: 0;
+  padding: .55rem .7rem; max-width: 100%; overflow-x: auto; white-space: pre-wrap;
+  word-break: break-word; }
+.md .md-code > pre > code { background: none; padding: 0; }
+.md .md-tw { overflow-x: auto; max-width: 100%; margin: .5rem 0; }
+.md .md-tw table { border-collapse: collapse; }
+.md .md-tw th, .md .md-tw td { border: 1px solid #dedede; padding: .2rem .5rem;
+  white-space: normal; }
+.md .md-note { color: #666; font-size: .85em; font-style: italic; margin: 0 0 .5rem; }
+ul.paths { margin: .2rem 0; padding-left: 1.2rem; }
+ul.paths li { margin: .1rem 0; word-break: break-all; }
+.diff { white-space: pre-wrap; word-break: break-word; margin: .3rem 0 .8rem;
+  padding: .7rem .9rem; border-radius: 4px; font-size: .86em; line-height: 1.5;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  background: #fafafa; border: 1px solid #e3e3e3; }
+.diff div { min-height: 1.5em; }
+.diff .add { background: #e2f3e2; }
+.diff .del { background: #f8e0e0; }
+.diff .add-ws, .diff .del-ws { color: #999; background: #f3f3f3; }
+.diff .hunk { color: #6a5acd; }
+.diff .hdr { color: #666; }
+.diff details.ws { margin: .1rem 0; border: 1px dashed #ccc; background: #f6f6f6; }
+.diff details.ws > summary { padding: .1rem .5rem; color: #777; font-family: inherit; font-size: .95em; }
+.diff details.ws > summary::before { content: "\25B8 "; }
+.diff details.ws[open] > summary::before { content: "\25BE "; }
+.schem { margin: .4rem 0 .8rem; overflow-x: auto; background: #fff;
+  border: 1px solid #e3e3e3; border-radius: 4px; padding: .4rem; }
+.schem svg { display: block; }
+.label { font-weight: 600; color: #444; font-size: .85em; text-transform: uppercase;
+  letter-spacing: .03em; margin: .6rem 0 .1rem; }
+.absent { color: #777; font-style: italic; }
+.ok { color: #1f6f3a; } .bad { color: #a33; } .na { color: #777; }
+.note { color: #555; font-size: .9em; }
+.tools { margin: .4rem 0 0; }
+.controls { margin: 0 0 1rem; font-size: .9em; color: #555; }
+.controls button { font: inherit; padding: .1rem .5rem; margin-right: .3rem; }
+dl.kv { display: grid; grid-template-columns: max-content 1fr; gap: .1rem 1.2rem; margin: .6rem 0 1rem; }
+dl.kv dt { color: #555; } dl.kv dd { margin: 0; }
+@media (max-width: 600px) { dl.kv { grid-template-columns: 1fr; } dl.kv dt { margin-top: .4rem; } }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .92em; }
+</style><script>
+function setAll(open) {
+  document.querySelectorAll('details').forEach(function (d) { d.open = open; });
+}
+</script></head><body><main><h1>stereovision2 → comb_mult_add_16_mode · 20260919-201925-b4d1b5</h1><p class="sub">benchadapt adaptation run · record at <code>outputs/adapt/vtr_sv2/stereovision2/comb_mult_add_16_mode/20260919-201925-b4d1b5</code></p><dl class="kv"><dt>run id</dt><dd><code>20260919-201925-b4d1b5</code></dd><dt>started</dt><dd>2026-09-19 20:19:25 -0700</dd><dt>finished</dt><dd>2026-09-19 20:24:42 -0700</dd><dt>suite / design</dt><dd>vtr_sv2 / <b>stereovision2</b></dd><dt>target mode</dt><dd><code>comb_mult_add_16_mode</code></dd><dt>tier</dt><dd>NONE (NONE) — not recorded</dd><dt>outcome</dt><dd><b class="bad">rejected</b> [<code>planner_declined</code>] — planner declined: no representative mapping</dd><dt>editor attempts</dt><dd>0 <span class="note">(editor calls against the one approved plan; record field <code>iterations</code>)</span></dd><dt>wall clock</dt><dd>5m 16s (agents 5m 16s, VTR and other 0s)  [316.5 s total; 'other' is synthesis-only checks and framework time between calls]</dd><dt>models per role</dt><dd>planner: <code>anthropic/claude-opus-5</code></dd><dt>VPR arguments</dt><dd>channel width 300 · device koios_medium · seed 1 <span class="note">(from run.json)</span></dd><dt>repo commit</dt><dd><code>9f7d9368e887</code> <span class="bad">with uncommitted changes to tracked files</span></dd><dt>sandbox</dt><dd>bubblewrap <span class="note">(recorded per agent call, before the run-level field existed: every call in this run ran in its own mount namespace)</span></dd><dt>agent reads</dt><dd>none outside the agents' own working directories <span class="note">(paths each agent named outside its own working directory, computed from the tool events; its own scratch excluded)</span></dd><dt>prompt set</dt><dd><code>04b705e2ccb8</code> <span class="note">(sha256 over 8 templates in src/agents and 14 inline pieces; full value in run.json <code>prompt_set</code>)</span></dd></dl><div class="controls"><button type="button" onclick="setAll(true)">expand all</button><button type="button" onclick="setAll(false)">collapse all</button>exported 2026-09-20T17:39:31-07:00</div><details class="section"><summary><h2>Mode contract</h2> <span class="meta">recorded (outcome.json contract field)</span></summary><div class="body"><p class="note">Verbatim, as recorded with the run and sent to the agents.</p><pre class="plain">Hard-block primitive to instantiate: `comb_mult_add_16`   (precision INT16)
+  computes: out = ax*ay + bx
+  input ports:  ax[16], ay[16], bx[32]
+  output ports: result[64]
+  arithmetic: the block's operands and result are signed two's complement. A design operand narrower than its port must be widened to the port width: zero-extended if the design treats it as unsigned, sign-extended if signed. An unsigned design operand as wide as its port has no exact representation on this block.
+  timing: the block is combinational; `result` is valid in the same cycle the inputs are applied (no clock port).
+  Wire EVERY operand of the fused region onto the input ports (name them exactly as above); drive the region's real consumer from the output port. Tie unused term ports to 0. Do not leave input ports unconnected.</pre></div></details><details class="section"><summary><h2>Agent calls</h2> <span class="meta">1 call(s), in order</span></summary><div class="body"><details class="call"><summary>Call 1 · <b>planner</b> · anthropic/claude-opus-5 · <span class="ok">ok</span> <span class="meta">in 14 · out 23751 · reasoning 0 · cache read 168332 · cache write 51282 · 316.4 s</span></summary><div class="body"><div class="label">prompt</div><div class="md prompt"><p>You are the Planner. Choose the region(s) in stereovision2.v to adapt so hard-block mode<br>'comb_mult_add_16_mode' (Hard-block primitive to instantiate: <code>comb_mult_add_16</code>   (precision INT16)<br>  computes: out = ax*ay + bx<br>  input ports:  ax[16], ay[16], bx[32]<br>  output ports: result[64]<br>  arithmetic: the block's operands and result are signed two's complement. A design operand narrower than its port must be widened to the port width: zero-extended if the design treats it as unsigned, sign-extended if signed. An unsigned design operand as wide as its port has no exact representation on this block.<br>  timing: the block is combinational; <code>result</code> is valid in the same cycle the inputs are applied (no clock port).<br>  Wire EVERY operand of the fused region onto the input ports (name them exactly as above); drive the region's real consumer from the output port. Tie unused term ports to 0. Do not leave input ports unconnected.) is exercised, then write a concrete plan. Do NOT edit files —<br>output the header + plan only.</p><p>Convert only arithmetic that 'comb_mult_add_16_mode' can compute exactly as the design already computes it,<br>never fabricated computation. For a sum-of-products / MAC mode the product terms must ALREADY feed<br>a COMMON reduction (a shared sum/accumulator); products that feed SEPARATE outputs (e.g. distinct<br>systolic-array elements) must NOT be fused, and an isolated scalar multiply does not fit a<br>sum-of-products mode. If no candidate fits, output <code>TIER: NONE</code>.</p><p>Account for every candidate listed below in your PLAN: which you convert and which you leave, with<br>the reason each is left. Group candidates that share a reason.</p><p>Candidate arithmetic regions (id | operation | instances):<br>fltr_compute_f1.$mul$stereovision2.v:859$44 | multiply | 6<br>fltr_compute_f1.$mul$stereovision2.v:860$45 | multiply | 6<br>fltr_compute_f1.$mul$stereovision2.v:861$46 | multiply | 6<br>fltr_compute_f1.$mul$stereovision2.v:862$47 | multiply | 6<br>fltr_compute_f1.$mul$stereovision2.v:863$48 | multiply | 6<br>fltr_compute_f1.$mul$stereovision2.v:864$49 | multiply | 6<br>fltr_compute_f1.$mul$stereovision2.v:865$50 | multiply | 6<br>fltr_compute_f2.$mul$stereovision2.v:890$59 | multiply | 6<br>fltr_compute_f2.$mul$stereovision2.v:891$60 | multiply | 6<br>fltr_compute_f2.$mul$stereovision2.v:892$61 | multiply | 6<br>fltr_compute_f2.$mul$stereovision2.v:893$62 | multiply | 6<br>fltr_compute_f2.$mul$stereovision2.v:894$63 | multiply | 6<br>fltr_compute_f3.$mul$stereovision2.v:928$72 | multiply | 6<br>fltr_compute_f3.$mul$stereovision2.v:929$73 | multiply | 6<br>fltr_compute_f3.$mul$stereovision2.v:930$74 | multiply | 6<br>fltr_compute_f3.$mul$stereovision2.v:932$76 | multiply | 6<br>fltr_compute_f3.$mul$stereovision2.v:933$77 | multiply | 6<br>fltr_compute_f3.$mul$stereovision2.v:934$78 | multiply | 6<br>fltr_compute_h1.$mul$stereovision2.v:959$86 | multiply | 6<br>fltr_compute_h1.$mul$stereovision2.v:960$87 | multiply | 6<br>fltr_compute_h1.$mul$stereovision2.v:961$88 | multiply | 6<br>fltr_compute_h1.$mul$stereovision2.v:963$90 | multiply | 6<br>fltr_compute_h1.$mul$stereovision2.v:964$91 | multiply | 6<br>fltr_compute_h1.$mul$stereovision2.v:965$92 | multiply | 6<br>fltr_compute_h2.$mul$stereovision2.v:993$101 | multiply | 6<br>fltr_compute_h2.$mul$stereovision2.v:994$102 | multiply | 6<br>fltr_compute_h2.$mul$stereovision2.v:995$103 | multiply | 6<br>fltr_compute_h2.$mul$stereovision2.v:996$104 | multiply | 6<br>fltr_compute_h2.$mul$stereovision2.v:997$105 | multiply | 6<br>fltr_compute_h3.$mul$stereovision2.v:1030$114 | multiply | 6<br>fltr_compute_h3.$mul$stereovision2.v:1031$115 | multiply | 6<br>fltr_compute_h3.$mul$stereovision2.v:1032$116 | multiply | 6<br>fltr_compute_h3.$mul$stereovision2.v:1034$118 | multiply | 6<br>fltr_compute_h3.$mul$stereovision2.v:1035$119 | multiply | 6<br>fltr_compute_h3.$mul$stereovision2.v:1036$120 | multiply | 6<br>fltr_compute_h4.$mul$stereovision2.v:1065$128 | multiply | 6<br>fltr_compute_h4.$mul$stereovision2.v:1066$129 | multiply | 6<br>fltr_compute_h4.$mul$stereovision2.v:1067$130 | multiply | 6<br>fltr_compute_h4.$mul$stereovision2.v:1068$131 | multiply | 6<br>fltr_compute_h4.$mul$stereovision2.v:1069$132 | multiply | 6<br>fltr_compute_h4.$mul$stereovision2.v:1070$133 | multiply | 6<br>fltr_compute_h4.$mul$stereovision2.v:1071$134 | multiply | 6<br>my_fir_f1.$mul$stereovision2.v:1486$154 | sop | 6<br>my_fir_f1.$mul$stereovision2.v:1487$155 | sop | 6<br>my_fir_f1.$mul$stereovision2.v:1488$157 | mult_add | 6<br>my_fir_f1.$mul$stereovision2.v:1489$159 | mult_add | 6<br>my_fir_f1.$mul$stereovision2.v:1490$161 | mult_add | 6<br>my_fir_f1.$mul$stereovision2.v:1491$163 | mult_add | 6<br>my_fir_f1.$mul$stereovision2.v:1492$165 | mult_add | 6<br>my_fir_f2.$mul$stereovision2.v:1543$170 | mult_add | 6<br>my_fir_f2.$mul$stereovision2.v:1544$172 | mult_add | 6<br>my_fir_f2.$mul$stereovision2.v:1545$174 | mult_add | 6<br>my_fir_f2.$mul$stereovision2.v:1546$176 | mult_add | 6<br>my_fir_f2.$mul$stereovision2.v:1547$178 | mult_add | 6<br>my_fir_f3.$mul$stereovision2.v:1602$184 | sop | 6<br>my_fir_f3.$mul$stereovision2.v:1603$185 | sop | 6<br>my_fir_f3.$mul$stereovision2.v:1604$187 | mult_add | 6<br>my_fir_f3.$mul$stereovision2.v:1605$189 | mult_add | 6<br>my_fir_f3.$mul$stereovision2.v:1606$191 | mult_add | 6<br>my_fir_f3.$mul$stereovision2.v:1607$193 | mult_add | 6<br>my_fir_h1.$mul$stereovision2.v:1661$197 | sop | 6<br>my_fir_h1.$mul$stereovision2.v:1662$198 | sop | 6<br>my_fir_h1.$mul$stereovision2.v:1663$200 | mult_add | 6<br>my_fir_h1.$mul$stereovision2.v:1664$202 | mult_add | 6<br>my_fir_h1.$mul$stereovision2.v:1665$204 | mult_add | 6<br>my_fir_h1.$mul$stereovision2.v:1666$206 | mult_add | 6<br>my_fir_h2.$mul$stereovision2.v:1717$211 | mult_add | 6<br>my_fir_h2.$mul$stereovision2.v:1718$213 | mult_add | 6<br>my_fir_h2.$mul$stereovision2.v:1719$215 | mult_add | 6<br>my_fir_h2.$mul$stereovision2.v:1720$217 | mult_add | 6<br>my_fir_h2.$mul$stereovision2.v:1721$219 | mult_add | 6<br>my_fir_h3.$mul$stereovision2.v:1775$225 | sop | 6<br>my_fir_h3.$mul$stereovision2.v:1776$226 | sop | 6<br>my_fir_h3.$mul$stereovision2.v:1777$228 | mult_add | 6<br>my_fir_h3.$mul$stereovision2.v:1778$230 | mult_add | 6<br>my_fir_h3.$mul$stereovision2.v:1779$232 | mult_add | 6<br>my_fir_h3.$mul$stereovision2.v:1780$234 | mult_add | 6<br>my_fir_h4.$mul$stereovision2.v:1833$238 | sop | 6<br>my_fir_h4.$mul$stereovision2.v:1834$239 | sop | 6<br>my_fir_h4.$mul$stereovision2.v:1835$241 | mult_add | 6<br>my_fir_h4.$mul$stereovision2.v:1836$243 | mult_add | 6<br>my_fir_h4.$mul$stereovision2.v:1837$245 | mult_add | 6<br>my_fir_h4.$mul$stereovision2.v:1838$247 | mult_add | 6</p><p>Baseline: the unmodified stereovision2 under this run's VPR settings (regime 'koios_medium': channel width 300, device koios_medium, seed 1) has a critical path of 12.4624 ns and uses 219 DSP tiles of the device's 770, one block per tile. Its slowest stage is in my_fir: one hard multiply on a DSP tile (two_mult_18x19), then six adder levels with their carry chains, then one LUT, into an enabled flip-flop. Any path your rewrite creates is compared against that critical path.</p><div class="mdh mdh1">Rewrite rules</div><p>A stage is the logic between one register and the next. A block is one instance of the target mode. These rules hold for any synchronous design on any FPGA. Numbers that depend on this architecture are in the last section; use them, do not restate them as rules.</p><div class="mdh mdh2">Must hold</div><p>Going against these produces a wrong design, not a slower one.</p><p><strong>Observability.</strong> Only a block's output is visible. A value read by anything other than the arithmetic being absorbed (another expression, a module output port, another module) cannot go inside a block. Keep it outside, or recompute it for those readers. Check the source; detection does not see port consumers. Operands are exempt: the block takes a copy and the original signal still exists.</p><p><strong>Register control.</strong> A register carries its reset, enable and initial value. These modes hold no registers, so absorbing a register deletes that behaviour. If anything depends on it, keep the register and drive it from the block's result, or leave the site alone.</p><p><strong>Arithmetic.</strong> The block computes the mode's expression on signed ports. Match the original bit for bit or leave the site alone.</p><div class="md-tw"><table><thead><tr><th>design operand</th><th>on a signed port</th><th>allowed</th></tr></thead><tbody><tr><td>unsigned, narrower than the port</td><td>zero-extend</td><td>yes</td></tr><tr><td>unsigned, as wide as the port, range provably below the signed maximum (constant coefficient, bounded value)</td><td>zero-extend, state the bound and where it comes from</td><td>yes</td></tr><tr><td>unsigned, as wide as the port, range not boundable from the source (a top-level input)</td><td>no exact representation</td><td>no</td></tr><tr><td>original truncates each product before the sum</td><td>a fused sum truncated after differs</td><td>no</td></tr><tr><td>original's narrow sum register wraps</td><td>the low bits of the wider result reproduce the wrap</td><td>yes</td></tr></tbody></table></div><div class="mdh mdh2">Weigh</div><p>The clock period is the delay of the slowest stage in the whole design. A stage's delay is the sum of everything on it: each block's fixed delay, each wire, each soft cell. Each relationship below names what it does to delay and to area. If a plan goes against one, say why.</p><div class="mdh mdh3">1. Slowest stage → all outputs</div><p>Your task names the design's slowest stage and what is on it.</p><div class="mdh mdh4">Slowest stage → delay</div><p><strong>Relationship:</strong> A rewrite that does not touch the slowest stage cannot make the design faster, and must leave every stage no slower than it was. A rewrite that does touch it must make it shorter, not merely different. Compare every stage you change against it.</p><div class="mdh mdh4">Slowest stage → area</div><p><strong>Relationship:</strong> A rewrite that cannot shorten the clock period is paid for in tiles alone. Say so in the plan.</p><div class="mdh mdh3">2. Block to register → delay</div><p><strong>Relationship:</strong> A block's result goes to a register, or into the next block, with nothing but wire between. Any soft arithmetic between a block and its register is added to the stage.</p><div class="mdh mdh3">3. Blocks in series → all outputs</div><div class="mdh mdh4">Blocks in series → delay</div><p><strong>Relationship:</strong> Each block in series adds its own delay plus one wire. Sum them with the wire in and the wire out, and compare against the slowest stage. That comparison, not a fixed count, says how many fit.</p><div class="mdh mdh4">Blocks in series → area</div><p><strong>Relationship:</strong> None. Series or side by side, the same blocks take the same tiles.</p><div class="mdh mdh3">4. Absorbed work → all outputs</div><p>Absorbed work is arithmetic inside the block's expression rather than in series with it: a multiply and one addend, or two products and their sum, depending on the mode.</p><div class="mdh mdh4">Absorbed work → delay</div><p><strong>Relationship:</strong> Free. The block's delay is the mode's own and does not rise because its adder is used. This is where a conversion wins: soft logic leaves the stage and the block's delay already covers the work. An adder feeding the block's addend port is absorbed; an adder reading the block's result is on the path after it (rule 2).</p><div class="mdh mdh4">Absorbed work → area</div><p><strong>Relationship:</strong> Flip-flops fall where product registers go. Do not count on LUT savings.</p><div class="mdh mdh3">5. Registers → all outputs</div><div class="mdh mdh4">Registers → delay</div><p><strong>Relationship:</strong> A register may move only if no stage becomes longer and the module's latency is unchanged. If one must be added to keep latency, put it where it splits the longest stage. Every other operand entering that stage must be delayed by the same amount, or the stage adds values from different cycles.</p><div class="mdh mdh4">Registers → area</div><p><strong>Relationship:</strong> A register placed mid-chain costs operand-delay registers that a register after the chain does not.</p><div class="mdh mdh3">6. Tiles → area</div><p><strong>Relationship:</strong> A block occupies one DSP tile in one mode. Do not assume the multiply it replaces frees a tile: the synthesis tool may already have placed that multiply on a tile shared with others. Count the blocks against the tiles the unmodified design uses and the device's count, both in your task.</p><div class="mdh mdh2">Measured on this architecture</div><div class="md-tw"><table><thead><tr><th>element on a path</th><th>ns</th></tr></thead><tbody><tr><td>block, any mode</td><td>2.14</td></tr><tr><td>wire, block to block</td><td>0.96 to 2.22</td></tr><tr><td>wire, register to first block</td><td>1.0 to 3.82</td></tr><tr><td>wire, last block to register</td><td>0.83 to 2.67</td></tr><tr><td>wire, block into soft logic</td><td>0.96 to 3.67</td></tr><tr><td>clock-to-Q</td><td>0.06</td></tr></tbody></table></div><p>Every DSP mode costs the same 2.14 ns. The invented modes have no chain ports, so a partial sum passes between blocks through general routing. The packer can place up to four multiplies of 9 bits or less on one tile and up to two of 18 bits or less; a block in either invented mode takes its tile alone.</p><div class="mdh mdh2">Before you commit to a plan</div><p>State in your plan: how many blocks and how many tiles on top of the unmodified design's; the longest series of blocks in any stage and its delay from the table, against the slowest stage; and what soft logic leaves the stage you touch, and whether that stage is the slowest one. If a site does not fit under those numbers, arrange it differently, take fewer, or leave it, and name the rule that ruled it out.</p><p>Objective: minimize the design's area-delay product, VPR's used area times the critical path, against the baseline in your task. A rewrite that does not lower it is not worth making; say so and output TIER: NONE rather than convert sites for their own sake. Among rewrites that lower it, prefer the one that lowers it most.</p><p>Classify the tier of the change you propose (a datatype/algorithm variant, T3, is out of scope —<br>do not propose one):</p><ul><li>T1: Direct replacement: no change to the computed function or surrounding structure; no datatype change.</li><li>T2: Local restructuring only; preserve the region's function, role, and live consumers; no new operation/datatype family.</li></ul><p>Read the source. Output EXACTLY this header (uppercase keys), then the plan:</p><p>TIER: T1 | T2 | NONE<br>REGIONS: &lt;comma-separated region id(s)&gt;            # one id for a direct swap; N ids for a fusion<br>SHARED_REDUCTION: &lt;the signal/module the terms feed&gt;   # or NONE for a single region<br>BLOCKS: &lt;how many blocks the rewrite instantiates, a single integer&gt;<br>TILES: &lt;how many DSP tiles the whole design then uses, a single integer&gt;<br>STAGE_NS: &lt;the delay of the slowest stage your rewrite leaves, in ns, a single number&gt;<br>MAPPING: &lt;which operands map to which of the mode's ports&gt;<br>PLAN: &lt;how the module's live inputs/outputs and downstream consumers are preserved; any introduced<br>operations/datatypes (should be NONE for T1/T2); and the main risks&gt;</p><p>Output rules: no preamble before the TIER line — read the source first, then write. You<br>are one step of an automated pipeline: a reviewer runs automatically on this plan, you<br>cannot invoke it, and no human reads your output, so do not end with a question or an<br>offer.</p><p>Read these files in this directory: stereovision2.v</p></div><div class="label">response</div><div class="md response"><p class="md-note">1 paragraph break restored by the export, where the recorder joined text blocks with no separator.</p><p>I'll read the source first.</p><p>TIER: NONE<br>REGIONS: NONE<br>SHARED_REDUCTION: NONE<br>BLOCKS: 0<br>TILES: 219<br>STAGE_NS: 12.4624<br>MAPPING: NONE — no site is converted. (Had a site been taken the map would be ax = one 16-bit tap value, ay = the zero-extended 16-bit constant coefficient, bx = the 32-bit running partial sum or 32'd0, result[31:0] → the <code>dout</code> register.)<br>PLAN:</p><p><strong>What the source actually computes</strong></p><p>Two families of candidates exist, and every listed id falls in one of them.</p><p><em>fltr_compute_f1/f2/f3/h1/h2/h3/h4</em> (lines 841–1076, ids <code>$mul$...:859$44</code> … <code>$mul$...:1071$134</code>, 49 ids, 6 instances each). Each module is three pipeline stages: <code>q1..q7 &lt;= din[8-bit slice] * const</code> (stage 1), <code>d_out_tmp &lt;= {q1[16]x3,q1} + ... + {q7[16]x3,q7}</code> (stage 2), <code>dout &lt;= d_out_tmp[18:3]</code> (stage 3).</p><p><em>my_fir_f1/f2/f3/h1/h2/h3/h4</em> (lines 1453–1845, ids <code>$mul$...:1486$154</code> … <code>$mul$...:1838$247</code>, 34 ids, 6 instances each). Each is a 7-tap (f1, f2, h2) or 6-tap (f3, h1, h3, h4) FIR: the products of <code>din</code>/<code>n_delay_reg1..6</code> with positive constants feed one common reduction, the 28-bit <code>dout</code> register, enabled by <code>new_data_rdy</code>. <code>din</code> is <code>[15:0]</code>, as are the delay registers.</p><p><strong>Left: all 49 fltr_compute ids</strong> — two independent reasons.</p><ol><li><em>Register control / latency.</em> The products land in the registers <code>q1..q7</code> and the common sum happens in the <strong>next</strong> stage. The mode holds no registers, so fusing product+sum deletes a pipeline stage and shortens the module's latency from 3 cycles to 2. <code>dout</code> feeds <code>v_fltr_*x7</code>'s output ports and thence <code>h_fltr</code>/<code>my_fir</code>, so the lost cycle is observable at the top level. Keeping the <code>q</code> registers and using the block only for the multiply is a 1:1 swap on a stage that is not the slowest one, and it is an area loss: these are 8-bit × ≤9-bit products, four of which the packer puts on <strong>one</strong> tile, whereas a block in this mode takes a tile alone — 294 multiplies (7 modules × 7 × 6 instances) would go from roughly 74 tiles to 294.</li><li><em>Arithmetic (f1, f3, h4 additionally).</em> <code>q</code> is 17 bits and the sum re-reads it as <strong>signed</strong> 17-bit. In f1 (coef 277), f3 (coef 364) and h4 (coef 324) the product reaches 255·277 = 70 635, 255·364 = 92 820, 255·324 = 82 620, all ≥ 2^16, so <code>q[16]</code> sets and the design's sum receives <em>product − 131 072</em>. A fused <code>ax*ay + bx</code> would contribute the true product. That is the "original truncates each product before the sum" row: not representable.</li></ol><p><strong>Left: my_fir_f2 (ids $170,$172,$174,$176,$178), my_fir_f3 ($184,$185,$187,$189,$191,$193), my_fir_h3 ($225,$226,$228,$230,$232,$234)</strong> — no exact representation of the operands.</p><p><code>din</code> and the delay registers are 16-bit <strong>unsigned</strong>, exactly as wide as <code>ax</code>/<code>ay</code>. Tracing the driver (lines 514–520 against 185–197 and 706–712): <code>my_fir_f2.din = h_fltr.vidin_in_f1 = fltr_compute_f1.dout</code>, <code>my_fir_f3.din = fltr_compute_f3.dout</code>, <code>my_fir_h3.din = fltr_compute_h4.dout</code>. Those three fltr_compute modules are exactly the ones whose 17-bit <code>q</code> goes negative (above), so <code>d_out_tmp</code> can be negative and <code>dout = d_out_tmp[18:3]</code> can carry bit 15. Concretely for f1 with <code>din[31:24] = 255</code> and the rest 0: <code>d_out_tmp = 20'hF13AB</code>, <code>dout = 16'hE275 = 57 973 &gt; 32 767</code>. Zero-extension onto a signed port is therefore not provably safe, and sign-extension would be wrong: the "unsigned, as wide as the port, range not boundable" row. Splitting <code>din[15]</code> out as a separate weighted correction term would be fabricating extra structure, not the design's arithmetic.</p><p><strong>Left: my_fir_f1 ($154,$155,$157,$159,$161,$163,$165), my_fir_h1 ($197,$198,$200,$202,$204,$206), my_fir_h2 ($211,$213,$215,$217,$219), my_fir_h4 ($238,$239,$241,$243,$245,$247)</strong> — arithmetically convertible, but they cannot lower the area-delay product.</p><p>These four are exact: <code>my_fir_f1.din = fltr_compute_f2.dout ≤ (255·673)&gt;&gt;3 = 21 451</code>; <code>my_fir_h1.din = fltr_compute_h2.dout ≤ 21 451</code>; <code>my_fir_h2.din = fltr_compute_h1.dout ≤ (255·470)&gt;&gt;3 = 14 981</code>; <code>my_fir_h4.din = fltr_compute_h3.dout ≤ (255·484)&gt;&gt;3 = 15 427</code>. In each of those four fltr_compute modules every coefficient·255 stays below 2^16, so no <code>q[16]</code> sets, <code>d_out_tmp</code> is non-negative, and the bound holds — all four are below 2^15, so zero-extension onto the signed ports is exact, and the 28-bit FIR sum never overflows either (21 451·673 = 14 436 523 &lt; 2^28). They are genuine common-reduction sum-of-products sites.</p><p>They still lose, for two reasons.</p><p><em>The period cannot move.</em> The baseline's slowest stage is a 7-tap my_fir: one hard multiply, six adder levels, one LUT, into the enabled flop. Only f1, f2 and h2 have seven taps; f2 and h2 carry the identical coefficient set {4,42,163,255,163,42,4} and the identical structure, so their stages have the same delay. my_fir_f2 is in the "not representable" group above, so its six-adder-level stage survives any rewrite untouched and pins the clock at 12.4624 ns. Converting f1, h1, h2, h4 is a rewrite that does not touch the binding stage, so by rule 1 it is paid for in tiles alone.</p><p><em>And the tile bill is real.</em> Series depth is also against us: to reach a single result with no soft logic the mode's single <code>bx</code> port forces a straight chain, i.e. 7 blocks deep for a 7-tap filter — 7·2.14 + 6 inter-block wires + the two end wires is roughly 28 ns, far past 12.4624. Even depth 2 costs 0.06 + 3.82 + 2.14 + 2.22 + 2.14 + 2.67 = 13.05 ns at the wire table's upper end, already over the baseline, and it still leaves two 32-bit soft adder levels to merge the four partial sums. The only arrangement that clears the budget is depth 1 (0.06 + 3.82 + 2.14 + 2.67 = 8.69 ns worst case) with the whole reduction left in a soft tree — which absorbs no addition at all and needs one block, hence one whole tile, per product. That is 7+6+7+6 = 26 blocks per instance-set × 6 instances = 156 tiles, replacing multiplies that the packer currently pairs two-to-a-tile (about 14 tiles per set, 84 total): 219 → 291 of 770. Area up about a third, delay flat, and rule 4's note not to count on LUT savings means the freed soft adders cannot be banked against it.</p><p>Area-delay product therefore rises for every rewrite available, so no site is converted. No operations or datatypes are introduced; <code>stereovision2.v</code> is left unmodified, and every module's live inputs, outputs, latencies and enabled registers stand as they are.</p></div><details class="inner"><summary>tool events <span class="meta">9 recorded, 0 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> wc -l /work/stereovision2.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "wc -l /work/stereovision2.v"
+}</pre><div class="label">output</div><pre class="plain">1846 /work/stereovision2.v
+</pre></div></details><details class="inner"><summary><code>bash</code> <span class="meta"><span class="ok">completed</span> ls /work</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "ls /work"
+}</pre><div class="label">output</div><pre class="plain">stereovision2.v
+</pre></div></details><details class="inner"><summary><code>read</code> <span class="meta"><span class="ok">completed</span> /work/stereovision2.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "filePath": "/work/stereovision2.v",
+ "offset": 820,
+ "limit": 300
+}</pre><div class="label">output</div><pre class="plain">&lt;path&gt;/work/stereovision2.v&lt;/path&gt;
+&lt;type&gt;file&lt;/type&gt;
+&lt;content&gt;
+820:  	fifo226 fifo4(tm3_clk_v0, vidin_new_data, buff_out4, buff_out5);
+821:  	fifo226 fifo5(tm3_clk_v0, vidin_new_data, buff_out5, buff_out6);
+822:  	fifo226 fifo6(tm3_clk_v0, vidin_new_data, buff_out6, buff_out7);
+823: 
+824:    fltr_compute_f1 inst_fltr_compute_f1 (tm3_clk_v0, {buff_out1, buff_out2, buff_out3, buff_out4, buff_out5, buff_out6, buff_out7}, vidin_out_f1);	
+825:    fltr_compute_f2 inst_fltr_compute_f2 (tm3_clk_v0, {buff_out1, buff_out2, buff_out3, buff_out4, buff_out5, buff_out6, buff_out7}, vidin_out_f2);	
+826:    fltr_compute_f3 inst_fltr_compute_f3 (tm3_clk_v0, {buff_out1, buff_out2, buff_out3, buff_out4, buff_out5, buff_out6, buff_out7}, vidin_out_f3);	
+827:    fltr_compute_h1 inst_fltr_compute_h1 (tm3_clk_v0, {buff_out1, buff_out2, buff_out3, buff_out4, buff_out5, buff_out6, buff_out7}, vidin_out_h1);	
+828:    fltr_compute_h2 inst_fltr_compute_h2 (tm3_clk_v0, {buff_out1, buff_out2, buff_out3, buff_out4, buff_out5, buff_out6, buff_out7}, vidin_out_h2);	
+829:    fltr_compute_h3 inst_fltr_compute_h3 (tm3_clk_v0, {buff_out1, buff_out2, buff_out3, buff_out4, buff_out5, buff_out6, buff_out7}, vidin_out_h3);	
+830:    fltr_compute_h4 inst_fltr_compute_h4 (tm3_clk_v0, {buff_out1, buff_out2, buff_out3, buff_out4, buff_out5, buff_out6, buff_out7}, vidin_out_h4);	
+831: 
+832:          assign buff_out0 = vidin_in ; 
+833: /*
+834:    always @(posedge tm3_clk_v0)
+835:    begin
+836:          buff_out0 &lt;= vidin_in ; 
+837:          //vidin_out_or &lt;= buff_out6; 
+838:    end 
+839: */
+840: endmodule
+841: module fltr_compute_f1 (clk, din, dout);
+842: 
+843:     input clk; 
+844:     input[55:0] din; 
+845:     output[15:0] dout; 
+846:     reg[15:0] dout;
+847:     reg[16:0] q1; 
+848:     reg[16:0] q2; 
+849:     reg[16:0] q3; 
+850:     reg[16:0] q4; 
+851:     reg[16:0] q5; 
+852:     reg[16:0] q6; 
+853:     reg[16:0] q7; 
+854:     reg[19:0] d_out_tmp; 
+855: 
+856:     always @(posedge clk)
+857:     begin
+858: 			// PAJ - grabbed these from the mult_const declarations
+859: 			q1 &lt;= din[55:48] * 5'b11101;
+860: 			q2 &lt;= din[47:40] * 7'b1100101;
+861: 			q3 &lt;= din[39:32] * 5'b10001;
+862: 			q4 &lt;= din[31:24] * 9'b100010101;
+863: 			q5 &lt;= din[23:16] * 5'b10001;
+864: 			q6 &lt;= din[15:8] * 7'b1100101;
+865: 			q7 &lt;= din[7:0] * 5'b11101;
+866: 
+867:           d_out_tmp &lt;= ({q1[16], q1[16], q1[16], q1}) + ({q2[16], q2[16], q2[16], q2}) + ({q3[16], q3[16], q3[16], q3}) + ({q4[16], q4[16], q4[16], q4}) + ({q5[16], q5[16], q5[16], q5}) + ({q6[16], q6[16], q6[16], q6}) + ({q7[16], q7[16], q7[16], q7});
+868:           dout &lt;= d_out_tmp[18:3] ; 
+869:     end 
+870:  endmodule
+871: module fltr_compute_f2 (clk, din, dout);
+872: 
+873:     input clk; 
+874:     input[55:0] din; 
+875:     output[15:0] dout; 
+876:     reg[15:0] dout;
+877:     reg[16:0] q1; 
+878:     reg[16:0] q2; 
+879:     reg[16:0] q3; 
+880:     reg[16:0] q4; 
+881:     reg[16:0] q5; 
+882:     reg[16:0] q6; 
+883:     reg[16:0] q7; 
+884:     reg[19:0] d_out_tmp; 
+885: 
+886:     always @(posedge clk)
+887:     begin
+888: 			// PAJ - grabbed these from the mult_const declarations
+889: 			q1 &lt;= din[55:48] * 3'b100;
+890: 			q2 &lt;= din[47:40] * 6'b101010;
+891: 			q3 &lt;= din[39:32] * 8'b10100011;
+892: 			q4 &lt;= din[31:24] * 8'b11111111;
+893: 			q5 &lt;= din[23:16] * 8'b10100011;
+894: 			q6 &lt;= din[15:8] * 6'b101010;
+895: 			q7 &lt;= din[7:0] * 3'b100;
+896: 
+897:           d_out_tmp &lt;= ({q1[16], q1[16], q1[16], q1}) + ({q2[16], q2[16], q2[16], q2}) + ({q3[16], q3[16], q3[16], q3}) + ({q4[16], q4[16], q4[16], q4}) + ({q5[16], q5[16], q5[16], q5}) + ({q6[16], q6[16], q6[16], q6}) + ({q7[16], q7[16], q7[16], q7});
+898:           dout &lt;= d_out_tmp[18:3] ; 
+899:     end 
+900:  endmodule
+901: 
+902: 
+903: 
+904: 
+905: 
+906: 
+907: 
+908: 
+909: 
+910: module fltr_compute_f3 (clk, din, dout);
+911: 
+912:     input clk; 
+913:     input[55:0] din; 
+914:     output[15:0] dout; 
+915:     reg[15:0] dout;
+916:     reg[16:0] q1; 
+917:     reg[16:0] q2; 
+918:     reg[16:0] q3;
+…[truncated, 10057 chars total]</pre></div></details><details class="inner"><summary><code>read</code> <span class="meta"><span class="ok">completed</span> /work/stereovision2.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "filePath": "/work/stereovision2.v",
+ "offset": 1440,
+ "limit": 410
+}</pre><div class="label">output</div><pre class="plain">&lt;path&gt;/work/stereovision2.v&lt;/path&gt;
+&lt;type&gt;file&lt;/type&gt;
+&lt;content&gt;
+1440: `define COEF0_b  29
+1441: 	`define COEF1_b  101
+1442: //	`define COEF2_b  -15
+1443: //	`define COEF3_b  -235
+1444: //	`define COEF4_b  -15
+1445: 	`define COEF2_b  15
+1446: 	`define COEF3_b  235
+1447: 	`define COEF4_b  15
+1448: 	`define COEF5_b  101
+1449: 	`define COEF6_b  29
+1450: 
+1451: 	`define WIDTH_5B 5'b10000
+1452: 	
+1453: module my_fir_f1 (clk, new_data_rdy, output_data_ready, din, dout);
+1454: 
+1455: //coefdata=29,101,-15,-235,-15,101,29;
+1456: 
+1457: 	//parameter `WIDTH = 5'b10000;
+1458: 
+1459:     input clk; 
+1460:     input[`WIDTH_5B - 1:0] din; 
+1461:     output[28 - 1:0] dout; 
+1462:     reg[28 - 1:0] dout;
+1463: 	input new_data_rdy;
+1464: 	output output_data_ready;
+1465: 	reg output_data_ready;
+1466: 
+1467:     reg[`WIDTH_5B - 1:0]n_delay_reg1;
+1468:     reg[`WIDTH_5B - 1:0]n_delay_reg2;
+1469:     reg[`WIDTH_5B - 1:0]n_delay_reg3;
+1470:     reg[`WIDTH_5B - 1:0]n_delay_reg4;
+1471:     reg[`WIDTH_5B - 1:0]n_delay_reg5;
+1472:     reg[`WIDTH_5B - 1:0]n_delay_reg6;
+1473: 
+1474:     always @(posedge clk)
+1475:     begin
+1476: 		if (new_data_rdy == 1'b1)
+1477: 		begin
+1478: 			n_delay_reg1 &lt;= din;
+1479: 			n_delay_reg2 &lt;= n_delay_reg1;
+1480: 			n_delay_reg3 &lt;= n_delay_reg2;
+1481: 			n_delay_reg4 &lt;= n_delay_reg3;
+1482: 			n_delay_reg5 &lt;= n_delay_reg4;
+1483: 			n_delay_reg6 &lt;= n_delay_reg5;
+1484: 		
+1485: 			output_data_ready &lt;= 1'b1;
+1486: 			dout &lt;= (din * `COEF0_b) + 
+1487: 				(n_delay_reg1 * `COEF1_b) + 
+1488: 				(n_delay_reg2 * `COEF2_b) + 
+1489: 				(n_delay_reg3 * `COEF3_b) + 
+1490: 				(n_delay_reg4 * `COEF4_b) + 
+1491: 				(n_delay_reg5 * `COEF5_b) + 
+1492: 				(n_delay_reg6 * `COEF6_b);
+1493: 		end
+1494: 		else
+1495: 		begin
+1496: 			output_data_ready &lt;= 1'b0;
+1497: 		end
+1498: 	end
+1499: endmodule
+1500: 	`define COEF0_c  4
+1501: 	`define COEF1_c  42
+1502: 	`define COEF2_c  163
+1503: 	`define COEF3_c  255
+1504: 	`define COEF4_c  163
+1505: 	`define COEF5_c  42
+1506: 	`define COEF6_c  4
+1507: 	
+1508: module my_fir_f2 (clk, new_data_rdy, output_data_ready, din, dout);
+1509: 
+1510: //coefdata=4,42,163,255,163,42,4;
+1511: 
+1512: 
+1513: //	parameter WIDTH = 5'b10000;
+1514: 
+1515:     input clk; 
+1516:     input[`WIDTH_5B - 1:0] din; 
+1517:     output[28 - 1:0] dout; 
+1518:     reg[28 - 1:0] dout;
+1519: 	input new_data_rdy;
+1520: 	output output_data_ready;
+1521: 	reg output_data_ready;
+1522: 
+1523:     reg[`WIDTH_5B - 1:0]n_delay_reg1;
+1524:     reg[`WIDTH_5B - 1:0]n_delay_reg2;
+1525:     reg[`WIDTH_5B - 1:0]n_delay_reg3;
+1526:     reg[`WIDTH_5B - 1:0]n_delay_reg4;
+1527:     reg[`WIDTH_5B - 1:0]n_delay_reg5;
+1528:     reg[`WIDTH_5B - 1:0]n_delay_reg6;
+1529: 
+1530:     always @(posedge clk)
+1531:     begin
+1532: 		if (new_data_rdy == 1'b1)
+1533: 		begin
+1534: 			n_delay_reg1 &lt;= din;
+1535: 			n_delay_reg2 &lt;= n_delay_reg1;
+1536: 			n_delay_reg3 &lt;= n_delay_reg2;
+1537: 			n_delay_reg4 &lt;= n_delay_reg3;
+1538: 			n_delay_reg5 &lt;= n_delay_reg4;
+1539: 			n_delay_reg6 &lt;= n_delay_reg5;
+1540: 		
+1541: 			output_data_ready &lt;= 1'b1;
+1542: 			dout &lt;= (din * `COEF0_c) + 
+1543: 				(n_delay_reg1 * `COEF1_c) + 
+1544: 				(n_delay_reg2 * `COEF2_c) + 
+1545: 				(n_delay_reg3 * `COEF3_c) + 
+1546: 				(n_delay_reg4 * `COEF4_c) + 
+1547: 				(n_delay_reg5 * `COEF5_c) + 
+1548: 				(n_delay_reg6 * `COEF6_c);
+1549: 
+1550: 		end
+1551: 		else
+1552: 		begin
+1553: 			output_data_ready &lt;= 1'b0;
+1554: 		end
+1555: 	end
+1556: endmodule
+1557: 
+1558: //	`define COEF0_d  -12
+1559: //	`define COEF1_d  -77
+1560: //	`define COEF2_d  -148
+1561: 	`define COEF0_d  12
+1562: 	`define COEF1_d  77
+1563: 	`define COEF2_d  148
+1564: 	`define COEF3_d  0
+1565: 	`define COEF4_d  148
+1566: 	`define COEF5_d  77
+1567: 	`define COEF6_d  12
+1568: 	
+1569: module my_fir_f3 (clk, new_data_rdy, output_data_ready, din, dout);
+1570: 
+1571: //coefdata=-12,-77,-148,0,148,77,12;
+1572: 
+1573: //	parameter `WIDTH = 5'b10000;
+1574: 
+1575:     input clk; 
+1576:     input[`WIDTH_5B - 1:0] din; 
+1577:     output[28 - 1:0] d
+…[truncated, 11803 chars total]</pre></div></details><details class="inner"><summary><code>grep</code> <span class="meta"><span class="ok">completed</span> my_fir_(f1|f2|f3|h1|h2|h3|h4)\s+\w+|my_fir</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "my_fir_(f1|f2|f3|h1|h2|h3|h4)\\s+\\w+|my_fir",
+ "path": "/work/stereovision2.v"
+}</pre><div class="label">output</div><pre class="plain">Found 28 matches
+/work/stereovision2.v:
+  Line 481:    wire my_fir_rdy_f1; 
+
+  Line 484:    wire my_fir_rdy_f2; 
+
+  Line 487:    wire my_fir_rdy_f3; 
+
+  Line 490:    wire my_fir_rdy_h1; 
+
+  Line 493:    wire my_fir_rdy_h2; 
+
+  Line 496:    wire my_fir_rdy_h3; 
+
+  Line 499:    wire my_fir_rdy_h4; 
+
+  Line 514:    my_fir_f1 your_instance_name_f1 (tm3_clk_v0, vidin_new_data, my_fir_rdy_f1, vidin_in_f2, vidin_out_temp_f1); 
+
+  Line 515:    my_fir_f2 your_instance_name_f2 (tm3_clk_v0, vidin_new_data, my_fir_rdy_f2, vidin_in_f1, vidin_out_temp_f2); 
+
+  Line 516:    my_fir_f3 your_instance_name_f3 (tm3_clk_v0, vidin_new_data, my_fir_rdy_f3, vidin_in_f3, vidin_out_temp_f3); 
+
+  Line 517:    my_fir_h1 your_instance_name_h1 (tm3_clk_v0, vidin_new_data, my_fir_rdy_h1, vidin_in_h2, vidin_out_temp_h1); 
+
+  Line 518:    my_fir_h2 your_instance_name_h2 (tm3_clk_v0, vidin_new_data, my_fir_rdy_h2, vidin_in_h1, vidin_out_temp_h2); 
+
+  Line 519:    my_fir_h3 your_instance_name_h3 (tm3_clk_v0, vidin_new_data, my_fir_rdy_h3, vidin_in_h4, vidin_out_temp_h3); 
+
+  Line 520:    my_fir_h4 your_instance_name_h4 (tm3_clk_v0, vidin_new_data, my_fir_rdy_h4, vidin_in_h3, vidin_out_temp_h4); 
+
+  Line 525:          if (my_fir_rdy_f1 == 1'b1)
+
+  Line 529:          if (my_fir_rdy_f2 == 1'b1)
+
+  Line 533:          if (my_fir_rdy_f3 == 1'b1)
+
+  Line 537:          if (my_fir_rdy_h1 == 1'b1)
+
+  Line 541:          if (my_fir_rdy_h2 == 1'b1)
+
+  Line 545:          if (my_fir_rdy_h3 == 1'b1)
+
+  Line 550:          if (my_fir_rdy_h4 == 1'b1)
+
+  Line 1453: module my_fir_f1 (clk, new_data_rdy, output_data_ready, din, dout);
+
+  Line 1508: module my_fir_f2 (clk, new_data_rdy, output_data_ready, din, dout);
+
+  Line 1569: module my_fir_f3 (clk, new_data_rdy, output_data_ready, din, dout);
+
+  Line 1627: module my_fir_h1 (clk, new_data_rdy, output_data_ready, din, dout);
+
+  Line 1683: module my_fir_h2 (clk, new_data_rdy, output_data_ready, din, dout);
+
+  Line 1743: module my_fir_h3 (clk, new_data_rdy, output_data_ready, din, dout);
+
+  Line 1801: module my_fir_h4 (clk, new_data_rdy, output_data_ready, din, dout);
+</pre></div></details><details class="inner"><summary><code>read</code> <span class="meta"><span class="ok">completed</span> /work/stereovision2.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "filePath": "/work/stereovision2.v",
+ "offset": 440,
+ "limit": 130
+}</pre><div class="label">output</div><pre class="plain">&lt;path&gt;/work/stereovision2.v&lt;/path&gt;
+&lt;type&gt;file&lt;/type&gt;
+&lt;content&gt;
+440:          v_d_reg_s2_right &lt;= v_d_reg_s2_right_2to0 ; 
+441:          v_d_reg_s4_right &lt;= v_d_reg_s4_right_2to0 ; 
+442:    end 
+443: endmodule
+444: 
+445: 
+446: 
+447: // Discription: this block creates a long fifo
+448: // of  lengh of one line and then applies the
+449: // the first and last byte of the fifo into a 
+450: // that finally creates horizontal edge detection
+451: // filter. 
+452: // note: it uses fifo component to implement the fifo
+453: // date: Oct.7 ,2001
+454: // By:  Ahmad darabiha
+455: module h_fltr (tm3_clk_v0, vidin_new_data, vidin_in_f1, vidin_in_f2, vidin_in_f3, vidin_in_h1, vidin_in_h2, vidin_in_h3, vidin_in_h4, real_z_reg, imag_z_reg, real_p_reg, imag_p_reg, real_n_reg, imag_n_reg);
+456: 
+457:    input tm3_clk_v0; 
+458:    input vidin_new_data; 
+459:    input[15:0] vidin_in_f1; 
+460:    input[15:0] vidin_in_f2; 
+461:    input[15:0] vidin_in_f3; 
+462:    input[15:0] vidin_in_h1; 
+463:    input[15:0] vidin_in_h2; 
+464:    input[15:0] vidin_in_h3; 
+465:    input[15:0] vidin_in_h4; 
+466:    output[15:0] real_z_reg; 
+467:    reg[15:0] real_z_reg;
+468:    output[15:0] imag_z_reg; 
+469:    reg[15:0] imag_z_reg;
+470:    output[15:0] real_p_reg; 
+471:    reg[15:0] real_p_reg;
+472:    output[15:0] imag_p_reg; 
+473:    reg[15:0] imag_p_reg;
+474:    output[15:0] real_n_reg; 
+475:    reg[15:0] real_n_reg;
+476:    output[15:0] imag_n_reg; 
+477:    reg[15:0] imag_n_reg;
+478: 
+479:    wire[27:0] vidin_out_temp_f1; 
+480:    reg[27:0] vidin_out_reg_f1; 
+481:    wire my_fir_rdy_f1; 
+482:    wire[27:0] vidin_out_temp_f2; 
+483:    reg[27:0] vidin_out_reg_f2; 
+484:    wire my_fir_rdy_f2; 
+485:    wire[27:0] vidin_out_temp_f3; 
+486:    reg[27:0] vidin_out_reg_f3; 
+487:    wire my_fir_rdy_f3; 
+488:    wire[27:0] vidin_out_temp_h1; 
+489:    reg[27:0] vidin_out_reg_h1; 
+490:    wire my_fir_rdy_h1; 
+491:    wire[27:0] vidin_out_temp_h2; 
+492:    reg[27:0] vidin_out_reg_h2; 
+493:    wire my_fir_rdy_h2; 
+494:    wire[27:0] vidin_out_temp_h3; 
+495:    reg[27:0] vidin_out_reg_h3; 
+496:    wire my_fir_rdy_h3; 
+497:    wire[27:0] vidin_out_temp_h4; 
+498:    reg[27:0] vidin_out_reg_h4; 
+499:    wire my_fir_rdy_h4; 
+500:    wire[28:0] sum_tmp_1; 
+501:    wire[28:0] sum_tmp_2; 
+502: 
+503:    wire[28:0] sum_tmp_3; 
+504:    wire[28:0] sum_tmp_4; 
+505:    wire[30:0] sum_tmp_5; 
+506:    wire[15:0] real_p; 
+507:    wire[15:0] imag_p; 
+508:    wire[15:0] real_z; 
+509:    wire[15:0] imag_z; 
+510:    wire[15:0] real_n; 
+511:    wire[15:0] imag_n; 
+512:    wire[16:0] tmp; 
+513: 
+514:    my_fir_f1 your_instance_name_f1 (tm3_clk_v0, vidin_new_data, my_fir_rdy_f1, vidin_in_f2, vidin_out_temp_f1); 
+515:    my_fir_f2 your_instance_name_f2 (tm3_clk_v0, vidin_new_data, my_fir_rdy_f2, vidin_in_f1, vidin_out_temp_f2); 
+516:    my_fir_f3 your_instance_name_f3 (tm3_clk_v0, vidin_new_data, my_fir_rdy_f3, vidin_in_f3, vidin_out_temp_f3); 
+517:    my_fir_h1 your_instance_name_h1 (tm3_clk_v0, vidin_new_data, my_fir_rdy_h1, vidin_in_h2, vidin_out_temp_h1); 
+518:    my_fir_h2 your_instance_name_h2 (tm3_clk_v0, vidin_new_data, my_fir_rdy_h2, vidin_in_h1, vidin_out_temp_h2); 
+519:    my_fir_h3 your_instance_name_h3 (tm3_clk_v0, vidin_new_data, my_fir_rdy_h3, vidin_in_h4, vidin_out_temp_h3); 
+520:    my_fir_h4 your_instance_name_h4 (tm3_clk_v0, vidin_new_data, my_fir_rdy_h4, vidin_in_h3, vidin_out_temp_h4); 
+521:    steer_fltr my_steer_fltr_inst (tm3_clk_v0, vidin_new_data, vidin_out_reg_f1, vidin_out_reg_f2, vidin_out_reg_f3, vidin_out_reg_h1, vidin_out_reg_h2, vidin_out_reg_h3, vidin_out_reg_h4, real_z, imag_z, real_p, imag_p, real_n, imag_n); 
+522: 
+523:    always @(posedge tm3_clk_v0)
+524:    begin
+525:          if (my_fir_rdy_f1 == 1'b1)
+526:          begin
+527:             vidin_out_reg_f1 &lt;= vidin_out_temp_f1 ; 
+528:          end 
+529:          if (my_fir_rdy_f2 == 1'b1)
+530:          begin
+531:             vidin_out_reg_f2 &lt;= vidin_out_temp_f2 ; 
+532:          end 
+533:          if (my_fir_rdy_f3 
+…[truncated, 5217 chars total]</pre></div></details><details class="inner"><summary><code>grep</code> <span class="meta"><span class="ok">completed</span> h_fltr|vidin_out_f1|vidin_in_f1</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "h_fltr|vidin_out_f1|vidin_in_f1",
+ "path": "/work/stereovision2.v"
+}</pre><div class="label">output</div><pre class="plain">Found 21 matches
+/work/stereovision2.v:
+  Line 188:    h_fltr h_fltr_1_left (tm3_clk_v0, v_nd_s1_left, vidin_v_out_1_f1_left, vidin_v_out_1_f2_left, vidin_v_out_1_f3_left, vidin_v_out_1_h1_left, vidin_v_out_1_h2_left, vidin_v_out_1_h3_left, vidin_v_out_1_h4_left, real_z_1_left, imag_z_1_left, real_p_1_left, imag_p_1_left, real_n_1_left, imag_n_1_left);
+
+  Line 189:    h_fltr h_fltr_2_left (tm3_clk_v0, v_nd_s2_left, vidin_v_out_2_f1_left, vidin_v_out_2_f2_left, vidin_v_out_2_f3_left, vidin_v_out_2_h1_left, vidin_v_out_2_h2_left, vidin_v_out_2_h3_left, vidin_v_out_2_h4_left, real_z_2_left, imag_z_2_left, real_p_2_left, imag_p_2_left, real_n_2_left, imag_n_2_left); 
+
+  Line 190:    h_fltr h_fltr_4_left (tm3_clk_v0, v_nd_s4_left, vidin_v_out_4_f1_left, vidin_v_out_4_f2_left, vidin_v_out_4_f3_left, vidin_v_out_4_h1_left, vidin_v_out_4_h2_left, vidin_v_out_4_h3_left, vidin_v_out_4_h4_left, real_z_4_left, imag_z_4_left, real_p_4_left, imag_p_4_left, real_n_4_left, imag_n_4_left);
+
+  Line 195:    h_fltr h_fltr_1_right (tm3_clk_v0, v_nd_s1_right, vidin_v_out_1_f1_right, vidin_v_out_1_f2_right, vidin_v_out_1_f3_right, vidin_v_out_1_h1_right, vidin_v_out_1_h2_right, vidin_v_out_1_h3_right, vidin_v_out_1_h4_right, real_z_1_right, imag_z_1_right, real_p_1_right, imag_p_1_right, real_n_1_right, imag_n_1_right);
+
+  Line 196:    h_fltr h_fltr_2_right (tm3_clk_v0, v_nd_s2_right, vidin_v_out_2_f1_right, vidin_v_out_2_f2_right, vidin_v_out_2_f3_right, vidin_v_out_2_h1_right, vidin_v_out_2_h2_right, vidin_v_out_2_h3_right, vidin_v_out_2_h4_right, real_z_2_right, imag_z_2_right, real_p_2_right, imag_p_2_right, real_n_2_right, imag_n_2_right);
+
+  Line 197:    h_fltr h_fltr_4_right (tm3_clk_v0, v_nd_s4_right, vidin_v_out_4_f1_right, vidin_v_out_4_f2_right, vidin_v_out_4_f3_right, vidin_v_out_4_h1_right, vidin_v_out_4_h2_right, vidin_v_out_4_h3_right, vidin_v_out_4_h4_right, real_z_4_right, imag_z_4_right, real_p_4_right, imag_p_4_right, real_n_4_right, imag_n_4_right); 
+
+  Line 455: module h_fltr (tm3_clk_v0, vidin_new_data, vidin_in_f1, vidin_in_f2, vidin_in_f3, vidin_in_h1, vidin_in_h2, vidin_in_h3, vidin_in_h4, real_z_reg, imag_z_reg, real_p_reg, imag_p_reg, real_n_reg, imag_n_reg);
+
+  Line 459:    input[15:0] vidin_in_f1; 
+
+  Line 515:    my_fir_f2 your_instance_name_f2 (tm3_clk_v0, vidin_new_data, my_fir_rdy_f2, vidin_in_f1, vidin_out_temp_f2); 
+
+  Line 664: module v_fltr_496x7 (tm3_clk_v0, vidin_new_data, vidin_in, vidin_out_f1, vidin_out_f2, vidin_out_f3, vidin_out_h1, vidin_out_h2, vidin_out_h3, vidin_out_h4); // PAJ var never used, vidin_out_or);
+
+  Line 672:    output[15:0] vidin_out_f1; 
+
+  Line 673:    wire[15:0] vidin_out_f1;
+
+  Line 706:    fltr_compute_f1 inst_fltr_compute_f1 (tm3_clk_v0, {buff_out1, buff_out2, buff_out3, buff_out4, buff_out5, buff_out6, buff_out7}, vidin_out_f1);	
+
+  Line 723: module v_fltr_316x7 (tm3_clk_v0, vidin_new_data, vidin_in, vidin_out_f1, vidin_out_f2, vidin_out_f3, vidin_out_h1, vidin_out_h2, vidin_out_h3, vidin_out_h4); // PAJ var never used, vidin_out_or);
+
+  Line 731:    output[15:0] vidin_out_f1; 
+
+  Line 732:    wire[15:0] vidin_out_f1;
+
+  Line 765:    fltr_compute_f1 inst_fltr_compute_f1 (tm3_clk_v0, {buff_out1, buff_out2, buff_out3, buff_out4, buff_out5, buff_out6, buff_out7}, vidin_out_f1);	
+
+  Line 782: module v_fltr_226x7 (tm3_clk_v0, vidin_new_data, vidin_in, vidin_out_f1, vidin_out_f2, vidin_out_f3, vidin_out_h1, vidin_out_h2, vidin_out_h3, vidin_out_h4); // PAJ var never used, vidin_out_or);
+
+  Line 790:    output[15:0] vidin_out_f1; 
+
+  Line 791:    wire[15:0] vidin_out_f1;
+
+  Line 824:    fltr_compute_f1 inst_fltr_compute_f1 (tm3_clk_v0, {buff_out1, buff_out2, buff_out3, buff_out4, buff_out5, buff_out6, buff_out7}, vidin_out_f1);	
+</pre></div></details><details class="inner"><summary><code>read</code> <span class="meta"><span class="ok">completed</span> /work/stereovision2.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "filePath": "/work/stereovision2.v",
+ "offset": 664,
+ "limit": 60
+}</pre><div class="label">output</div><pre class="plain">&lt;path&gt;/work/stereovision2.v&lt;/path&gt;
+&lt;type&gt;file&lt;/type&gt;
+&lt;content&gt;
+664: module v_fltr_496x7 (tm3_clk_v0, vidin_new_data, vidin_in, vidin_out_f1, vidin_out_f2, vidin_out_f3, vidin_out_h1, vidin_out_h2, vidin_out_h3, vidin_out_h4); // PAJ var never used, vidin_out_or);
+665: 
+666:    parameter horiz_length  = 9'b111110000;
+667:    parameter vert_length  = 3'b111; // PAJ constant for all
+668: 
+669:    input tm3_clk_v0; 
+670:    input vidin_new_data; 
+671:    input[7:0] vidin_in; 
+672:    output[15:0] vidin_out_f1; 
+673:    wire[15:0] vidin_out_f1;
+674:    output[15:0] vidin_out_f2; 
+675:    wire[15:0] vidin_out_f2;
+676:    output[15:0] vidin_out_f3; 
+677:    wire[15:0] vidin_out_f3;
+678:    output[15:0] vidin_out_h1; 
+679:    wire[15:0] vidin_out_h1;
+680:    output[15:0] vidin_out_h2; 
+681:    wire[15:0] vidin_out_h2;
+682:    output[15:0] vidin_out_h3; 
+683:    wire[15:0] vidin_out_h3;
+684:    output[15:0] vidin_out_h4; 
+685:    wire[15:0] vidin_out_h4;
+686: //   output[7:0] vidin_out_or; 
+687: //   reg[7:0] vidin_out_or;
+688: 
+689:    wire[7:0] buff_out0; 
+690:    wire[7:0] buff_out1; 
+691:    wire[7:0] buff_out2; 
+692:    wire[7:0] buff_out3; 
+693:    wire[7:0] buff_out4; 
+694:    wire[7:0] buff_out5; 
+695:    wire[7:0] buff_out6; 
+696:    wire[7:0] buff_out7; 
+697: 
+698:  	fifo496 fifo0(tm3_clk_v0, vidin_new_data, buff_out0, buff_out1);
+699:  	fifo496 fifo1(tm3_clk_v0, vidin_new_data, buff_out1, buff_out2);
+700:  	fifo496 fifo2(tm3_clk_v0, vidin_new_data, buff_out2, buff_out3);
+701:  	fifo496 fifo3(tm3_clk_v0, vidin_new_data, buff_out3, buff_out4);
+702:  	fifo496 fifo4(tm3_clk_v0, vidin_new_data, buff_out4, buff_out5);
+703:  	fifo496 fifo5(tm3_clk_v0, vidin_new_data, buff_out5, buff_out6);
+704:  	fifo496 fifo6(tm3_clk_v0, vidin_new_data, buff_out6, buff_out7);
+705: 
+706:    fltr_compute_f1 inst_fltr_compute_f1 (tm3_clk_v0, {buff_out1, buff_out2, buff_out3, buff_out4, buff_out5, buff_out6, buff_out7}, vidin_out_f1);	
+707:    fltr_compute_f2 inst_fltr_compute_f2 (tm3_clk_v0, {buff_out1, buff_out2, buff_out3, buff_out4, buff_out5, buff_out6, buff_out7}, vidin_out_f2);	
+708:    fltr_compute_f3 inst_fltr_compute_f3 (tm3_clk_v0, {buff_out1, buff_out2, buff_out3, buff_out4, buff_out5, buff_out6, buff_out7}, vidin_out_f3);	
+709:    fltr_compute_h1 inst_fltr_compute_h1 (tm3_clk_v0, {buff_out1, buff_out2, buff_out3, buff_out4, buff_out5, buff_out6, buff_out7}, vidin_out_h1);	
+710:    fltr_compute_h2 inst_fltr_compute_h2 (tm3_clk_v0, {buff_out1, buff_out2, buff_out3, buff_out4, buff_out5, buff_out6, buff_out7}, vidin_out_h2);	
+711:    fltr_compute_h3 inst_fltr_compute_h3 (tm3_clk_v0, {buff_out1, buff_out2, buff_out3, buff_out4, buff_out5, buff_out6, buff_out7}, vidin_out_h3);	
+712:    fltr_compute_h4 inst_fltr_compute_h4 (tm3_clk_v0, {buff_out1, buff_out2, buff_out3, buff_out4, buff_out5, buff_out6, buff_out7}, vidin_out_h4);	
+713: 
+714:          assign buff_out0 = vidin_in ; 
+715: /*
+716:    always @(posedge tm3_clk_v0)
+717:    begin
+718:          buff_out0 &lt;= vidin_in ; 
+719:          //vidin_out_or &lt;= buff_out6; 
+720:    end 
+721: */
+722: endmodule
+723: module v_fltr_316x7 (tm3_clk_v0, vidin_new_data, vidin_in, vidin_out_f1, vidin_out_f2, vidin_out_f3, vidin_out_h1, vidin_out_h2, vidin_out_h3, vidin_out_h4); // PAJ var never used, vidin_out_or);
+
+(Showing lines 664-723 of 1846. Use offset=724 to continue.)
+&lt;/content&gt;</pre></div></details><details class="inner"><summary><code>read</code> <span class="meta"><span class="ok">completed</span> /work/stereovision2.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "filePath": "/work/stereovision2.v",
+ "offset": 100,
+ "limit": 90
+}</pre><div class="label">output</div><pre class="plain">&lt;path&gt;/work/stereovision2.v&lt;/path&gt;
+&lt;type&gt;file&lt;/type&gt;
+&lt;content&gt;
+100:    wire[15:0] vidin_v_out_2_f3_left; 
+101:    wire[15:0] vidin_v_out_2_h1_left; 
+102:    wire[15:0] vidin_v_out_2_h2_left; 
+103:    wire[15:0] vidin_v_out_2_h3_left; 
+104:    wire[15:0] vidin_v_out_2_h4_left; 
+105:    wire[15:0] vidin_v_out_4_f1_left; 
+106:    wire[15:0] vidin_v_out_4_f2_left; 
+107:    wire[15:0] vidin_v_out_4_f3_left; 
+108:    wire[15:0] vidin_v_out_4_h1_left; 
+109:    wire[15:0] vidin_v_out_4_h2_left; 
+110:    wire[15:0] vidin_v_out_4_h3_left; 
+111:    wire[15:0] vidin_v_out_4_h4_left; 
+112:    wire[15:0] vidin_v_out_1_f1_right; 
+113:    wire[15:0] vidin_v_out_1_f2_right; 
+114:    wire[15:0] vidin_v_out_1_f3_right; 
+115:    wire[15:0] vidin_v_out_1_h1_right; 
+116:    wire[15:0] vidin_v_out_1_h2_right; 
+117:    wire[15:0] vidin_v_out_1_h3_right; 
+118:    wire[15:0] vidin_v_out_1_h4_right; 
+119:    wire[15:0] vidin_v_out_2_f1_right; 
+120:    wire[15:0] vidin_v_out_2_f2_right; 
+121:    wire[15:0] vidin_v_out_2_f3_right; 
+122:    wire[15:0] vidin_v_out_2_h1_right; 
+123:    wire[15:0] vidin_v_out_2_h2_right; 
+124:    wire[15:0] vidin_v_out_2_h3_right; 
+125:    wire[15:0] vidin_v_out_2_h4_right; 
+126:    wire[15:0] vidin_v_out_4_f1_right; 
+127:    wire[15:0] vidin_v_out_4_f2_right; 
+128:    wire[15:0] vidin_v_out_4_f3_right; 
+129:    wire[15:0] vidin_v_out_4_h1_right; 
+130:    wire[15:0] vidin_v_out_4_h2_right; 
+131:    wire[15:0] vidin_v_out_4_h3_right; 
+132:    wire[15:0] vidin_v_out_4_h4_right; 
+133:    wire[7:0] v_d_reg_s1_2to3_left; 
+134:    wire[7:0] v_d_reg_s2_2to3_left; 
+135:    wire[7:0] v_d_reg_s4_2to3_left; 
+136:    wire[7:0] v_d_reg_s1_2to3_right; 
+137:    wire[7:0] v_d_reg_s2_2to3_right; 
+138:    wire[7:0] v_d_reg_s4_2to3_right; 
+139:    reg[18:0] vidin_addr_reg_2to3; 
+140:    reg svid_comp_switch_2to3; 
+141:    wire[15:0] real_z_4_left; 
+142:    wire[15:0] imag_z_4_left; 
+143:    wire[15:0] real_p_4_left; 
+144:    wire[15:0] imag_p_4_left; 
+145:    wire[15:0] real_n_4_left; 
+146:    wire[15:0] imag_n_4_left; 
+147:    wire[15:0] real_z_4_right; 
+148:    wire[15:0] imag_z_4_right; 
+149:    wire[15:0] real_p_4_right; 
+150:    wire[15:0] imag_p_4_right; 
+151:    wire[15:0] real_n_4_right; 
+152:    wire[15:0] imag_n_4_right; 
+153:    wire[15:0] real_z_2_left; 
+154:    wire[15:0] imag_z_2_left; 
+155:    wire[15:0] real_p_2_left; 
+156:    wire[15:0] imag_p_2_left; 
+157:    wire[15:0] real_n_2_left; 
+158:    wire[15:0] imag_n_2_left; 
+159:    wire[15:0] real_z_2_right; 
+160:    wire[15:0] imag_z_2_right; 
+161:    wire[15:0] real_p_2_right; 
+162:    wire[15:0] imag_p_2_right; 
+163:    wire[15:0] real_n_2_right; 
+164:    wire[15:0] imag_n_2_right; 
+165:    wire[15:0] real_z_1_left; 
+166:    wire[15:0] imag_z_1_left; 
+167:    wire[15:0] real_p_1_left; 
+168:    wire[15:0] imag_p_1_left; 
+169:    wire[15:0] real_n_1_left; 
+170:    wire[15:0] imag_n_1_left; 
+171:    wire[15:0] real_z_1_right; 
+172:    wire[15:0] imag_z_1_right; 
+173:    wire[15:0] real_p_1_right; 
+174:    wire[15:0] imag_p_1_right; 
+175:    wire[15:0] real_n_1_right; 
+176:    wire[15:0] imag_n_1_right; 
+177: 
+178:    assign tm3_sram_data_in = offchip_sram_data_in;
+179:    assign offchip_sram_addr = tm3_sram_addr;
+180:    assign offchip_sram_data_out = tm3_sram_data_out;
+181:    assign offchip_sram_we = tm3_sram_we;
+182:    assign offchip_sram_oe = tm3_sram_oe;
+183:    assign tm3_sram_data_out = tm3_sram_data_xhdl0;
+184: 
+185:    v_fltr_496x7  v_fltr_1_left(tm3_clk_v0, v_nd_s1_left, v_d_reg_s1_left, vidin_v_out_1_f1_left, vidin_v_out_1_f2_left, vidin_v_out_1_f3_left, vidin_v_out_1_h1_left, vidin_v_out_1_h2_left, vidin_v_out_1_h3_left, vidin_v_out_1_h4_left); 
+186:    v_fltr_316x7  v_fltr_2_left(tm3_clk_v0, v_nd_s2_left, v_d_reg_s2_left, vidin_v_out_2_f1_left, vidin_v_out_2_f2_left, vidin_v_out_2_f3_left, vidin_v_out_2_h1_left, vidin_v_out_2_h2_left, vidin_v_out_2_h3_left, vidin_v_out_2_h4_left); 
+187:    v_fltr_226x7  v_fltr_4_left(tm3_clk_v0, v_nd_s4_left, v_d_reg_s4_left, vidin_v
+…[truncated, 4845 chars total]</pre></div></details></div></div></details></div></details></div></details><details class="section"><summary><h2>The edit</h2> <span class="meta">absent</span></summary><div class="body"><p class="absent">No edit.diff in the run dir (the run produced no edit, or ended before one was recorded).</p></div></details><details class="section"><summary><h2>Verification</h2> <span class="meta">0 editor attempt(s) · from the outcome record · final: planner_declined</span></summary><div class="body"><p class="note">This run predates the per-attempt record (2026-09-12). With a single editor attempt, the rows below follow directly from the recorded outcome code and reason; nothing is inferred beyond what that code implies about the stages that ran.</p><p class="absent">No editor call recorded: the loop ended before an edit (the planner declined, its response was malformed, or the plan was rejected).</p><h3>Checks on the final editor attempt</h3><p class="absent">Outcome code 'planner_declined': the run ended before any check ran (planner declined: no representative mapping).</p><h3>Synthesis-only result (counted from files)</h3><p class="absent">No synthesis netlist under vtr/ in this run dir.</p><h3>Packed netlist (counted from files)</h3><p class="absent">No packed .net under vtr/ (the run never reached VPR, or the flow failed before packing).</p><p>Modes recorded in the outcome as used after the edit: <span class="absent">none recorded</span></p></div></details><details class="section"><summary><h2>Numbers</h2> <span class="meta">no PPA · 1 call(s)</span></summary><div class="body"><h3>PPA as recorded</h3><p class="absent">No PPA recorded (the run ended before a VTR flow completed; before 2026-09-12 also any rejected run).</p><h3>Coverage</h3><table class="num"><tr><th>quantity</th><th class="n">value</th><th>what it counts</th></tr><tr><td>candidate regions offered</td><td class='n'>83</td><td class='note'>detected regions handed to the planner (one RTL expression each)</td></tr><tr><td>candidate instances</td><td class='n'>498</td><td class='note'>those regions times the elaborated instance count of their module</td></tr><tr><td>regions selected</td><td class='n'>—</td><td class='note'>regions the approved plan names</td></tr><tr><td>selected instances</td><td class='n'>—</td><td class='note'>selected regions times their module's instance count</td></tr><tr><td>blocks packed</td><td class='n'>—</td><td class='note'>packed blocks in the target mode (editor attempt )</td></tr></table><p class="note">Offered and packed are not the same unit: a candidate is a source region, a packed block is an elaborated instance, and one block can fuse several regions (or the editor can chain several blocks for one region), so they are recorded raw rather than as a ratio.</p><h3>Block counts</h3><p class="absent">No packed netlist to count.</p><h3>Tokens and cost per call</h3><div style="overflow-x:auto"><table class="num"><tr><th>#</th><th>role</th><th>model</th><th>status</th><th class="n">in</th><th class="n">out</th><th class="n">reasoning</th><th class="n">cache read</th><th class="n">cache write</th><th class="n">steps</th><th class="n">tool calls (errors)</th><th class="n">seconds</th><th class="n">cost $</th></tr><tr><td>1</td><td>planner</td><td><code>anthropic/claude-opus-5</code></td><td>ok</td><td class='n'>14</td><td class='n'>23751</td><td class='n'>0</td><td class='n'>168332</td><td class='n'>51282</td><td class='n'>7</td><td class='n'>9 (0)</td><td class='n'>316.4</td><td class='n'>0.9985</td></tr><tr class='total'><td></td><td>total (1 calls)</td><td></td><td></td><td class='n'>14</td><td class='n'>23751</td><td class='n'>0</td><td class='n'>168332</td><td class='n'>51282</td><td></td><td></td><td class='n'>316.5</td><td class='n'>0.9985</td></tr></table></div><p class="note">Cost as reported by the gateway per call, summed. Token components are kept separate (uncached input, output, reasoning, cache read, cache write).</p></div></details><details class="section"><summary><h2>Objective loop</h2> <span class="meta">quiet — </span></summary><div class="body"><table class="num"><tr><th>quantity</th><th>value</th></tr><tr><td>trigger</td><td><b>did not fire</b></td></tr><tr><td>reason</td><td><code>—</code></td></tr><tr><td>seeds per candidate</td><td>1, 2, 3</td></tr><tr><td>kept</td><td>—</td></tr></table><p class="note">The objective is the area-delay product: VPR's "Total used logic block area" (minimum-width transistor areas, I/Os and empty grid tiles excluded) times the critical path. Area and delay are each taken as the median over the seed list, independently, so the recorded pair need not come from one placement; every seed's raw numbers are in the table below. The trigger fires when the product is NOT LOWER than the baseline's.</p><p class="absent">No baseline area was available, so the product could not be formed and the step could not fire.</p><h3>Candidates measured</h3><p class="absent">No candidate was measured: the run produced no accepted edit, so the step had nothing to compare.</p></div></details><script type="application/json" id="run-summary">{"run_id": "20260919-201925-b4d1b5", "suite": "vtr_sv2", "design": "stereovision2", "mode": "comb_mult_add_16_mode", "started_at": "2026-09-19T20:19:25-07:00", "accepted": false, "outcome": "planner_declined", "tier": "NONE", "editor_attempts": 0, "model_family": "Claude", "models": {"planner": "anthropic/claude-opus-5"}, "wall_seconds": 316.4506907989853, "blocks_packed": null, "regime": "koios_medium", "archived": false, "file": "stereovision2_comb_mult_add_16_mode_20260919-201925-b4d1b5.html"}</script></main></body></html>

@@ -1,6 +1,16 @@
 # Hand-maintained, read by `benchadapt publish` when it regenerates index.html.
 # One entry per run id. Fields:
-#   description: one line saying what the run established, or what it is still on the index for
+#   description: ONE line, fixed shape:
+#     <converted>/<applicable> <modules>; period <vs baseline>; area <vs baseline>; <what is notable>
+#     converted/applicable are region counts from the run record (coverage.regions_selected over
+#     coverage.candidates_offered); modules names the module family the regions sit in. period and
+#     area are against the baseline for the run's OWN design and VPR regime, never across regimes.
+#     area is VPR's "Total used logic block area". A field the record does not carry is written
+#     "not recorded", never inferred.
+#   group: optional {name, index, size}. Rendered before the description as "<index>/<size> <name>".
+#     A group is an editorial grouping of runs made as one sequence; it lives here and not in the
+#     run record, so a run can be regrouped without touching outputs/. Runs with no group render
+#     exactly as before.
 #   equivalence: one line in a fixed shape, filled from the harness logs, never from memory:
 #     <verdict>; sim <n> <cycles|vectors> on <module>.<outputs>, <m> mismatches; LEC <proven>/<points>[ (unproven on <signals>)]; <testbench>, <model file>
 #     verdict: equivalent (0 mismatches and every LEC point proven) | inconclusive (0 mismatches, LEC short or not run)
@@ -21,74 +31,124 @@
 # where the run's point is a comparison between models. Runs that are otherwise alike are
 # distinguished by something that actually happened in them.
 
+
+20260920-061855-cc3e48:
+  description: "41/83 my_fir (all seven); period -29.7%; area -14.9%; first rewrite on this design to lower both, and the first to reach every my_fir module — an 18-bit port needs no din bound."
+
+20260919-201925-b4d1b5:
+  description: "0/83 none converted; period not recorded; area not recorded; planner declined with TIER: NONE under the area-delay objective, correctly — every comb_mult_add_16 rewrite raises the product."
+
+20260919-180249-1ef135:
+  description: "24/83 my_fir f1/h1/h2/h4; period -12.3%; area +15.0%; best period of the comb_mult_add_16 runs, but 85% of the gain is routing and the product still rises 0.9%."
+
+20260919-130618-6c95b0:
+  description: "24/83 my_fir f1/h1/h2/h4; period -1.6%; area +10.8%; same edit shape as dfdcb1 at 1.43 ns less, the difference being routing around the block pair, not structure."
+  group: {name: "both instructions", index: 3, size: 3}
+
+20260919-124655-dfdcb1:
+  description: "24/83 my_fir f1/h1/h2/h4; period +9.9%; area +12.1%; first run to take my_fir instead of fltr_compute, proving the din bound from the upstream coefficients."
+  group: {name: "both instructions", index: 2, size: 3}
+
+20260919-122617-a8d97c:
+  description: "20/83 fltr_compute (all seven); period +0.1%; area +24.9%; 120 blocks spread over every module, and only 1 of 100 timing paths names one."
+  group: {name: "both instructions", index: 1, size: 3}
+
+20260919-121429-938270:
+  description: "7/83 fltr_compute f1; period -1.7%; area +9.6%; the narrowest accepted rewrite on this design, one module only."
+  group: {name: "rules only", index: 3, size: 3}
+
+20260919-120030-b0e1dc:
+  description: "22/83 fltr_compute f2/h1/h2/h3; period -6.1%; area +28.9%; +578 LUTs against 622fca's -1 on the same design, the cliff being a kept d_out_tmp stage."
+  group: {name: "rules only", index: 2, size: 3}
+
+20260919-114651-622fca:
+  description: "12/83 fltr_compute h1/h3; period -3.2%; area +11.3%; deletes the d_out_tmp register stage and its sign-extension tree, leaving no soft gate in the converted modules."
+  group: {name: "rules only", index: 1, size: 3}
+
+20260919-112820-89ee19:
+  description: "42/83 fltr_compute (all seven); period +24.9%; area +38.4%; full T1 coverage again, and the worst period of the four."
+  group: {name: "coverage only", index: 4, size: 4}
+
+20260919-002825-e4efa1:
+  description: "38/83 fltr_compute (all seven) planned, none built; period not recorded; area not recorded; the editor call returned HTTP 529 with an empty response, so no edit, no VTR and no measurement."
+  group: {name: "coverage only", index: 3, size: 4}
+
+20260919-001048-255fe2:
+  description: "38/83 fltr_compute (all seven); period +0.1%; area +39.4%; leaves exactly the four 9-bit-coefficient taps whose 17-bit truncation is load-bearing."
+  group: {name: "coverage only", index: 2, size: 4}
+
+20260918-234934-6e22e1:
+  description: "42/83 fltr_compute (all seven); period -3.6%; area +43.5%; first run to take all 42 T1 sites, 252 blocks, and the largest area of any run here."
+  group: {name: "coverage only", index: 1, size: 4}
+
+20260915-004939-736294:
+  description: "5/83 fltr_compute f2; period +135.3%; area +20.5%; seven blocks in series; measured on koios_small, so not comparable with the koios_medium runs."
+  equivalence: "equivalent; sim 2035 cycles on fltr_compute_f2.dout, 0 mismatches; LEC 32/32; tb_equiv_fltr.v, comb_mult_add_16.v"
+
+20260915-004011-e9ae9b:
+  description: "5/83 fltr_compute f2; period +124.8%; area +17.9%; seven blocks in series; measured on koios_small, so not comparable with the koios_medium runs."
+  equivalence: "equivalent; sim 2035 cycles on fltr_compute_f2.dout, 0 mismatches; LEC 32/32; tb_equiv_fltr.v, comb_mult_add_16.v"
+
+20260915-001535-ffde1b:
+  description: "6/83 fltr_compute h1; period +94.2%; area +7.0%; six blocks in series with the chain split across two columns, the run that priced chaining through general routing."
+  equivalence: "equivalent; sim 2038 cycles on fltr_compute_h1.dout, 0 mismatches; LEC 32/32; tb_equiv_fltr.v, comb_mult_add_16.v"
+
 20260914-001612-e388bf:
-  description: "Third without the inherited prompt, the same nine sites and nine blocks again; its editor simulated its own edit against a model of the block it wrote in scratch before check.sh ever ran."
+  description: "9/18 bilinearintrp; period +139.6%; area +26.7%; third without the inherited prompt; its editor simulated its own edit against a model it wrote before check.sh ran."
   equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 124/124; tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
 
 20260914-000834-9be831:
-  description: "Second without the inherited prompt, nine sites and nine blocks; its editor wrote a testbench and a Python driver into scratch to check the edit itself, and its plan reviewer read the top-level consumers before approving."
+  description: "9/18 bilinearintrp; period +139.5%; area +29.7%; second without the inherited prompt; its editor wrote a testbench and driver into scratch to check itself."
   equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 124/124; tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
 
 20260914-000233-ef78a2:
-  description: "First of three runs with the inherited assistant prompt removed from every agent: the same nine sites and nine blocks as the three runs before it, so the framing that prompt carried was not what chose them. Its edit kept 58 more flip-flops than the other two and came out 1.3 ns slower."
+  description: "9/18 bilinearintrp; period +166.9%; area +26.1%; first with the inherited assistant prompt removed; kept 58 more flip-flops than the other two and came out 1.3 ns slower."
   equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 124/124; tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
 
 20260913-201714-642729:
-  description: "Third of the three, establishing that the nine-region choice repeats at this prompt set; its planner reached for ripgrep and fell back, and its reviewer probed with three successive find patterns."
-  equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 124/124; tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
-
-20260913-193020-ed0a74:
-  description: "First of the three runs at the corrected prompt set, and the last before the sandbox existed: the same nine sites as the two that follow, but its acceptance reviewer was refused a cat of a copy of the block's behavioral model kept in the developer's notes outside the repository, read the same file with grep instead, and read an architecture copy the same way. The read the sandbox was built to stop."
+  description: "9/18 bilinearintrp; period +137.4%; area +27.3%; third of three at this prompt set, establishing that the nine-region choice repeats."
   equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 124/124; tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
 
 20260913-195430-d2386a:
-  description: "Second of the three, and the first with every agent call inside a bubblewrap sandbox; its acceptance reviewer searched the whole filesystem with find and a recursive grep from /, and both returned only its own working copy."
+  description: "9/18 bilinearintrp; period +137.4%; area +29.1%; second of three at this prompt set."
+  equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 124/124; tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
+
+20260913-193020-ed0a74:
+  description: "9/18 bilinearintrp; period +137.4%; area +27.3%; first of three at this prompt set."
   equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 124/124; tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
 
 20260913-003854-c7b4de:
-  description: "Third repeat at one commit, the same nine sites and the same chain shape again; the plan reviewer approved and the loop re-ran the planner anyway, which is where the verdict-parse defect surfaced."
+  description: "9/18 bilinearintrp; period +137.4%; area +27.3%; same nine regions and nine blocks as the runs around it."
   equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 124/124; tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
 
 20260913-002957-033296:
-  description: "Second repeat at the same commit, same nine sites and same shape; its editor wrote and ran a 20,000-vector check of its own edit, which survives in the run directory as _bl_tb.v."
+  description: "9/18 bilinearintrp; period +137.4%; area +30.2%; nine blocks in series, the arrangement that makes the period 2.4x the baseline."
   equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 124/124; tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
 
 20260912-211952-6553b1:
-  description: "First of three repeats at one commit establishing that the planner takes all nine applicable sites: nine blocks across all three channels, where the 09-06 run had taken three over red alone."
+  description: "9/18 bilinearintrp; period +140.9%; area +26.1%; the run re-analysed at wire level to price a chain hop at 1.170 ns between adjacent tiles."
   equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 124/124; tb_equiv_bilin_rgb_run4.v, comb_mult_add_16.v"
 
 20260912-174718-9ca8d3:
-  description: "GPT against Claude on the same design and mode: one block fusing two of red's three products, with delayed operand copies keeping the terms aligned. The acceptance reviewer rejected the first attempt for summing a current-cycle product with a registered one."
+  description: "1/18 bilinearintrp; period +9.1%; area +1.2%; a single block, and the +0.44 ns is a soft adder joining the block's stage."
   equivalence: "equivalent; sim 598 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 180/180; tb_equiv_bilin_rgb_run4gpt.v, comb_mult_add_16.v"
 
 20260907-200734-b07463:
-  description: "The Koios result: every one of the 72 sum-of-products sites in dla_like.small converted onto comb_sop_2_18 from a single module edit. Its acceptance reviewer checked 200,000 vectors against a model of the block it wrote itself."
+  description: "not recorded (pre-schema-2) dla_like.small; period -20.0%; area -5.3%; the only comb_sop_2_18 run before cc3e48, and the only other run to lower both."
   equivalence: "equivalent; sim 1030 cycles on dsp_block_16_8_false.resulta/chainout, 0 mismatches; LEC 73/73; tb_equiv_dsp_block.v, comb_sop_2_18.v"
 
 20260906-002639-68ab30:
-  description: "First rewrite proven equivalent: three chained comb_mult_add_16 blocks over the red channel of bilinearintrp. Both the editor and the acceptance reviewer simulated it against their own models of the block before the framework checked anything."
+  description: "not recorded (pre-schema-2) bilinearintrp; period +68.6%; area +9.8%; measured under VPR defaults, so not comparable with the fixed-layout runs."
   equivalence: "equivalent; sim 526 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 166/166; tb_equiv_bilin_rgb.v, comb_mult_add_16.v"
 
 20260905-233425-5363c7:
-  description: "Four editor attempts against a gate no edit could satisfy: the netlist aliasing labelled a single region a fusion, so the multi-region checks fired on every attempt. The rewrite was also wrong on the green channel."
+  description: "not recorded (pre-schema-2) bilinearintrp; period not recorded; area +1.8%; gate_failed, kept on the index as the first recorded failure of the deterministic gates."
   equivalence: "not equivalent; sim 526 cycles on bilinearintrp.r/g/b, 473 mismatches on g (0 on r, 0 on b); LEC 173/180 (unproven on g); tb_equiv_bilin_rgb.v, comb_mult_add_16.v"
 
 20260827-153207-b498fe:
-  description: "The Claude half of the controlled pair run once the mode contract was complete: the same single int_sop_4 rewrite as its GPT twin up to two wire names, and cycle-exact where the pre-fix edits had been a cycle late."
+  description: "not recorded (pre-schema-2) bilinearintrp; period +5.6%; area +7.3%; sop_4_mode, the accumulating four-term mode, under VPR defaults."
   equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 166/166; tb_equiv_bilin_rgb_run4.v, int_sop_4_model.v (1-stage)"
 
 20260827-152947-8d3f03:
-  description: "The GPT half of that controlled pair, and the rewrite the LEC study was built on: one int_sop_4 driving r directly, with the external register the pre-contract runs had added now gone."
-
+  description: "not recorded (pre-schema-2) bilinearintrp; period -7.1%; area +1.8%; sop_4_mode, and the only raygentop run to beat its baseline period."
   equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 166/166; tb_equiv_bilin_rgb_run4.v, int_sop_4_model.v (1-stage)"
-20260915-001535-ffde1b:
-  description: "First run on stereovision2, the coverage target: offered 83 candidates, the planner took the six non-zero taps of one vertical filter, fltr_compute_h1, as a chain of six comb_mult_add_16 blocks (36 packed over its six instances), and gave reasons for leaving the my_fir modules (16-bit unsigned operands) and fltr_compute_f1/f3/h4 (a 9-bit coefficient whose product reaches 2^16). The six-block chain sits in one cycle: critical path 11.61 to 22.54 ns against the koios_small baseline, dsp 224 to 260."
-  equivalence: "equivalent; sim 2038 cycles on fltr_compute_h1.dout, 0 mismatches; LEC 32/32; tb_equiv_fltr.v, comb_mult_add_16.v"
-
-20260915-004011-e9ae9b:
-  description: "Second stereovision2 run, same invocation: the planner moved to fltr_compute_f2 (five candidate taps plus the two shift taps it absorbed), a chain of seven comb_mult_add_16 blocks, 42 packed over six instances; f1/f3/h4 left on the 9-bit coefficient, my_fir not named. Critical path 11.61 to 26.10 ns against the koios_small baseline, dsp 224 to 289. The editor appended its own blackbox declaration of the block to the file."
-  equivalence: "equivalent; sim 2035 cycles on fltr_compute_f2.dout, 0 mismatches; LEC 32/32; tb_equiv_fltr.v, comb_mult_add_16.v"
-
-20260915-004939-736294:
-  description: "Third stereovision2 run, same invocation: fltr_compute_f2 again with the same seven-block chain, identical to run e9ae9b apart from instance names and comments; 42 blocks packed. The planner's exclusion list wrongly puts h1 and h3 (largest products 49215 and 37485) among the modules whose products exceed 2^16. Critical path 27.31 ns, dsp 300, the packer's answer to a netlist that differs only in names."
-  equivalence: "equivalent; sim 2035 cycles on fltr_compute_f2.dout, 0 mismatches; LEC 32/32; tb_equiv_fltr.v, comb_mult_add_16.v"
