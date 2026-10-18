@@ -32,6 +32,18 @@
 # distinguished by something that actually happened in them.
 
 
+20261018-002646-0915c9:
+  description: "1/33 seq_mac (256 of 288 instances); period -13.0%; area -20.5%; 2afa0f repeated under the three-term objective and the 2026-10-17 reset rule: same plan, same signal (effective_rst), same edits, product 0.602 of the baseline; the kept rewrite declares the block (* blackbox *), revision 1 does not and keeps the dead qmult/qadd."
+  equivalence: "not equivalent; sim 1374 cycles on systolic_pe_matrix.matrixC*/a_data_out/b_data_out, 246746 same-cycle mismatches on 256 of 258 outputs (first at the pe_reset pulse after multiply 1; revision 1: 270039); LEC 0/6144 (killed at 600 s; revision 1 0/6248); tb_equiv_pe_matrix.v, mac_int_9x9.v; diagnostic tb_equiv_pe_matrix_midreset.v: 251824 and 284758 mismatches"
+
+20261018-002632-3e90cd:
+  description: "1/33 seq_mac (256 of 288 instances); period +0.0%; area -32.1%; the design with the accumulator reset fixed (koios_fixed), three-term objective, product 0.574 of its baseline, 256 blocks on 64 full tiles, revision declined by the planner; the editor's RTL declares no blackbox for the block and keeps the dead qmult/qadd."
+  equivalence: "inconclusive; sim 1380 cycles on systolic_pe_matrix.matrixC*/a_data_out/b_data_out, 0 mismatches under the stated bound (pe_reset pulsed only between matrix multiplies); LEC 0/6144 (killed at 600 s); tb_equiv_pe_matrix_between.v, mac_int_9x9.v; diagnostic tb_equiv_pe_matrix.v (a pulse during multiply 3): 197012 mismatches on 256 of 258 outputs"
+
+20261016-135809-2afa0f:
+  description: "1/33 seq_mac (256 of 288 instances); period -13.0%; area -20.5%; first mac_9x9 run on tpu_like.small.os under the two-term objective; the block's reset is effective_rst, which pe_reset pulses between matrix multiplies, so both rewrites fail the verdict testbench; the kept rewrite declares the block (* blackbox *), revision 1 does not and keeps the dead qmult/qadd; re-recorded 2026-10-18 per testbench (the earlier entries, with doubled counts, are in the record's history)."
+  equivalence: "not equivalent; sim 1374 cycles on systolic_pe_matrix.matrixC*/a_data_out/b_data_out, 246746 same-cycle mismatches on 256 of 258 outputs (first at the pe_reset pulse after multiply 1; revision 1: 270039); LEC 0/6144 (killed at 600 s; revision 1 0/6248); tb_equiv_pe_matrix.v, mac_int_9x9.v; diagnostic tb_equiv_pe_matrix_midreset.v: 251824 and 284758 mismatches"
+
 20260920-061855-cc3e48:
   description: "41/83 my_fir (all seven); period -29.7%; area -14.9%; first rewrite on this design to lower both, and the first to reach every my_fir module — an 18-bit port needs no din bound."
 
