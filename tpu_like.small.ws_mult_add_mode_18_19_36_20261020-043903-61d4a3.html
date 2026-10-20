@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>tpu_like.small.ws → mult_add_mode_18_19_36 · 20261020-043903-61d4a3</title><style>
+:root { color-scheme: light; }
+/* Embedded previews (Slack) size their frame from a height measured once, at first paint
+   and possibly at a different width than the one displayed; a page whose height depends on
+   line wrapping then gets cut off. A definite minimum height in absolute units (not vh, not
+   %) keeps the measured height at or above the collapsed page's height down to ~500px wide
+   (measured 1418px at 500px, 977 at 700, 893 at 1200). Below the fold in a normal browser. */
+html, body { height: auto; }
+body { margin: 0; padding: 1.5rem 1rem 4rem; background: #fff; color: #1a1a1a; min-height: 1450px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 15px; line-height: 1.6; }
+main { max-width: 72rem; margin: 0 auto; }
+h1 { font-size: 1.4rem; margin: 0 0 .25rem; font-weight: 600; }
+h2 { font-size: 1.1rem; margin: 0; font-weight: 600; display: inline; }
+h3 { font-size: 1rem; margin: 1.2rem 0 .4rem; font-weight: 600; }
+.sub { color: #555; margin: 0 0 1rem; }
+table { border-collapse: collapse; margin: .5rem 0 1rem; }
+th, td { text-align: left; padding: .2rem .8rem .2rem 0; vertical-align: top; }
+th { font-weight: 600; color: #444; white-space: nowrap; }
+table.num td.n, table.num th.n { text-align: right; font-variant-numeric: tabular-nums; }
+tr.total td { border-top: 1px solid #bbb; font-weight: 600; }
+details { margin: .6rem 0; border: 1px solid #d8d8d8; border-radius: 4px; background: #fff; }
+details > summary { cursor: pointer; padding: .55rem .8rem; list-style: none;
+  display: flex; gap: .6rem; align-items: baseline; flex-wrap: wrap; }
+details > summary::-webkit-details-marker { display: none; }
+details > summary::before { content: "\25B8"; color: #777; font-size: .8em; }
+details[open] > summary::before { content: "\25BE"; }
+details > summary > .meta { color: #666; font-size: .9em; }
+details > .body { padding: .2rem .8rem .8rem; border-top: 1px solid #e6e6e6; }
+details.section > summary { font-size: 1.05rem; }
+details.call { margin-left: 0; }
+details.inner { border-color: #e6e6e6; }
+details.inner > summary { padding: .35rem .6rem; font-size: .92em; }
+pre { white-space: pre-wrap; word-break: break-word; margin: .3rem 0 .8rem;
+  padding: .7rem .9rem; border-radius: 4px; font-size: .86em; line-height: 1.5;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+pre.prompt { background: #f4f4f2; border-left: 3px solid #b8b8b0; }
+pre.response { background: #eef3f8; border-left: 3px solid #7f9fbf; }
+pre.plain { background: #f6f6f6; }
+/* A prompt or response with its Markdown rendered. The tint and the left rule are the same
+   as the plain form above, so a rendered block still reads as quoted agent traffic and not
+   as the page's own prose; only the inside is laid out instead of shown as source. */
+.md { margin: .3rem 0 .8rem; padding: .6rem .9rem; border-radius: 4px; font-size: .93em;
+  overflow-wrap: break-word; }
+.md.prompt { background: #f4f4f2; border-left: 3px solid #b8b8b0; }
+.md.response { background: #eef3f8; border-left: 3px solid #7f9fbf; }
+.md > :first-child { margin-top: 0; } .md > :last-child { margin-bottom: 0; }
+.md p { margin: .5rem 0; }
+.md ul, .md ol { margin: .5rem 0; padding-left: 1.5rem; }
+.md li { margin: .15rem 0; }
+.md ul.md-litnum { list-style: none; padding-left: .8rem; }
+.md .md-num { color: #555; }
+.md blockquote { margin: .5rem 0; padding: .1rem .8rem; border-left: 2px solid #c4c4c4;
+  color: #444; }
+.md hr { border: 0; border-top: 1px solid #d5d5d5; margin: .8rem 0; }
+.md code { background: rgba(0,0,0,.055); padding: .05em .3em; border-radius: 3px; }
+.md .mdh { font-weight: 600; margin: .9rem 0 .35rem; line-height: 1.3; }
+.md .mdh1 { font-size: 1.12em; } .md .mdh2 { font-size: 1.07em; }
+.md .mdh3 { font-size: 1.02em; } .md .mdh4, .md .mdh5, .md .mdh6 { font-size: 1em; }
+/* A fenced block is a box inside the response, and must not widen or escape it: it wraps,
+   and scrolls sideways only within its own frame. */
+.md .md-code { margin: .5rem 0; border: 1px solid #dcdcdc; border-radius: 4px;
+  background: #fbfbfa; max-width: 100%; overflow: hidden; }
+.md .md-lang { display: block; padding: .15rem .6rem; border-bottom: 1px solid #e6e6e6;
+  color: #666; font-size: .8em; letter-spacing: .03em; }
+.md .md-code > pre { margin: 0; background: none; border: 0; border-radius: 0;
+  padding: .55rem .7rem; max-width: 100%; overflow-x: auto; white-space: pre-wrap;
+  word-break: break-word; }
+.md .md-code > pre > code { background: none; padding: 0; }
+.md .md-tw { overflow-x: auto; max-width: 100%; margin: .5rem 0; }
+.md .md-tw table { border-collapse: collapse; }
+.md .md-tw th, .md .md-tw td { border: 1px solid #dedede; padding: .2rem .5rem;
+  white-space: normal; }
+.md .md-note { color: #666; font-size: .85em; font-style: italic; margin: 0 0 .5rem; }
+ul.paths { margin: .2rem 0; padding-left: 1.2rem; }
+ul.paths li { margin: .1rem 0; word-break: break-all; }
+.diff { white-space: pre-wrap; word-break: break-word; margin: .3rem 0 .8rem;
+  padding: .7rem .9rem; border-radius: 4px; font-size: .86em; line-height: 1.5;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  background: #fafafa; border: 1px solid #e3e3e3; }
+.diff div { min-height: 1.5em; }
+.diff .add { background: #e2f3e2; }
+.diff .del { background: #f8e0e0; }
+.diff .add-ws, .diff .del-ws { color: #999; background: #f3f3f3; }
+.diff .hunk { color: #6a5acd; }
+.diff .hdr { color: #666; }
+.diff details.ws { margin: .1rem 0; border: 1px dashed #ccc; background: #f6f6f6; }
+.diff details.ws > summary { padding: .1rem .5rem; color: #777; font-family: inherit; font-size: .95em; }
+.diff details.ws > summary::before { content: "\25B8 "; }
+.diff details.ws[open] > summary::before { content: "\25BE "; }
+.schem { margin: .4rem 0 .8rem; overflow-x: auto; background: #fff;
+  border: 1px solid #e3e3e3; border-radius: 4px; padding: .4rem; }
+.schem svg { display: block; }
+.label { font-weight: 600; color: #444; font-size: .85em; text-transform: uppercase;
+  letter-spacing: .03em; margin: .6rem 0 .1rem; }
+.absent { color: #777; font-style: italic; }
+.ok { color: #1f6f3a; } .bad { color: #a33; } .na { color: #777; }
+.note { color: #555; font-size: .9em; }
+.tools { margin: .4rem 0 0; }
+.controls { margin: 0 0 1rem; font-size: .9em; color: #555; }
+.controls button { font: inherit; padding: .1rem .5rem; margin-right: .3rem; }
+dl.kv { display: grid; grid-template-columns: max-content 1fr; gap: .1rem 1.2rem; margin: .6rem 0 1rem; }
+dl.kv dt { color: #555; } dl.kv dd { margin: 0; }
+@media (max-width: 600px) { dl.kv { grid-template-columns: 1fr; } dl.kv dt { margin-top: .4rem; } }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .92em; }
+.summary { margin: .4rem 0 .6rem; padding: .6rem .9rem; background: #f5f8fb; border: 1px solid #d6e0ea;
+  border-radius: 4px; }
+.summary p { margin: .15rem 0; }
+p.how { color: #555; font-size: .9em; margin: 0 0 .6rem; }
+/* one colour per agent role: a left rule on the call and a chip in its summary line */
+.role { display: inline-block; padding: 0 .4rem; border-radius: 3px; font-size: .88em; font-weight: 600; }
+.role-planner { background: #ece6f7; color: #4b3590; }
+.role-plan-reviewer { background: #f8ecd6; color: #7a5310; }
+.role-editor { background: #dceef3; color: #18596f; }
+.role-acceptance { background: #f6e1e8; color: #8a2f4e; }
+.role-other { background: #eee; color: #555; }
+details.call.role-planner { border-left: 4px solid #8b70cf; }
+details.call.role-plan-reviewer { border-left: 4px solid #d29a3a; }
+details.call.role-editor { border-left: 4px solid #3f93ad; }
+details.call.role-acceptance { border-left: 4px solid #c45c80; }
+details.pass { border-color: #c4c4c4; background: #fcfcfc; }
+details.pass > summary { font-size: 1rem; }
+p.pass-head { margin: 0; padding: .35rem .8rem; border-top: 1px solid #e6e6e6; font-size: .92em; color: #333; }
+.retry-tag { display: inline-block; padding: 0 .35rem; border: 1px dashed #999; border-radius: 3px;
+  font-size: .85em; color: #555; }
+p.retry { margin: .7rem 0 .2rem; padding-left: .6rem; border-left: 2px dashed #999; color: #555; font-size: .9em; }
+</style><script>
+function setAll(open) {
+  document.querySelectorAll('details').forEach(function (d) { d.open = open; });
+}
+// an in-page link to a collapsed block opens it and every block around it
+function openHash() {
+  var e = document.getElementById(location.hash.slice(1));
+  for (; e; e = e.parentElement) { if (e.tagName === 'DETAILS') e.open = true; }
+}
+window.addEventListener('hashchange', openHash);
+window.addEventListener('DOMContentLoaded', openHash);
+</script></head><body><main><h1>tpu_like.small.ws → mult_add_mode_18_19_36 · 20261020-043903-61d4a3</h1><p class="sub">benchadapt adaptation run · record at <code>outputs/adapt/koios_medium/tpu_like.small.ws/mult_add_mode_18_19_36/20261020-043903-61d4a3</code></p><div class="summary"><p><b>What a run is.</b> One invocation of the framework on one design with one mode: here tpu_like.small.ws with <code>mult_add_mode_18_19_36</code>.</p><p><b>What happened.</b> 0 rewrites measured. Loop stopped by: planner declined (no representative mapping).</p><p><b>Result.</b> Area x delay not measured; verification: not recorded in the run record.</p></div><p class="how">How to read this page: the table below holds the run's settings; each section after it opens on click: the mode contract, the agent calls grouped by pass, the kept rewrite's diff, verification, numbers, and the objective loop comparing the rewrites.</p><dl class="kv"><dt>run id</dt><dd><code>20261020-043903-61d4a3</code></dd><dt>started</dt><dd>2026-10-20 04:39:03 -0700</dd><dt>finished</dt><dd>2026-10-20 04:44:30 -0700</dd><dt>suite / design</dt><dd>koios_medium / <b>tpu_like.small.ws</b></dd><dt>target mode</dt><dd><code>mult_add_mode_18_19_36</code></dd><dt>tier</dt><dd>NONE (NONE) — not recorded</dd><dt>outcome</dt><dd><b class="bad">rejected</b> [<code>planner_declined</code>] — planner declined: no representative mapping</dd><dt>wall clock</dt><dd>5m 27s (agents 5m 27s, VTR and other 0s)  [327.3 s total; 'other' is synthesis-only checks and framework time between calls]</dd><dt>models</dt><dd>all roles: <code>anthropic/claude-opus-5</code></dd><dt>layout</dt><dd>koios_extra_small, 90 x 90</dd><dt>VPR arguments</dt><dd>channel width 300 · device koios_extra_small <span class="note">(from run.json)</span></dd><dt>seeds</dt><dd>main flow seed 1<br>loop seeds 1, 2, 3 (adaptive)</dd><dt>sandbox</dt><dd>bubblewrap <span class="note">(recorded per agent call, before the run-level field existed: every call in this run ran in its own mount namespace)</span></dd><dt>agent reads</dt><dd>none outside the agents' own working directories <span class="note">(paths each agent named outside its own working directory, computed from the tool events; its own scratch excluded)</span></dd><dt>prompt set</dt><dd><code>68f550f86ceb</code> <span class="note">(sha256 over 10 templates in src/agents and 73 inline pieces; full value in run.json <code>prompt_set</code>)</span></dd></dl><div class="controls"><button type="button" onclick="setAll(true)">expand all</button><button type="button" onclick="setAll(false)">collapse all</button>exported 2026-10-20T11:58:02-07:00</div><details class="section"><summary><h2>Mode contract</h2> <span class="meta">recorded (outcome.json contract field)</span></summary><div class="body"><p class="note">Verbatim, as recorded with the run and sent to the agents.</p><pre class="plain">- primitive to instantiate: `mult_add_int_18x19` (precision INT19)
+- computes: out = ax*ay + bx + chainin
+- input ports: clk[1] (clock), reset[1], mode_sigs[12], ax[18], ay[19], bx[36], chainin[64], scanin[19]
+- output ports: result[64], chainout[64], scanout[19]
+- arithmetic: the block reads each operand port as an unsigned number, and its result is unsigned. An operand narrower than its port is zero-extended to the port width. The result wraps at 64 bits: a value past the result width keeps its low 64 bits (modulo 2^64), with no saturation and no flag.
+- registers: on `clk`, the block registers its operands (`ax`, `ay`, `bx`) at one clock edge and `result` at the next, with the arithmetic between the two registers: operands applied before clock edge k appear in `result` after edge k+1, 2 cycles later. The block has no clock enable and no path around either register. `chainin` is registered at the block's entry like an operand and reaches `result` 2 cycles after it is applied. `chainout` is combinational from the input registers: it carries the value `result` loads at the next clock edge, one cycle before `result` shows it.
+- reset: `reset` is synchronous and active high: at a clock edge that samples it high it clears every register of the block (the operand registers, the chainin register and the result register) to 0, and the block loads again at the next edge that samples it low.
+- power-up: every register of the block is unknown until the first clear by `reset`; no register of the block has an initial value, and a rewrite may not rely on one.
+- tie-off: `chainin` = 0 when the block is not chained (a dedicated chain input: only another block's `chainout` or a constant may drive it); `scanin` = 0 always (the operand scan chain is not used: `ay` is driven directly, and `scanout` is left unconnected); `mode_sigs` = 0 always (the architecture gives the port no meaning for this mode).
+- connections: connect every input port, by the port names above.</pre></div></details><details class="section"><summary><h2>Agent calls</h2> <span class="meta">1 call(s) in 1 pass, in order</span></summary><div class="body"><p class="note">Role: <span class="role role-planner">planner</span> <span class="role role-plan-reviewer">plan reviewer</span> <span class="role role-editor">editor</span> <span class="role role-acceptance">acceptance reviewer</span>. A plan reviewer sending the plan back, or the editor being asked again, is a <span class="retry-tag">retry</span> inside the same pass.</p><details class="pass" open><summary><b>Pass 1</b> <span class="meta">1 call, 5m 27s</span></summary><p class="pass-head"><b>planner declined</b> · the planner declined the first plan, so the loop had nothing to measure (no representative mapping)</p><div class="body"><details class="call role-planner" id="call-1"><summary>Call 1 · <span class="role role-planner">planner</span> · anthropic/claude-opus-5 · <span class="ok">ok</span> <span class="meta">in 20 · out 22678 · reasoning 17017 · cache read 254455 · cache write 50425 · 326.8 s</span></summary><div class="body"><div class="label">prompt</div><div class="md prompt"><div class="mdh mdh2">Task</div><p>You are the planner. Read the design source, tpu_like.small.ws.v, and decide which of the candidate arithmetic regions listed below to rewrite onto the hard block described next, or that none should be rewritten. Write a plan for the editor, who carries it out; do not edit any file.</p><div class="mdh mdh2">The block</div><ul><li>primitive to instantiate: <code>mult_add_int_18x19</code> (precision INT19)</li><li>computes: out = ax*ay + bx + chainin</li><li>input ports: clk[1] (clock), reset[1], mode_sigs[12], ax[18], ay[19], bx[36], chainin[64], scanin[19]</li><li>output ports: result[64], chainout[64], scanout[19]</li><li>arithmetic: the block reads each operand port as an unsigned number, and its result is unsigned. An operand narrower than its port is zero-extended to the port width. The result wraps at 64 bits: a value past the result width keeps its low 64 bits (modulo 2^64), with no saturation and no flag.</li><li>registers: on <code>clk</code>, the block registers its operands (<code>ax</code>, <code>ay</code>, <code>bx</code>) at one clock edge and <code>result</code> at the next, with the arithmetic between the two registers: operands applied before clock edge k appear in <code>result</code> after edge k+1, 2 cycles later. The block has no clock enable and no path around either register. <code>chainin</code> is registered at the block's entry like an operand and reaches <code>result</code> 2 cycles after it is applied. <code>chainout</code> is combinational from the input registers: it carries the value <code>result</code> loads at the next clock edge, one cycle before <code>result</code> shows it.</li><li>reset: <code>reset</code> is synchronous and active high: at a clock edge that samples it high it clears every register of the block (the operand registers, the chainin register and the result register) to 0, and the block loads again at the next edge that samples it low.</li><li>power-up: every register of the block is unknown until the first clear by <code>reset</code>; no register of the block has an initial value, and a rewrite may not rely on one.</li><li>tie-off: <code>chainin</code> = 0 when the block is not chained (a dedicated chain input: only another block's <code>chainout</code> or a constant may drive it); <code>scanin</code> = 0 always (the operand scan chain is not used: <code>ay</code> is driven directly, and <code>scanout</code> is left unconnected); <code>mode_sigs</code> = 0 always (the architecture gives the port no meaning for this mode).</li><li>connections: connect every input port, by the port names above.</li></ul><div class="mdh mdh2">The design</div><p>Baseline: the unmodified tpu_like.small.ws under this run's VPR settings (channel width 300, seed 1) has a worst register-to-register path of 11.1825 ns on its clock <code>clk</code> (VPR's intra-domain critical path, the worst over its clocks clk, clk_mem) and uses 94 DSP tiles of the device's 132. Its used logic-block area is 7.45611e+07 minimum-width transistor areas (one DSP tile 253779, one cluster 27905) and its routed wirelength is 382009, so its area x delay x wirelength product, the objective, is 3.18511e+14. Its slowest stage is in pooling: one hard multiply on a DSP tile (pooling's), from a block RAM output through one LUT into the multiply, then five LUTs into a block RAM input; wire 7.96 ns in all, 1.31 of it into the multiply. Any path your rewrite creates is compared against that critical path.</p><div class="mdh mdh3">Delays on this architecture</div><p>The block rows and the soft flip-flop row are from the architecture file. Wire and adder delays are sampled, given as a range with the median in parentheses. A row marked "on this design" is measured on the unmodified design's own placement under this run's VPR settings, with the design's hard multiplier standing in for the block; the other rows are sampled over earlier runs of other designs on this architecture.</p><div class="md-tw"><table><thead><tr><th>element on a path</th><th>ns</th></tr></thead><tbody><tr><td>into the block: a path ends at the block's input register (setup)</td><td>0.019</td></tr><tr><td>inside the block: input register clock-to-Q + delay + output register setup</td><td>0.060 + 2.140 + 0.019 = 2.219, below the baseline's critical path</td></tr><tr><td>out of the block: a path starts at the output register of <code>result</code> (clock-to-Q)</td><td>0.060</td></tr><tr><td><code>chainout</code>: input register clock-to-Q + delay, to the output pin</td><td>0.060 + 2.140 = 2.200</td></tr><tr><td>wire, block to block</td><td>0.96 to 2.22 (median 1.17)</td></tr><tr><td>wire, register to first block</td><td>1.00 to 3.19 (median 1.52)</td></tr><tr><td>wire, last block to register</td><td>0.83 to 2.67 (median 2.25)</td></tr><tr><td>wire, block into soft logic</td><td>1.168 to 1.376 (median 1.273) on this design</td></tr><tr><td>soft adder level, cell plus wire to the next</td><td>0.861 to 1.069 (median 0.954) on this design</td></tr><tr><td>soft flip-flop, clock to output</td><td>0.060</td></tr></tbody></table></div><div class="mdh mdh3">Candidate regions</div><p>An id names a product by its module and its multiply. One that ends in <code>(sum_in=&lt;module&gt;)</code> is a product whose sum sits in that other module: the product leaves its own module through a port and is added there, so the arithmetic to convert spans both. A <code>#1</code>, <code>#2</code> after an id separates instances of the same product that sit in sums of different shapes.</p><p>In every row, what it already is in the baseline: on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 56 of the 94 tiles (qmult 255 of its 256 element products on 84 tiles, 49 of them full; norm_sub 16 on 5 tiles; sub_activation 16 on 6; pooling's 8 x 8 product on 1); the 256th element product and pooling's 8 x 11 address product share the one tile in two_mult_18x19 mode.</p><div class="md-tw"><table><thead><tr><th>id</th><th>operation</th><th>instances</th><th>register stages between the products and their sum</th><th>products in the whole sum this one belongs to</th></tr></thead><tbody><tr><td>norm_sub.$mul$tpu_like.small.ws.v:5632$876</td><td>multiply</td><td>16</td><td>products reach no sum</td><td>no sum</td></tr><tr><td>pooling.$mul$tpu_like.small.ws.v:7612$1133</td><td>mult_add</td><td>1</td><td>products registered 0 stage(s) before the sum</td><td>the only product in its sum</td></tr><tr><td>pooling.$mul$tpu_like.small.ws.v:8143$1656</td><td>multiply</td><td>1</td><td>products reach no sum</td><td>no sum</td></tr><tr><td>qmult.$mul$tpu_like.small.ws.v:4969$853(sum_in=top)#1</td><td>sop</td><td>16</td><td>products registered 0 stage(s) before the sum</td><td>16 products in one chain of adders</td></tr><tr><td>qmult.$mul$tpu_like.small.ws.v:4969$853(sum_in=top)#10</td><td>sop</td><td>16</td><td>products registered 0 stage(s) before the sum</td><td>16 products in one chain of adders</td></tr><tr><td>qmult.$mul$tpu_like.small.ws.v:4969$853(sum_in=top)#11</td><td>sop</td><td>16</td><td>products registered 0 stage(s) before the sum</td><td>16 products in one chain of adders</td></tr><tr><td>qmult.$mul$tpu_like.small.ws.v:4969$853(sum_in=top)#12</td><td>sop</td><td>16</td><td>products registered 0 stage(s) before the sum</td><td>16 products in one chain of adders</td></tr><tr><td>qmult.$mul$tpu_like.small.ws.v:4969$853(sum_in=top)#13</td><td>sop</td><td>16</td><td>products registered 0 stage(s) before the sum</td><td>16 products in one chain of adders</td></tr><tr><td>qmult.$mul$tpu_like.small.ws.v:4969$853(sum_in=top)#14</td><td>sop</td><td>16</td><td>products registered 0 stage(s) before the sum</td><td>16 products in one chain of adders</td></tr><tr><td>qmult.$mul$tpu_like.small.ws.v:4969$853(sum_in=top)#15</td><td>sop</td><td>16</td><td>products registered 0 stage(s) before the sum</td><td>16 products in one chain of adders</td></tr><tr><td>qmult.$mul$tpu_like.small.ws.v:4969$853(sum_in=top)#16</td><td>sop</td><td>16</td><td>products registered 0 stage(s) before the sum</td><td>16 products in one chain of adders</td></tr><tr><td>qmult.$mul$tpu_like.small.ws.v:4969$853(sum_in=top)#2</td><td>sop</td><td>16</td><td>products registered 0 stage(s) before the sum</td><td>16 products in one chain of adders</td></tr><tr><td>qmult.$mul$tpu_like.small.ws.v:4969$853(sum_in=top)#3</td><td>sop</td><td>16</td><td>products registered 0 stage(s) before the sum</td><td>16 products in one chain of adders</td></tr><tr><td>qmult.$mul$tpu_like.small.ws.v:4969$853(sum_in=top)#4</td><td>sop</td><td>16</td><td>products registered 0 stage(s) before the sum</td><td>16 products in one chain of adders</td></tr><tr><td>qmult.$mul$tpu_like.small.ws.v:4969$853(sum_in=top)#5</td><td>sop</td><td>16</td><td>products registered 0 stage(s) before the sum</td><td>16 products in one chain of adders</td></tr><tr><td>qmult.$mul$tpu_like.small.ws.v:4969$853(sum_in=top)#6</td><td>sop</td><td>16</td><td>products registered 0 stage(s) before the sum</td><td>16 products in one chain of adders</td></tr><tr><td>qmult.$mul$tpu_like.small.ws.v:4969$853(sum_in=top)#7</td><td>sop</td><td>16</td><td>products registered 0 stage(s) before the sum</td><td>16 products in one chain of adders</td></tr><tr><td>qmult.$mul$tpu_like.small.ws.v:4969$853(sum_in=top)#8</td><td>sop</td><td>16</td><td>products registered 0 stage(s) before the sum</td><td>16 products in one chain of adders</td></tr><tr><td>qmult.$mul$tpu_like.small.ws.v:4969$853(sum_in=top)#9</td><td>sop</td><td>16</td><td>products registered 0 stage(s) before the sum</td><td>16 products in one chain of adders</td></tr><tr><td>sub_activation.$mul$tpu_like.small.ws.v:8509$1681</td><td>mult_add</td><td>16</td><td>products registered 1 stage(s) before the sum</td><td>the only product in its sum</td></tr></tbody></table></div><div class="mdh mdh2">Correctness: these must hold</div><ul><li><strong>Same behavior.</strong> The rewritten design must produce the same outputs as the original on every cycle, with every register of the original starting at 0. Do not change what the design computes. Logic added only to reproduce it (recomputing a value, deriving the block's reset, correcting a block's result) is allowed.</li><li><strong>Visibility.</strong> Only what the block's output ports carry is visible outside it. A value read by anything else (another expression, a module port, another module) cannot go inside a block: keep it outside, or recompute it. Check the source for every reader.</li><li><strong>Terms.</strong> Keep every term of the original arithmetic. A term with no matching block port is computed outside the block. A port the design ties to a constant may be tied the same way on the block.</li><li><strong>Registers and reset.</strong> The block's registers, if it has any, behave as the contract states. A design register may become a block register only if that keeps its behavior. Drive the block's reset so that "same behavior" holds. Registers the rewrite adds have no initial value to rely on either.</li><li><strong>Assumptions.</strong> If the rewrite is correct only under an assumption about the design's inputs or use (a bound on a value, when a signal is asserted), state it on a line starting <code>ASSUMES:</code> and cite the lines of the design that support it. The rewrite is verified under that assumption.</li></ul><div class="mdh mdh2">Cost (guidance: go against it only with a reason in the plan)</div><ul><li>The clock period is the delay of the slowest stage (the logic between one register and the next). A rewrite that does not touch the slowest stage should not be expected to make the design faster, and should not make another stage slower than it.</li><li>Blocks in series are separate stages. A path through <code>chainout</code> starts at an input register and continues, in the same stage, into what it drives.</li><li>Moving or adding registers changes stage lengths and when values arrive.</li><li>Area falls when soft adders and flip-flops move into blocks.</li><li>A block of this mode takes a DSP tile alone. Synthesis may already have placed the design's multiplies on tiles, so a block that only replaces one saves little: count tiles against the baseline.</li><li>The block has chain ports: a block's <code>chainout</code> can drive the next block's <code>chainin</code> directly, so a sum can continue from block to block.</li></ul><div class="mdh mdh2">Objective</div><p>Minimize area × delay × wirelength against the baseline. If you expect no rewrite to lower it, output TIER: NONE. Among rewrites that lower it, choose the one that lowers it most.</p><div class="mdh mdh2">Output</div><div class="mdh mdh3">Tiers</div><ul><li><strong>T1:</strong> The block replaces the region's arithmetic as it stands: the same operations on the same operands, now inside the block.</li><li><strong>T2:</strong> The region's arithmetic is regrouped to fit the block (products regrouped into the block's sums, registers moved), computing the same values.</li><li><strong>NONE:</strong> No rewrite: no candidate can be rewritten correctly.</li></ul><div class="mdh mdh3">Header</div><p>Write exactly this header, each key at the start of its own line, then the plan:</p><p>TIER: &lt;exactly one of T1, T2, NONE&gt;<br>REGIONS: &lt;the converted candidate ids, comma-separated; NONE when TIER is NONE&gt;<br>SHARED_REDUCTION: &lt;the signal or module the converted products are summed in; NONE for a single region&gt;<br>BLOCKS: &lt;how many blocks the rewrite instantiates, one integer&gt;<br>TILES: &lt;how many DSP tiles the whole design then uses, one integer&gt;<br>STAGE_NS: &lt;the delay of the slowest stage the rewrite leaves, in ns, one number&gt;<br>MAPPING: &lt;which design signals go to which block ports&gt;<br>PLAN: &lt;the plan, stating everything listed below&gt;</p><div class="mdh mdh3">What the plan must state</div><ul><li>Every candidate region, converted or left, with the reason each is left; candidates that share a reason may be grouped.</li><li>How many blocks the rewrite adds, and how many DSP tiles the design then uses.</li><li>The longest series of blocks in any stage and its delay, against the slowest stage.</li><li>What soft logic leaves which stage, and whether that stage is the slowest.</li><li>For each converted region, the register stages from its operands to its result, before and after the rewrite.</li></ul><div class="mdh mdh3">Output rules</div><ul><li>Write nothing before the TIER line; read the source first.</li><li>A reviewer checks the plan automatically and no person reads it, so do not end with a question or an offer.</li></ul><p>Read these files in this directory: tpu_like.small.ws.v</p></div><div class="label">response</div><div class="md response"><p>I'll start by reading the design source.</p><p>TIER: NONE<br>REGIONS: NONE<br>SHARED_REDUCTION: NONE<br>BLOCKS: 0<br>TILES: 94<br>STAGE_NS: 11.1825<br>MAPPING: NONE<br>PLAN:</p><p><strong>Summary.</strong> No candidate region can be rewritten onto <code>mult_add_int_18x19</code> in a way that lowers area x delay x wirelength. Of the 20 candidate rows, 18 cannot be rewritten correctly at all (latency or arithmetic mismatch, or they do not fit the device). The one row that <em>is</em> a clean structural fit (<code>sub_activation...$1681</code>) is correct but strictly loses on the objective: it cannot shorten the critical path, and it converts multiplies that synthesis already packs 4-to-a-tile into blocks that each take a DSP tile alone, raising area with no compensating gain. Therefore: no rewrite, 0 blocks added, the design keeps its 94 DSP tiles, and the slowest stage stays the baseline's 11.1825 ns pooling path.</p><p><strong>Longest series of blocks in any stage.</strong> Zero blocks are instantiated, so the longest series of blocks in any stage is 0 blocks, 0 ns. The slowest stage remains the baseline's pooling stage at 11.1825 ns (one hard multiply, ~7.96 ns of it wire). No soft logic leaves any stage; no stage changes length; no register is moved or added.</p><p><strong>Register stages, per candidate.</strong> No region is converted, so no region's operand-to-result register depth changes. The counts below are the baseline depths, stated per candidate as part of the reason each is left.</p><hr><p><strong>Candidates left, with reasons.</strong></p><p><strong>1. <code>qmult.$mul$tpu_like.small.ws.v:4969$853(sum_in=top)#1</code> ... <code>#16</code> (all 16 rows, 256 products).</strong><br>These share one reason, in three parts, any one of which is disqualifying.</p><ul><li><em>The sum is not a sum of products.</em> Each product is consumed by <code>seq_mac</code> (lines 4932-4954) through the saturate/truncate network at lines 4937-4949 before it reaches the adder: <code>mul_out_temp</code> is the 16-bit unsigned product of two 8-bit unsigned operands (<code>qmult</code>, line 4969, both ports unsigned), and <code>mul_out</code> is a nonlinear function of it (<code>8'h7F</code> when <code>mul_out_temp[15]==0</code> and any of <code>[14:7]</code> is set, <code>8'h80</code> when <code>mul_out_temp[15]==1</code> and <code>[14:7]</code> are all zero, otherwise <code>{mul_out_temp[15], mul_out_temp[6:0]}</code>). The adder at line 4987 adds <code>mul_out</code>, not the product. Putting the product into the block's <code>ax*ay + bx</code> sum would add the unmangled product and change what the design computes. Making it correct would require assuming every element product stays below 128, which nothing in the design establishes.</li><li><em>The adds are in separate stages.</em> Register depth today: operands -&gt; <code>a_flopped</code>/<code>b_flopped</code> (1 stage, line 4925-4927) -&gt; product and add combinational -&gt; <code>out_c</code> leaves the PE unregistered (line 4847) and is registered as <code>c_flopped</code> in the next PE down the column (<code>in_c(matrixC0_0)</code> etc., lines 4483-4496). So the 16-deep "chain of adders" in a column crosses 15 register boundaries, one add per stage. <code>chainout</code> chaining only works inside a single stage, so the chain cannot be carried from block to block without changing the pipeline depth and therefore when every <code>matrixC*</code> value appears.</li><li><em>It does not fit the device.</em> Each block takes a DSP tile alone, so one converted column costs 16 tiles and all 16 columns cost 256 tiles against the device's 132; even one column would push the design from 94 tiles to about 106 while freeing at most a few of the 84 tiles the 255 element products are packed onto at 4 per tile.</li></ul><p><strong>2. <code>norm_sub.$mul$tpu_like.small.ws.v:5632$876</code> (16 instances).</strong><br>Structurally this is the block's shape: <code>mean_applied_data</code> is registered at line 5631 and <code>variance_applied_data &lt;= mean_applied_data * inv_var</code> at line 5632, i.e. 1 register stage before the multiply and 1 after, and the "else" arms at 5621-5622 and 5640-5641 clear rather than hold, so the block's synchronous clear could reproduce the enable as <code>reset | ~enable_norm | ~(in_data_available | norm_in_progress)</code>. It is left for two reasons:</p><ul><li><em>Correctness.</em> Line 5636 bypasses the multiply when <code>validity_mask == 0</code>: <code>variance_applied_data &lt;= mean_applied_data</code>. The block always multiplies, so the bypass would have to ride on <code>ay</code> (<code>validity_mask ? inv_var : 1</code>), but <code>ay</code> is sampled one clock edge before <code>result</code> loads, whereas the design evaluates <code>validity_mask</code> in the same cycle the product is registered. The two disagree whenever <code>validity_mask</code> changes, and nothing in the design pins it constant.</li><li><em>Cost.</em> 16 instances means 16 blocks on 16 tiles, replacing 16 multiplies that currently sit on 5 tiles: 94 - 5 + 16 = 105 tiles, +11 tiles = +2.79e6 area units, against at most ~16 flip-flops and a few muxes saved per instance. The region is not on the 11.1825 ns stage, so delay cannot improve to pay for it.</li></ul><p><strong>3. <code>pooling.$mul$tpu_like.small.ws.v:7612$1133</code> (1 instance, <code>matrix_size_int*y + x + k</code>).</strong><br>Register depth today: 0 stages anywhere. Line 7612 is a continuous assignment; <code>x</code>, <code>y</code>, <code>k</code> (lines 7614-7632) feed the product combinationally and <code>raddr_accum0_pool</code> leaves the module combinationally as an output port, driving an accumulator RAM read address and the <code>raddr_accum1..15_pool</code> shift chain (lines 7634-7649). The block would put 2 clock edges between the counters and the address. To restore it, the block's operand registers would have to be fed values two cycles ahead of <code>x</code>, <code>y</code>, <code>k</code>, which is not derivable: at the cycle <code>start_pooling</code> rises the counters restart from 0 (line 7615-7619), so the needed lookahead crosses an event the design cannot see in advance. Feeding the block with the counters' next-state values instead yields the value one cycle late (it would equal <code>raddr_accum1_pool</code>, not <code>raddr_accum0_pool</code>), leaving the combinational address still to be computed in soft logic. Also only one multiply: the block would take a tile alone while the tile it currently shares still has to carry the 256th element product, so tiles do not fall.</p><p><strong>4. <code>pooling.$mul$tpu_like.small.ws.v:8143$1656</code> (1 instance, <code>filter_size_int*filter_size_int</code>).</strong><br>Register depth today: 0 stages, and 0 after. It is a continuous function of the config input <code>filter_size</code> (line 7487) read combinationally by seventeen comparisons in different pipeline stages (lines 7495, 7607, 7678, 7712, ... 8143). A block output lags its operands by 2 cycles and, because no block register has a power-up value, must be cleared by <code>reset</code> first, so it would read 0 for the cycles after any clear and would track a config change 2 cycles late; every one of those seventeen readers would see a different value than the original on those cycles. One multiply again, so tiles do not fall.</p><p><strong>5. <code>sub_activation.$mul$tpu_like.small.ws.v:8509$1681</code> (16 instances).</strong><br>This one is correct to convert and is left only on cost. For the record, the conversion that was checked and rejected: register depth today is operands -&gt; <code>slope_applied_data_internal</code> and <code>data_intercept_delayed</code> (1 stage, lines 8509-8510) -&gt; <code>intercept_applied_data_internal &lt;= slope_applied_data_internal + data_intercept_delayed</code> (2nd stage, line 8511), i.e. 2 stages from <code>data_slope</code>/<code>inp_data</code>/<code>data_intercept</code> to the sum, exactly the block's own depth; <code>ax=data_slope</code>, <code>ay=inp_data</code>, <code>bx=data_intercept</code>, <code>result[7:0]</code> -&gt; <code>intercept_applied_data_internal</code>, <code>bx</code> holding <code>data_intercept</code> undelayed because the block's own operand register supplies the delay line 8510 provides; <code>reset</code> driven by <code>reset | ~enable_activation | ~(in_data_available | activation_in_progress)</code>, which reproduces lines 8497-8505 and 8544-8552 since those arms clear rather than hold; truncation is safe because the design keeps only the low 8 bits of the product and of the sum and low-bit truncation commutes with both <code>+</code> and <code>*</code>; <code>slope_applied_data_internal</code> and <code>data_intercept_delayed</code> have no reader outside line 8511 and <code>intercept_applied_data_internal</code> none outside line 8557, so nothing hidden inside the block is read elsewhere. It is still rejected because:</p><ul><li><em>Delay cannot improve.</em> The slowest stage is the pooling multiply path at 11.1825 ns and this rewrite does not touch it. The stages the rewrite creates are far shorter than it: into the block, <code>inp_data</code> register -&gt; address decode (lines 8602-8639) -&gt; slope LUT -&gt; wire (1.00-3.19) -&gt; 0.019 setup; inside the block 2.219 ns; out of the block 0.060 + wire (0.83-2.67) into <code>out_data_internal</code>. None approaches 11.1825 ns, so the clock period stays where it is and the rewrite buys no delay.</li><li><em>Area rises.</em> 16 instances need 16 blocks on 16 tiles, replacing 16 multiplies that sit on 6 tiles today: 94 - 6 + 16 = 104 tiles, +10 tiles = +2.54e6 area units. Breaking even would require freeing about 91 clusters (2.54e6 / 27905), i.e. roughly 910 BLEs, about 57 per instance. The soft logic actually removed per instance is the 8-bit adder of line 8511 plus the <code>slope_applied_data_internal</code>, <code>data_intercept_delayed</code> and <code>intercept_applied_data_internal</code> registers with their clear muxes: on the order of 30-40 BLEs, and only a fraction of that turns into whole freed clusters. Area goes up roughly 1.5-2%.</li><li><em>Wirelength does not fall.</em> Sixteen multiplies that are packed onto 6 tiles today would be spread across 16 tiles, so the activation datapath's routing gets longer, not shorter.</li></ul><p>With delay flat, area up and wirelength flat-to-up, the product rises above the baseline's 3.18511e14. The same accounting rules out every other candidate too: the block does one multiply, the architecture packs four <code>mult_9x9_fixed_pt</code> multiplies per tile, so any conversion trades 1 tile per multiply against 0.25 tile per multiply today, and the only candidates with enough soft logic attached to repay that (the <code>qmult</code> chains) are the ones whose arithmetic and pipeline make them unconvertible. Hence TIER: NONE.</p></div><details class="inner"><summary>tool events <span class="meta">15 recorded, 1 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>Bash</code> <span class="meta"><span class="bad">error</span> wc -l /work/tpu_like.small.ws.v; ls /work</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "wc -l /work/tpu_like.small.ws.v; ls /work"
+}</pre><div class="label">error</div><pre class="plain">&lt;tool_use_error&gt;Error: No such tool available: Bash. Bash is disabled for this session, in subagents as well as here.&lt;/tool_use_error&gt;</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> ^module|^endmodule</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "^module|^endmodule",
+ "path": "/work/tpu_like.small.ws.v",
+ "output_mode": "content",
+ "-n": true
+}</pre><div class="label">output</div><pre class="plain">324:module matmul_16x16_systolic(
+1566:endmodule
+1571:module systolic_data_setup(
+2606:endmodule
+2612:module systolic_pe_matrix(
+4727:endmodule
+4733:module processing_element(
+4892:endmodule
+4900:module seq_mac(a, b, c, out, reset, clk);
+4956:endmodule
+4963:module qmult(i_multiplicand,i_multiplier,o_result);
+4972:endmodule
+4981:module qadd(a,b,c);
+4990:endmodule
+4992:module cfg(
+5268:endmodule
+5274:module norm(
+5594:endmodule
+5596:module norm_sub(
+5653:endmodule
+5660:module simple_ram (
+5692:endmodule
+5699:module ram (
+5761:endmodule
+5764:module control(
+5883:endmodule
+5889:module accumulator (
+7329:endmodule
+7336:module pooling(
+8149:endmodule
+8155:module activation(
+8464:endmodule
+8466:module sub_activation(
+8647:endmodule
+8649:module top(
+10535:endmodule</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/tpu_like.small.ws.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/tpu_like.small.ws.v",
+ "offset": 4890,
+ "limit": 110
+}</pre><div class="label">output</div><pre class="plain">4890	
+4891	
+4892	endmodule
+4893	
+4894	
+4895	
+4896	//////////////////////////////////////////////////////////////////////////
+4897	// Multiply-and-accumulate (MAC) block
+4898	//////////////////////////////////////////////////////////////////////////
+4899	
+4900	module seq_mac(a, b, c, out, reset, clk);
+4901	
+4902	input [`DWIDTH-1:0] a;
+4903	input [`DWIDTH-1:0] b;
+4904	input [`DWIDTH-1:0] c;
+4905	input reset;
+4906	input clk;
+4907	output [`DWIDTH-1:0] out;
+4908	
+4909	wire [`DWIDTH-1:0] mul_out;
+4910	wire [`DWIDTH-1:0] add_out;
+4911	
+4912	reg [`DWIDTH-1:0] a_flopped;
+4913	reg [`DWIDTH-1:0] b_flopped;
+4914	reg [`DWIDTH-1:0] c_flopped;
+4915	
+4916	wire [2*`DWIDTH-1:0] mul_out_temp;
+4917	wire [2*`DWIDTH-1:0] mul_out_temp_reg;
+4918	
+4919	always @(posedge clk) begin
+4920	  if (reset) begin
+4921	    a_flopped &lt;= 0;
+4922	    b_flopped &lt;= 0;
+4923	    c_flopped &lt;= 0;
+4924	  end else begin
+4925	    a_flopped &lt;= a;
+4926	    b_flopped &lt;= b;
+4927	    c_flopped &lt;= c;
+4928	  end
+4929	end
+4930	  
+4931	// assign mul_out = a * b;
+4932	qmult mult_u1(.i_multiplicand(a_flopped), .i_multiplier(b_flopped), .o_result(mul_out_temp));
+4933	
+4934	
+4935	// down cast the result
+4936	// todo: do a fused multiply add. Truncate only once after the accumulation is complete
+4937	assign mul_out = 
+4938	    (mul_out_temp[2*`DWIDTH-1] == 0) ?  //positive number
+4939	        (
+4940	           (|(mul_out_temp[2*`DWIDTH-2 : `DWIDTH-1])) ?  //is any bit from 14:7 is 1, that means overlfow
+4941	             {mul_out_temp[2*`DWIDTH-1] , {(`DWIDTH-1){1'b1}}} : //sign bit and then all 1s
+4942	             {mul_out_temp[2*`DWIDTH-1] , mul_out_temp[`DWIDTH-2:0]} 
+4943	        )
+4944	        : //negative number
+4945	        (
+4946	           (|(mul_out_temp[2*`DWIDTH-2 : `DWIDTH-1])) ?  //is any bit from 14:7 is 0, that means overlfow
+4947	             {mul_out_temp[2*`DWIDTH-1] , mul_out_temp[`DWIDTH-2:0]} :
+4948	             {mul_out_temp[2*`DWIDTH-1] , {(`DWIDTH-1){1'b0}}} //sign bit and then all 0s
+4949	        );
+4950	
+4951	
+4952	// we just truncate the higher bits of the product
+4953	// assign out = mul_out + c_flopped;
+4954	qadd add_u1(.a(c_flopped), .b(mul_out), .c(out));
+4955	
+4956	endmodule
+4957	
+4958	
+4959	//////////////////////////////////////////////////////////////////////////
+4960	// Multiplier
+4961	//////////////////////////////////////////////////////////////////////////
+4962	
+4963	module qmult(i_multiplicand,i_multiplier,o_result);
+4964	
+4965	input [`DWIDTH-1:0] i_multiplicand;
+4966	input [`DWIDTH-1:0] i_multiplier;
+4967	output [2*`DWIDTH-1:0] o_result;
+4968	
+4969	assign o_result = i_multiplicand * i_multiplier;
+4970	//DW02_mult #(`DWIDTH,`DWIDTH) u_mult(.A(i_multiplicand), .B(i_multiplier), .TC(1'b1), .PRODUCT(o_result));
+4971	
+4972	endmodule
+4973	
+4974	
+4975	
+4976	//////////////////////////////////////////////////////////////////////////
+4977	// Adder
+4978	//////////////////////////////////////////////////////////////////////////
+4979	// todo: Output should have one extra bit as compared to the inputs
+4980	
+4981	module qadd(a,b,c);
+4982	
+4983	input [`DWIDTH-1:0] a;
+4984	input [`DWIDTH-1:0] b;
+4985	output [`DWIDTH-1:0] c;
+4986	
+4987	assign c = a + b;
+4988	// DW01_add #(`DWIDTH) u_add(.A(a), .B(b), .CI(1'b0), .SUM(c), .CO());
+4989	
+4990	endmodule
+4991	
+4992	module cfg(
+4993	    input                             PCLK,
+4994	    input                             PRESETn,
+4995	    input        [`REG_ADDRWIDTH-1:0] PADDR,
+4996	    input                             PWRITE,
+4997	    input                             PSEL,
+4998	    input                             PENABLE,
+4999	    input        [`REG_DATAWIDTH-1:0] PWDATA,</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/tpu_like.small.ws.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/tpu_like.small.ws.v",
+ "offset": 5590,
+ "limit": 70
+}</pre><div class="label">output</div><pre class="plain">5590	    .clk(clk),
+5591	    .reset(reset)
+5592	);
+5593	
+5594	endmodule
+5595	
+5596	module norm_sub(
+5597		input enable_norm,
+5598	    input [`DWIDTH-1:0] mean,
+5599	    input [`DWIDTH-1:0] inv_var,
+5600	    input in_data_available,
+5601	    input [`DWIDTH-1:0] inp_data,
+5602	    output [`DWIDTH-1:0] out_data,
+5603	    output out_data_available,
+5604	    input  validity_mask,
+5605	    input clk,
+5606	    input reset
+5607	);
+5608	
+5609	reg out_data_available_internal;
+5610	wire [`DWIDTH-1:0] out_data_internal;
+5611	reg [`DWIDTH-1:0] mean_applied_data;
+5612	reg [`DWIDTH-1:0] variance_applied_data;
+5613	reg norm_in_progress;
+5614	
+5615	//Muxing logic to handle the case when this block is disabled
+5616	assign out_data_available = (enable_norm) ? out_data_available_internal : in_data_available;
+5617	assign out_data = (enable_norm) ? out_data_internal : inp_data;
+5618	
+5619	always @(posedge clk) begin
+5620	    if ((reset || ~enable_norm)) begin
+5621	        mean_applied_data &lt;= 0;
+5622	        variance_applied_data &lt;= 0;
+5623	    end else if (in_data_available||norm_in_progress) begin
+5624	        //Let's apply mean and variance as the input data comes in.
+5625	        //We have a pipeline here. First stage does the add (to apply the mean)
+5626	        //and second stage does the multiplication (to apply the variance).
+5627	        //Note: the following loop is not a loop across multiple columns of data.
+5628	        //This loop will run in 2 cycle on the same column of data that comes into 
+5629	        //this module in 1 clock.
+5630	        if (validity_mask == 1'b1) begin
+5631	            mean_applied_data &lt;= (inp_data - mean);
+5632	            variance_applied_data &lt;= (mean_applied_data * inv_var);
+5633	        end 
+5634	        else begin
+5635	            mean_applied_data &lt;= (inp_data);
+5636	            variance_applied_data &lt;= (mean_applied_data);
+5637	        end
+5638	    end
+5639	    else begin
+5640	        mean_applied_data &lt;= 0;
+5641	        variance_applied_data &lt;= 0;
+5642	    end
+5643	end
+5644	
+5645	//The data is normalized in two cycles so we are shifting in_data_available by 2 to generate out_data_available
+5646	always @(posedge clk) begin
+5647		norm_in_progress &lt;= in_data_available;
+5648		out_data_available_internal &lt;= norm_in_progress;
+5649	end
+5650	
+5651	assign out_data_internal = variance_applied_data;
+5652	
+5653	endmodule
+5654	
+5655	//Simple sual port RAM is not understood by VTR
+5656	`ifdef QUARTUS
+5657	//////////////////////////////////
+5658	// Simple dual port RAM
+5659	//////////////////////////////////</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/tpu_like.small.ws.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/tpu_like.small.ws.v",
+ "offset": 4733,
+ "limit": 160
+}</pre><div class="label">output</div><pre class="plain">4733	module processing_element(
+4734	    reset, 
+4735	    clk, 
+4736	    b_data_sel,
+4737	    in_a,
+4738	    in_a_chain,
+4739	    in_b,
+4740	    in_c,
+4741	    out_a,
+4742	    out_a_chain,
+4743	    out_b, 
+4744	    out_b0,
+4745	    out_b1,
+4746	    out_c,
+4747	    b_data_valid_ping,
+4748	    b_data_valid_pong,
+4749	    mode
+4750	 );
+4751	
+4752	input reset;
+4753	input clk;
+4754	input b_data_sel;
+4755	input b_data_valid_ping;
+4756	input b_data_valid_pong;
+4757	input  [`DWIDTH-1:0] in_a;
+4758	input  [`DWIDTH-1:0] in_a_chain;
+4759	input  [`DWIDTH-1:0] in_b; 
+4760	input  [`DWIDTH-1:0] in_c; 
+4761	output [`DWIDTH-1:0] out_a;
+4762	output [`DWIDTH-1:0] out_a_chain;
+4763	output [`DWIDTH-1:0] out_b;
+4764	output [`DWIDTH-1:0] out_b0;
+4765	output [`DWIDTH-1:0] out_b1;
+4766	output [`DWIDTH-1:0] out_c;  
+4767	input mode;
+4768	
+4769	
+4770	
+4771	
+4772	
+4773	
+4774	
+4775	
+4776	
+4777	
+4778	
+4779	
+4780	
+4781	
+4782	
+4783	
+4784	
+4785	
+4786	
+4787	
+4788	
+4789	
+4790	
+4791	
+4792	
+4793	
+4794	
+4795	
+4796	
+4797	
+4798	
+4799	
+4800	
+4801	
+4802	
+4803	
+4804	
+4805	
+4806	
+4807	
+4808	
+4809	
+4810	
+4811	
+4812	
+4813	
+4814	
+4815	
+4816	
+4817	
+4818	
+4819	
+4820	
+4821	
+4822	
+4823	
+4824	
+4825	
+4826	
+4827	
+4828	
+4829	
+4830	
+4831	
+4832	
+4833	
+4834	
+4835	
+4836	
+4837	
+4838	reg [`DWIDTH-1:0] out_a;
+4839	reg [`DWIDTH-1:0] out_b;
+4840	reg [`DWIDTH-1:0] out_b0;
+4841	reg [`DWIDTH-1:0] out_b1;
+4842	
+4843	wire [`DWIDTH-1:0] in_mac;
+4844	wire [`DWIDTH-1:0] out_c;
+4845	wire [`DWIDTH-1:0] out_mac;
+4846	
+4847	assign out_c = out_mac;
+4848	assign in_mac = (b_data_sel==0)? out_b0 : out_b1;
+4849	        
+4850	seq_mac u_mac(.a(out_a), .b(in_mac), .c(in_c), .out(out_mac), .reset(reset), .clk(clk));
+4851	
+4852	always @(posedge clk)begin
+4853	    if(reset) begin
+4854	        out_a&lt;=0;
+4855	    end
+4856	    else begin  
+4857	        out_a&lt;=mode ? in_a : in_a_chain;
+4858	    end
+4859	end
+4860	
+4861	assign out_a_chain = out_a;
+4862	
+4863	always @(posedge clk)begin
+4864	    if(reset) begin
+4865	        out_b&lt;=0;
+4866	    end
+4867	    else begin  
+4868	        out_b&lt;=in_b;
+4869	    end
+4870	end
+4871	
+4872	always @(posedge clk)begin 
+4873	    if (reset) begin
+4874	        out_b0&lt;=0;
+4875	    end
+4876	    if(b_data_valid_ping == 1) begin
+4877	        out_b0&lt;=in_b;
+4878	    end
+4879	end
+4880	
+4881	always @(posedge clk)begin 
+4882	    if (reset) begin
+4883	        out_b1&lt;=0;
+4884	    end
+4885	    if(b_data_valid_pong == 1) begin
+4886	        out_b1&lt;=in_b;
+4887	    end
+4888	end
+4889	
+4890	
+4891	
+4892	endmodule</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/tpu_like.small.ws.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/tpu_like.small.ws.v",
+ "offset": 7560,
+ "limit": 120
+}</pre><div class="label">output</div><pre class="plain">7560	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] avg4;
+7561	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] avg5;
+7562	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] avg6;
+7563	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] avg7;
+7564	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] avg8;
+7565	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] avg9;
+7566	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] avg10;
+7567	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] avg11;
+7568	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] avg12;
+7569	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] avg13;
+7570	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] avg14;
+7571	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] avg15;
+7572	
+7573	reg [`DWIDTH+`MAT_MUL_SIZE-1:0] avg0_int;
+7574	reg [`DWIDTH+`MAT_MUL_SIZE-1:0] avg1_int;
+7575	reg [`DWIDTH+`MAT_MUL_SIZE-1:0] avg2_int;
+7576	reg [`DWIDTH+`MAT_MUL_SIZE-1:0] avg3_int;
+7577	reg [`DWIDTH+`MAT_MUL_SIZE-1:0] avg4_int;
+7578	reg [`DWIDTH+`MAT_MUL_SIZE-1:0] avg5_int;
+7579	reg [`DWIDTH+`MAT_MUL_SIZE-1:0] avg6_int;
+7580	reg [`DWIDTH+`MAT_MUL_SIZE-1:0] avg7_int;
+7581	reg [`DWIDTH+`MAT_MUL_SIZE-1:0] avg8_int;
+7582	reg [`DWIDTH+`MAT_MUL_SIZE-1:0] avg9_int;
+7583	reg [`DWIDTH+`MAT_MUL_SIZE-1:0] avg10_int;
+7584	reg [`DWIDTH+`MAT_MUL_SIZE-1:0] avg11_int;
+7585	reg [`DWIDTH+`MAT_MUL_SIZE-1:0] avg12_int;
+7586	reg [`DWIDTH+`MAT_MUL_SIZE-1:0] avg13_int;
+7587	reg [`DWIDTH+`MAT_MUL_SIZE-1:0] avg14_int;
+7588	reg [`DWIDTH+`MAT_MUL_SIZE-1:0] avg15_int;
+7589	
+7590	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] average0;
+7591	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] average1;
+7592	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] average2;
+7593	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] average3;
+7594	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] average4;
+7595	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] average5;
+7596	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] average6;
+7597	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] average7;
+7598	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] average8;
+7599	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] average9;
+7600	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] average10;
+7601	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] average11;
+7602	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] average12;
+7603	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] average13;
+7604	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] average14;
+7605	wire [`DWIDTH+`MAT_MUL_SIZE-1:0] average15;
+7606	
+7607	assign pool_norm_valid = (pool_count1 == (filter_size_int*filter_size_int))?1'b1:1'b0;
+7608	
+7609	reg [`AWIDTH-1:0] x;
+7610	reg [`AWIDTH-1:0] y;
+7611	reg [`AWIDTH-1:0] k;
+7612	assign raddr_accum0_pool = (~resetn|~start_pooling)? 11'h7ff: ((matrix_size_int)*y + x + k);
+7613	
+7614	always @(posedge clk) begin
+7615	    if(~resetn|~start_pooling) begin
+7616	        x&lt;=0;
+7617	        y&lt;=0;
+7618	        k&lt;=0;
+7619	    end
+7620	    else if (y == (matrix_size_int-1) &amp; x==(filter_size_int-1)) begin
+7621	        k&lt;=k+filter_size_int;
+7622	        y&lt;=0;
+7623	        x&lt;=0;
+7624	    end
+7625	    else if (x==(filter_size_int-1)) begin
+7626	        y&lt;=y+1;
+7627	        x&lt;=0;
+7628	    end
+7629	    else if (start_pooling) begin
+7630	        x&lt;=x+1;
+7631	    end
+7632	end
+7633	
+7634	always @ (posedge clk) begin
+7635	    raddr_accum1_pool &lt;= raddr_accum0_pool;
+7636	    raddr_accum2_pool &lt;= raddr_accum1_pool;
+7637	    raddr_accum3_pool &lt;= raddr_accum2_pool;
+7638	    raddr_accum4_pool &lt;= raddr_accum3_pool;
+7639	    raddr_accum5_pool &lt;= raddr_accum4_pool;
+7640	    raddr_accum6_pool &lt;= raddr_accum5_pool;
+7641	    raddr_accum7_pool &lt;= raddr_accum6_pool;
+7642	    raddr_accum8_pool &lt;= raddr_accum7_pool;
+7643	    raddr_accum9_pool &lt;= raddr_accum8_pool;
+7644	    raddr_accum10_pool &lt;= raddr_accum9_pool;
+7645	    raddr_accum11_pool &lt;= raddr_accum10_pool;
+7646	    raddr_accum12_pool &lt;= raddr_accum11_pool;
+7647	    raddr_accum13_pool &lt;= raddr_accum12_pool;
+7648	    raddr_accum14_pool &lt;= raddr_accum13_pool;
+7649	    raddr_accum15_pool &lt;= raddr_accum14_pool;
+7650	end
+7651	
+7652	always @ (posedge clk) begin
+7653	    if (~resetn) begin
+7654	        compare0 &lt;= 0;
+7655	    end
+7656	    else if (rdata_accum0_pool &gt; cmp0) begin
+7657	        compare0 &lt;= rdata_accum0_pool;
+7658	    end
+7659	    else if (rdata_accum0_pool &lt; cmp0) begin
+7660	        compare0 &lt;= cmp0;
+7661	    end
+7662	end 
+7663	
+7664	always @ (posedge clk
+…[truncated, 4687 chars total]</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/tpu_like.small.ws.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/tpu_like.small.ws.v",
+ "offset": 8100,
+ "limit": 60
+}</pre><div class="label">output</div><pre class="plain">8100	        avg14_int &lt;= 0;
+8101	    end
+8102	    else begin
+8103	        avg14_int &lt;= avg14 + rdata_accum14_pool;
+8104	    end
+8105	end
+8106	
+8107	assign cmp14 = (pool_count14 == 1)? 0 : compare14;
+8108	assign avg14 = (pool_count14 == 1)? 0 : avg14_int;
+8109	assign average14 = (filter_size_int == 8'b1)? avg14_int : (filter_size_int == 8'b10)? avg14_int &gt;&gt; 2 : (filter_size_int == 8'b11)? avg14_int &gt;&gt; 3 : (filter_size_int == 8'b100)? avg14_int &gt;&gt; 4 : avg14_int;
+8110	
+8111	wire [`DWIDTH-1:0] pool14_wire;
+8112	assign pool14_wire = (pool_count15 == (filter_size_int*filter_size_int))? ((pool_select == 0)? compare14 : average14) : 8'b0;
+8113	always @(posedge clk) begin
+8114	 pool14 &lt;= pool14_wire;
+8115	end
+8116	
+8117	always @ (posedge clk) begin
+8118	    if (~resetn) begin
+8119	        compare15 &lt;= 0;
+8120	    end
+8121	    else if (rdata_accum15_pool &gt; cmp15) begin
+8122	        compare15 &lt;= rdata_accum15_pool;
+8123	    end
+8124	    else if (rdata_accum15_pool &lt; cmp15) begin
+8125	        compare15 &lt;= cmp15;
+8126	    end
+8127	end 
+8128	
+8129	always @ (posedge clk) begin
+8130	    if (~resetn) begin
+8131	        avg15_int &lt;= 0;
+8132	    end
+8133	    else begin
+8134	        avg15_int &lt;= avg15 + rdata_accum15_pool;
+8135	    end
+8136	end
+8137	
+8138	assign cmp15 = (pool_count15 == 1)? 0 : compare15;
+8139	assign avg15 = (pool_count15 == 1)? 0 : avg15_int;
+8140	assign average15 = (filter_size_int == 8'b1)? avg15_int : (filter_size_int == 8'b10)? avg15_int &gt;&gt; 2 : (filter_size_int == 8'b11)? avg15_int &gt;&gt; 3 : (filter_size_int == 8'b100)? avg15_int &gt;&gt; 4 : avg15_int;
+8141	
+8142	wire [`DWIDTH-1:0] pool15_wire;
+8143	assign pool15_wire = (pool_count16 == (filter_size_int*filter_size_int))? ((pool_select == 0)? compare15 : average15) : 8'b0;
+8144	always @(posedge clk) begin
+8145	 pool15 &lt;= pool15_wire;
+8146	end
+8147	
+8148	
+8149	endmodule
+8150	
+8151	////////////////////////////////////////////////////////////////////////////////
+8152	// THIS FILE WAS AUTOMATICALLY GENERATED FROM generate_activation.v.mako
+8153	// DO NOT EDIT
+8154	////////////////////////////////////////////////////////////////////////////////
+8155	module activation(
+8156	    input activation_type,
+8157	    input enable_activation,
+8158	    input enable_pool,
+8159	    input in_data_available,</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/tpu_like.small.ws.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/tpu_like.small.ws.v",
+ "offset": 7336,
+ "limit": 225
+}</pre><div class="label">output</div><pre class="plain">7336	module pooling(
+7337	    clk,
+7338	    resetn,
+7339	    start_pooling,
+7340	    pool_select,
+7341	    pool_norm_valid,
+7342	    enable_pool,
+7343	    rdata_accum0_pool,
+7344	    rdata_accum1_pool,
+7345	    rdata_accum2_pool,
+7346	    rdata_accum3_pool,
+7347	    rdata_accum4_pool,
+7348	    rdata_accum5_pool,
+7349	    rdata_accum6_pool,
+7350	    rdata_accum7_pool,
+7351	    rdata_accum8_pool,
+7352	    rdata_accum9_pool,
+7353	    rdata_accum10_pool,
+7354	    rdata_accum11_pool,
+7355	    rdata_accum12_pool,
+7356	    rdata_accum13_pool,
+7357	    rdata_accum14_pool,
+7358	    rdata_accum15_pool,
+7359	    raddr_accum0_pool,
+7360	    raddr_accum1_pool,
+7361	    raddr_accum2_pool,
+7362	    raddr_accum3_pool,
+7363	    raddr_accum4_pool,
+7364	    raddr_accum5_pool,
+7365	    raddr_accum6_pool,
+7366	    raddr_accum7_pool,
+7367	    raddr_accum8_pool,
+7368	    raddr_accum9_pool,
+7369	    raddr_accum10_pool,
+7370	    raddr_accum11_pool,
+7371	    raddr_accum12_pool,
+7372	    raddr_accum13_pool,
+7373	    raddr_accum14_pool,
+7374	    raddr_accum15_pool,
+7375	    pool0,
+7376	    pool1,
+7377	    pool2,
+7378	    pool3,
+7379	    pool4,
+7380	    pool5,
+7381	    pool6,
+7382	    pool7,
+7383	    pool8,
+7384	    pool9,
+7385	    pool10,
+7386	    pool11,
+7387	    pool12,
+7388	    pool13,
+7389	    pool14,
+7390	    pool15,
+7391	    matrix_size,
+7392	    filter_size
+7393	);
+7394	
+7395	input clk;
+7396	input resetn;
+7397	input start_pooling;
+7398	input pool_select;
+7399	input enable_pool;
+7400	output pool_norm_valid;
+7401	output reg [`DWIDTH-1:0] pool0;
+7402	output reg [`DWIDTH-1:0] pool1;
+7403	output reg [`DWIDTH-1:0] pool2;
+7404	output reg [`DWIDTH-1:0] pool3;
+7405	output reg [`DWIDTH-1:0] pool4;
+7406	output reg [`DWIDTH-1:0] pool5;
+7407	output reg [`DWIDTH-1:0] pool6;
+7408	output reg [`DWIDTH-1:0] pool7;
+7409	output reg [`DWIDTH-1:0] pool8;
+7410	output reg [`DWIDTH-1:0] pool9;
+7411	output reg [`DWIDTH-1:0] pool10;
+7412	output reg [`DWIDTH-1:0] pool11;
+7413	output reg [`DWIDTH-1:0] pool12;
+7414	output reg [`DWIDTH-1:0] pool13;
+7415	output reg [`DWIDTH-1:0] pool14;
+7416	output reg [`DWIDTH-1:0] pool15;
+7417	input [`DWIDTH-1:0] rdata_accum0_pool;
+7418	input [`DWIDTH-1:0] rdata_accum1_pool;
+7419	input [`DWIDTH-1:0] rdata_accum2_pool;
+7420	input [`DWIDTH-1:0] rdata_accum3_pool;
+7421	input [`DWIDTH-1:0] rdata_accum4_pool;
+7422	input [`DWIDTH-1:0] rdata_accum5_pool;
+7423	input [`DWIDTH-1:0] rdata_accum6_pool;
+7424	input [`DWIDTH-1:0] rdata_accum7_pool;
+7425	input [`DWIDTH-1:0] rdata_accum8_pool;
+7426	input [`DWIDTH-1:0] rdata_accum9_pool;
+7427	input [`DWIDTH-1:0] rdata_accum10_pool;
+7428	input [`DWIDTH-1:0] rdata_accum11_pool;
+7429	input [`DWIDTH-1:0] rdata_accum12_pool;
+7430	input [`DWIDTH-1:0] rdata_accum13_pool;
+7431	input [`DWIDTH-1:0] rdata_accum14_pool;
+7432	input [`DWIDTH-1:0] rdata_accum15_pool;
+7433	output [`AWIDTH-1:0] raddr_accum0_pool;
+7434	output [`AWIDTH-1:0] raddr_accum1_pool;
+7435	output [`AWIDTH-1:0] raddr_accum2_pool;
+7436	output [`AWIDTH-1:0] raddr_accum3_pool;
+7437	output [`AWIDTH-1:0] raddr_accum4_pool;
+7438	output [`AWIDTH-1:0] raddr_accum5_pool;
+7439	output [`AWIDTH-1:0] raddr_accum6_pool;
+7440	output [`AWIDTH-1:0] raddr_accum7_pool;
+7441	output [`AWIDTH-1:0] raddr_accum8_pool;
+7442	output [`AWIDTH-1:0] raddr_accum9_pool;
+7443	output [`AWIDTH-1:0] raddr_accum10_pool;
+7444	output [`AWIDTH-1:0] raddr_accum11_pool;
+7445	output [`AWIDTH-1:0] raddr_accum12_pool;
+7446	output [`AWIDTH-1:0] raddr_accum13_pool;
+7447	output [`AWIDTH-1:0] raddr_accum14_pool;
+7448	output [`AWIDTH-1:0] raddr_accum15_pool;
+7449	input [`DWIDTH-1:0] matrix_size;
+7450	input [`DWIDTH-1:0] filter_size;
+7451	
+7452	reg [`AWIDTH-1:0] raddr_accum1_pool;
+7453	reg [`AWIDTH-1:0] raddr_accum2_pool;
+7454	reg [`AWIDTH-1:0] raddr_accum3_pool;
+7455	reg [`AWIDTH-1:0] raddr_accum4_pool;
+7456	reg [`AWIDTH-1:0] raddr_accum5_pool;
+7457	reg [`AWIDTH-1:0] raddr_accum6_pool;
+7458	reg [`AWIDTH-1:0] raddr_accum7_pool;
+7459	reg [`AWIDTH-1:0] raddr_accum8_pool;
+7460	reg [`AWIDTH-1:0] raddr_accum9_p
+…[truncated, 7238 chars total]</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/tpu_like.small.ws.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/tpu_like.small.ws.v",
+ "offset": 8466,
+ "limit": 185
+}</pre><div class="label">output</div><pre class="plain">8466	module sub_activation(
+8467	    input activation_type,
+8468	    input enable_activation,
+8469	    input in_data_available,
+8470	    input [`DWIDTH-1:0] inp_data,
+8471	    output [`DWIDTH-1:0] out_data,
+8472	    output out_data_available,
+8473	    input validity_mask,
+8474	    input clk,
+8475	    input reset
+8476	);
+8477	
+8478	reg  out_data_available_internal;
+8479	reg [`DWIDTH-1:0] out_data_internal;
+8480	reg [`DWIDTH-1:0] slope_applied_data_internal;
+8481	reg [`DWIDTH-1:0] intercept_applied_data_internal;
+8482	reg [`DWIDTH-1:0] relu_applied_data_internal;
+8483	
+8484	reg [31:0] cycle_count;
+8485	reg activation_in_progress;
+8486	
+8487	reg [3:0] address;
+8488	reg [`DWIDTH-1:0] data_slope;
+8489	reg [`DWIDTH-1:0] data_intercept;
+8490	reg [`DWIDTH-1:0] data_intercept_delayed;
+8491	
+8492	// If the activation block is not enabled, just forward the input data
+8493	assign out_data             = enable_activation ? out_data_internal : inp_data;
+8494	assign out_data_available   = enable_activation ? out_data_available_internal : in_data_available;
+8495	
+8496	always @(posedge clk) begin
+8497	   if (reset || ~enable_activation) begin
+8498	      slope_applied_data_internal     &lt;= 0;
+8499	      intercept_applied_data_internal &lt;= 0; 
+8500	      relu_applied_data_internal      &lt;= 0; 
+8501	      data_intercept_delayed      &lt;= 0;
+8502	      out_data_available_internal &lt;= 0;
+8503	      cycle_count                 &lt;= 0;
+8504	      activation_in_progress      &lt;= 0;      
+8505	   end 
+8506	   else if(in_data_available || activation_in_progress) begin
+8507	      cycle_count &lt;= cycle_count + 1;
+8508	      if(activation_type==1'b1) begin // tanH
+8509	        slope_applied_data_internal &lt;= data_slope * inp_data;
+8510	        data_intercept_delayed &lt;= data_intercept;
+8511	        intercept_applied_data_internal &lt;= slope_applied_data_internal + data_intercept_delayed;
+8512	      end else begin // ReLU
+8513	        relu_applied_data_internal &lt;= (inp_data)? {`DWIDTH{1'b0}} : inp_data;
+8514	      end 
+8515	      
+8516	      //TANH needs 1 extra cycle
+8517	      if (activation_type==1'b1) begin
+8518	         if (cycle_count==2) begin
+8519	            out_data_available_internal &lt;= 1;
+8520	         end
+8521	      end else begin
+8522	         if (cycle_count==1) begin
+8523	           out_data_available_internal &lt;= 1;
+8524	         end
+8525	      end
+8526	
+8527	      //TANH needs 1 extra cycle
+8528	      if (activation_type==1'b1) begin
+8529	        if(cycle_count==2) begin
+8530	           activation_in_progress &lt;= 0;
+8531	        end
+8532	        else begin
+8533	           activation_in_progress &lt;= 1;
+8534	        end
+8535	      end else begin
+8536	        if(cycle_count==1) begin
+8537	           activation_in_progress &lt;= 0;
+8538	        end
+8539	        else begin
+8540	           activation_in_progress &lt;= 1;
+8541	        end
+8542	      end
+8543	   end   
+8544	   else begin
+8545	      slope_applied_data_internal     &lt;= 0;
+8546	      intercept_applied_data_internal &lt;= 0; 
+8547	      relu_applied_data_internal      &lt;= 0; 
+8548	      data_intercept_delayed      &lt;= 0;
+8549	      out_data_available_internal &lt;= 0;
+8550	      cycle_count                 &lt;= 0;
+8551	      activation_in_progress      &lt;= 0;
+8552	   end
+8553	end
+8554	
+8555	always @ (posedge clk) begin
+8556	   if (activation_type == 1'b1)
+8557	      out_data_internal &lt;= intercept_applied_data_internal;
+8558	   else
+8559	      out_data_internal &lt;= relu_applied_data_internal;
+8560	end
+8561	
+8562	//Our equation of tanh is Y=AX+B
+8563	//A is the slope and B is the intercept.
+8564	//We store A in one LUT and B in another.
+8565	//LUT for the slope
+8566	always @(address) begin
+8567	    case (address)
+8568	      4'b0000: data_slope = 8'd0;
+8569	      4'b0001: data_slope = 8'd0;
+8570	      4'b0010: data_slope = 8'd2;
+8571	      4'b0011: data_slope = 8'd3;
+8572	      4'b0100: data_slope = 8'd4;
+8573	      4'b0101: data_slope = 8'd0;
+8574	      4'b0110: data_slope = 8'd4;
+8575	      4'b0111: data_slope = 8'd3;
+85
+…[truncated, 6441 chars total]</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> ^`define</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "^`define",
+ "path": "/work/tpu_like.small.ws.v",
+ "output_mode": "content",
+ "-n": true,
+ "head_limit": 40
+}</pre><div class="label">output</div><pre class="plain">2:`define VCS
+3:`define MATMUL_SIZE_16 
+4:`define MORE_TESTS
+5:`define DESIGN_SIZE_16
+6:`define SIMULATION
+7:`define layer_test
+9:`define DWIDTH 8
+10:`define AWIDTH 11
+11:`define MEM_SIZE 2048
+14:`define MAT_MUL_SIZE 4
+15:`define MASK_WIDTH 4
+16:`define LOG2_MAT_MUL_SIZE 2
+20:`define MAT_MUL_SIZE 8
+21:`define MASK_WIDTH 8
+22:`define LOG2_MAT_MUL_SIZE 3
+26:`define MAT_MUL_SIZE 16
+27:`define MASK_WIDTH 16
+28:`define LOG2_MAT_MUL_SIZE 4
+32:`define MAT_MUL_SIZE 32
+33:`define MASK_WIDTH 32
+34:`define LOG2_MAT_MUL_SIZE 5
+38:`define DESIGN_SIZE 4
+39:`define LOG2_DESIGN_SIZE 2
+43:`define DESIGN_SIZE 8
+44:`define LOG2_DESIGN_SIZE 3
+48:`define DESIGN_SIZE 16
+49:`define LOG2_DESIGN_SIZE 4
+53:`define DESIGN_SIZE 32
+54:`define LOG2_DESIGN_SIZE 5
+57:`define BB_MAT_MUL_SIZE `MAT_MUL_SIZE
+58:`define NUM_CYCLES_IN_MAC 3
+59:`define MEM_ACCESS_LATENCY 1
+60:`define REG_DATAWIDTH 32
+61:`define REG_ADDRWIDTH 8
+62:`define ADDR_STRIDE_WIDTH 8
+63:`define MAX_BITS_POOL 3
+132:`define REG_ENABLES_ADDR 32'h0
+142:`define REG_STDN_TPU_ADDR 32'h4
+149:`define REG_MEAN_ADDR 32'h8
+155:`define REG_INV_VAR_ADDR 32'hA
+
+[Showing results with pagination = limit: 40]</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> sub_activation|validity_mask</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "sub_activation|validity_mask",
+ "path": "/work/tpu_like.small.ws.v",
+ "output_mode": "content",
+ "-n": true,
+ "head_limit": 60
+}</pre><div class="label">output</div><pre class="plain">305://Bit `MASK_WIDTH-1:0 validity_mask
+364:    validity_mask_a_rows,
+365:    validity_mask_a_cols_b_rows,
+366:    validity_mask_b_cols,
+410:input [`MASK_WIDTH-1:0] validity_mask_a_rows;
+411:input [`MASK_WIDTH-1:0] validity_mask_a_cols_b_rows;
+412:input [`MASK_WIDTH-1:0] validity_mask_b_cols;
+799:    .validity_mask_a_rows(validity_mask_a_rows),
+800:    .validity_mask_a_cols_b_rows(validity_mask_a_cols_b_rows),
+801:    .validity_mask_b_cols(validity_mask_b_cols),
+1616:    validity_mask_a_rows,
+1617:    validity_mask_a_cols_b_rows,
+1618:    validity_mask_b_cols,
+1669:input [`MASK_WIDTH-1:0] validity_mask_a_rows;
+1670:input [`MASK_WIDTH-1:0] validity_mask_a_cols_b_rows;
+1671:input [`MASK_WIDTH-1:0] validity_mask_b_cols;
+1751:       ((validity_mask_a_cols_b_rows[0]==1'b0 &amp;&amp; a_mem_access_counter==1) ||
+1752:        (validity_mask_a_cols_b_rows[1]==1'b0 &amp;&amp; a_mem_access_counter==2) ||
+1753:        (validity_mask_a_cols_b_rows[2]==1'b0 &amp;&amp; a_mem_access_counter==3) ||
+1754:        (validity_mask_a_cols_b_rows[3]==1'b0 &amp;&amp; a_mem_access_counter==4) ||
+1755:        (validity_mask_a_cols_b_rows[4]==1'b0 &amp;&amp; a_mem_access_counter==5) ||
+1756:        (validity_mask_a_cols_b_rows[5]==1'b0 &amp;&amp; a_mem_access_counter==6) ||
+1757:        (validity_mask_a_cols_b_rows[6]==1'b0 &amp;&amp; a_mem_access_counter==7) ||
+1758:        (validity_mask_a_cols_b_rows[7]==1'b0 &amp;&amp; a_mem_access_counter==8) ||
+1759:        (validity_mask_a_cols_b_rows[8]==1'b0 &amp;&amp; a_mem_access_counter==9) ||
+1760:        (validity_mask_a_cols_b_rows[9]==1'b0 &amp;&amp; a_mem_access_counter==10) ||
+1761:        (validity_mask_a_cols_b_rows[10]==1'b0 &amp;&amp; a_mem_access_counter==11) ||
+1762:        (validity_mask_a_cols_b_rows[11]==1'b0 &amp;&amp; a_mem_access_counter==12) ||
+1763:        (validity_mask_a_cols_b_rows[12]==1'b0 &amp;&amp; a_mem_access_counter==13) ||
+1764:        (validity_mask_a_cols_b_rows[13]==1'b0 &amp;&amp; a_mem_access_counter==14) ||
+1765:        (validity_mask_a_cols_b_rows[14]==1'b0 &amp;&amp; a_mem_access_counter==15) ||
+1766:        (validity_mask_a_cols_b_rows[15]==1'b0 &amp;&amp; a_mem_access_counter==16)) ?
+1774:assign a0_data = a_data[`DWIDTH-1:0] &amp; {`DWIDTH{a_data_valid}} &amp; {`DWIDTH{validity_mask_a_rows[0]}};
+1775:assign a1_data = a_data[2*`DWIDTH-1:1*`DWIDTH] &amp; {`DWIDTH{a_data_valid}} &amp; {`DWIDTH{validity_mask_a_rows[1]}};
+1776:assign a2_data = a_data[3*`DWIDTH-1:2*`DWIDTH] &amp; {`DWIDTH{a_data_valid}} &amp; {`DWIDTH{validity_mask_a_rows[2]}};
+1777:assign a3_data = a_data[4*`DWIDTH-1:3*`DWIDTH] &amp; {`DWIDTH{a_data_valid}} &amp; {`DWIDTH{validity_mask_a_rows[3]}};
+1778:assign a4_data = a_data[5*`DWIDTH-1:4*`DWIDTH] &amp; {`DWIDTH{a_data_valid}} &amp; {`DWIDTH{validity_mask_a_rows[4]}};
+1779:assign a5_data = a_data[6*`DWIDTH-1:5*`DWIDTH] &amp; {`DWIDTH{a_data_valid}} &amp; {`DWIDTH{validity_mask_a_rows[5]}};
+1780:assign a6_data = a_data[7*`DWIDTH-1:6*`DWIDTH] &amp; {`DWIDTH{a_data_valid}} &amp; {`DWIDTH{validity_mask_a_rows[6]}};
+1781:assign a7_data = a_data[8*`DWIDTH-1:7*`DWIDTH] &amp; {`DWIDTH{a_data_valid}} &amp; {`DWIDTH{validity_mask_a_rows[7]}};
+1782:assign a8_data = a_data[9*`DWIDTH-1:8*`DWIDTH] &amp; {`DWIDTH{a_data_valid}} &amp; {`DWIDTH{validity_mask_a_rows[8]}};
+1783:assign a9_data = a_data[10*`DWIDTH-1:9*`DWIDTH] &amp; {`DWIDTH{a_data_valid}} &amp; {`DWIDTH{validity_mask_a_rows[9]}};
+1784:assign a10_data = a_data[11*`DWIDTH-1:10*`DWIDTH] &amp; {`DWIDTH{a_data_valid}} &amp; {`DWIDTH{validity_mask_a_rows[10]}};
+1785:assign a11_data = a_data[12*`DWIDTH-1:11*`DWIDTH] &amp; {`DWIDTH{a_data_valid}} &amp; {`DWIDTH{validity_mask_a_rows[11]}};
+1786:assign a12_data = a_data[13*`DWIDTH-1:12*`DWIDTH] &amp; {`DWIDTH{a_data_valid}} &amp; {`DWIDTH{validity_mask_a_rows[12]}};
+1787:assign a13_data = a_data[14*`DWIDTH-1:13*`DWIDTH] &amp; {`DWIDTH{a_data_valid}} &amp; {`DWIDTH{validity_mask_a_rows[13]}};
+1788:assign a14_data = a_data[15*`DWIDTH-1:14*`DWIDTH] &amp; {`DWIDTH{a_data_valid}} &amp; {`DWIDTH{validity_mask_a_rows[14]}};
+1789:assign a15_data = a_data[16*`DWIDTH-1:15*`DWIDTH] &amp; {`DWIDTH{a_data_valid}} &amp; {`DWIDTH{validity_mask_a_rows[15]}};
+2197:       ((validity_mask_a_cols_b_rows[0]==1'b0 &amp;&amp; b_mem_access_counter==1
+…[truncated, 4958 chars total]</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> sub_activation u_</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "sub_activation u_",
+ "path": "/work/tpu_like.small.ws.v",
+ "output_mode": "content",
+ "-n": true,
+ "head_limit": 20
+}</pre><div class="label">output</div><pre class="plain">No matches found</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> norm_sub u_|\.in_c\(|processing_element u_pe0_0|processing_element u_pe1_0</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "norm_sub u_|\\.in_c\\(|processing_element u_pe0_0|processing_element u_pe1_0",
+ "path": "/work/tpu_like.small.ws.v",
+ "output_mode": "content",
+ "-n": true,
+ "head_limit": 30
+}</pre><div class="label">output</div><pre class="plain">4467:processing_element pe0_0(.reset(effective_rst), .clk(clk), .b_data_sel(b_data_sel),             .in_a(a0),    .in_a_chain(in_a_chain_0_0_NC),  .in_b(b0),      .in_c(c0),        .out_a(out_a_0_0_NC), .out_a_chain(a0_0to0_1), .out_b(b0_0to1_0), .out_b0(b0_0to1_0_ping), .out_b1(b0_0to1_0_pong), .out_c(matrixC0_0), .b_data_valid_ping(b_data_valid_ping),         .b_data_valid_pong(b_data_valid_pong        ), .mode(1'b1));
+4468:processing_element pe0_1(.reset(effective_rst), .clk(clk), .b_data_sel(b_data_sel_delay1), .in_a(in_a_0_1_NC), .in_a_chain(a0_0to0_1), .in_b(b1),      .in_c(c1),        .out_a(out_a_0_1_NC), .out_a_chain(a0_1to0_2), .out_b(b0_1to1_1), .out_b0(b0_1to1_1_ping), .out_b1(b0_1to1_1_pong), .out_c(matrixC0_1), .b_data_valid_ping(b_data_valid_ping_delay0_1), .b_data_valid_pong(b_data_valid_pong_delay0_1), .mode(1'b0));
+4469:processing_element pe0_2(.reset(effective_rst), .clk(clk), .b_data_sel(b_data_sel_delay2), .in_a(in_a_0_2_NC), .in_a_chain(a0_1to0_2), .in_b(b2),      .in_c(c2),        .out_a(out_a_0_2_NC), .out_a_chain(a0_2to0_3), .out_b(b0_2to1_2), .out_b0(b0_2to1_2_ping), .out_b1(b0_2to1_2_pong), .out_c(matrixC0_2), .b_data_valid_ping(b_data_valid_ping_delay0_2), .b_data_valid_pong(b_data_valid_pong_delay0_2), .mode(1'b0));
+4470:processing_element pe0_3(.reset(effective_rst), .clk(clk), .b_data_sel(b_data_sel_delay3), .in_a(in_a_0_3_NC), .in_a_chain(a0_2to0_3), .in_b(b3),      .in_c(c3),        .out_a(out_a_0_3_NC), .out_a_chain(a0_3to0_4), .out_b(b0_3to1_3), .out_b0(b0_3to1_3_ping), .out_b1(b0_3to1_3_pong), .out_c(matrixC0_3), .b_data_valid_ping(b_data_valid_ping_delay0_3), .b_data_valid_pong(b_data_valid_pong_delay0_3), .mode(1'b0));
+4471:processing_element pe0_4(.reset(effective_rst), .clk(clk), .b_data_sel(b_data_sel_delay4), .in_a(in_a_0_4_NC), .in_a_chain(a0_3to0_4), .in_b(b4),      .in_c(c4),        .out_a(out_a_0_4_NC), .out_a_chain(a0_4to0_5), .out_b(b0_4to1_4), .out_b0(b0_4to1_4_ping), .out_b1(b0_4to1_4_pong), .out_c(matrixC0_4), .b_data_valid_ping(b_data_valid_ping_delay0_4), .b_data_valid_pong(b_data_valid_pong_delay0_4), .mode(1'b0));
+4472:processing_element pe0_5(.reset(effective_rst), .clk(clk), .b_data_sel(b_data_sel_delay5), .in_a(in_a_0_5_NC), .in_a_chain(a0_4to0_5), .in_b(b5),      .in_c(c5),        .out_a(out_a_0_5_NC), .out_a_chain(a0_5to0_6), .out_b(b0_5to1_5), .out_b0(b0_5to1_5_ping), .out_b1(b0_5to1_5_pong), .out_c(matrixC0_5), .b_data_valid_ping(b_data_valid_ping_delay0_5), .b_data_valid_pong(b_data_valid_pong_delay0_5), .mode(1'b0));
+4473:processing_element pe0_6(.reset(effective_rst), .clk(clk), .b_data_sel(b_data_sel_delay6), .in_a(in_a_0_6_NC), .in_a_chain(a0_5to0_6), .in_b(b6),      .in_c(c6),        .out_a(out_a_0_6_NC), .out_a_chain(a0_6to0_7), .out_b(b0_6to1_6), .out_b0(b0_6to1_6_ping), .out_b1(b0_6to1_6_pong), .out_c(matrixC0_6), .b_data_valid_ping(b_data_valid_ping_delay0_6), .b_data_valid_pong(b_data_valid_pong_delay0_6), .mode(1'b0));
+4474:processing_element pe0_7(.reset(effective_rst), .clk(clk), .b_data_sel(b_data_sel_delay7), .in_a(in_a_0_7_NC), .in_a_chain(a0_6to0_7), .in_b(b7),      .in_c(c7),        .out_a(out_a_0_7_NC), .out_a_chain(a0_7to0_8), .out_b(b0_7to1_7), .out_b0(b0_7to1_7_ping), .out_b1(b0_7to1_7_pong), .out_c(matrixC0_7), .b_data_valid_ping(b_data_valid_ping_delay0_7), .b_data_valid_pong(b_data_valid_pong_delay0_7), .mode(1'b0));
+4475:processing_element pe0_8(.reset(effective_rst), .clk(clk), .b_data_sel(b_data_sel_delay8), .in_a(in_a_0_8_NC), .in_a_chain(a0_7to0_8), .in_b(b8),      .in_c(c8),        .out_a(out_a_0_8_NC), .out_a_chain(a0_8to0_9), .out_b(b0_8to1_8), .out_b0(b0_8to1_8_ping), .out_b1(b0_8to1_8_pong), .out_c(matrixC0_8), .b_data_valid_ping(b_data_valid_ping_delay0_8), .b_data_valid_pong(b_data_valid_pong_delay0_8), .mode(1'b0));
+4476:processing_element pe0_9(.reset(effective_rst), .clk(clk), .b_data_sel(b_data_sel_delay9), .in_a(in_a_0_9_NC), .in_a_chain(a0_8to0_9), .in_b(b9),      .in_c(c9),        .out_a(out_a_0_9_NC), .out_a_chain(a0_9t
+…[truncated, 12905 chars total]</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> sub_activation |norm_sub </span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "sub_activation |norm_sub ",
+ "path": "/work/tpu_like.small.ws.v",
+ "output_mode": "content",
+ "-n": true,
+ "head_limit": 10
+}</pre><div class="label">output</div><pre class="plain">5372:norm_sub norm0(
+5386:norm_sub norm1(
+5400:norm_sub norm2(
+5414:norm_sub norm3(
+5428:norm_sub norm4(
+5442:norm_sub norm5(
+5456:norm_sub norm6(
+5470:norm_sub norm7(
+5484:norm_sub norm8(
+5498:norm_sub norm9(
+
+[Showing results with pagination = limit: 10]</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/tpu_like.small.ws.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/tpu_like.small.ws.v",
+ "offset": 8380,
+ "limit": 86
+}</pre><div class="label">output</div><pre class="plain">8380	    .out_data(out_data9),
+8381	    .out_data_available(out_data_available_NC9),
+8382	    .validity_mask(validity_mask[9]),
+8383	    .clk(clk),
+8384	    .reset(reset)
+8385	);    
+8386	
+8387	wire out_data_available_NC10;
+8388	sub_activation activation10(
+8389	    .activation_type(activation_type),
+8390	    .enable_activation(enable_activation),
+8391	    .in_data_available(in_data_available10),
+8392	    .inp_data(inp_data10),
+8393	    .out_data(out_data10),
+8394	    .out_data_available(out_data_available_NC10),
+8395	    .validity_mask(validity_mask[10]),
+8396	    .clk(clk),
+8397	    .reset(reset)
+8398	);    
+8399	
+8400	wire out_data_available_NC11;
+8401	sub_activation activation11(
+8402	    .activation_type(activation_type),
+8403	    .enable_activation(enable_activation),
+8404	    .in_data_available(in_data_available11),
+8405	    .inp_data(inp_data11),
+8406	    .out_data(out_data11),
+8407	    .out_data_available(out_data_available_NC11),
+8408	    .validity_mask(validity_mask[11]),
+8409	    .clk(clk),
+8410	    .reset(reset)
+8411	);    
+8412	
+8413	wire out_data_available_NC12;
+8414	sub_activation activation12(
+8415	    .activation_type(activation_type),
+8416	    .enable_activation(enable_activation),
+8417	    .in_data_available(in_data_available12),
+8418	    .inp_data(inp_data12),
+8419	    .out_data(out_data12),
+8420	    .out_data_available(out_data_available_NC12),
+8421	    .validity_mask(validity_mask[12]),
+8422	    .clk(clk),
+8423	    .reset(reset)
+8424	);    
+8425	
+8426	wire out_data_available_NC13;
+8427	sub_activation activation13(
+8428	    .activation_type(activation_type),
+8429	    .enable_activation(enable_activation),
+8430	    .in_data_available(in_data_available13),
+8431	    .inp_data(inp_data13),
+8432	    .out_data(out_data13),
+8433	    .out_data_available(out_data_available_NC13),
+8434	    .validity_mask(validity_mask[13]),
+8435	    .clk(clk),
+8436	    .reset(reset)
+8437	);    
+8438	
+8439	wire out_data_available_NC14;
+8440	sub_activation activation14(
+8441	    .activation_type(activation_type),
+8442	    .enable_activation(enable_activation),
+8443	    .in_data_available(in_data_available14),
+8444	    .inp_data(inp_data14),
+8445	    .out_data(out_data14),
+8446	    .out_data_available(out_data_available_NC14),
+8447	    .validity_mask(validity_mask[14]),
+8448	    .clk(clk),
+8449	    .reset(reset)
+8450	);    
+8451	
+8452	sub_activation activation15(
+8453	  .activation_type(activation_type),
+8454	  .enable_activation(enable_activation),
+8455	  .in_data_available(in_data_available15),
+8456	  .inp_data(inp_data15),
+8457	  .out_data(out_data15),
+8458	  .out_data_available(out_data_available_final),
+8459	  .validity_mask(validity_mask[15]),
+8460	  .clk(clk),
+8461	  .reset(reset)
+8462	);
+8463	
+8464	endmodule
+8465	</pre></div></details></div></div></details></div></details></div></details></div></details><details class="section"><summary><h2>The kept rewrite</h2> <span class="meta">absent</span></summary><div class="body"><p class="absent">No edit.diff in the run dir (the run produced no edit, or ended before one was recorded).</p></div></details><details class="section"><summary><h2>Verification</h2> <span class="meta">0 editor attempt(s) · from the outcome record · final: planner_declined</span></summary><div class="body"><p class="note">This run predates the per-attempt record (2026-09-12). With a single editor attempt, the rows below follow directly from the recorded outcome code and reason; nothing is inferred beyond what that code implies about the stages that ran.</p><p class="absent">No editor call recorded: the loop ended before an edit (the planner declined, its response was malformed, or the plan was rejected).</p><h3>Checks on the final editor attempt</h3><p class="absent">Outcome code 'planner_declined': the run ended before any check ran (planner declined: no representative mapping).</p><h3>Synthesis-only result (counted from files)</h3><p class="absent">No synthesis netlist under vtr/ in this run dir.</p><h3>Packed netlist (counted from files)</h3><p class="absent">No packed .net under vtr/ (the run never reached VPR, or the flow failed before packing).</p><p>Modes recorded in the outcome as used after the edit: <span class="absent">none recorded</span></p></div></details><details class="section"><summary><h2>Numbers</h2> <span class="meta">no PPA · 1 call(s)</span></summary><div class="body"><h3>PPA as recorded</h3><p class="absent">No PPA recorded (the run ended before a VTR flow completed; before 2026-09-12 also any rejected run).</p><h3>Coverage</h3><table class="num"><tr><th>quantity</th><th class="n">value</th><th>what it counts</th></tr><tr><td>sites offered</td><td class='n'>20</td><td class='note'>sites DETECT found and handed to the planner (one RTL expression each)</td></tr><tr><td>site instances offered</td><td class='n'>290</td><td class='note'>those sites times the elaborated instance count of their module</td></tr><tr><td>sites converted</td><td class='n'>—</td><td class='note'>sites the approved plan names</td></tr><tr><td>site instances converted</td><td class='n'>—</td><td class='note'>converted sites times their module's instance count</td></tr><tr><td>blocks packed</td><td class='n'>—</td><td class='note'>packed block instances in the target mode (editor attempt )</td></tr><tr><td>tiles packed</td><td class='n'>—</td><td class='note'>DSP tiles in the target mode (the .net mode count); absent on records before 2026-10-15</td></tr></table><p class="note">Offered and packed are not the same unit: a site is a source region, a packed block is an elaborated instance, and one block can fuse several sites (or the editor can chain several blocks for one site), so they are recorded raw rather than as a ratio.</p><h3>Block counts</h3><p class="absent">No packed netlist to count.</p><h3>Tokens and cost per call</h3><div style="overflow-x:auto"><table class="num"><tr><th>#</th><th>role</th><th>model</th><th>status</th><th class="n">in</th><th class="n">out</th><th class="n">reasoning</th><th class="n">cache read</th><th class="n">cache write</th><th class="n">total</th><th class="n">steps</th><th class="n">tool calls (errors)</th><th class="n">seconds</th><th class="n">cost $</th></tr><tr><td>1</td><td>planner</td><td><code>anthropic/claude-opus-5</code></td><td>ok</td><td class='n'>20</td><td class='n'>22678</td><td class='n'>17017</td><td class='n'>254455</td><td class='n'>50425</td><td class='n'>327578</td><td class='n'>16</td><td class='n'>15 (1)</td><td class='n'>326.8</td><td class='n'>1.1985</td></tr><tr class='total'><td></td><td>total (1 calls)</td><td></td><td></td><td class='n'>20</td><td class='n'>22678</td><td class='n'>17017</td><td class='n'>254455</td><td class='n'>50425</td><td class='n'>327578</td><td></td><td></td><td class='n'>327.3</td><td class='n'>1.1985</td></tr></table></div><p class="note">Cost a client-side list-price estimate per call, summed, not a bill. Token components are kept separate (uncached input, output, reasoning, cache read, cache write); total is their sum, with reasoning counted once. Reasoning tokens are already counted inside the output column.</p></div></details><details class="section"><summary><h2>Objective loop</h2> <span class="meta">0 rewrite(s) measured · stopped by: planner declined</span></summary><div class="body"><dl class="kv"><dt>revisions allowed</dt><dd>5</dd><dt>seeds per rewrite</dt><dd>1, 2, 3 (adaptive)</dd><dt>kept</dt><dd><b>n/a</b></dd><dt>loop stopped by</dt><dd>planner declined (no representative mapping)</dd><dt>objective</dt><dd>area x delay x wirelength (delay register to register, 2026-10-20)</dd><dt>baseline</dt><dd><span class="absent">no baseline product: it could not be formed (area, delay or wirelength missing)</span></dd></dl><p class="note">The objective is area x delay x wirelength (delay register to register, 2026-10-20): VPR's total used logic block area (I/Os and empty grid tiles excluded) times the critical path times the total routed wirelength. Each term is the median over the loop's seeds; the product is the product of the medians. Beside every product stand the ratios against the baseline, A/A0 (area), D/D0 (critical path), W/W0 (wirelength) and their product, so the normalization can be read off. After each measured rewrite, the planner is given every measurement so far and asked for a revision. A revision is built and checked like the first rewrite, and the lowest product is kept, a later rewrite having to beat it by more than 7.90%. The loop stops when the planner declines to revise, when a revision does not lower the best product by more than 7.90%, when a revision fails its checks, or when 5 revisions have been made.</p><p class="absent">No rewrite was measured: the run produced no accepted edit, so the loop had nothing to compare.</p></div></details><script type="application/json" id="run-summary">{"sites_converted": null, "sites_offered": 20, "instances_converted": null, "instances_offered": 290, "loop": true, "loop_dry": false, "candidates_measured": 0, "loop_cap": 5, "loop_ended_by": null, "loop_stop": {"by": "planner_declined", "label": "planner declined", "detail": "no representative mapping", "read": "outcome"}, "kept": null, "period_ns": null, "used_area": null, "area_backfilled_from": null, "area_note": "nothing was measured: the record carries no PPA", "area_delay": null, "wirelength": null, "wirelength_source": null, "objective": null, "ratios": {"area": null, "delay": null, "wirelength": null, "product": null}, "ppa_basis": "the one recorded flow", "baseline": {"regime": "koios_extra_small", "cpd_ns": 11.1825, "used_area": 74561100.0, "area_source": "entry", "area_delay": 833779500.75, "wirelength": 382009, "wirelength_source": "entry", "objective": 318511273302006.75, "file": "configs/baselines/complexDSP.yaml"}, "verified": null, "run_id": "20261020-043903-61d4a3", "suite": "koios_medium", "design": "tpu_like.small.ws", "mode": "mult_add_mode_18_19_36", "started_at": "2026-10-20T04:39:03-07:00", "accepted": false, "outcome": "planner_declined", "tier": "NONE", "editor_attempts": 0, "model_family": "Claude", "layer": "claude-code", "models": {"planner": "anthropic/claude-opus-5"}, "wall_seconds": 327.2681427770294, "agent_seconds": 326.8, "blocks_packed": null, "regime": "koios_extra_small", "archived": false, "file": "tpu_like.small.ws_mult_add_mode_18_19_36_20261020-043903-61d4a3.html"}</script></main></body></html>

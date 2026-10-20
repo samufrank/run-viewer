@@ -32,6 +32,40 @@
 # distinguished by something that actually happened in them.
 
 
+20261020-113700-f0049e:
+  description: "0/10 none converted; period not recorded; area not recorded; rerun of 4ab670 with the agent turn cap at 200: the planner ended at the 900 s call timeout after 39 tool calls, again without a plan."
+  equivalence: "not checked"
+  group: {name: "2026-10-20 batch", index: 5, size: 6}
+
+20261020-050132-3913ac:
+  description: "0/5 none converted; period not recorded; area not recorded; attention_layer on koios_small, planner declined with TIER: NONE, no edit."
+  equivalence: "not checked"
+  group: {name: "2026-10-20 batch", index: 6, size: 6}
+
+20261020-044813-4ab670:
+  description: "0/10 none converted; period not recorded; area not recorded; the planner reached its 30-turn cap before writing a plan; replaced in the 2026-10-20 batch by the rerun f0049e."
+  equivalence: "not checked"
+
+20261020-044431-d4ba31:
+  description: "0/4 none converted; period not recorded; area not recorded; spmv on mac_int_18x19, planner declined with TIER: NONE, no edit."
+  equivalence: "not checked"
+  group: {name: "2026-10-20 batch", index: 4, size: 6}
+
+20261020-043903-61d4a3:
+  description: "0/20 none converted; period not recorded; area not recorded; tpu_like.small.ws on mult_add, planner declined with TIER: NONE, no edit."
+  equivalence: "not checked"
+  group: {name: "2026-10-20 batch", index: 3, size: 6}
+
+20261020-035157-d752f6:
+  description: "1/33 seq_mac (256 blocks); reg-to-reg period -12.1% (overall -8.5%); area +5.5%; kept the first pass, product 0.820 of the baseline; revision 1 measured 0.702 but its 14.5% gain is under the 15.4% band; the run is checked against the original tpu_like.small.os, whose accumulator reset the rewrite changes."
+  equivalence: "not equivalent; sim 1374 cycles on systolic_pe_matrix.matrixC*/a_data_out/b_data_out, 270039 same-cycle mismatches on 256 of 258 outputs; LEC not run; tb_equiv_pe_matrix.v, mac_int_9x9.v"
+  group: {name: "2026-10-20 batch", index: 2, size: 6}
+
+20261020-032324-afcdfd:
+  description: "1/33 seq_mac (256 blocks); reg-to-reg period -7.6% (overall -7.5%); area -22.9%; kept the first pass, product 0.486 of the baseline; the revision planner declined."
+  equivalence: "inconclusive; sim 1380 cycles on systolic_pe_matrix.matrixC*/a_data_out/b_data_out, 0 mismatches under the stated bound (pe_reset pulsed only between matrix multiplies); LEC not run; tb_equiv_pe_matrix_between.v, mac_int_9x9.v"
+  group: {name: "2026-10-20 batch", index: 1, size: 6}
+
 20261018-002646-0915c9:
   description: "1/33 seq_mac (256 of 288 instances); period -13.0%; area -20.5%; 2afa0f repeated under the three-term objective and the 2026-10-17 reset rule: same plan, same signal (effective_rst), same edits, product 0.602 of the baseline; the kept rewrite declares the block (* blackbox *), revision 1 does not and keeps the dead qmult/qadd."
   equivalence: "not equivalent; sim 1374 cycles on systolic_pe_matrix.matrixC*/a_data_out/b_data_out, 246746 same-cycle mismatches on 256 of 258 outputs (first at the pe_reset pulse after multiply 1; revision 1: 270039); LEC 0/6144 (killed at 600 s; revision 1 0/6248); tb_equiv_pe_matrix.v, mac_int_9x9.v; diagnostic tb_equiv_pe_matrix_midreset.v: 251824 and 284758 mismatches"
