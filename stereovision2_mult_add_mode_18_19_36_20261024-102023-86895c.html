@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>stereovision2 → mult_add_mode_18_19_36 · 20261024-102023-86895c</title><style>
+:root { color-scheme: light; }
+/* Embedded previews (Slack) size their frame from a height measured once, at first paint
+   and possibly at a different width than the one displayed; a page whose height depends on
+   line wrapping then gets cut off. A definite minimum height in absolute units (not vh, not
+   %) keeps the measured height at or above the collapsed page's height down to ~500px wide
+   (measured 1418px at 500px, 977 at 700, 893 at 1200). Below the fold in a normal browser. */
+html, body { height: auto; }
+body { margin: 0; padding: 1.5rem 1rem 4rem; background: #fff; color: #1a1a1a; min-height: 1450px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 15px; line-height: 1.6; }
+main { max-width: 72rem; margin: 0 auto; }
+h1 { font-size: 1.4rem; margin: 0 0 .25rem; font-weight: 600; }
+h2 { font-size: 1.1rem; margin: 0; font-weight: 600; display: inline; }
+h3 { font-size: 1rem; margin: 1.2rem 0 .4rem; font-weight: 600; }
+.sub { color: #555; margin: 0 0 1rem; }
+table { border-collapse: collapse; margin: .5rem 0 1rem; }
+th, td { text-align: left; padding: .2rem .8rem .2rem 0; vertical-align: top; }
+th { font-weight: 600; color: #444; white-space: nowrap; }
+table.num td.n, table.num th.n { text-align: right; font-variant-numeric: tabular-nums; }
+tr.total td { border-top: 1px solid #bbb; font-weight: 600; }
+details { margin: .6rem 0; border: 1px solid #d8d8d8; border-radius: 4px; background: #fff; }
+details > summary { cursor: pointer; padding: .55rem .8rem; list-style: none;
+  display: flex; gap: .6rem; align-items: baseline; flex-wrap: wrap; }
+details > summary::-webkit-details-marker { display: none; }
+details > summary::before { content: "\25B8"; color: #777; font-size: .8em; }
+details[open] > summary::before { content: "\25BE"; }
+details > summary > .meta { color: #666; font-size: .9em; }
+details > .body { padding: .2rem .8rem .8rem; border-top: 1px solid #e6e6e6; }
+details.section > summary { font-size: 1.05rem; }
+details.call { margin-left: 0; }
+details.inner { border-color: #e6e6e6; }
+details.inner > summary { padding: .35rem .6rem; font-size: .92em; }
+pre { white-space: pre-wrap; word-break: break-word; margin: .3rem 0 .8rem;
+  padding: .7rem .9rem; border-radius: 4px; font-size: .86em; line-height: 1.5;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+pre.prompt { background: #f4f4f2; border-left: 3px solid #b8b8b0; }
+pre.response { background: #eef3f8; border-left: 3px solid #7f9fbf; }
+pre.plain { background: #f6f6f6; }
+/* A prompt or response with its Markdown rendered. The tint and the left rule are the same
+   as the plain form above, so a rendered block still reads as quoted agent traffic and not
+   as the page's own prose; only the inside is laid out instead of shown as source. */
+.md { margin: .3rem 0 .8rem; padding: .6rem .9rem; border-radius: 4px; font-size: .93em;
+  overflow-wrap: break-word; }
+.md.prompt { background: #f4f4f2; border-left: 3px solid #b8b8b0; }
+.md.response { background: #eef3f8; border-left: 3px solid #7f9fbf; }
+.md > :first-child { margin-top: 0; } .md > :last-child { margin-bottom: 0; }
+.md p { margin: .5rem 0; }
+.md ul, .md ol { margin: .5rem 0; padding-left: 1.5rem; }
+.md li { margin: .15rem 0; }
+.md ul.md-litnum { list-style: none; padding-left: .8rem; }
+.md .md-num { color: #555; }
+.md blockquote { margin: .5rem 0; padding: .1rem .8rem; border-left: 2px solid #c4c4c4;
+  color: #444; }
+.md hr { border: 0; border-top: 1px solid #d5d5d5; margin: .8rem 0; }
+.md code { background: rgba(0,0,0,.055); padding: .05em .3em; border-radius: 3px; }
+.md .mdh { font-weight: 600; margin: .9rem 0 .35rem; line-height: 1.3; }
+.md .mdh1 { font-size: 1.12em; } .md .mdh2 { font-size: 1.07em; }
+.md .mdh3 { font-size: 1.02em; } .md .mdh4, .md .mdh5, .md .mdh6 { font-size: 1em; }
+/* A fenced block is a box inside the response, and must not widen or escape it: it wraps,
+   and scrolls sideways only within its own frame. */
+.md .md-code { margin: .5rem 0; border: 1px solid #dcdcdc; border-radius: 4px;
+  background: #fbfbfa; max-width: 100%; overflow: hidden; }
+.md .md-lang { display: block; padding: .15rem .6rem; border-bottom: 1px solid #e6e6e6;
+  color: #666; font-size: .8em; letter-spacing: .03em; }
+.md .md-code > pre { margin: 0; background: none; border: 0; border-radius: 0;
+  padding: .55rem .7rem; max-width: 100%; overflow-x: auto; white-space: pre-wrap;
+  word-break: break-word; }
+.md .md-code > pre > code { background: none; padding: 0; }
+.md .md-tw { overflow-x: auto; max-width: 100%; margin: .5rem 0; }
+.md .md-tw table { border-collapse: collapse; }
+.md .md-tw th, .md .md-tw td { border: 1px solid #dedede; padding: .2rem .5rem;
+  white-space: normal; }
+.md .md-note { color: #666; font-size: .85em; font-style: italic; margin: 0 0 .5rem; }
+ul.paths { margin: .2rem 0; padding-left: 1.2rem; }
+ul.paths li { margin: .1rem 0; word-break: break-all; }
+.diff { white-space: pre-wrap; word-break: break-word; margin: .3rem 0 .8rem;
+  padding: .7rem .9rem; border-radius: 4px; font-size: .86em; line-height: 1.5;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  background: #fafafa; border: 1px solid #e3e3e3; }
+.diff div { min-height: 1.5em; }
+.diff .add { background: #e2f3e2; }
+.diff .del { background: #f8e0e0; }
+.diff .add-ws, .diff .del-ws { color: #999; background: #f3f3f3; }
+.diff .hunk { color: #6a5acd; }
+.diff .hdr { color: #666; }
+.diff details.ws { margin: .1rem 0; border: 1px dashed #ccc; background: #f6f6f6; }
+.diff details.ws > summary { padding: .1rem .5rem; color: #777; font-family: inherit; font-size: .95em; }
+.diff details.ws > summary::before { content: "\25B8 "; }
+.diff details.ws[open] > summary::before { content: "\25BE "; }
+.schem { margin: .4rem 0 .8rem; overflow-x: auto; background: #fff;
+  border: 1px solid #e3e3e3; border-radius: 4px; padding: .4rem; }
+.schem svg { display: block; }
+.label { font-weight: 600; color: #444; font-size: .85em; text-transform: uppercase;
+  letter-spacing: .03em; margin: .6rem 0 .1rem; }
+.absent { color: #777; font-style: italic; }
+.ok { color: #1f6f3a; } .bad { color: #a33; } .na { color: #777; }
+.note { color: #555; font-size: .9em; }
+.tools { margin: .4rem 0 0; }
+.controls { margin: 0 0 1rem; font-size: .9em; color: #555; }
+.controls button { font: inherit; padding: .1rem .5rem; margin-right: .3rem; }
+dl.kv { display: grid; grid-template-columns: max-content 1fr; gap: .1rem 1.2rem; margin: .6rem 0 1rem; }
+dl.kv dt { color: #555; } dl.kv dd { margin: 0; }
+@media (max-width: 600px) { dl.kv { grid-template-columns: 1fr; } dl.kv dt { margin-top: .4rem; } }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .92em; }
+.summary { margin: .4rem 0 .6rem; padding: .6rem .9rem; background: #f5f8fb; border: 1px solid #d6e0ea;
+  border-radius: 4px; }
+.summary p { margin: .15rem 0; }
+p.how { color: #555; font-size: .9em; margin: 0 0 .6rem; }
+/* one colour per agent role: a left rule on the call and a chip in its summary line */
+.role { display: inline-block; padding: 0 .4rem; border-radius: 3px; font-size: .88em; font-weight: 600; }
+.role-planner { background: #ece6f7; color: #4b3590; }
+.role-plan-reviewer { background: #f8ecd6; color: #7a5310; }
+.role-editor { background: #dceef3; color: #18596f; }
+.role-acceptance { background: #f6e1e8; color: #8a2f4e; }
+.role-other { background: #eee; color: #555; }
+details.call.role-planner { border-left: 4px solid #8b70cf; }
+details.call.role-plan-reviewer { border-left: 4px solid #d29a3a; }
+details.call.role-editor { border-left: 4px solid #3f93ad; }
+details.call.role-acceptance { border-left: 4px solid #c45c80; }
+details.pass { border-color: #c4c4c4; background: #fcfcfc; }
+details.pass > summary { font-size: 1rem; }
+p.pass-head { margin: 0; padding: .35rem .8rem; border-top: 1px solid #e6e6e6; font-size: .92em; color: #333; }
+.retry-tag { display: inline-block; padding: 0 .35rem; border: 1px dashed #999; border-radius: 3px;
+  font-size: .85em; color: #555; }
+p.retry { margin: .7rem 0 .2rem; padding-left: .6rem; border-left: 2px dashed #999; color: #555; font-size: .9em; }
+</style><script>
+function setAll(open) {
+  document.querySelectorAll('details').forEach(function (d) { d.open = open; });
+}
+// an in-page link to a collapsed block opens it and every block around it
+function openHash() {
+  var e = document.getElementById(location.hash.slice(1));
+  for (; e; e = e.parentElement) { if (e.tagName === 'DETAILS') e.open = true; }
+}
+window.addEventListener('hashchange', openHash);
+window.addEventListener('DOMContentLoaded', openHash);
+</script></head><body><main><h1>stereovision2 → mult_add_mode_18_19_36 · 20261024-102023-86895c</h1><p class="sub">benchadapt adaptation run · record at <code>outputs/adapt/vtr_sv2/stereovision2/mult_add_mode_18_19_36/20261024-102023-86895c</code></p><div class="summary"><p><b>What a run is.</b> One invocation of the framework on one design with one mode: here stereovision2 with <code>mult_add_mode_18_19_36</code>.</p><p><b>What happened.</b> 0 rewrites measured. Loop stopped by: planner declined (no representative mapping).</p><p><b>Result.</b> Area x delay not measured; verification: not recorded in the run record.</p></div><p class="how">How to read this page: the table below holds the run's settings; each section after it opens on click: the mode contract, the agent calls grouped by pass, the kept rewrite's diff, verification, numbers, and the objective loop comparing the rewrites.</p><dl class="kv"><dt>run id</dt><dd><code>20261024-102023-86895c</code></dd><dt>started</dt><dd>2026-10-24 10:20:23 -0700</dd><dt>finished</dt><dd>2026-10-24 10:25:57 -0700</dd><dt>suite / design</dt><dd>vtr_sv2 / <b>stereovision2</b></dd><dt>target mode</dt><dd><code>mult_add_mode_18_19_36</code></dd><dt>tier</dt><dd>NONE (NONE) — not recorded</dd><dt>outcome</dt><dd><b class="bad">rejected</b> [<code>planner_declined</code>] — planner declined: no representative mapping</dd><dt>wall clock</dt><dd>5m 34s (agents 5m 33s, VTR and other 1s)  [333.9 s total; 'other' is synthesis-only checks and framework time between calls]</dd><dt>models</dt><dd>all roles: <code>anthropic/claude-opus-5</code></dd><dt>layout</dt><dd>koios_small, 140 x 140</dd><dt>VPR arguments</dt><dd>channel width 300 · device koios_small <span class="note">(from run.json)</span></dd><dt>seeds</dt><dd>main flow seed 1<br>loop seeds 1, 2, 3, 4, 5 (adaptive)</dd><dt>sandbox</dt><dd>bubblewrap <span class="note">(recorded per agent call, before the run-level field existed: every call in this run ran in its own mount namespace)</span></dd><dt>agent reads</dt><dd>none outside the agents' own working directories <span class="note">(paths each agent named outside its own working directory, computed from the tool events; its own scratch excluded)</span></dd><dt>prompt set</dt><dd><code>4d70213e4c53</code> <span class="note">(sha256 over 10 templates in src/agents and 96 inline pieces; full value in run.json <code>prompt_set</code>)</span></dd></dl><div class="controls"><button type="button" onclick="setAll(true)">expand all</button><button type="button" onclick="setAll(false)">collapse all</button>exported 2026-10-27T12:51:30-07:00</div><details class="section"><summary><h2>Mode contract</h2> <span class="meta">recorded (outcome.json contract field)</span></summary><div class="body"><p class="note">Verbatim, as recorded with the run and sent to the agents.</p><pre class="plain">- primitive to instantiate: `mult_add_int_18x19` (precision INT19)
+- computes: out = ax*ay + bx + chainin
+- input ports: clk[1] (clock), reset[1], mode_sigs[12], ax[18], ay[19], bx[36], chainin[64], scanin[19]
+- output ports: result[64], chainout[64], scanout[19]
+- arithmetic: the block reads each operand port as an unsigned number, and its result is unsigned. An operand narrower than its port is zero-extended to the port width. The result wraps at 64 bits: a value past the result width keeps its low 64 bits (modulo 2^64), with no saturation and no flag.
+- registers: on `clk`, the block registers its operands (`ax`, `ay`, `bx`) at one clock edge and `result` at the next, with the arithmetic between the two registers: operands applied before clock edge k appear in `result` after edge k+1, 2 cycles later. The block has no clock enable and no path around either register. `chainin` is registered at the block's entry like an operand and reaches `result` 2 cycles after it is applied. `chainout` is combinational from the input registers: it carries the value `result` loads at the next clock edge, one cycle before `result` shows it.
+- reset: `reset` is synchronous and active high: at a clock edge that samples it high it clears every register of the block (the operand registers, the chainin register and the result register) to 0, and the block loads again at the next edge that samples it low.
+- power-up: every register of the block is unknown until the first clear by `reset`; no register of the block has an initial value, and a rewrite may not rely on one.
+- tie-off: `chainin` = 0 when the block is not chained (a dedicated chain input: only another block's `chainout` or a constant may drive it); `scanin` = 0 always (the operand scan chain is not used: `ay` is driven directly, and `scanout` is left unconnected); `mode_sigs` = 0 always (the architecture gives the port no meaning for this mode).
+- connections: connect every input port, by the port names above. `chainout` reaches only the next block's `chainin`, through a dedicated connection to the block directly below it in the column; it has no connection to general routing, so nothing else may read it.</pre></div></details><details class="section"><summary><h2>Agent calls</h2> <span class="meta">1 call(s) in 1 pass, in order</span></summary><div class="body"><p class="note">Role: <span class="role role-planner">planner</span> <span class="role role-plan-reviewer">plan reviewer</span> <span class="role role-editor">editor</span> <span class="role role-acceptance">acceptance reviewer</span>. A plan reviewer sending the plan back, or the editor being asked again, is a <span class="retry-tag">retry</span> inside the same pass.</p><details class="pass" open><summary><b>Pass 1</b> <span class="meta">1 call, 5m 33s</span></summary><p class="pass-head"><b>planner declined</b> · the planner declined the first plan, so the loop had nothing to measure (no representative mapping)</p><div class="body"><details class="call role-planner" id="call-1"><summary>Call 1 · <span class="role role-planner">planner</span> · anthropic/claude-opus-5 · <span class="ok">ok</span> <span class="meta">in 12 · out 22227 · reasoning 18014 · cache read 181186 · cache write 53242 · 333.1 s</span></summary><div class="body"><div class="label">prompt</div><div class="md prompt"><div class="mdh mdh2">Task</div><p>You are the planner. Read the design source, stereovision2.v, and decide which of the candidate arithmetic regions listed below to rewrite onto the hard block described next, or that none should be rewritten. Write a plan for the editor, who carries it out; do not edit any file.</p><div class="mdh mdh2">The block</div><ul><li>primitive to instantiate: <code>mult_add_int_18x19</code> (precision INT19)</li><li>computes: out = ax*ay + bx + chainin</li><li>input ports: clk[1] (clock), reset[1], mode_sigs[12], ax[18], ay[19], bx[36], chainin[64], scanin[19]</li><li>output ports: result[64], chainout[64], scanout[19]</li><li>arithmetic: the block reads each operand port as an unsigned number, and its result is unsigned. An operand narrower than its port is zero-extended to the port width. The result wraps at 64 bits: a value past the result width keeps its low 64 bits (modulo 2^64), with no saturation and no flag.</li><li>registers: on <code>clk</code>, the block registers its operands (<code>ax</code>, <code>ay</code>, <code>bx</code>) at one clock edge and <code>result</code> at the next, with the arithmetic between the two registers: operands applied before clock edge k appear in <code>result</code> after edge k+1, 2 cycles later. The block has no clock enable and no path around either register. <code>chainin</code> is registered at the block's entry like an operand and reaches <code>result</code> 2 cycles after it is applied. <code>chainout</code> is combinational from the input registers: it carries the value <code>result</code> loads at the next clock edge, one cycle before <code>result</code> shows it.</li><li>reset: <code>reset</code> is synchronous and active high: at a clock edge that samples it high it clears every register of the block (the operand registers, the chainin register and the result register) to 0, and the block loads again at the next edge that samples it low.</li><li>power-up: every register of the block is unknown until the first clear by <code>reset</code>; no register of the block has an initial value, and a rewrite may not rely on one.</li><li>tie-off: <code>chainin</code> = 0 when the block is not chained (a dedicated chain input: only another block's <code>chainout</code> or a constant may drive it); <code>scanin</code> = 0 always (the operand scan chain is not used: <code>ay</code> is driven directly, and <code>scanout</code> is left unconnected); <code>mode_sigs</code> = 0 always (the architecture gives the port no meaning for this mode).</li><li>connections: connect every input port, by the port names above. <code>chainout</code> reaches only the next block's <code>chainin</code>, through a dedicated connection to the block directly below it in the column; it has no connection to general routing, so nothing else may read it.</li></ul><div class="mdh mdh2">The design</div><p>Baseline: the unmodified stereovision2 under this run's VPR settings (channel width 300, median of five seeds, 1 to 5) has a worst register-to-register path of 11.6069 ns on its one clock <code>tm3_clk_v0</code> (I/O pads not timed) and uses 224 DSP tiles (as packed at seed 1) of the device's 306. Its used logic-block area is 9.73358e+07 minimum-width transistor areas (one DSP tile 253779, one cluster 27905) and its routed wirelength is 436921, so its area x delay x wirelength product, the objective, is 4.93619e+14. Its slowest stage (read off the seed-1 timing report) is in my_fir_f1: one hard multiply on a DSP tile (two_mult_18x19), then six adder levels with their carry chains, then one LUT, into an enabled flip-flop. The next slowest stage (read off the seed-1 timing report), in my_fir_f2 (endpoint group $dffe~642, not path 1's $dffe~456), is the same shape as path 1, one hard multiply on a DSP tile, six adder levels with their carry chains, one LUT, into an enabled flip-flop, 11.293 ns, so shortening the slowest stage past that point buys nothing on its own. Any path your rewrite creates is compared against that critical path.</p><div class="mdh mdh3">Delays on this architecture</div><p>The block rows and the soft flip-flop row are from the architecture file. Wire and adder delays are sampled, given as a range with the median in parentheses. A row marked "on this design" is measured on the unmodified design's own placement under this run's VPR settings, with the design's hard multiplier standing in for the block; the other rows are sampled over earlier runs of other designs on this architecture.</p><div class="md-tw"><table><thead><tr><th>element on a path</th><th>ns</th></tr></thead><tbody><tr><td>into the block: a path ends at the block's input register (setup)</td><td>0.019</td></tr><tr><td>inside the block: input register clock-to-Q + delay + output register setup</td><td>0.060 + 2.140 + 0.019 = 2.219, below the baseline's critical path</td></tr><tr><td>out of the block: a path starts at the output register of <code>result</code> (clock-to-Q)</td><td>0.060</td></tr><tr><td><code>chainout</code>: input register clock-to-Q + delay, to the output pin</td><td>0.060 + 2.140 = 2.200</td></tr><tr><td>wire, block to block</td><td>0.96 to 2.22 (median 1.17)</td></tr><tr><td>wire, register to first block</td><td>1.001 to 1.940 (median 1.419) on this design</td></tr><tr><td>wire, last block to register</td><td>0.83 to 2.67 (median 2.25)</td></tr><tr><td>wire, block into soft logic</td><td>0.544 to 1.481 (median 0.960) on this design</td></tr><tr><td>soft adder level, cell plus wire to the next</td><td>0.653 to 1.839 (median 1.069) on this design</td></tr><tr><td>soft flip-flop, clock to output</td><td>0.060</td></tr></tbody></table></div><div class="mdh mdh3">Candidate regions</div><p>An id names a product by its module and its multiply. One that ends in <code>(sum_in=&lt;module&gt;)</code> is a product whose sum sits in that other module: the product leaves its own module through a port and is added there, so the arithmetic to convert spans both. A <code>#1</code>, <code>#2</code> after an id separates instances of the same product that sit in sums of different shapes.</p><p>In every row, operation: sop.<br>In every row, instances: 6.</p><div class="md-tw"><table><thead><tr><th>id</th><th>what it already is in the baseline</th><th>register stages between the products and their sum</th><th>products in the whole sum this one belongs to</th></tr></thead><tbody><tr><td>fltr_compute_f1.$mul$stereovision2.v:859$44</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>fltr_compute_f1.$mul$stereovision2.v:860$45</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>fltr_compute_f1.$mul$stereovision2.v:861$46</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>fltr_compute_f1.$mul$stereovision2.v:862$47</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>fltr_compute_f1.$mul$stereovision2.v:863$48</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>fltr_compute_f1.$mul$stereovision2.v:864$49</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>fltr_compute_f1.$mul$stereovision2.v:865$50</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>fltr_compute_f2.$mul$stereovision2.v:889$58</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>fltr_compute_f2.$mul$stereovision2.v:890$59</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>fltr_compute_f2.$mul$stereovision2.v:891$60</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>fltr_compute_f2.$mul$stereovision2.v:892$61</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>fltr_compute_f2.$mul$stereovision2.v:893$62</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>fltr_compute_f2.$mul$stereovision2.v:894$63</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>fltr_compute_f2.$mul$stereovision2.v:895$64</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>fltr_compute_f3.$mul$stereovision2.v:928$72</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>fltr_compute_f3.$mul$stereovision2.v:929$73</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>fltr_compute_f3.$mul$stereovision2.v:930$74</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>fltr_compute_f3.$mul$stereovision2.v:932$76</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>fltr_compute_f3.$mul$stereovision2.v:933$77</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>fltr_compute_f3.$mul$stereovision2.v:934$78</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>fltr_compute_h1.$mul$stereovision2.v:959$86</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>fltr_compute_h1.$mul$stereovision2.v:960$87</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>fltr_compute_h1.$mul$stereovision2.v:961$88</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>fltr_compute_h1.$mul$stereovision2.v:963$90</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>fltr_compute_h1.$mul$stereovision2.v:964$91</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>fltr_compute_h1.$mul$stereovision2.v:965$92</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>fltr_compute_h2.$mul$stereovision2.v:992$100</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>fltr_compute_h2.$mul$stereovision2.v:993$101</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>fltr_compute_h2.$mul$stereovision2.v:994$102</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>fltr_compute_h2.$mul$stereovision2.v:995$103</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>fltr_compute_h2.$mul$stereovision2.v:996$104</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>fltr_compute_h2.$mul$stereovision2.v:997$105</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>fltr_compute_h2.$mul$stereovision2.v:998$106</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>fltr_compute_h3.$mul$stereovision2.v:1030$114</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>fltr_compute_h3.$mul$stereovision2.v:1031$115</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>fltr_compute_h3.$mul$stereovision2.v:1032$116</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>fltr_compute_h3.$mul$stereovision2.v:1034$118</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>fltr_compute_h3.$mul$stereovision2.v:1035$119</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>fltr_compute_h3.$mul$stereovision2.v:1036$120</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>fltr_compute_h4.$mul$stereovision2.v:1065$128</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>fltr_compute_h4.$mul$stereovision2.v:1066$129</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>fltr_compute_h4.$mul$stereovision2.v:1067$130</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>fltr_compute_h4.$mul$stereovision2.v:1068$131</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>fltr_compute_h4.$mul$stereovision2.v:1069$132</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>fltr_compute_h4.$mul$stereovision2.v:1070$133</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>fltr_compute_h4.$mul$stereovision2.v:1071$134</td><td>on a DSP tile in mult_9x9_fixed_pt mode, four to a tile on 39 of the 57 tiles that hold only these</td><td>products registered 1 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>my_fir_f1.$mul$stereovision2.v:1486$154</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>my_fir_f1.$mul$stereovision2.v:1487$155</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>my_fir_f1.$mul$stereovision2.v:1488$157</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>my_fir_f1.$mul$stereovision2.v:1489$159</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>my_fir_f1.$mul$stereovision2.v:1490$161</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>my_fir_f1.$mul$stereovision2.v:1491$163</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>my_fir_f1.$mul$stereovision2.v:1492$165</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>my_fir_f2.$mul$stereovision2.v:1542$169</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>my_fir_f2.$mul$stereovision2.v:1543$170</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>my_fir_f2.$mul$stereovision2.v:1544$172</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>my_fir_f2.$mul$stereovision2.v:1545$174</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>my_fir_f2.$mul$stereovision2.v:1546$176</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>my_fir_f2.$mul$stereovision2.v:1547$178</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>my_fir_f2.$mul$stereovision2.v:1548$180</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>my_fir_f3.$mul$stereovision2.v:1602$184</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>my_fir_f3.$mul$stereovision2.v:1603$185</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>my_fir_f3.$mul$stereovision2.v:1604$187</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>my_fir_f3.$mul$stereovision2.v:1605$189</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>my_fir_f3.$mul$stereovision2.v:1606$191</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>my_fir_f3.$mul$stereovision2.v:1607$193</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>my_fir_h1.$mul$stereovision2.v:1661$197</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>my_fir_h1.$mul$stereovision2.v:1662$198</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>my_fir_h1.$mul$stereovision2.v:1663$200</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>my_fir_h1.$mul$stereovision2.v:1664$202</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>my_fir_h1.$mul$stereovision2.v:1665$204</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>my_fir_h1.$mul$stereovision2.v:1666$206</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>my_fir_h2.$mul$stereovision2.v:1716$210</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>my_fir_h2.$mul$stereovision2.v:1717$211</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>my_fir_h2.$mul$stereovision2.v:1718$213</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>my_fir_h2.$mul$stereovision2.v:1719$215</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>my_fir_h2.$mul$stereovision2.v:1720$217</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>my_fir_h2.$mul$stereovision2.v:1721$219</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>my_fir_h2.$mul$stereovision2.v:1722$221</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>7 products in one chain of adders</td></tr><tr><td>my_fir_h3.$mul$stereovision2.v:1775$225</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>my_fir_h3.$mul$stereovision2.v:1776$226</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>my_fir_h3.$mul$stereovision2.v:1777$228</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>my_fir_h3.$mul$stereovision2.v:1778$230</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>my_fir_h3.$mul$stereovision2.v:1779$232</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>my_fir_h3.$mul$stereovision2.v:1780$234</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>my_fir_h4.$mul$stereovision2.v:1833$238</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>my_fir_h4.$mul$stereovision2.v:1834$239</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>my_fir_h4.$mul$stereovision2.v:1835$241</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>my_fir_h4.$mul$stereovision2.v:1836$243</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>my_fir_h4.$mul$stereovision2.v:1837$245</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr><tr><td>my_fir_h4.$mul$stereovision2.v:1838$247</td><td>on a DSP tile in two_mult_18x19 mode, one or two to a tile</td><td>products registered 0 stage(s) before the sum</td><td>6 products in one chain of adders</td></tr></tbody></table></div><div class="mdh mdh2">Correctness: these must hold</div><ul><li><strong>Same behavior.</strong> The rewritten design must produce the same outputs as the original on every cycle, with every register of the original starting at 0. Do not change what the design computes. Logic added only to reproduce it (recomputing a value, deriving the block's reset, correcting a block's result) is allowed.</li><li><strong>Visibility.</strong> Only what the block's output ports carry is visible outside it. A value read by anything else (another expression, a module port, another module) cannot go inside a block: keep it outside, or recompute it. Check the source for every reader.</li><li><strong>Terms.</strong> Keep every term of the original arithmetic. A term with no matching block port is computed outside the block. A port the design ties to a constant may be tied the same way on the block.</li><li><strong>Registers and reset.</strong> The block's registers, if it has any, behave as the contract states. A design register may become a block register only if that keeps its behavior. Drive the block's reset so that "same behavior" holds after every reset, not only at start-up. Registers the rewrite adds start unknown; do not rely on their initial value.</li><li><strong>Assumptions.</strong> If the rewrite is correct only under an assumption about the design's inputs or use (a bound on a value, when a signal is asserted), state it on a line starting <code>ASSUMES:</code> and cite the lines of the design that support it. The reference testbench does not know your assumption, so the rewrite must still match the original under it.</li><li><strong>Scope.</strong> Change only what the rewrite onto the block needs.</li></ul><div class="mdh mdh2">Cost (guidance: go against it only with a reason in the plan)</div><ul><li>The clock period is the delay of the slowest stage (the logic between one register and the next). A rewrite that does not touch the slowest stage should not be expected to make the design faster, and should not make another stage slower than it.</li><li>Blocks in series are separate stages. A path through <code>chainout</code> starts at an input register and continues, in the same stage, into what it drives.</li><li>Moving or adding registers changes stage lengths and when values arrive.</li><li>Area falls when soft adders and flip-flops move into blocks.</li><li>A block of this mode takes a DSP tile alone. Synthesis may already have placed the design's multiplies on tiles, so a block that only replaces one saves little: count tiles against the baseline.</li><li>The block has chain ports: a block's <code>chainout</code> can drive the next block's <code>chainin</code> directly, so a sum can continue from block to block.</li></ul><div class="mdh mdh2">Objective</div><p>Minimize area × delay × wirelength against the baseline. If you expect no rewrite to lower it, output TIER: NONE. Among rewrites that lower it, choose the one that lowers it most.</p><div class="mdh mdh2">Output</div><div class="mdh mdh3">Tiers</div><ul><li><strong>T1:</strong> The block replaces the region's arithmetic as it stands: the same operations on the same operands, now inside the block.</li><li><strong>T2:</strong> The region's arithmetic is regrouped to fit the block (products regrouped into the block's sums, registers moved), computing the same values.</li><li><strong>NONE:</strong> No rewrite: no candidate can be rewritten correctly.</li></ul><div class="mdh mdh3">Header</div><p>Write exactly this header, each key at the start of its own line, then the plan:</p><p>TIER: &lt;exactly one of T1, T2, NONE&gt;<br>REGIONS: &lt;the converted candidate ids, comma-separated; NONE when TIER is NONE&gt;<br>SHARED_REDUCTION: &lt;the signal or module the converted products are summed in; NONE for a single region&gt;<br>BLOCKS: &lt;how many blocks the rewrite instantiates, one integer&gt;<br>TILES: &lt;how many DSP tiles the whole design then uses, one integer&gt;<br>STAGE_NS: &lt;the delay of the slowest stage the rewrite leaves, in ns, one number&gt;<br>MAPPING: &lt;which design signals go to which block ports&gt;<br>PLAN: &lt;the plan, stating everything listed below&gt;</p><div class="mdh mdh3">What the plan must state</div><ul><li>Every candidate region, converted or left, with the reason each is left; candidates that share a reason may be grouped.</li><li>How many blocks the rewrite adds, and how many DSP tiles the design then uses.</li><li>The longest series of blocks in any stage and its delay, against the slowest stage.</li><li>What soft logic leaves which stage, and whether that stage is the slowest.</li><li>For each converted region, the register stages from its operands to its result, before and after the rewrite.</li></ul><div class="mdh mdh3">Output rules</div><ul><li>Write nothing before the TIER line; read the source first.</li><li>A reviewer checks the plan automatically and no person reads it, so do not end with a question or an offer.</li><li>If a change to the design itself, not to the rewrite, would let more of it use the block, you may say so on a line starting <code>DESIGN_CHANGE:</code>. It is reported to the user and does not change your decision.</li></ul><div class="mdh mdh2">Reference simulation</div><p>After the edit, the framework simulates the edited design against the original with the reference testbench, comparing every output on every cycle. A candidate that does not match is not measured. The testbench (tb_equiv_sv2_top.v) and the block's behavioural model (mult_add_int_18x19.v) are in sim_reference/.</p><p>Read these files in this directory: stereovision2.v</p></div><div class="label">response</div><div class="md response"><p>I'll start by reading the design source.</p><p>TIER: NONE<br>REGIONS: NONE<br>SHARED_REDUCTION: NONE<br>BLOCKS: 0<br>TILES: 224<br>STAGE_NS: 11.6069<br>MAPPING: NONE — no block is instantiated, no design signal is connected to a block port.<br>PLAN:</p><p><strong>Decision: leave every candidate region unconverted. No subset of these regions lowers area × delay × wirelength, and the group that owns the critical path cannot be converted correctly at all.</strong></p><p><strong>What the source says (read before deciding)</strong></p><p>Two shapes of candidate exist, and they behave differently.</p><p><em>my_fir group</em> (<code>my_fir_f1/f2/f3/h1/h2/h3/h4</code>, stereovision2.v:1453-1845, each module instantiated once inside <code>h_fltr</code> at stereovision2.v:514-520, <code>h_fltr</code> itself 6 times → 6 instances per id). The whole body is inside <code>if (new_data_rdy == 1'b1)</code> (e.g. stereovision2.v:1476, 1532, 1823): the tap line <code>n_delay_reg1..6</code> and the output register <code>dout</code> are all clock-enabled by that one signal, and <code>new_data_rdy</code> is the top-level input <code>vidin_new_data</code> (stereovision2.v:514-520). There is exactly <strong>one</strong> register stage from <code>din</code>/<code>n_delay_reg*</code> to <code>dout</code>.</p><p><em>fltr_compute group</em> (<code>fltr_compute_f1/f2/f3/h1/h2/h3/h4</code>, stereovision2.v:841-1076, instantiated in <code>v_fltr_496x7</code>/<code>316x7</code>/<code>226x7</code> at stereovision2.v:706, 765, 824, two instances each → 6 instances per id). No enable anywhere: <code>q1..q7 &lt;= din_slice * const</code> (stage 1), <code>d_out_tmp &lt;= sum of the seven sign-extended q</code> (stage 2), <code>dout &lt;= d_out_tmp[18:3]</code> (stage 3). Three unconditional stages.</p><p><strong>Why the my_fir regions are left (all 40 my_fir ids: 1486$154 … 1838$247)</strong></p><p>These are the only candidates on or near the critical path (path 1 is in <code>my_fir_f1</code>, path 2 at 11.293 ns in <code>my_fir_f2</code>, and the other five my_fir modules have the identical shape), so they are the only ones that could buy delay. They are left for two independent, each sufficient, reasons.</p><ol><li><em>Correctness: the enable cannot be reproduced.</em> The block has a fixed 2-cycle operand→result latency, no clock enable, and no path around either register; the design has one enabled register stage. The value <code>dout</code> loads at an enabled edge t_n is <code>sum_i x[n-i]*c_i</code>, where <code>x[n]</code> is <code>din</code> just before t_n. A block can only produce it from operands presented before t_n−1. The <code>c0</code> term needs <code>din</code> before t_n, which does not exist a cycle earlier. The tap terms are no better: the delay line advances in the <em>enabled-sample</em> domain while the block's registers advance in the <em>clock</em> domain, so <code>n_delay_reg_i</code> one clock before t_n equals <code>x[n-i]</code> only when the previous clock edge was not enabled, and equals <code>x[n-i-1]</code> when enabled edges are back to back. No fixed choice of tap per block matches both cases. Relaxing the output register does not help: <code>vidin_out_temp_*</code> is read only under <code>my_fir_rdy_*</code> (stereovision2.v:525-553), but that read is at t_n+1, so the value must still be loaded at t_n. An <code>ASSUMES:</code> line restricting <code>new_data_rdy</code> is not available either — the reference testbench drives <code>vidin_new_data = r32[0]</code>, a fresh random bit per cycle (sim_reference/tb_equiv_sv2_top.v:191), so both the back-to-back and the isolated case occur. Chaining does not rescue this: <code>chainin</code> is registered at the block's entry, so an N-block chain costs N cycles and needs skewed operands, i.e. more latency, not less.</li><li><em>Capacity and cost, even if (1) were solvable.</em> A block of this mode takes a DSP tile alone. The my_fir products are 45 per instance set × 6 = 270 products, packed one-or-two to a tile on about 135 tiles today. Converting all of them (which is what a delay win requires, since every one of the 36 my_fir instances has the same multiply + six-adder-level shape and the second path is already 11.293 ns) gives 224 − 135 + 270 = 359 tiles against a 306-tile device: it does not fit. Converting only <code>my_fir_f1</code> and <code>my_fir_f2</code> (84 products → 84 blocks, net +42 tiles, 266 tiles, which does fit) would leave the next my_fir shape critical at ≈11.29 ns, a ≤2.7% delay gain against +42 × 253779 = +1.07e7 area (+11%) and more routing: the objective rises.</li></ol><p><strong>Why the fltr_compute regions are left (all 46 fltr ids: 859$44 … 1071$134)</strong></p><p>These are convertible in principle — this is the one shape that fits the block's contract. The three unconditional stages absorb it: block operands <code>ax = din_slice</code>, <code>ay = coefficient</code>, <code>bx = 0</code>, <code>chainin = 0</code> reproduce <code>q_i</code> with the block's operand register standing in for <code>q_i</code> and its result register for <code>d_out_tmp</code>, the result landing 2 cycles after <code>din</code>, and the existing 7-input sign-extended adder tree then moves into the <code>dout</code> stage, with <code>result[16:0]</code> sign-extended on bit 16 exactly as the source extends <code>q_i[16]</code> (every product fits in 17 bits unsigned, so the block's unsigned result is bit-identical to <code>q_i</code>, and the original's treatment of bit 16 as a sign bit is preserved outside the block). <code>reset</code> would be driven by the design's synchronous reset so that the block's registers clear with the rest. They are left because the cost is unambiguously bad:</p><ul><li><em>Tiles.</em> 46 products × 6 instances = 276 products, four to a tile on 57 tiles today. One block each → 276 tiles, net +219, total 443 of 306: it does not fit either. Any partial conversion costs +0.75 tile (≈190k area) per product converted.</li><li><em>Delay.</em> <code>fltr_compute</code> is nowhere near the critical path, and the rewrite would not change that: the block stage is 2.219 ns and the new <code>dout</code> stage is ≈0.060 + 0.960 + 6 × 1.069 + setup ≈ 7.5 ns, both well under 11.6069 ns. Per the cost guidance, a rewrite that does not touch the slowest stage should not be expected to make the design faster — the clock period stays 11.6069 ns.</li><li><em>Area balance.</em> The only soft logic recovered per instance is 7 × 17 bits of <code>q</code> plus 20 bits of <code>d_out_tmp</code> = 139 flip-flops (the 6-level adder chain is not removed, only moved from stage 2 to stage 3), i.e. roughly a cluster or two per instance against 253779 per added DSP tile. Converting even the smallest family alone (<code>fltr_compute_f3</code>, 6 ids × 6 instances = 36 blocks, net +27 tiles) is ≈ +6.9e6 area (+7%) for ≈ +2e5 saved, no delay change, and a longer, more spread DSP placement, so wirelength rises too. Every fltr subset multiplies the objective up.</li></ul><p><strong>Required figures for the chosen plan (no rewrite)</strong></p><ul><li>Blocks added: 0. DSP tiles used by the design: 224, unchanged from the baseline (306 available).</li><li>Longest series of blocks in any stage: none (0 blocks); no stage contains a block, so there is nothing to compare against the 11.6069 ns slowest stage.</li><li>Soft logic leaving a stage: none. No adder level or flip-flop is moved out of any stage, and in particular the slowest stage (<code>my_fir_f1</code>: hard multiply, six adder levels with carry chains, one LUT, into the enabled flip-flop) is untouched, as is the 11.293 ns <code>my_fir_f2</code> stage behind it.</li><li>Register stages per converted region, before and after: not applicable, no region is converted. For the record, the two shapes are 1 enabled stage (my_fir, which the block's 2 unconditional stages cannot match) and 3 unconditional stages (fltr_compute, which the block would fit as 2 block stages + 1 soft adder stage).</li><li>Objective: unchanged at 4.93619e+14; every candidate rewrite examined raises it.</li></ul><p>DESIGN_CHANGE: two changes to the design itself, together, would make the my_fir family mappable and would attack the actual critical stage. (a) Let <code>vidin_out_temp_*</code> carry one more cycle of latency — i.e. delay the <code>my_fir_rdy_*</code>-gated capture at stereovision2.v:525-553 by one cycle, and feed the FIR taps from an ungated copy of the delay line — so the block's fixed 2-cycle, enable-free operand→result path can replace the enabled 1-cycle multiply-add; with <code>chainout → chainin</code> chaining across the 6-7 products of each FIR, the six soft adder levels (≈6 × 1.069 ns) would leave the critical stage, leaving block stages of 2.219 ns. (b) This needs about 270 single-multiply blocks where the design now packs those products two to a tile on ~135 tiles, so it also needs a larger DSP column count (≈360 tiles) than the current 306-tile device, or a block mode that holds more than one multiply per tile.</p></div><details class="inner"><summary>tool events <span class="meta">9 recorded, 0 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/stereovision2.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/stereovision2.v",
+ "limit": 120
+}</pre><div class="label">output</div><pre class="plain">1	module sv_chip2_hierarchy_no_mem (reset, tm3_clk_v0,  vidin_new_data, vidin_rgb_reg, vidin_addr_reg, svid_comp_switch, counter_out_2to1, bus_word_3_2to1, bus_word_4_2to1, bus_word_5_2to1, bus_word_6_2to1, vidin_new_data_fifo, vidin_rgb_reg_fifo_left, vidin_rgb_reg_fifo_right, vidin_addr_reg_2to0, v_nd_s1_left_2to0, v_nd_s2_left_2to0 , v_nd_s4_left_2to0 , v_d_reg_s1_left_2to0 , v_d_reg_s2_left_2to0 , v_d_reg_s4_left_2to0 , v_nd_s1_right_2to0, v_nd_s2_right_2to0 , v_nd_s4_right_2to0 , v_d_reg_s1_right_2to0 , v_d_reg_s2_right_2to0 , v_d_reg_s4_right_2to0,offchip_sram_data_in,offchip_sram_addr,offchip_sram_data_out,offchip_sram_we,offchip_sram_oe,tm3_sram_adsp);
+2			
+3	   input [63:0]offchip_sram_data_in;
+4	   output [18:0]offchip_sram_addr;
+5	   output [63:0]offchip_sram_data_out;
+6	   output [7:0]offchip_sram_we;
+7	   output [1:0]offchip_sram_oe;
+8	
+9		input reset;
+10	   input tm3_clk_v0; 
+11	
+12	   wire[63:0] tm3_sram_data_in;
+13	
+14	   wire[63:0] tm3_sram_data_out;
+15	   reg[63:0] tm3_sram_data_xhdl0;
+16	
+17	   reg[18:0] tm3_sram_addr;
+18	
+19	   reg[7:0] tm3_sram_we;
+20	
+21	   reg[1:0] tm3_sram_oe;
+22	   output tm3_sram_adsp; 
+23	   reg tm3_sram_adsp;
+24	   input vidin_new_data; 
+25	   input[7:0] vidin_rgb_reg; 
+26	   input[18:0] vidin_addr_reg; 
+27	   input svid_comp_switch; 
+28	   output[2:0] counter_out_2to1; 
+29	   wire[2:0] counter_out_2to1;
+30	   output[15:0] bus_word_3_2to1; 
+31	   wire[15:0] bus_word_3_2to1;
+32	   output[15:0] bus_word_4_2to1; 
+33	   wire[15:0] bus_word_4_2to1;
+34	   output[15:0] bus_word_5_2to1; 
+35	   wire[15:0] bus_word_5_2to1;
+36	   output[15:0] bus_word_6_2to1; 
+37	   wire[15:0] bus_word_6_2to1;
+38	   output vidin_new_data_fifo; 
+39	   reg vidin_new_data_fifo;
+40	   output[7:0] vidin_rgb_reg_fifo_left; 
+41	   reg[7:0] vidin_rgb_reg_fifo_left;
+42	   output[7:0] vidin_rgb_reg_fifo_right; 
+43	   reg[7:0] vidin_rgb_reg_fifo_right;
+44	   output[3:0] vidin_addr_reg_2to0; 
+45	   reg[3:0] vidin_addr_reg_2to0;
+46	   input v_nd_s1_left_2to0; 
+47	   input v_nd_s2_left_2to0; 
+48	   input v_nd_s4_left_2to0; 
+49	   input[7:0] v_d_reg_s1_left_2to0; 
+50	   input[7:0] v_d_reg_s2_left_2to0; 
+51	   input[7:0] v_d_reg_s4_left_2to0; 
+52	   input v_nd_s1_right_2to0; 
+53	   input v_nd_s2_right_2to0; 
+54	   input v_nd_s4_right_2to0; 
+55	   input[7:0] v_d_reg_s1_right_2to0; 
+56	   input[7:0] v_d_reg_s2_right_2to0; 
+57	   input[7:0] v_d_reg_s4_right_2to0; 
+58	
+59	   wire v_nd_s1; 
+60	   wire vidin_new_data_v_fltr; 
+61	   reg[9:0] horiz; 
+62	   reg[9:0] vert; 
+63	   reg[63:0] vidin_data_buf_sc_1; 
+64	   reg[55:0] vidin_data_buf_2_sc_1; 
+65	   reg[18:0] vidin_addr_buf_sc_1; 
+66	   reg[13:0] vidin_addr_buf_sc_1_fifo; 
+67	   wire[18:0] vidin_addr_reg_scld; 
+68	   reg video_state; 
+69	   wire[7:0] vidin_gray_scld_1; 
+70	   reg[63:0] vidout_buf_fifo_1_left; 
+71	   reg[63:0] vidout_buf_fifo_1_right; 
+72	   reg[7:0] vidin_rgb_reg_tmp; 
+73	   reg[7:0] vidin_data_buf_fifo_sc_1_l; 
+74	   reg[7:0] vidin_data_buf_fifo_sc_1_r; 
+75	   reg[63:0] vidout_buf_fifo_2_1_left; 
+76	   reg[63:0] vidout_buf_fifo_2_1_right; 
+77	   wire vidin_new_data_tmp; 
+78	   reg[18:0] vidin_addr_reg_reg; 
+79	   reg v_nd_s1_left; 
+80	   reg v_nd_s1_right; 
+81	   reg v_nd_s2_left; 
+82	   reg v_nd_s2_right; 
+83	   reg v_nd_s4_left; 
+84	   reg v_nd_s4_right; 
+85	   reg[7:0] v_d_reg_s1_left; 
+86	   reg[7:0] v_d_reg_s1_right; 
+87	   reg[7:0] v_d_reg_s2_left; 
+88	   reg[7:0] v_d_reg_s2_right; 
+89	   reg[7:0] v_d_reg_s4_left; 
+90	   reg[7:0] v_d_reg_s4_right; 
+91	   wire[15:0] vidin_v_out_1_f1_left; 
+92	   wire[15:0] vidin_v_out_1_f2_left; 
+93	   wire[15:0] vidin_v_out_1_f3_left; 
+94	   wire[15:0] vidin_v_out_1_h1_left; 
+95	   wire[15:0] vidin_v_out_1_h2_left; 
+96	   wire[15:0] vidin_v_out_1_h3_left; 
+97	   wire[15:0] vidin_v_out_1_h4_left; 
+98	   wire[15:0] vidin_v_out_2_f1_left; 
+99	   wire[15:0] vidin_v_out_2_f2_left; 
+100	   wire[15:0] vidin_v_out_2_f3_left; 
+101	   wire[15:0] vidin_v_out_2_h1_left; 
+102	   wire[15:0] vidin_v_out_2_h2_left; 
+103	   wire[15:0] vid
+…[truncated, 4743 chars total]</pre></div></details><details class="inner"><summary><code>Glob</code> <span class="meta"><span class="ok">completed</span> **/*.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "**/*.v"
+}</pre><div class="label">output</div><pre class="plain">sim_reference/mult_add_int_18x19.v
+sim_reference/tb_equiv_sv2_top.v
+stereovision2.v</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/stereovision2.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/stereovision2.v",
+ "offset": 820,
+ "limit": 260
+}</pre><div class="label">output</div><pre class="plain">820	 	fifo226 fifo4(tm3_clk_v0, vidin_new_data, buff_out4, buff_out5);
+821	 	fifo226 fifo5(tm3_clk_v0, vidin_new_data, buff_out5, buff_out6);
+822	 	fifo226 fifo6(tm3_clk_v0, vidin_new_data, buff_out6, buff_out7);
+823	
+824	   fltr_compute_f1 inst_fltr_compute_f1 (tm3_clk_v0, {buff_out1, buff_out2, buff_out3, buff_out4, buff_out5, buff_out6, buff_out7}, vidin_out_f1);	
+825	   fltr_compute_f2 inst_fltr_compute_f2 (tm3_clk_v0, {buff_out1, buff_out2, buff_out3, buff_out4, buff_out5, buff_out6, buff_out7}, vidin_out_f2);	
+826	   fltr_compute_f3 inst_fltr_compute_f3 (tm3_clk_v0, {buff_out1, buff_out2, buff_out3, buff_out4, buff_out5, buff_out6, buff_out7}, vidin_out_f3);	
+827	   fltr_compute_h1 inst_fltr_compute_h1 (tm3_clk_v0, {buff_out1, buff_out2, buff_out3, buff_out4, buff_out5, buff_out6, buff_out7}, vidin_out_h1);	
+828	   fltr_compute_h2 inst_fltr_compute_h2 (tm3_clk_v0, {buff_out1, buff_out2, buff_out3, buff_out4, buff_out5, buff_out6, buff_out7}, vidin_out_h2);	
+829	   fltr_compute_h3 inst_fltr_compute_h3 (tm3_clk_v0, {buff_out1, buff_out2, buff_out3, buff_out4, buff_out5, buff_out6, buff_out7}, vidin_out_h3);	
+830	   fltr_compute_h4 inst_fltr_compute_h4 (tm3_clk_v0, {buff_out1, buff_out2, buff_out3, buff_out4, buff_out5, buff_out6, buff_out7}, vidin_out_h4);	
+831	
+832	         assign buff_out0 = vidin_in ; 
+833	/*
+834	   always @(posedge tm3_clk_v0)
+835	   begin
+836	         buff_out0 &lt;= vidin_in ; 
+837	         //vidin_out_or &lt;= buff_out6; 
+838	   end 
+839	*/
+840	endmodule
+841	module fltr_compute_f1 (clk, din, dout);
+842	
+843	    input clk; 
+844	    input[55:0] din; 
+845	    output[15:0] dout; 
+846	    reg[15:0] dout;
+847	    reg[16:0] q1; 
+848	    reg[16:0] q2; 
+849	    reg[16:0] q3; 
+850	    reg[16:0] q4; 
+851	    reg[16:0] q5; 
+852	    reg[16:0] q6; 
+853	    reg[16:0] q7; 
+854	    reg[19:0] d_out_tmp; 
+855	
+856	    always @(posedge clk)
+857	    begin
+858				// PAJ - grabbed these from the mult_const declarations
+859				q1 &lt;= din[55:48] * 5'b11101;
+860				q2 &lt;= din[47:40] * 7'b1100101;
+861				q3 &lt;= din[39:32] * 5'b10001;
+862				q4 &lt;= din[31:24] * 9'b100010101;
+863				q5 &lt;= din[23:16] * 5'b10001;
+864				q6 &lt;= din[15:8] * 7'b1100101;
+865				q7 &lt;= din[7:0] * 5'b11101;
+866	
+867	          d_out_tmp &lt;= ({q1[16], q1[16], q1[16], q1}) + ({q2[16], q2[16], q2[16], q2}) + ({q3[16], q3[16], q3[16], q3}) + ({q4[16], q4[16], q4[16], q4}) + ({q5[16], q5[16], q5[16], q5}) + ({q6[16], q6[16], q6[16], q6}) + ({q7[16], q7[16], q7[16], q7});
+868	          dout &lt;= d_out_tmp[18:3] ; 
+869	    end 
+870	 endmodule
+871	module fltr_compute_f2 (clk, din, dout);
+872	
+873	    input clk; 
+874	    input[55:0] din; 
+875	    output[15:0] dout; 
+876	    reg[15:0] dout;
+877	    reg[16:0] q1; 
+878	    reg[16:0] q2; 
+879	    reg[16:0] q3; 
+880	    reg[16:0] q4; 
+881	    reg[16:0] q5; 
+882	    reg[16:0] q6; 
+883	    reg[16:0] q7; 
+884	    reg[19:0] d_out_tmp; 
+885	
+886	    always @(posedge clk)
+887	    begin
+888				// PAJ - grabbed these from the mult_const declarations
+889				q1 &lt;= din[55:48] * 3'b100;
+890				q2 &lt;= din[47:40] * 6'b101010;
+891				q3 &lt;= din[39:32] * 8'b10100011;
+892				q4 &lt;= din[31:24] * 8'b11111111;
+893				q5 &lt;= din[23:16] * 8'b10100011;
+894				q6 &lt;= din[15:8] * 6'b101010;
+895				q7 &lt;= din[7:0] * 3'b100;
+896	
+897	          d_out_tmp &lt;= ({q1[16], q1[16], q1[16], q1}) + ({q2[16], q2[16], q2[16], q2}) + ({q3[16], q3[16], q3[16], q3}) + ({q4[16], q4[16], q4[16], q4}) + ({q5[16], q5[16], q5[16], q5}) + ({q6[16], q6[16], q6[16], q6}) + ({q7[16], q7[16], q7[16], q7});
+898	          dout &lt;= d_out_tmp[18:3] ; 
+899	    end 
+900	 endmodule
+901	
+902	
+903	
+904	
+905	
+906	
+907	
+908	
+909	
+910	module fltr_compute_f3 (clk, din, dout);
+911	
+912	    input clk; 
+913	    input[55:0] din; 
+914	    output[15:0] dout; 
+915	    reg[15:0] dout;
+916	    reg[16:0] q1; 
+917	    reg[16:0] q2; 
+918	    reg[16:0] q3; 
+919	    reg[16:0] q4; 
+920	    reg[16:0] q5; 
+921	    reg[16:0] q6; 
+922	    reg[16:0] q7; 
+923	    reg[19:0] d_out_tmp; 
+924	
+925	    always @(posedge clk)
+926
+…[truncated, 8987 chars total]</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/stereovision2.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/stereovision2.v",
+ "offset": 1400,
+ "limit": 230
+}</pre><div class="label">output</div><pre class="plain">1400	   always @(posedge clk)
+1401	   begin
+1402	         counter_out &lt;= counter_out_tmp ; 
+1403	         bus_word_3 &lt;= bus_word_3_tmp ; 
+1404	         bus_word_4 &lt;= bus_word_4_tmp ; 
+1405	         bus_word_5 &lt;= bus_word_5_tmp ; 
+1406	         bus_word_6 &lt;= bus_word_6_tmp ; 
+1407	         if (vidin_new_data_scld_1_2to3_left == 1'b1)
+1408	         begin
+1409	            vidin_addr_reg_tmp &lt;= vidin_addr_reg ; 
+1410	            svid_comp_switch_tmp &lt;= svid_comp_switch ; 
+1411	            vidin_data_reg_scld_1_2to3_left_rp_tmp &lt;= vidin_data_reg_scld_1_2to3_left_rp ; 
+1412	            vidin_data_reg_scld_2_2to3_left_rp_tmp &lt;= vidin_data_reg_scld_2_2to3_left_rp ; 
+1413	            vidin_data_reg_scld_4_2to3_left_rp_tmp &lt;= vidin_data_reg_scld_4_2to3_left_rp ; 
+1414	            vidin_data_reg_scld_1_2to3_right_rp_tmp &lt;= vidin_data_reg_scld_1_2to3_right_rp ; 
+1415	            vidin_data_reg_scld_2_2to3_right_rp_tmp &lt;= vidin_data_reg_scld_2_2to3_right_rp ; 
+1416	            vidin_data_reg_scld_4_2to3_right_rp_tmp &lt;= vidin_data_reg_scld_4_2to3_right_rp ; 
+1417	            vidin_data_reg_scld_1_2to3_left_ip_tmp &lt;= vidin_data_reg_scld_1_2to3_left_ip ; 
+1418	            vidin_data_reg_scld_2_2to3_left_ip_tmp &lt;= vidin_data_reg_scld_2_2to3_left_ip ; 
+1419	            vidin_data_reg_scld_4_2to3_left_ip_tmp &lt;= vidin_data_reg_scld_4_2to3_left_ip ; 
+1420	            vidin_data_reg_scld_1_2to3_right_ip_tmp &lt;= vidin_data_reg_scld_1_2to3_right_ip ; 
+1421	            vidin_data_reg_scld_2_2to3_right_ip_tmp &lt;= vidin_data_reg_scld_2_2to3_right_ip ; 
+1422	            vidin_data_reg_scld_4_2to3_right_ip_tmp &lt;= vidin_data_reg_scld_4_2to3_right_ip ; 
+1423	            vidin_data_reg_scld_1_2to3_left_rn_tmp &lt;= vidin_data_reg_scld_1_2to3_left_rn ; 
+1424	            vidin_data_reg_scld_2_2to3_left_rn_tmp &lt;= vidin_data_reg_scld_2_2to3_left_rn ; 
+1425	            vidin_data_reg_scld_4_2to3_left_rn_tmp &lt;= vidin_data_reg_scld_4_2to3_left_rn ; 
+1426	            vidin_data_reg_scld_1_2to3_right_rn_tmp &lt;= vidin_data_reg_scld_1_2to3_right_rn ; 
+1427	            vidin_data_reg_scld_2_2to3_right_rn_tmp &lt;= vidin_data_reg_scld_2_2to3_right_rn ; 
+1428	            vidin_data_reg_scld_4_2to3_right_rn_tmp &lt;= vidin_data_reg_scld_4_2to3_right_rn ; 
+1429	            vidin_data_reg_scld_1_2to3_left_in_tmp &lt;= vidin_data_reg_scld_1_2to3_left_in ; 
+1430	            vidin_data_reg_scld_2_2to3_left_in_tmp &lt;= vidin_data_reg_scld_2_2to3_left_in ; 
+1431	            vidin_data_reg_scld_4_2to3_left_in_tmp &lt;= vidin_data_reg_scld_4_2to3_left_in ; 
+1432	            vidin_data_reg_scld_1_2to3_right_in_tmp &lt;= vidin_data_reg_scld_1_2to3_right_in ; 
+1433	            vidin_data_reg_scld_2_2to3_right_in_tmp &lt;= vidin_data_reg_scld_2_2to3_right_in ; 
+1434	            vidin_data_reg_scld_4_2to3_right_in_tmp &lt;= vidin_data_reg_scld_4_2to3_right_in ; 
+1435	         end 
+1436	   end 
+1437	endmodule
+1438	
+1439	
+1440	`define COEF0_b  29
+1441		`define COEF1_b  101
+1442	//	`define COEF2_b  -15
+1443	//	`define COEF3_b  -235
+1444	//	`define COEF4_b  -15
+1445		`define COEF2_b  15
+1446		`define COEF3_b  235
+1447		`define COEF4_b  15
+1448		`define COEF5_b  101
+1449		`define COEF6_b  29
+1450	
+1451		`define WIDTH_5B 5'b10000
+1452		
+1453	module my_fir_f1 (clk, new_data_rdy, output_data_ready, din, dout);
+1454	
+1455	//coefdata=29,101,-15,-235,-15,101,29;
+1456	
+1457		//parameter `WIDTH = 5'b10000;
+1458	
+1459	    input clk; 
+1460	    input[`WIDTH_5B - 1:0] din; 
+1461	    output[28 - 1:0] dout; 
+1462	    reg[28 - 1:0] dout;
+1463		input new_data_rdy;
+1464		output output_data_ready;
+1465		reg output_data_ready;
+1466	
+1467	    reg[`WIDTH_5B - 1:0]n_delay_reg1;
+1468	    reg[`WIDTH_5B - 1:0]n_delay_reg2;
+1469	    reg[`WIDTH_5B - 1:0]n_delay_reg3;
+1470	    reg[`WIDTH_5B - 1:0]n_delay_reg4;
+1471	    reg[`WIDTH_5B - 1:0]n_delay_reg5;
+1472	    reg[`WIDTH_5B - 1:0]n_delay_reg6;
+1473	
+1474	    always @(posedge clk)
+1475	    begin
+1476			if (new_data_rdy == 1'b1)
+1477			begin
+1478				n_delay_reg1 &lt;= din;
+1479				n_delay_reg2 &lt;= n_de
+…[truncated, 8163 chars total]</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> my_fir|new_data_rdy|output_data_ready</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "my_fir|new_data_rdy|output_data_ready",
+ "output_mode": "content",
+ "-n": true,
+ "head_limit": 120
+}</pre><div class="label">output</div><pre class="plain">stereovision2.v:481:   wire my_fir_rdy_f1; 
+stereovision2.v:484:   wire my_fir_rdy_f2; 
+stereovision2.v:487:   wire my_fir_rdy_f3; 
+stereovision2.v:490:   wire my_fir_rdy_h1; 
+stereovision2.v:493:   wire my_fir_rdy_h2; 
+stereovision2.v:496:   wire my_fir_rdy_h3; 
+stereovision2.v:499:   wire my_fir_rdy_h4; 
+stereovision2.v:514:   my_fir_f1 your_instance_name_f1 (tm3_clk_v0, vidin_new_data, my_fir_rdy_f1, vidin_in_f2, vidin_out_temp_f1); 
+stereovision2.v:515:   my_fir_f2 your_instance_name_f2 (tm3_clk_v0, vidin_new_data, my_fir_rdy_f2, vidin_in_f1, vidin_out_temp_f2); 
+stereovision2.v:516:   my_fir_f3 your_instance_name_f3 (tm3_clk_v0, vidin_new_data, my_fir_rdy_f3, vidin_in_f3, vidin_out_temp_f3); 
+stereovision2.v:517:   my_fir_h1 your_instance_name_h1 (tm3_clk_v0, vidin_new_data, my_fir_rdy_h1, vidin_in_h2, vidin_out_temp_h1); 
+stereovision2.v:518:   my_fir_h2 your_instance_name_h2 (tm3_clk_v0, vidin_new_data, my_fir_rdy_h2, vidin_in_h1, vidin_out_temp_h2); 
+stereovision2.v:519:   my_fir_h3 your_instance_name_h3 (tm3_clk_v0, vidin_new_data, my_fir_rdy_h3, vidin_in_h4, vidin_out_temp_h3); 
+stereovision2.v:520:   my_fir_h4 your_instance_name_h4 (tm3_clk_v0, vidin_new_data, my_fir_rdy_h4, vidin_in_h3, vidin_out_temp_h4); 
+stereovision2.v:525:         if (my_fir_rdy_f1 == 1'b1)
+stereovision2.v:529:         if (my_fir_rdy_f2 == 1'b1)
+stereovision2.v:533:         if (my_fir_rdy_f3 == 1'b1)
+stereovision2.v:537:         if (my_fir_rdy_h1 == 1'b1)
+stereovision2.v:541:         if (my_fir_rdy_h2 == 1'b1)
+stereovision2.v:545:         if (my_fir_rdy_h3 == 1'b1)
+stereovision2.v:550:         if (my_fir_rdy_h4 == 1'b1)
+stereovision2.v:1453:module my_fir_f1 (clk, new_data_rdy, output_data_ready, din, dout);
+stereovision2.v:1463:	input new_data_rdy;
+stereovision2.v:1464:	output output_data_ready;
+stereovision2.v:1465:	reg output_data_ready;
+stereovision2.v:1476:		if (new_data_rdy == 1'b1)
+stereovision2.v:1485:			output_data_ready &lt;= 1'b1;
+stereovision2.v:1496:			output_data_ready &lt;= 1'b0;
+stereovision2.v:1508:module my_fir_f2 (clk, new_data_rdy, output_data_ready, din, dout);
+stereovision2.v:1519:	input new_data_rdy;
+stereovision2.v:1520:	output output_data_ready;
+stereovision2.v:1521:	reg output_data_ready;
+stereovision2.v:1532:		if (new_data_rdy == 1'b1)
+stereovision2.v:1541:			output_data_ready &lt;= 1'b1;
+stereovision2.v:1553:			output_data_ready &lt;= 1'b0;
+stereovision2.v:1569:module my_fir_f3 (clk, new_data_rdy, output_data_ready, din, dout);
+stereovision2.v:1579:	input new_data_rdy;
+stereovision2.v:1580:	output output_data_ready;
+stereovision2.v:1581:	reg output_data_ready;
+stereovision2.v:1592:		if (new_data_rdy == 1'b1)
+stereovision2.v:1601:			output_data_ready &lt;= 1'b1;
+stereovision2.v:1611:			output_data_ready &lt;= 1'b0;
+stereovision2.v:1627:module my_fir_h1 (clk, new_data_rdy, output_data_ready, din, dout);
+stereovision2.v:1638:	input new_data_rdy;
+stereovision2.v:1639:	output output_data_ready;
+stereovision2.v:1640:	reg output_data_ready;
+stereovision2.v:1651:		if (new_data_rdy == 1'b1)
+stereovision2.v:1660:			output_data_ready &lt;= 1'b1;
+stereovision2.v:1670:			output_data_ready &lt;= 1'b0;
+stereovision2.v:1683:module my_fir_h2 (clk, new_data_rdy, output_data_ready, din, dout);
+stereovision2.v:1693:	input new_data_rdy;
+stereovision2.v:1694:	output output_data_ready;
+stereovision2.v:1695:	reg output_data_ready;
+stereovision2.v:1706:		if (new_data_rdy == 1'b1)
+stereovision2.v:1715:			output_data_ready &lt;= 1'b1;
+stereovision2.v:1726:			output_data_ready &lt;= 1'b0;
+stereovision2.v:1743:module my_fir_h3 (clk, new_data_rdy, output_data_ready, din, dout);
+stereovision2.v:1752:	input new_data_rdy;
+stereovision2.v:1753:	output output_data_ready;
+stereovision2.v:1754:	reg output_data_ready;
+stereovision2.v:1765:		if (new_data_rdy == 1'b1)
+stereovision2.v:1774:			output_data_ready &lt;= 1'b1;
+stereovision2.v:1784:			output_data_ready &lt;= 1'b0;
+stereovision2.v:1801:module my_fir_h4 (clk, new_data_rdy, output_data_ready, din, dout);
+stereovision2.v:1810:	input ne
+…[truncated, 4255 chars total]</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/stereovision2.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/stereovision2.v",
+ "offset": 475,
+ "limit": 90
+}</pre><div class="label">output</div><pre class="plain">475	   reg[15:0] real_n_reg;
+476	   output[15:0] imag_n_reg; 
+477	   reg[15:0] imag_n_reg;
+478	
+479	   wire[27:0] vidin_out_temp_f1; 
+480	   reg[27:0] vidin_out_reg_f1; 
+481	   wire my_fir_rdy_f1; 
+482	   wire[27:0] vidin_out_temp_f2; 
+483	   reg[27:0] vidin_out_reg_f2; 
+484	   wire my_fir_rdy_f2; 
+485	   wire[27:0] vidin_out_temp_f3; 
+486	   reg[27:0] vidin_out_reg_f3; 
+487	   wire my_fir_rdy_f3; 
+488	   wire[27:0] vidin_out_temp_h1; 
+489	   reg[27:0] vidin_out_reg_h1; 
+490	   wire my_fir_rdy_h1; 
+491	   wire[27:0] vidin_out_temp_h2; 
+492	   reg[27:0] vidin_out_reg_h2; 
+493	   wire my_fir_rdy_h2; 
+494	   wire[27:0] vidin_out_temp_h3; 
+495	   reg[27:0] vidin_out_reg_h3; 
+496	   wire my_fir_rdy_h3; 
+497	   wire[27:0] vidin_out_temp_h4; 
+498	   reg[27:0] vidin_out_reg_h4; 
+499	   wire my_fir_rdy_h4; 
+500	   wire[28:0] sum_tmp_1; 
+501	   wire[28:0] sum_tmp_2; 
+502	
+503	   wire[28:0] sum_tmp_3; 
+504	   wire[28:0] sum_tmp_4; 
+505	   wire[30:0] sum_tmp_5; 
+506	   wire[15:0] real_p; 
+507	   wire[15:0] imag_p; 
+508	   wire[15:0] real_z; 
+509	   wire[15:0] imag_z; 
+510	   wire[15:0] real_n; 
+511	   wire[15:0] imag_n; 
+512	   wire[16:0] tmp; 
+513	
+514	   my_fir_f1 your_instance_name_f1 (tm3_clk_v0, vidin_new_data, my_fir_rdy_f1, vidin_in_f2, vidin_out_temp_f1); 
+515	   my_fir_f2 your_instance_name_f2 (tm3_clk_v0, vidin_new_data, my_fir_rdy_f2, vidin_in_f1, vidin_out_temp_f2); 
+516	   my_fir_f3 your_instance_name_f3 (tm3_clk_v0, vidin_new_data, my_fir_rdy_f3, vidin_in_f3, vidin_out_temp_f3); 
+517	   my_fir_h1 your_instance_name_h1 (tm3_clk_v0, vidin_new_data, my_fir_rdy_h1, vidin_in_h2, vidin_out_temp_h1); 
+518	   my_fir_h2 your_instance_name_h2 (tm3_clk_v0, vidin_new_data, my_fir_rdy_h2, vidin_in_h1, vidin_out_temp_h2); 
+519	   my_fir_h3 your_instance_name_h3 (tm3_clk_v0, vidin_new_data, my_fir_rdy_h3, vidin_in_h4, vidin_out_temp_h3); 
+520	   my_fir_h4 your_instance_name_h4 (tm3_clk_v0, vidin_new_data, my_fir_rdy_h4, vidin_in_h3, vidin_out_temp_h4); 
+521	   steer_fltr my_steer_fltr_inst (tm3_clk_v0, vidin_new_data, vidin_out_reg_f1, vidin_out_reg_f2, vidin_out_reg_f3, vidin_out_reg_h1, vidin_out_reg_h2, vidin_out_reg_h3, vidin_out_reg_h4, real_z, imag_z, real_p, imag_p, real_n, imag_n); 
+522	
+523	   always @(posedge tm3_clk_v0)
+524	   begin
+525	         if (my_fir_rdy_f1 == 1'b1)
+526	         begin
+527	            vidin_out_reg_f1 &lt;= vidin_out_temp_f1 ; 
+528	         end 
+529	         if (my_fir_rdy_f2 == 1'b1)
+530	         begin
+531	            vidin_out_reg_f2 &lt;= vidin_out_temp_f2 ; 
+532	         end 
+533	         if (my_fir_rdy_f3 == 1'b1)
+534	         begin
+535	            vidin_out_reg_f3 &lt;= vidin_out_temp_f3 ; 
+536	         end 
+537	         if (my_fir_rdy_h1 == 1'b1)
+538	         begin
+539	            vidin_out_reg_h1 &lt;= vidin_out_temp_h1 ; 
+540	         end 
+541	         if (my_fir_rdy_h2 == 1'b1)
+542	         begin
+543	            vidin_out_reg_h2 &lt;= vidin_out_temp_h2 ; 
+544	         end 
+545	         if (my_fir_rdy_h3 == 1'b1)
+546	         begin
+547	            vidin_out_reg_h3 &lt;= vidin_out_temp_h3 ; 
+548	
+549	         end 
+550	         if (my_fir_rdy_h4 == 1'b1)
+551	         begin
+552	            vidin_out_reg_h4 &lt;= vidin_out_temp_h4 ; 
+553	         end 
+554	   end 
+555	
+556	   always @(posedge tm3_clk_v0)
+557	   begin
+558	         real_z_reg &lt;= real_z ; 
+559	         imag_z_reg &lt;= imag_z ; 
+560	         real_p_reg &lt;= real_p ; 
+561	         imag_p_reg &lt;= imag_p ; 
+562	         real_n_reg &lt;= real_n ; 
+563	         imag_n_reg &lt;= imag_n ; 
+564	   end </pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/stereovision2.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/stereovision2.v",
+ "offset": 1795,
+ "limit": 60
+}</pre><div class="label">output</div><pre class="plain">1795		`define COEF3_4  0
+1796		`define COEF4_4  109
+1797		`define COEF5_4  56
+1798		`define COEF6_4  9
+1799	
+1800	
+1801	module my_fir_h4 (clk, new_data_rdy, output_data_ready, din, dout);
+1802	
+1803	//coefdata=-9,-56,-109,0,109,56,9;
+1804		//	parameter WIDTH = 5'b10000;
+1805	
+1806	    input clk; 
+1807	    input[`WIDTH_5B - 1:0] din; 
+1808	    output[28 - 1:0] dout; 
+1809	    reg[28 - 1:0] dout;
+1810		input new_data_rdy;
+1811		output output_data_ready;
+1812		reg output_data_ready;
+1813	
+1814	    reg[`WIDTH_5B - 1:0]n_delay_reg1;
+1815	    reg[`WIDTH_5B - 1:0]n_delay_reg2;
+1816	    reg[`WIDTH_5B - 1:0]n_delay_reg3;
+1817	    reg[`WIDTH_5B - 1:0]n_delay_reg4;
+1818	    reg[`WIDTH_5B - 1:0]n_delay_reg5;
+1819	    reg[`WIDTH_5B - 1:0]n_delay_reg6;
+1820	
+1821	    always @(posedge clk)
+1822	    begin
+1823			if (new_data_rdy == 1'b1)
+1824			begin
+1825				n_delay_reg1 &lt;= din;
+1826				n_delay_reg2 &lt;= n_delay_reg1;
+1827				n_delay_reg3 &lt;= n_delay_reg2;
+1828				n_delay_reg4 &lt;= n_delay_reg3;
+1829				n_delay_reg5 &lt;= n_delay_reg4;
+1830				n_delay_reg6 &lt;= n_delay_reg5;
+1831			
+1832				output_data_ready &lt;= 1'b1;
+1833				dout &lt;= (din * `COEF0_4) + 
+1834					(n_delay_reg1 * `COEF1_4) + 
+1835					(n_delay_reg2 * `COEF2_4) + 
+1836					(n_delay_reg4 * `COEF4_4) + 
+1837					(n_delay_reg5 * `COEF5_4) + 
+1838					(n_delay_reg6 * `COEF6_4);
+1839			end
+1840			else
+1841			begin
+1842				output_data_ready &lt;= 1'b0;
+1843			end
+1844		end
+1845	endmodule
+1846	
+1847	</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> vidin_new_data</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "vidin_new_data",
+ "path": "/work/sim_reference/tb_equiv_sv2_top.v",
+ "output_mode": "content",
+ "-n": true,
+ "-C": 3
+}</pre><div class="label">output</div><pre class="plain">1-// tb_equiv_sv2_top.v: equivalence testbench for stereovision2's sv_chip2_hierarchy_no_mem, generated by verify/equiv/gen_tb.py
+2-// on 2026-10-22; do not edit, regenerate (the command is in make_testbenches.sh):
+3:[Omitted long matching line]
+4:// Compares every output every cycle: counter_out_2to1[3], bus_word_3_2to1[16], bus_word_4_2to1[16], bus_word_5_2to1[16], bus_word_6_2to1[16], vidin_new_data_fifo[1], vidin_rgb_reg_fifo_left[8], vidin_rgb_reg_fifo_right[8], vidin_addr_reg_2to0[4], offchip_sram_addr[19], offchip_sram_data_out[64], offchip_sram_we[8], offchip_sram_oe[2], tm3_sram_adsp[1].
+5-// Resets: reset (active low); policy strict; compare from the first cycle after the reset release.
+6:// In the zero phases: vidin_new_data = 1, v_nd_s1_left_2to0 = 1, v_nd_s2_left_2to0 = 1, v_nd_s4_left_2to0 = 1, v_nd_s1_right_2to0 = 1, v_nd_s2_right_2to0 = 1, v_nd_s4_right_2to0 = 1.
+7-// The top holds every filter of both families; port_bus_2to1 samples the h_fltr outputs on the s1_left strobe only and never reads real_z/imag_z.
+8-`timescale 1ns/1ps
+9-`ifndef REF
+--
+35-module tb;
+36-    reg tm3_clk_v0 = 0; always #5 tm3_clk_v0 = ~tm3_clk_v0;
+37-    reg reset = 0;
+38:    reg vidin_new_data = 0;
+39-    reg [7:0] vidin_rgb_reg = 0;
+40-    reg [18:0] vidin_addr_reg = 0;
+41-    reg svid_comp_switch = 0;
+--
+57-    wire [15:0] bus_word_4_2to1_ref, bus_word_4_2to1_dut;
+58-    wire [15:0] bus_word_5_2to1_ref, bus_word_5_2to1_dut;
+59-    wire [15:0] bus_word_6_2to1_ref, bus_word_6_2to1_dut;
+60:    wire vidin_new_data_fifo_ref, vidin_new_data_fifo_dut;
+61-    wire [7:0] vidin_rgb_reg_fifo_left_ref, vidin_rgb_reg_fifo_left_dut;
+62-    wire [7:0] vidin_rgb_reg_fifo_right_ref, vidin_rgb_reg_fifo_right_dut;
+63-    wire [3:0] vidin_addr_reg_2to0_ref, vidin_addr_reg_2to0_dut;
+--
+66-    wire [7:0] offchip_sram_we_ref, offchip_sram_we_dut;
+67-    wire [1:0] offchip_sram_oe_ref, offchip_sram_oe_dut;
+68-    wire tm3_sram_adsp_ref, tm3_sram_adsp_dut;
+69:[Omitted long matching line]
+70:[Omitted long matching line]
+71-    // one xorshift32 PRNG behind every random value; draw sets r32
+72-    reg [31:0] prng = `SEED, r32;
+73-    task draw; begin prng = prng ^ (prng &lt;&lt; 13); prng = prng ^ (prng &gt;&gt; 17); prng = prng ^ (prng &lt;&lt; 5); r32 = prng; end endtask
+--
+85-            2: oname = "bus_word_4_2to1";
+86-            3: oname = "bus_word_5_2to1";
+87-            4: oname = "bus_word_6_2to1";
+88:            5: oname = "vidin_new_data_fifo";
+89-            6: oname = "vidin_rgb_reg_fifo_left";
+90-            7: oname = "vidin_rgb_reg_fifo_right";
+91-            8: oname = "vidin_addr_reg_2to0";
+--
+141-            if (bus_word_6_2to1_dut !== bus_word_6_2to1_ref) note_mismatch(4, bus_word_6_2to1_ref, bus_word_6_2to1_dut);
+142-            if (bus_word_6_2to1_dut !== prev[4][15:0]) begin delsum = delsum + 1; dl[4] = dl[4] + 1; end
+143-            if (^bus_word_6_2to1_ref === 1'bx) xr[4] = xr[4] + 1; else begin if (^bus_word_6_2to1_dut === 1'bx) xd[4] = xd[4] + 1; if (bus_word_6_2to1_ref != 0) act[4] = act[4] + 1; end
+144:            if (vidin_new_data_fifo_dut !== vidin_new_data_fifo_ref) note_mismatch(5, vidin_new_data_fifo_ref, vidin_new_data_fifo_dut);
+145:            if (vidin_new_data_fifo_dut !== prev[5][0:0]) begin delsum = delsum + 1; dl[5] = dl[5] + 1; end
+146:            if (^vidin_new_data_fifo_ref === 1'bx) xr[5] = xr[5] + 1; else begin if (^vidin_new_data_fifo_dut === 1'bx) xd[5] = xd[5] + 1; if (vidin_new_data_fifo_ref != 0) act[5] = act[5] + 1; end
+147-            if (vidin_rgb_reg_fifo_left_dut !== vidin_rgb_reg_fifo_left_ref) note_mismatch(6, vidin_rgb_reg_fifo_left_ref, vidin_rgb_reg_fifo_left_dut);
+148-            if (vidin_rgb_reg_fifo_left_dut !== prev[6][7:0]) begin delsum = delsum + 1; dl[6] = dl[6] + 1; end
+149-            if (^vidin_rgb_reg_fifo_left_ref === 1'bx) xr[6] = xr[6] + 1; else begin if (^vidin_rgb_reg_fifo_left_dut === 1'bx) xd[6] = xd[6] + 1; if (vidin_rgb_reg_fifo_left_ref != 0) act[6] = act[6] + 1; end
+--
+174-        prev[2] = b
+…[truncated, 4989 chars total]</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> ^module |fltr_compute_f1 |my_fir_f1 ", "</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "^module |fltr_compute_f1 |my_fir_f1 \", \"",
+ "output_mode": "content",
+ "-n": true,
+ "head_limit": 60
+}</pre><div class="label">output</div><pre class="plain">sim_reference/tb_equiv_sv2_top.v:35:module tb;
+stereovision2.v:1:[Omitted long matching line]
+stereovision2.v:455:module h_fltr (tm3_clk_v0, vidin_new_data, vidin_in_f1, vidin_in_f2, vidin_in_f3, vidin_in_h1, vidin_in_h2, vidin_in_h3, vidin_in_h4, real_z_reg, imag_z_reg, real_p_reg, imag_p_reg, real_n_reg, imag_n_reg);
+stereovision2.v:566:module steer_fltr (clk, new_data, f1, f2, f3, h1, h2, h3, h4, re_z, im_z, re_p, im_p, re_n, im_n);
+stereovision2.v:664:module v_fltr_496x7 (tm3_clk_v0, vidin_new_data, vidin_in, vidin_out_f1, vidin_out_f2, vidin_out_f3, vidin_out_h1, vidin_out_h2, vidin_out_h3, vidin_out_h4); // PAJ var never used, vidin_out_or);
+stereovision2.v:706:   fltr_compute_f1 inst_fltr_compute_f1 (tm3_clk_v0, {buff_out1, buff_out2, buff_out3, buff_out4, buff_out5, buff_out6, buff_out7}, vidin_out_f1);	
+stereovision2.v:723:module v_fltr_316x7 (tm3_clk_v0, vidin_new_data, vidin_in, vidin_out_f1, vidin_out_f2, vidin_out_f3, vidin_out_h1, vidin_out_h2, vidin_out_h3, vidin_out_h4); // PAJ var never used, vidin_out_or);
+stereovision2.v:765:   fltr_compute_f1 inst_fltr_compute_f1 (tm3_clk_v0, {buff_out1, buff_out2, buff_out3, buff_out4, buff_out5, buff_out6, buff_out7}, vidin_out_f1);	
+stereovision2.v:782:module v_fltr_226x7 (tm3_clk_v0, vidin_new_data, vidin_in, vidin_out_f1, vidin_out_f2, vidin_out_f3, vidin_out_h1, vidin_out_h2, vidin_out_h3, vidin_out_h4); // PAJ var never used, vidin_out_or);
+stereovision2.v:824:   fltr_compute_f1 inst_fltr_compute_f1 (tm3_clk_v0, {buff_out1, buff_out2, buff_out3, buff_out4, buff_out5, buff_out6, buff_out7}, vidin_out_f1);	
+stereovision2.v:841:module fltr_compute_f1 (clk, din, dout);
+stereovision2.v:871:module fltr_compute_f2 (clk, din, dout);
+stereovision2.v:910:module fltr_compute_f3 (clk, din, dout);
+stereovision2.v:941:module fltr_compute_h1 (clk, din, dout);
+stereovision2.v:973:module fltr_compute_h2 (clk, din, dout);
+stereovision2.v:1011:module fltr_compute_h3 (clk, din, dout);
+stereovision2.v:1046:module fltr_compute_h4 (clk, din, dout);
+stereovision2.v:1094:module fifo496 (clk, wen, din, dout);
+stereovision2.v:1135:module fifo316 (clk, wen, din, dout);
+stereovision2.v:1159:module fifo226 (clk, wen, din, dout);
+stereovision2.v:1183:module port_bus_2to1 (clk, vidin_addr_reg, svid_comp_switch, vidin_new_data_scld_1_2to3_left, 
+stereovision2.v:1453:module my_fir_f1 (clk, new_data_rdy, output_data_ready, din, dout);
+stereovision2.v:1508:module my_fir_f2 (clk, new_data_rdy, output_data_ready, din, dout);
+stereovision2.v:1569:module my_fir_f3 (clk, new_data_rdy, output_data_ready, din, dout);
+stereovision2.v:1627:module my_fir_h1 (clk, new_data_rdy, output_data_ready, din, dout);
+stereovision2.v:1683:module my_fir_h2 (clk, new_data_rdy, output_data_ready, din, dout);
+stereovision2.v:1743:module my_fir_h3 (clk, new_data_rdy, output_data_ready, din, dout);
+stereovision2.v:1801:module my_fir_h4 (clk, new_data_rdy, output_data_ready, din, dout);
+sim_reference/mult_add_int_18x19.v:18:module mult_add_int_18x19 (</pre></div></details></div></div></details></div></details></div></details></div></details><details class="section"><summary><h2>The kept rewrite</h2> <span class="meta">absent</span></summary><div class="body"><p class="absent">No edit.diff in the run dir (the run produced no edit, or ended before one was recorded).</p></div></details><details class="section"><summary><h2>Verification</h2> <span class="meta">0 editor attempt(s) · from the outcome record · final: planner_declined</span></summary><div class="body"><p class="note">This run predates the per-attempt record (2026-09-12). With a single editor attempt, the rows below follow directly from the recorded outcome code and reason; nothing is inferred beyond what that code implies about the stages that ran.</p><p class="absent">No editor call recorded: the loop ended before an edit (the planner declined, its response was malformed, or the plan was rejected).</p><h3>Checks on the final editor attempt</h3><p class="absent">Outcome code 'planner_declined': the run ended before any check ran (planner declined: no representative mapping).</p><h3>Synthesis-only result (counted from files)</h3><p class="absent">No synthesis netlist under vtr/ in this run dir.</p><h3>Packed netlist (counted from files)</h3><p class="absent">No packed .net under vtr/ (the run never reached VPR, or the flow failed before packing).</p><p>Modes recorded in the outcome as used after the edit: <span class="absent">none recorded</span></p></div></details><details class="section"><summary><h2>Numbers</h2> <span class="meta">no PPA · 1 call(s)</span></summary><div class="body"><h3>PPA as recorded</h3><p class="absent">No PPA recorded (the run ended before a VTR flow completed; before 2026-09-12 also any rejected run).</p><h3>Coverage</h3><table class="num"><tr><th>quantity</th><th class="n">value</th><th>what it counts</th></tr><tr><td>sites offered</td><td class='n'>91</td><td class='note'>sites DETECT found and handed to the planner (one RTL expression each)</td></tr><tr><td>site instances offered</td><td class='n'>546</td><td class='note'>those sites times the elaborated instance count of their module</td></tr><tr><td>sites converted</td><td class='n'>—</td><td class='note'>sites the approved plan names</td></tr><tr><td>site instances converted</td><td class='n'>—</td><td class='note'>converted sites times their module's instance count</td></tr><tr><td>blocks packed</td><td class='n'>—</td><td class='note'>packed block instances in the target mode (editor attempt )</td></tr><tr><td>tiles packed</td><td class='n'>—</td><td class='note'>DSP tiles in the target mode (the .net mode count); absent on records before 2026-10-15</td></tr></table><p class="note">Offered and packed are not the same unit: a site is a source region, a packed block is an elaborated instance, and one block can fuse several sites (or the editor can chain several blocks for one site), so they are recorded raw rather than as a ratio.</p><h3>Block counts</h3><p class="absent">No packed netlist to count.</p><h3>Tokens and cost per call</h3><div style="overflow-x:auto"><table class="num"><tr><th>#</th><th>role</th><th>model</th><th>status</th><th class="n">in</th><th class="n">out</th><th class="n">reasoning</th><th class="n">cache read</th><th class="n">cache write</th><th class="n">total</th><th class="n">steps</th><th class="n">tool calls (errors)</th><th class="n">seconds</th><th class="n">cost $</th></tr><tr><td>1</td><td>planner</td><td><code>anthropic/claude-opus-5</code></td><td>ok</td><td class='n'>12</td><td class='n'>22227</td><td class='n'>18014</td><td class='n'>181186</td><td class='n'>53242</td><td class='n'>256667</td><td class='n'>10</td><td class='n'>9 (0)</td><td class='n'>333.1</td><td class='n'>1.1787</td></tr><tr class='total'><td></td><td>total (1 calls)</td><td></td><td></td><td class='n'>12</td><td class='n'>22227</td><td class='n'>18014</td><td class='n'>181186</td><td class='n'>53242</td><td class='n'>256667</td><td></td><td></td><td class='n'>333.9</td><td class='n'>1.1787</td></tr></table></div><p class="note">Cost a client-side list-price estimate per call, summed, not a bill. Token components are kept separate (uncached input, output, reasoning, cache read, cache write); total is their sum, with reasoning counted once. Reasoning tokens are already counted inside the output column.</p></div></details><details class="section"><summary><h2>Objective loop</h2> <span class="meta">0 rewrite(s) measured · stopped by: planner declined</span></summary><div class="body"><dl class="kv"><dt>revisions allowed</dt><dd>9</dd><dt>seeds per rewrite</dt><dd>1, 2, 3, 4, 5 (adaptive)</dd><dt>kept</dt><dd><b>n/a</b></dd><dt>loop stopped by</dt><dd>planner declined (no representative mapping)</dd><dt>objective</dt><dd>area x delay x wirelength (delay register to register, 2026-10-20)</dd><dt>baseline</dt><dd><span class="absent">no baseline product: it could not be formed (area, delay or wirelength missing)</span></dd></dl><p class="note">The objective is area x delay x wirelength (delay register to register, 2026-10-20): VPR's total used logic block area (I/Os and empty grid tiles excluded) times the critical path times the total routed wirelength. Each term is the median over the loop's seeds; the product is the product of the medians. Beside every product stand the ratios against the baseline, A/A0 (area), D/D0 (critical path), W/W0 (wirelength) and their product, so the normalization can be read off. After each measured rewrite, the planner is given every measurement so far and asked for a revision. A revision is built and checked like the first rewrite, and the lowest product is kept, a later rewrite having to beat it by more than 9.41%. The loop stops when the planner declines to revise, when a revision does not lower the best product by more than 9.41%, when a revision fails its checks, or when 9 revisions have been made.</p><p class="absent">No rewrite was measured: the run produced no accepted edit, so the loop had nothing to compare.</p></div></details><script type="application/json" id="run-summary">{"sites_converted": null, "sites_offered": 91, "instances_converted": null, "instances_offered": 546, "loop": true, "loop_dry": false, "candidates_measured": 0, "loop_cap": 9, "loop_ended_by": null, "loop_stop": {"by": "planner_declined", "label": "planner declined", "detail": "no representative mapping", "read": "outcome"}, "kept": null, "period_ns": null, "used_area": null, "area_backfilled_from": null, "area_note": "nothing was measured: the record carries no PPA", "area_delay": null, "wirelength": null, "wirelength_source": null, "objective": null, "ratios": {"area": null, "delay": null, "wirelength": null, "product": null}, "ppa_basis": "the one recorded flow", "baseline": {"regime": "koios_small", "cpd_ns": 11.6069, "used_area": 97335800.0, "area_source": "entry", "area_delay": 1129766897.02, "wirelength": 439781, "wirelength_source": "entry", "objective": 496850015738352.6, "file": "configs/baselines/complexDSP.yaml", "source": "baselines file entry", "convention": "seed-1 figures of the baselines file entry (the run record carries no baseline the loop divided by)"}, "verified": null, "run_id": "20261024-102023-86895c", "suite": "vtr_sv2", "design": "stereovision2", "mode": "mult_add_mode_18_19_36", "started_at": "2026-10-24T10:20:23-07:00", "accepted": false, "outcome": "planner_declined", "tier": "NONE", "editor_attempts": 0, "model_family": "Claude", "layer": "claude-code", "models": {"planner": "anthropic/claude-opus-5"}, "wall_seconds": 333.8680549340788, "agent_seconds": 333.1, "blocks_packed": null, "regime": "koios_small", "archived": false, "file": "stereovision2_mult_add_mode_18_19_36_20261024-102023-86895c.html"}</script></main></body></html>

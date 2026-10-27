@@ -32,6 +32,147 @@
 # distinguished by something that actually happened in them.
 
 
+20261023-000858-8a8201:
+  description: "1/33 qmult; period -8.2%; area -22.9%; tpu_like.small.os.fixed on mac_9x9_fixed_pt_mode (first sweep), accepted T2, kept revision1 of 2 measured passes, the revision planner declined; product 0.484 (A/A0 0.771, D/D0 0.918, W/W0 0.684, medians of seeds 1 to 5); holds only if pe_reset is written between matrix multiplies, never while one is in flight (with a reset in flight the check gives 28 mismatches)."
+  group: {name: "2026-10-23 rerun", index: 1, size: 35}
+
+20261023-012354-5ef539:
+  description: "0/33 none converted; period not recorded; area not recorded; tpu_like.small.os.fixed on mac_18x19_fixed_pt_mode (first sweep), planner declined with TIER: NONE, no edit: seq_mac fits, but 256 blocks at two per tile need 128 of the 132 tiles and the objective does not fall."
+  group: {name: "2026-10-23 rerun", index: 2, size: 35}
+
+20261023-013255-918dd9:
+  description: "0/33 none converted; period not recorded; area not recorded; tpu_like.small.os.fixed on mac_27x27_fixed_pt_mode (first sweep), planner declined with TIER: NONE, no edit: the PE MAC is the only fit and 256 blocks at one per tile do not fit the device."
+  group: {name: "2026-10-23 rerun", index: 3, size: 35}
+
+20261023-013729-a74ff9:
+  description: "0/33 none converted; period not recorded; area not recorded; tpu_like.small.os.fixed on mult_add_mode_18_19_36 (first sweep), planner declined with TIER: NONE, no edit: the next-slowest stage caps any period gain at 0.72% while every conversion adds DSP tiles."
+  group: {name: "2026-10-23 rerun", index: 4, size: 35}
+
+20261023-025529-3743be:
+  description: "0/5 none converted; period not recorded; area not recorded; attention_layer on mult_add_mode_18_19_36 (first sweep), planner declined with TIER: NONE, no edit: the two slowest stages are in the softmax floating-point path with no multiply, so no rewrite moves the period."
+  group: {name: "2026-10-23 rerun", index: 5, size: 35}
+
+20261023-030158-6c2886:
+  description: "0/5 none converted; period not recorded; area not recorded; attention_layer on mult_add_mode_27_27_64 (first sweep), planner declined with TIER: NONE, no edit: same period ceiling as 3743be, and every rewrite raises area."
+  group: {name: "2026-10-23 rerun", index: 6, size: 35}
+
+20261023-035904-ea61a0:
+  description: "0/1 none converted; period not recorded; area not recorded; eltwise_layer on mult_add_mode_18_19_36 (first sweep), planner declined with TIER: NONE, no edit: the 24 FPMult 8x8 mantissa products are a correct rewrite, left on cost."
+  group: {name: "2026-10-23 rerun", index: 7, size: 35}
+
+20261023-040703-d8b54e:
+  description: "0/1 none converted; period not recorded; area not recorded; eltwise_layer on mult_add_mode_27_27_64 (first sweep), planner declined with TIER: NONE, no edit: the 24 FPMult 8x8 mantissa products are a correct rewrite, left on cost."
+  group: {name: "2026-10-23 rerun", index: 8, size: 35}
+
+20261023-041926-dfdce1:
+  description: "0/1 none converted; period not recorded; area not recorded; softmax on mult_add_mode_18_19_36 (first sweep), planner declined with TIER: NONE, no edit: the 16 FPMult 11x11 mantissa products are the only candidate, left on cost."
+  group: {name: "2026-10-23 rerun", index: 9, size: 35}
+
+20261023-042318-945c42:
+  description: "0/1 none converted; period not recorded; area not recorded; softmax on mult_add_mode_27_27_64 (first sweep), planner declined with TIER: NONE, no edit: the 16 FPMult 11x11 mantissa products are the only candidate, left on cost."
+  group: {name: "2026-10-23 rerun", index: 10, size: 35}
+
+20261023-042724-e7e0f0:
+  description: "1/20 pooling; period -7.1%; area -2.0%; tpu_like.small.ws on comb_mult_add_16_mode (first sweep), accepted T2, kept the first pass, the revision planner declined; product 0.887 (A/A0 0.980, D/D0 0.929, W/W0 0.973, medians of seeds 1 to 5)."
+  group: {name: "2026-10-23 rerun", index: 11, size: 35}
+
+20261023-052954-5edc90:
+  description: "2/18 dsp_block_16_8_false; period -11.5%; area -2.6%; dla_like.small on sop_2_mode (first sweep), accepted T1, kept the first pass, the revision planner declined; product 0.766 (A/A0 0.974, D/D0 0.885, W/W0 0.888, medians of seeds 1 to 5)."
+  group: {name: "2026-10-23 rerun", index: 12, size: 35}
+
+20261023-124400-93b32d:
+  description: "0/20 none converted; period not recorded; area not recorded; tpu_like.small.ws on mult_add_mode_18_19_36, planner declined with TIER: NONE, no edit: it proposed a pooling rewrite, the plan reviewer rejected its assumption against the reference stimulus, and it withdrew."
+  group: {name: "2026-10-23 rerun", index: 13, size: 35}
+
+20261023-124405-9a6903:
+  description: "2/18 dsp_block_16_8_false; period -4.8%; area +0.2%; dla_like.small on comb_sop_2_18_mode, accepted T1, kept the first pass, the revision planner declined; product 0.906 (A/A0 1.002, D/D0 0.952, W/W0 0.949, medians of seeds 1 to 5)."
+  group: {name: "2026-10-23 rerun", index: 14, size: 35}
+
+20261023-131312-adb717:
+  description: "1/1 mul_r2; period +0.0%; area -2.9%; bgm on mult_add_mode_27_27_64, accepted T2, kept the first pass, the next revision did not beat it by the band; product 0.985 (A/A0 0.971, D/D0 1.000, W/W0 1.014, medians of seeds 1 to 5); within seed noise: the kept seeds (0.970 to 0.999 of the baseline median) overlap the baseline seeds (0.995 to 1.008)."
+  group: {name: "2026-10-23 rerun", index: 15, size: 35}
+
+20261023-145725-68e47f:
+  description: "2/18 dsp_block_16_8_false; period -10.1%; area +7.9%; dla_like.small on mult_add_mode_18_19_36, accepted T2, kept the first pass, the next revision did not beat it by the band; product 0.958 (A/A0 1.079, D/D0 0.899, W/W0 0.987, medians of seeds 1 to 5); within seed noise: the 4.2% gain is inside the 5.9% band and two of the five kept seeds lie in the baseline range; the blocks only multiply and the sum stays in soft logic."
+  group: {name: "2026-10-23 rerun", index: 16, size: 35}
+
+20261023-162143-88e0ee:
+  description: "84/91 fltr_compute and my_fir (all seven each); period -60.7%; area -39.7%; stereovision2 on sop_4_mode, accepted T2, kept revision2 of 4 passes, the next revision did not beat it by the band; product 0.134 (A/A0 0.603, D/D0 0.393, W/W0 0.565, medians of seeds 1 to 5); 7 of the 91 tap products per filter set become soft shift-and-add beside the blocks."
+  group: {name: "2026-10-23 rerun", index: 17, size: 35}
+
+20261023-192531-7427c4:
+  description: "61/91 fltr_compute and my_fir (all seven each); period -30.0%; area -44.6%; stereovision2 on comb_sop_2_18_mode, accepted T2, kept revision3 of 5 passes, the next revision did not beat it by the band; product 0.190 (A/A0 0.554, D/D0 0.700, W/W0 0.489, medians of seeds 1 to 5); 30 of the 91 tap products per filter set become soft shift-and-add, so part of the DSP tile drop (224 to 96) is not block mapping."
+  group: {name: "2026-10-23 rerun", index: 18, size: 35}
+
+20261023-221408-c2d78a:
+  description: "9/18 bilinearintrp; period -9.4%; area -3.5%; raygentop on sop_4_mode, accepted T2, kept revision2 of 4 passes, the next revision did not beat it by the band; product 0.823 (A/A0 0.965, D/D0 0.906, W/W0 0.941, medians of seeds 1 to 5)."
+  group: {name: "2026-10-23 rerun", index: 19, size: 35}
+
+20261023-221713-40df08:
+  description: "4/4 corr, corr_seq; period -39.6%; area +24.9%; stereovision1 on sop_2_mode, accepted T2, kept the first pass, the revision planner declined; product 0.604 (A/A0 1.249, D/D0 0.604, W/W0 0.800, medians of seeds 1 to 5)."
+  group: {name: "2026-10-23 rerun", index: 20, size: 35}
+
+20261023-230011-accc3b:
+  description: "0/4 none converted; period not recorded; area not recorded; stereovision1 on comb_sop_2_18_mode, planner declined with TIER: NONE, no edit: a correct rewrite exists, but each comb_sop_2_18 takes a tile that four 9x9 products share today."
+  group: {name: "2026-10-23 rerun", index: 21, size: 35}
+
+20261023-230326-260284:
+  description: "0/18 none converted; period not recorded; area not recorded; raygentop on comb_mult_add_16_mode, planner declined with TIER: NONE, no edit: matmult sums bit slices of registered products and bilinearintrp registers its products before the sum, so neither fits."
+  group: {name: "2026-10-23 rerun", index: 22, size: 35}
+
+20261023-231036-c22eaa:
+  description: "9/18 bilinearintrp; period +0.7%; area +0.0%; raygentop on comb_sop_2_18_mode, accepted T2, kept the first pass, the revision planner declined; product 0.952 (A/A0 1.000, D/D0 1.007, W/W0 0.946, medians of seeds 1 to 5); within seed noise: the gain is wirelength only and the kept seeds (0.914 to 1.075 of the baseline median) overlap the baseline seeds (0.988 to 1.031); the third product per colour is removed by algebra in soft logic, not taken by a block."
+  group: {name: "2026-10-23 rerun", index: 23, size: 35}
+
+20261023-232808-6c999a:
+  description: "9/18 bilinearintrp; period -0.3%; area -2.3%; raygentop on sop_2_mode, accepted T2, kept the first pass, the revision planner declined; product 0.842 (A/A0 0.977, D/D0 0.997, W/W0 0.864, medians of seeds 1 to 5); the third product per colour is removed by algebra in soft logic, not taken by a block."
+  group: {name: "2026-10-23 rerun", index: 24, size: 35}
+
+20261023-233742-0d61ab:
+  description: "0/18 none converted; period not recorded; area not recorded; raygentop on mult_add_mode_18_19_36, planner declined with TIER: NONE, no edit: every product already shares a DSP tile and a mult_add block takes a tile alone."
+  group: {name: "2026-10-23 rerun", index: 25, size: 35}
+
+20261023-234425-b52396:
+  description: "4/4 corr, corr_seq; period -36.2%; area +26.9%; stereovision1 on sop_4_mode, accepted T2, kept the first pass, the revision planner declined; product 0.669 (A/A0 1.269, D/D0 0.638, W/W0 0.826, medians of seeds 1 to 5)."
+  group: {name: "2026-10-23 rerun", index: 26, size: 35}
+
+20261024-000115-2250b6:
+  description: "1/1 qmult; period -6.8%; area -26.6%; conv_layer on mac_18x19_fixed_pt_mode, accepted T2, kept the first pass, the next revision did not beat it by the band; product 0.597 (A/A0 0.734, D/D0 0.932, W/W0 0.873, medians of seeds 1 to 5); the eltwise overwrite is rebuilt in soft logic outside the block, by a 32-bit offset register."
+  group: {name: "2026-10-23 rerun", index: 27, size: 35}
+
+20261024-004036-72ad09:
+  description: "0/4 none converted; period not recorded; area not recorded; stereovision1 on mult_add_mode_18_19_36, planner declined with TIER: NONE, no edit: corr's two products are registered and summed the next cycle with no addend."
+  group: {name: "2026-10-23 rerun", index: 28, size: 35}
+
+20261024-010553-5e66f7:
+  description: "1/1 qmult; period -2.7%; area -9.5%; conv_layer on mac_27x27_fixed_pt_mode, accepted T2, kept revision2 of 4 passes, the next revision did not beat it by the band; product 0.802 (A/A0 0.905, D/D0 0.973, W/W0 0.911, medians of seeds 1 to 5); the eltwise overwrite is rebuilt in soft logic outside the block, by an offset register and a shared 33-bit adder."
+  group: {name: "2026-10-23 rerun", index: 29, size: 35}
+
+20261024-025934-afb5a0:
+  description: "13/91 my_fir (all seven); period -29.3%; area -32.2%; stereovision2 on comb_mult_add_16_mode, accepted T2, kept revision2 of 4 passes, the next revision did not beat it by the band; product 0.321 (A/A0 0.678, D/D0 0.707, W/W0 0.670, medians of seeds 1 to 5); each block only multiplies one pre-added tap pair, its adder unused; 32 of the 45 my_fir tap products per set become soft shift-and-add, and that is where the DSP tiles go."
+  group: {name: "2026-10-23 rerun", index: 30, size: 35}
+
+20261024-052256-27e037:
+  description: "0/4 none converted; period not recorded; area not recorded; spmv on mac_18x19_fixed_pt_mode, planner declined with TIER: NONE, no edit: the Channel product register has an enable and no reset and feeds a FIFO."
+  group: {name: "2026-10-23 rerun", index: 31, size: 35}
+
+20261024-052751-8a1320:
+  description: "0/10 none converted; period not recorded; area not recorded; bnn on mult_add_mode_18_19_36, planner declined with TIER: NONE, no edit: 125 HLS multiplier instances with enabled product registers and hard-coded weights."
+  group: {name: "2026-10-23 rerun", index: 32, size: 35}
+
+20261024-054658-3f2d36:
+  description: "53/91 fltr_compute and my_fir (all seven each); period -63.1%; area -46.5%; stereovision2 on sop_2_mode, accepted T2, kept revision3 of 5 passes, the next revision did not beat it by the band; product 0.094 (A/A0 0.535, D/D0 0.369, W/W0 0.478, medians of seeds 1 to 5); 38 of the 91 tap products per filter set become soft shift-and-add, so part of the DSP tile drop (224 to 84) is not block mapping."
+  group: {name: "2026-10-23 rerun", index: 33, size: 35}
+
+20261024-102023-86895c:
+  description: "0/91 none converted; period not recorded; area not recorded; stereovision2 on mult_add_mode_18_19_36, planner declined with TIER: NONE, no edit: no subset lowers the objective and the critical-path group cannot be converted correctly."
+  group: {name: "2026-10-23 rerun", index: 34, size: 35}
+
+20261024-102558-c39329:
+  description: "1/1 qmult; period -17.0%; area -7.3%; conv_layer on mult_add_mode_18_19_36, accepted T1, kept the first pass, the revision planner declined; product 0.701 (A/A0 0.927, D/D0 0.830, W/W0 0.911, medians of seeds 1 to 5)."
+  group: {name: "2026-10-23 rerun", index: 35, size: 35}
+
+
 20261020-113700-f0049e:
   description: "0/10 none converted; period not recorded; area not recorded; rerun of 4ab670 with the agent turn cap at 200: the planner ended at the 900 s call timeout after 39 tool calls, again without a plan."
   equivalence: "not checked"

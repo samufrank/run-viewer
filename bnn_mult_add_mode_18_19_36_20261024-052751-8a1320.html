@@ -1,0 +1,2512 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>bnn → mult_add_mode_18_19_36 · 20261024-052751-8a1320</title><style>
+:root { color-scheme: light; }
+/* Embedded previews (Slack) size their frame from a height measured once, at first paint
+   and possibly at a different width than the one displayed; a page whose height depends on
+   line wrapping then gets cut off. A definite minimum height in absolute units (not vh, not
+   %) keeps the measured height at or above the collapsed page's height down to ~500px wide
+   (measured 1418px at 500px, 977 at 700, 893 at 1200). Below the fold in a normal browser. */
+html, body { height: auto; }
+body { margin: 0; padding: 1.5rem 1rem 4rem; background: #fff; color: #1a1a1a; min-height: 1450px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 15px; line-height: 1.6; }
+main { max-width: 72rem; margin: 0 auto; }
+h1 { font-size: 1.4rem; margin: 0 0 .25rem; font-weight: 600; }
+h2 { font-size: 1.1rem; margin: 0; font-weight: 600; display: inline; }
+h3 { font-size: 1rem; margin: 1.2rem 0 .4rem; font-weight: 600; }
+.sub { color: #555; margin: 0 0 1rem; }
+table { border-collapse: collapse; margin: .5rem 0 1rem; }
+th, td { text-align: left; padding: .2rem .8rem .2rem 0; vertical-align: top; }
+th { font-weight: 600; color: #444; white-space: nowrap; }
+table.num td.n, table.num th.n { text-align: right; font-variant-numeric: tabular-nums; }
+tr.total td { border-top: 1px solid #bbb; font-weight: 600; }
+details { margin: .6rem 0; border: 1px solid #d8d8d8; border-radius: 4px; background: #fff; }
+details > summary { cursor: pointer; padding: .55rem .8rem; list-style: none;
+  display: flex; gap: .6rem; align-items: baseline; flex-wrap: wrap; }
+details > summary::-webkit-details-marker { display: none; }
+details > summary::before { content: "\25B8"; color: #777; font-size: .8em; }
+details[open] > summary::before { content: "\25BE"; }
+details > summary > .meta { color: #666; font-size: .9em; }
+details > .body { padding: .2rem .8rem .8rem; border-top: 1px solid #e6e6e6; }
+details.section > summary { font-size: 1.05rem; }
+details.call { margin-left: 0; }
+details.inner { border-color: #e6e6e6; }
+details.inner > summary { padding: .35rem .6rem; font-size: .92em; }
+pre { white-space: pre-wrap; word-break: break-word; margin: .3rem 0 .8rem;
+  padding: .7rem .9rem; border-radius: 4px; font-size: .86em; line-height: 1.5;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+pre.prompt { background: #f4f4f2; border-left: 3px solid #b8b8b0; }
+pre.response { background: #eef3f8; border-left: 3px solid #7f9fbf; }
+pre.plain { background: #f6f6f6; }
+/* A prompt or response with its Markdown rendered. The tint and the left rule are the same
+   as the plain form above, so a rendered block still reads as quoted agent traffic and not
+   as the page's own prose; only the inside is laid out instead of shown as source. */
+.md { margin: .3rem 0 .8rem; padding: .6rem .9rem; border-radius: 4px; font-size: .93em;
+  overflow-wrap: break-word; }
+.md.prompt { background: #f4f4f2; border-left: 3px solid #b8b8b0; }
+.md.response { background: #eef3f8; border-left: 3px solid #7f9fbf; }
+.md > :first-child { margin-top: 0; } .md > :last-child { margin-bottom: 0; }
+.md p { margin: .5rem 0; }
+.md ul, .md ol { margin: .5rem 0; padding-left: 1.5rem; }
+.md li { margin: .15rem 0; }
+.md ul.md-litnum { list-style: none; padding-left: .8rem; }
+.md .md-num { color: #555; }
+.md blockquote { margin: .5rem 0; padding: .1rem .8rem; border-left: 2px solid #c4c4c4;
+  color: #444; }
+.md hr { border: 0; border-top: 1px solid #d5d5d5; margin: .8rem 0; }
+.md code { background: rgba(0,0,0,.055); padding: .05em .3em; border-radius: 3px; }
+.md .mdh { font-weight: 600; margin: .9rem 0 .35rem; line-height: 1.3; }
+.md .mdh1 { font-size: 1.12em; } .md .mdh2 { font-size: 1.07em; }
+.md .mdh3 { font-size: 1.02em; } .md .mdh4, .md .mdh5, .md .mdh6 { font-size: 1em; }
+/* A fenced block is a box inside the response, and must not widen or escape it: it wraps,
+   and scrolls sideways only within its own frame. */
+.md .md-code { margin: .5rem 0; border: 1px solid #dcdcdc; border-radius: 4px;
+  background: #fbfbfa; max-width: 100%; overflow: hidden; }
+.md .md-lang { display: block; padding: .15rem .6rem; border-bottom: 1px solid #e6e6e6;
+  color: #666; font-size: .8em; letter-spacing: .03em; }
+.md .md-code > pre { margin: 0; background: none; border: 0; border-radius: 0;
+  padding: .55rem .7rem; max-width: 100%; overflow-x: auto; white-space: pre-wrap;
+  word-break: break-word; }
+.md .md-code > pre > code { background: none; padding: 0; }
+.md .md-tw { overflow-x: auto; max-width: 100%; margin: .5rem 0; }
+.md .md-tw table { border-collapse: collapse; }
+.md .md-tw th, .md .md-tw td { border: 1px solid #dedede; padding: .2rem .5rem;
+  white-space: normal; }
+.md .md-note { color: #666; font-size: .85em; font-style: italic; margin: 0 0 .5rem; }
+ul.paths { margin: .2rem 0; padding-left: 1.2rem; }
+ul.paths li { margin: .1rem 0; word-break: break-all; }
+.diff { white-space: pre-wrap; word-break: break-word; margin: .3rem 0 .8rem;
+  padding: .7rem .9rem; border-radius: 4px; font-size: .86em; line-height: 1.5;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  background: #fafafa; border: 1px solid #e3e3e3; }
+.diff div { min-height: 1.5em; }
+.diff .add { background: #e2f3e2; }
+.diff .del { background: #f8e0e0; }
+.diff .add-ws, .diff .del-ws { color: #999; background: #f3f3f3; }
+.diff .hunk { color: #6a5acd; }
+.diff .hdr { color: #666; }
+.diff details.ws { margin: .1rem 0; border: 1px dashed #ccc; background: #f6f6f6; }
+.diff details.ws > summary { padding: .1rem .5rem; color: #777; font-family: inherit; font-size: .95em; }
+.diff details.ws > summary::before { content: "\25B8 "; }
+.diff details.ws[open] > summary::before { content: "\25BE "; }
+.schem { margin: .4rem 0 .8rem; overflow-x: auto; background: #fff;
+  border: 1px solid #e3e3e3; border-radius: 4px; padding: .4rem; }
+.schem svg { display: block; }
+.label { font-weight: 600; color: #444; font-size: .85em; text-transform: uppercase;
+  letter-spacing: .03em; margin: .6rem 0 .1rem; }
+.absent { color: #777; font-style: italic; }
+.ok { color: #1f6f3a; } .bad { color: #a33; } .na { color: #777; }
+.note { color: #555; font-size: .9em; }
+.tools { margin: .4rem 0 0; }
+.controls { margin: 0 0 1rem; font-size: .9em; color: #555; }
+.controls button { font: inherit; padding: .1rem .5rem; margin-right: .3rem; }
+dl.kv { display: grid; grid-template-columns: max-content 1fr; gap: .1rem 1.2rem; margin: .6rem 0 1rem; }
+dl.kv dt { color: #555; } dl.kv dd { margin: 0; }
+@media (max-width: 600px) { dl.kv { grid-template-columns: 1fr; } dl.kv dt { margin-top: .4rem; } }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .92em; }
+.summary { margin: .4rem 0 .6rem; padding: .6rem .9rem; background: #f5f8fb; border: 1px solid #d6e0ea;
+  border-radius: 4px; }
+.summary p { margin: .15rem 0; }
+p.how { color: #555; font-size: .9em; margin: 0 0 .6rem; }
+/* one colour per agent role: a left rule on the call and a chip in its summary line */
+.role { display: inline-block; padding: 0 .4rem; border-radius: 3px; font-size: .88em; font-weight: 600; }
+.role-planner { background: #ece6f7; color: #4b3590; }
+.role-plan-reviewer { background: #f8ecd6; color: #7a5310; }
+.role-editor { background: #dceef3; color: #18596f; }
+.role-acceptance { background: #f6e1e8; color: #8a2f4e; }
+.role-other { background: #eee; color: #555; }
+details.call.role-planner { border-left: 4px solid #8b70cf; }
+details.call.role-plan-reviewer { border-left: 4px solid #d29a3a; }
+details.call.role-editor { border-left: 4px solid #3f93ad; }
+details.call.role-acceptance { border-left: 4px solid #c45c80; }
+details.pass { border-color: #c4c4c4; background: #fcfcfc; }
+details.pass > summary { font-size: 1rem; }
+p.pass-head { margin: 0; padding: .35rem .8rem; border-top: 1px solid #e6e6e6; font-size: .92em; color: #333; }
+.retry-tag { display: inline-block; padding: 0 .35rem; border: 1px dashed #999; border-radius: 3px;
+  font-size: .85em; color: #555; }
+p.retry { margin: .7rem 0 .2rem; padding-left: .6rem; border-left: 2px dashed #999; color: #555; font-size: .9em; }
+</style><script>
+function setAll(open) {
+  document.querySelectorAll('details').forEach(function (d) { d.open = open; });
+}
+// an in-page link to a collapsed block opens it and every block around it
+function openHash() {
+  var e = document.getElementById(location.hash.slice(1));
+  for (; e; e = e.parentElement) { if (e.tagName === 'DETAILS') e.open = true; }
+}
+window.addEventListener('hashchange', openHash);
+window.addEventListener('DOMContentLoaded', openHash);
+</script></head><body><main><h1>bnn → mult_add_mode_18_19_36 · 20261024-052751-8a1320</h1><p class="sub">benchadapt adaptation run · record at <code>outputs/adapt/koios_medium/bnn/mult_add_mode_18_19_36/20261024-052751-8a1320</code></p><div class="summary"><p><b>What a run is.</b> One invocation of the framework on one design with one mode: here bnn with <code>mult_add_mode_18_19_36</code>.</p><p><b>What happened.</b> 0 rewrites measured. Loop stopped by: planner declined (no representative mapping).</p><p><b>Result.</b> Area x delay not measured; verification: not recorded in the run record.</p></div><p class="how">How to read this page: the table below holds the run's settings; each section after it opens on click: the mode contract, the agent calls grouped by pass, the kept rewrite's diff, verification, numbers, and the objective loop comparing the rewrites.</p><dl class="kv"><dt>run id</dt><dd><code>20261024-052751-8a1320</code></dd><dt>started</dt><dd>2026-10-24 05:27:51 -0700</dd><dt>finished</dt><dd>2026-10-24 05:46:56 -0700</dd><dt>suite / design</dt><dd>koios_medium / <b>bnn</b></dd><dt>target mode</dt><dd><code>mult_add_mode_18_19_36</code></dd><dt>tier</dt><dd>NONE (NONE) — not recorded</dd><dt>outcome</dt><dd><b class="bad">rejected</b> [<code>planner_declined</code>] — planner declined: no representative mapping</dd><dt>wall clock</dt><dd>19m 5s (agents 19m 4s, VTR and other 1s)  [1145.0 s total; 'other' is synthesis-only checks and framework time between calls]</dd><dt>models</dt><dd>all roles: <code>anthropic/claude-opus-5</code></dd><dt>layout</dt><dd>koios_extra_small, 90 x 90</dd><dt>VPR arguments</dt><dd>channel width 300 · device koios_extra_small <span class="note">(from run.json)</span></dd><dt>seeds</dt><dd>main flow seed 1<br>loop seeds 1, 2, 3, 4, 5 (adaptive)</dd><dt>sandbox</dt><dd>bubblewrap <span class="note">(recorded per agent call, before the run-level field existed: every call in this run ran in its own mount namespace)</span></dd><dt>agent reads</dt><dd>none outside the agents' own working directories <span class="note">(paths each agent named outside its own working directory, computed from the tool events; its own scratch excluded)</span></dd><dt>prompt set</dt><dd><code>4d70213e4c53</code> <span class="note">(sha256 over 10 templates in src/agents and 96 inline pieces; full value in run.json <code>prompt_set</code>)</span></dd></dl><div class="controls"><button type="button" onclick="setAll(true)">expand all</button><button type="button" onclick="setAll(false)">collapse all</button>exported 2026-10-27T12:52:00-07:00</div><details class="section"><summary><h2>Mode contract</h2> <span class="meta">recorded (outcome.json contract field)</span></summary><div class="body"><p class="note">Verbatim, as recorded with the run and sent to the agents.</p><pre class="plain">- primitive to instantiate: `mult_add_int_18x19` (precision INT19)
+- computes: out = ax*ay + bx + chainin
+- input ports: clk[1] (clock), reset[1], mode_sigs[12], ax[18], ay[19], bx[36], chainin[64], scanin[19]
+- output ports: result[64], chainout[64], scanout[19]
+- arithmetic: the block reads each operand port as an unsigned number, and its result is unsigned. An operand narrower than its port is zero-extended to the port width. The result wraps at 64 bits: a value past the result width keeps its low 64 bits (modulo 2^64), with no saturation and no flag.
+- registers: on `clk`, the block registers its operands (`ax`, `ay`, `bx`) at one clock edge and `result` at the next, with the arithmetic between the two registers: operands applied before clock edge k appear in `result` after edge k+1, 2 cycles later. The block has no clock enable and no path around either register. `chainin` is registered at the block's entry like an operand and reaches `result` 2 cycles after it is applied. `chainout` is combinational from the input registers: it carries the value `result` loads at the next clock edge, one cycle before `result` shows it.
+- reset: `reset` is synchronous and active high: at a clock edge that samples it high it clears every register of the block (the operand registers, the chainin register and the result register) to 0, and the block loads again at the next edge that samples it low.
+- power-up: every register of the block is unknown until the first clear by `reset`; no register of the block has an initial value, and a rewrite may not rely on one.
+- tie-off: `chainin` = 0 when the block is not chained (a dedicated chain input: only another block's `chainout` or a constant may drive it); `scanin` = 0 always (the operand scan chain is not used: `ay` is driven directly, and `scanout` is left unconnected); `mode_sigs` = 0 always (the architecture gives the port no meaning for this mode).
+- connections: connect every input port, by the port names above. `chainout` reaches only the next block's `chainin`, through a dedicated connection to the block directly below it in the column; it has no connection to general routing, so nothing else may read it.</pre></div></details><details class="section"><summary><h2>Agent calls</h2> <span class="meta">1 call(s) in 1 pass, in order</span></summary><div class="body"><p class="note">Role: <span class="role role-planner">planner</span> <span class="role role-plan-reviewer">plan reviewer</span> <span class="role role-editor">editor</span> <span class="role role-acceptance">acceptance reviewer</span>. A plan reviewer sending the plan back, or the editor being asked again, is a <span class="retry-tag">retry</span> inside the same pass.</p><details class="pass" open><summary><b>Pass 1</b> <span class="meta">1 call, 19m 4s</span></summary><p class="pass-head"><b>planner declined</b> · the planner declined the first plan, so the loop had nothing to measure (no representative mapping)</p><div class="body"><details class="call role-planner" id="call-1"><summary>Call 1 · <span class="role role-planner">planner</span> · anthropic/claude-opus-5 · <span class="ok">ok</span> <span class="meta">in 76 · out 79391 · reasoning 70181 · cache read 2979949 · cache write 176714 · 1144.2 s</span></summary><div class="body"><div class="label">prompt</div><div class="md prompt"><div class="mdh mdh2">Task</div><p>You are the planner. Read the design source, bnn.v, and decide which of the candidate arithmetic regions listed below to rewrite onto the hard block described next, or that none should be rewritten. Write a plan for the editor, who carries it out; do not edit any file.</p><div class="mdh mdh2">The block</div><ul><li>primitive to instantiate: <code>mult_add_int_18x19</code> (precision INT19)</li><li>computes: out = ax*ay + bx + chainin</li><li>input ports: clk[1] (clock), reset[1], mode_sigs[12], ax[18], ay[19], bx[36], chainin[64], scanin[19]</li><li>output ports: result[64], chainout[64], scanout[19]</li><li>arithmetic: the block reads each operand port as an unsigned number, and its result is unsigned. An operand narrower than its port is zero-extended to the port width. The result wraps at 64 bits: a value past the result width keeps its low 64 bits (modulo 2^64), with no saturation and no flag.</li><li>registers: on <code>clk</code>, the block registers its operands (<code>ax</code>, <code>ay</code>, <code>bx</code>) at one clock edge and <code>result</code> at the next, with the arithmetic between the two registers: operands applied before clock edge k appear in <code>result</code> after edge k+1, 2 cycles later. The block has no clock enable and no path around either register. <code>chainin</code> is registered at the block's entry like an operand and reaches <code>result</code> 2 cycles after it is applied. <code>chainout</code> is combinational from the input registers: it carries the value <code>result</code> loads at the next clock edge, one cycle before <code>result</code> shows it.</li><li>reset: <code>reset</code> is synchronous and active high: at a clock edge that samples it high it clears every register of the block (the operand registers, the chainin register and the result register) to 0, and the block loads again at the next edge that samples it low.</li><li>power-up: every register of the block is unknown until the first clear by <code>reset</code>; no register of the block has an initial value, and a rewrite may not rely on one.</li><li>tie-off: <code>chainin</code> = 0 when the block is not chained (a dedicated chain input: only another block's <code>chainout</code> or a constant may drive it); <code>scanin</code> = 0 always (the operand scan chain is not used: <code>ay</code> is driven directly, and <code>scanout</code> is left unconnected); <code>mode_sigs</code> = 0 always (the architecture gives the port no meaning for this mode).</li><li>connections: connect every input port, by the port names above. <code>chainout</code> reaches only the next block's <code>chainin</code>, through a dedicated connection to the block directly below it in the column; it has no connection to general routing, so nothing else may read it.</li></ul><div class="mdh mdh2">The design</div><p>Baseline: the unmodified bnn under this run's VPR settings (channel width 300, median of five seeds, 1 to 5) has a worst register-to-register path of 8.47118 ns on its one clock <code>ap_clk</code> (I/O pads not timed) and uses 99 DSP tiles (as packed at seed 1) of the device's 132. Its used logic-block area is 1.95004e+08 minimum-width transistor areas (one DSP tile 253779, one cluster 27905) and its routed wirelength is 1183063, so its area x delay x wirelength product, the objective, is 1.95432e+15. Its slowest stage (read off the seed-1 timing report) is in the dense layer dense_latency_..._2 (the path's adders; its end register not established): no multiply, a register through one LUT, four adders (one a six-stage carry chain) and two LUTs into a flip-flop with enable; wire 7.57 ns in all, 1.91 of it into the LUT after the adders. The next slowest stage (read off the seed-1 timing report), in the same dense layer (end register not established), is no multiply, a register through one LUT, six adders and two LUTs into a flip-flop with enable; wire 7.46 ns in all, 8.38 ns, so shortening the slowest stage past that point buys nothing on its own. Any path your rewrite creates is compared against that critical path.</p><div class="mdh mdh3">Delays on this architecture</div><p>The block rows and the soft flip-flop row are from the architecture file. Wire and adder delays are sampled, given as a range with the median in parentheses. A row marked "on this design" is measured on the unmodified design's own placement under this run's VPR settings, with the design's hard multiplier standing in for the block; the other rows are sampled over earlier runs of other designs on this architecture.</p><div class="md-tw"><table><thead><tr><th>element on a path</th><th>ns</th></tr></thead><tbody><tr><td>into the block: a path ends at the block's input register (setup)</td><td>0.019</td></tr><tr><td>inside the block: input register clock-to-Q + delay + output register setup</td><td>0.060 + 2.140 + 0.019 = 2.219, below the baseline's critical path</td></tr><tr><td>out of the block: a path starts at the output register of <code>result</code> (clock-to-Q)</td><td>0.060</td></tr><tr><td><code>chainout</code>: input register clock-to-Q + delay, to the output pin</td><td>0.060 + 2.140 = 2.200</td></tr><tr><td>wire, block to block</td><td>0.96 to 2.22 (median 1.17)</td></tr><tr><td>wire, register to first block</td><td>2.253 (one path on this design)</td></tr><tr><td>wire, last block to register</td><td>0.83 to 2.67 (median 2.25)</td></tr><tr><td>wire, block into soft logic</td><td>0.54 to 1.90 (median 0.96)</td></tr><tr><td>soft adder level, cell plus wire to the next</td><td>0.653 to 1.734 (median 0.902) on this design</td></tr><tr><td>soft flip-flop, clock to output</td><td>0.060</td></tr></tbody></table></div><div class="mdh mdh3">Candidate regions</div><p>An id names a product by its module and its multiply. One that ends in <code>(sum_in=&lt;module&gt;)</code> is a product whose sum sits in that other module: the product leaves its own module through a port and is added there, so the arithmetic to convert spans both. A <code>#1</code>, <code>#2</code> after an id separates instances of the same product that sit in sums of different shapes.</p><p>In every row, what it already is in the baseline: on a DSP tile in two_mult_18x19 mode, alone on 73 of the 99 tiles and two to a tile on 26 (every one of the 125 products of the six multiplier modules; the 26 shared tiles pair products of two modules 17 times and of one module 9 times).<br>In every row, register stages between the products and their sum: products registered 2 stage(s) before the sum.</p><div class="md-tw"><table><thead><tr><th>id</th><th>operation</th><th>instances</th><th>products in the whole sum this one belongs to</th></tr></thead><tbody><tr><td>myproject_mul_16s_10ns_26_2_0_MulnS_4.$mul$bnn.v:16387$3519(sum_in=bnn)#1</td><td>sop</td><td>7</td><td>29 products in one tree of adders</td></tr><tr><td>myproject_mul_16s_10ns_26_2_0_MulnS_4.$mul$bnn.v:16387$3519(sum_in=bnn)#2</td><td>sop</td><td>19</td><td>31 products in one tree of adders</td></tr><tr><td>myproject_mul_16s_11ns_26_2_0_MulnS_1.$mul$bnn.v:16442$3521(sum_in=bnn)#1</td><td>sop</td><td>3</td><td>31 products in one tree of adders</td></tr><tr><td>myproject_mul_16s_11ns_26_2_0_MulnS_1.$mul$bnn.v:16442$3521(sum_in=bnn)#2</td><td>sop</td><td>21</td><td>61 products in one tree of adders</td></tr><tr><td>myproject_mul_16s_12ns_26_2_0_MulnS_0.$mul$bnn.v:16497$3523(sum_in=bnn)</td><td>sop</td><td>36</td><td>61 products in one tree of adders</td></tr><tr><td>myproject_mul_16s_13ns_26_2_0_MulnS_2.$mul$bnn.v:16552$3525(sum_in=bnn)</td><td>sop</td><td>4</td><td>61 products in one tree of adders</td></tr><tr><td>myproject_mul_16s_8ns_24_2_0_MulnS_5.$mul$bnn.v:16607$3527(sum_in=bnn)</td><td>sop</td><td>1</td><td>31 products in one tree of adders</td></tr><tr><td>myproject_mul_16s_9ns_25_2_0_MulnS_3.$mul$bnn.v:16662$3529(sum_in=bnn)#1</td><td>sop</td><td>22</td><td>29 products in one tree of adders</td></tr><tr><td>myproject_mul_16s_9ns_25_2_0_MulnS_3.$mul$bnn.v:16662$3529(sum_in=bnn)#2</td><td>sop</td><td>8</td><td>31 products in one tree of adders</td></tr><tr><td>myproject_mul_16s_9ns_25_2_0_MulnS_3.$mul$bnn.v:16662$3529(sum_in=normalize_ap_fixed_ap_fixed_config16_0_0_0_0_0_0_0_0_0_0)</td><td>mult_add</td><td>4</td><td>the only product in its sum</td></tr></tbody></table></div><div class="mdh mdh2">Correctness: these must hold</div><ul><li><strong>Same behavior.</strong> The rewritten design must produce the same outputs as the original on every cycle, with every register of the original starting at 0. Do not change what the design computes. Logic added only to reproduce it (recomputing a value, deriving the block's reset, correcting a block's result) is allowed.</li><li><strong>Visibility.</strong> Only what the block's output ports carry is visible outside it. A value read by anything else (another expression, a module port, another module) cannot go inside a block: keep it outside, or recompute it. Check the source for every reader.</li><li><strong>Terms.</strong> Keep every term of the original arithmetic. A term with no matching block port is computed outside the block. A port the design ties to a constant may be tied the same way on the block.</li><li><strong>Registers and reset.</strong> The block's registers, if it has any, behave as the contract states. A design register may become a block register only if that keeps its behavior. Drive the block's reset so that "same behavior" holds after every reset, not only at start-up. Registers the rewrite adds start unknown; do not rely on their initial value.</li><li><strong>Assumptions.</strong> If the rewrite is correct only under an assumption about the design's inputs or use (a bound on a value, when a signal is asserted), state it on a line starting <code>ASSUMES:</code> and cite the lines of the design that support it. The reference testbench does not know your assumption, so the rewrite must still match the original under it.</li><li><strong>Scope.</strong> Change only what the rewrite onto the block needs.</li></ul><div class="mdh mdh2">Cost (guidance: go against it only with a reason in the plan)</div><ul><li>The clock period is the delay of the slowest stage (the logic between one register and the next). A rewrite that does not touch the slowest stage should not be expected to make the design faster, and should not make another stage slower than it.</li><li>Blocks in series are separate stages. A path through <code>chainout</code> starts at an input register and continues, in the same stage, into what it drives.</li><li>Moving or adding registers changes stage lengths and when values arrive.</li><li>Area falls when soft adders and flip-flops move into blocks.</li><li>A block of this mode takes a DSP tile alone. Synthesis may already have placed the design's multiplies on tiles, so a block that only replaces one saves little: count tiles against the baseline.</li><li>The block has chain ports: a block's <code>chainout</code> can drive the next block's <code>chainin</code> directly, so a sum can continue from block to block.</li></ul><div class="mdh mdh2">Objective</div><p>Minimize area × delay × wirelength against the baseline. If you expect no rewrite to lower it, output TIER: NONE. Among rewrites that lower it, choose the one that lowers it most.</p><div class="mdh mdh2">Output</div><div class="mdh mdh3">Tiers</div><ul><li><strong>T1:</strong> The block replaces the region's arithmetic as it stands: the same operations on the same operands, now inside the block.</li><li><strong>T2:</strong> The region's arithmetic is regrouped to fit the block (products regrouped into the block's sums, registers moved), computing the same values.</li><li><strong>NONE:</strong> No rewrite: no candidate can be rewritten correctly.</li></ul><div class="mdh mdh3">Header</div><p>Write exactly this header, each key at the start of its own line, then the plan:</p><p>TIER: &lt;exactly one of T1, T2, NONE&gt;<br>REGIONS: &lt;the converted candidate ids, comma-separated; NONE when TIER is NONE&gt;<br>SHARED_REDUCTION: &lt;the signal or module the converted products are summed in; NONE for a single region&gt;<br>BLOCKS: &lt;how many blocks the rewrite instantiates, one integer&gt;<br>TILES: &lt;how many DSP tiles the whole design then uses, one integer&gt;<br>STAGE_NS: &lt;the delay of the slowest stage the rewrite leaves, in ns, one number&gt;<br>MAPPING: &lt;which design signals go to which block ports&gt;<br>PLAN: &lt;the plan, stating everything listed below&gt;</p><div class="mdh mdh3">What the plan must state</div><ul><li>Every candidate region, converted or left, with the reason each is left; candidates that share a reason may be grouped.</li><li>How many blocks the rewrite adds, and how many DSP tiles the design then uses.</li><li>The longest series of blocks in any stage and its delay, against the slowest stage.</li><li>What soft logic leaves which stage, and whether that stage is the slowest.</li><li>For each converted region, the register stages from its operands to its result, before and after the rewrite.</li></ul><div class="mdh mdh3">Output rules</div><ul><li>Write nothing before the TIER line; read the source first.</li><li>A reviewer checks the plan automatically and no person reads it, so do not end with a question or an offer.</li><li>If a change to the design itself, not to the rewrite, would let more of it use the block, you may say so on a line starting <code>DESIGN_CHANGE:</code>. It is reported to the user and does not change your decision.</li></ul><div class="mdh mdh2">Reference simulation</div><p>After the edit, the framework simulates the edited design against the original with the reference testbench, comparing every output on every cycle. A candidate that does not match is not measured. The testbench (tb_equiv_bnn.v) and the block's behavioural model (mult_add_int_18x19.v) are in sim_reference/.</p><p>Read these files in this directory: bnn.v</p></div><div class="label">response</div><div class="md response"><p>I'll start by reading the design source and the reference files.</p><p>TIER: NONE<br>REGIONS: NONE<br>SHARED_REDUCTION: NONE<br>BLOCKS: 0<br>TILES: 99<br>STAGE_NS: 8.47118<br>MAPPING: none — no <code>mult_add_int_18x19</code> is instantiated; every multiply stays on the DSP tiles synthesis already gave it.<br>PLAN:</p><div class="mdh mdh2">What the candidates actually are</div><p>All ten candidate rows are the same shape. Every one of the 125 products is an instance of <code>myproject_mul_16s_*ns_*_2_0_MulnS_*</code> (bnn.v:16378-16393, 16433-16448, 16488-16503, 16543-16558, 16598-16613, 16653-16668): <code>tmp_product = a * {1'b0,b}</code> with <code>a</code> a 16-bit datum and <code>b</code> a hard-coded weight (9…13 bits, e.g. bnn.v:28673-28679), the product truncated to 24/26 bits and held in <code>p</code>, which is a register with clock enable <code>ce</code> and <strong>no reset</strong>.</p><p>The instances sit in four modules, and the counts match the candidate table exactly:</p><ul><li><code>normalize_..._1</code> (bnn.v:21804-25007): 61 products (bnn.v:22596-23496) = the 21 <code>11ns</code> + 36 <code>12ns</code> + 4 <code>13ns</code> rows ("61 products").</li><li><code>normalize_..._2</code> (bnn.v:25017-26687): 31 products (bnn.v:25434-25884) = 19 <code>10ns</code> + 3 <code>11ns</code> + 1 <code>8ns</code> + 8 <code>9ns</code> ("31 products").</li><li><code>normalize_..._s</code> (bnn.v:26697-28393): 29 products (bnn.v:27136-27556) = 22 <code>9ns</code> + 7 <code>10ns</code> ("29 products").</li><li><code>normalize_ap_fixed_..._config16</code> (bnn.v:28403-28693): the 4 <code>mult_add</code> products (bnn.v:28486-28544).</li></ul><p>In every case the product's whole sum is <strong>one 16-bit add of a constant</strong>, not a tree: <code>trunc_ln708_k_reg &lt;= grp_fu_*_p2[25:10]</code> (bnn.v:23658-23721) then <code>add_ln703_* = trunc_ln708_* + 16'dC</code> (bnn.v:24731-24819; config16: bnn.v:28572-28577, 28653-28661). There is no sum of several products anywhere: the normalize outputs pass through <code>relu_max_*</code> (sign-bit select, bnn.v:29401-29489 — nonlinear) before any dense adder tree, so the products of a module can never be joined with <code>chainin</code>. <code>bnn</code> itself contains no arithmetic at all (its only assigns are constants and port renames, bnn.v:21776-21792).</p><p>Arithmetically a block would fit: with <code>ax = data_X_V_read_int_reg</code>, <code>ay = weight</code>, <code>bx = C&lt;&lt;10</code>, <code>result[25:10]</code> equals <code>((a*b)&gt;&gt;10 + C) mod 2^16</code>, which is bit-exact with the design's <code>((a*b mod 2^26)&gt;&gt;10) + C mod 2^16</code> (and for config16 the 15-bit truncation is also exact, since <code>a*b &lt; 65535*239 &lt; 2^24</code>). The block would absorb one 16-bit adder and one 16-bit register per product. It is not the arithmetic that blocks the rewrite.</p><div class="mdh mdh2">Why every candidate is left (all ten share these reasons)</div><p><strong>1. Reset — no legal drive of the block's <code>reset</code> exists.</strong> <code>ap_rst</code> resets only the control state of this design: <code>ap_CS_fsm</code> (bnn.v:19189-19195), the <code>ap_enable_reg_pp0_iter*</code> chain (bnn.v:19197-19520), <code>input1_V_preg</code> and <code>input1_V_ap_vld_preg</code> (bnn.v:19867-19887). It does <strong>not</strong> reset the arithmetic pipeline: <code>p</code> in the <code>MulnS</code> modules, <code>data_*_V_read_int_reg</code> (bnn.v:23584-23586) and <code>trunc_ln708_*_reg</code> (bnn.v:23653-23723) have no reset term, and their enables <code>ap_ce</code> / <code>ap_ce_reg</code> do not depend on <code>ap_rst</code> (bnn.v:20379-20385, 20495-20499, 23510-23512), so these registers keep loading live data while <code>ap_rst</code> is high.</p><ul><li>Driving <code>reset = ap_rst</code> clears the block's operand and result registers at a mid-run reset while the reference keeps the live values; the block is then wrong for the two cycles it takes to refill, and those cycles are latched by the <code>layer4/8/12_out_*_V_reg</code> bank (enable <code>~ap_block_pp0_stage0_11001</code>, bnn.v:19889-19890) on any cycle whose enable is high — and for the config16 candidate the wrong value reaches <code>layer16_out_*_V</code> combinationally the same cycle (bnn.v:28581-28619, 21784-21792). The reference testbench asserts <code>ap_rst</code> mid-run with random data (<code>reset_pattern</code>, <code>resets_random</code>) and compares every output every cycle, so this is visible.</li><li>Tying <code>reset = 0</code> never clears the block, so by the block contract its registers stay unknown, and that X reaches the same places.</li><li>A "first reset only" pulse would need an added register, and added registers start unknown; it cannot be relied on.</li></ul><p><strong>2. Clock enable — the block free-runs, the design does not.</strong> The whole data path runs under one global stall: <code>STALL = ap_start &amp; ~input1_V_ap_vld_in_sig</code> (bnn.v:20495-20531, 20411-20417), which gates <code>ap_ce</code> into each normalize module (bnn.v:20379-20409), gates <code>p</code> and <code>trunc_ln708_*</code> through <code>ap_ce_reg</code> (bnn.v:23510-23512, 23654, 24709-24723), and gates every <code>layer*_out_*_V_reg</code> in <code>bnn</code> (bnn.v:19889-19890). The block has no clock enable and no path around either register. Of the two register stages the block would replace, the first (<code>p</code>) is in effect free-running — <code>p(m) = f(R0(m-1))</code> holds automatically because <code>R0</code> itself froze a cycle earlier — but the second (<code>trunc_ln708_*</code>, enable <code>ap_ce_reg</code> = CE delayed one cycle) is a genuinely enabled register. A free-running result register cannot hold it: holding the result at edge m needs the block's <em>input</em> registers unchanged between edges m-2 and m-1, i.e. CE(m-2)=0, while the design needs the hold when CE(m-1)=0. Feeding the value back through <code>bx</code> or <code>chainin</code> cannot fix it either — both are registered at the block's entry, so the feedback is two cycles, not one, and <code>chainout</code> (which does carry the right value one cycle early) may only reach the next block's <code>chainin</code>, never general routing. The only correct emulation is <code>ax = CE ? R0 : P</code> with <code>P</code> a free-running 16-bit copy of <code>ax</code>: 16 soft flip-flops plus a 16-bit 2:1 mux, i.e. the same soft area as the 16 flip-flops plus 16-bit adder the block would have absorbed. Net soft-logic saving: zero. (Gating <code>ap_clk</code> is not an option: it would put the arithmetic on a second, LUT-driven clock and invalidate the one-clock timing the objective is measured on.)</p><p><strong>3. Cost — tiles can only go up.</strong> All 125 products are already on DSP tiles, 73 alone and 26 tiles shared two-to-a-tile, for 99 tiles of 132. A block of this mode takes a tile alone, so every converted product takes one tile and returns at best one; converting K products leaves 99 + ~0.21·K tiles if the packer keeps pairing the rest at its present rate (125 → 125 tiles, +26 tiles = +6.6e6 area = +3.4%, if all ten regions were converted). With the enable emulation above there is nothing on the soft side to pay for that: the 16-bit bias add plus its 16 flip-flops (~16 FLE-equivalents, ~1.6 clusters) is exactly replaced by the mux-plus-copy. Area rises, so area × delay × wirelength rises.</p><p><strong>4. Delay — nothing to win.</strong> The slowest stage, 8.47118 ns, is in <code>dense_latency_..._2</code> and contains no multiply, so no rewrite of these regions touches it; the next stage is 8.38 ns, so there is no headroom to trade for area either. A converted path would be comfortably short — register → block 0.060 + 2.253 + 0.019 = 2.33 ns, inside the block 2.219 ns, block → register 0.060 + 2.25 + 0.019 = 2.33 ns — but short stages buy nothing here. Delay would stay 8.47118 ns while area grew.</p><p>Grouping of the rows as required: the nine <code>sop</code> rows (<code>..._MulnS_4 #1/#2</code>, <code>..._MulnS_1 #1/#2</code>, <code>..._MulnS_0</code>, <code>..._MulnS_2</code>, <code>..._MulnS_5</code>, <code>..._MulnS_3 #1/#2</code>) are left for reasons 1-4 above; they are not sums of products at all but 125 independent <code>product + constant</code> pairs, so <code>chainin</code> can absorb nothing and the per-product soft saving is one 16-bit add. The one <code>mult_add</code> row (<code>..._MulnS_3 (sum_in=normalize_ap_fixed_ap_fixed_config16...)</code>, 4 instances) is left for the same reasons, and is the worst case for reason 1 because its result drives <code>layer16_out_*_V</code> combinationally (bnn.v:28581-28619, 21784-21792), so a cleared or unknown block register is visible at the top-level outputs on the same cycle.</p><div class="mdh mdh2">Required figures for a no-rewrite result</div><ul><li>Blocks added: 0. DSP tiles used by the design: 99, unchanged from the baseline.</li><li>Longest series of blocks in any stage: none (0 blocks, 0 ns), against the slowest stage of 8.47118 ns, which is untouched.</li><li>Soft logic leaving a stage: none. No stage gets shorter and none gets longer; the slowest stage remains the <code>dense_latency_..._2</code> adder path at 8.47118 ns.</li><li>Register stages between the operands and the result, for each candidate, before and after: unchanged at three — <code>data_*_V_read_int_reg</code> (enable <code>ap_ce</code>) → <code>p</code> (enable <code>ap_ce_reg</code>) → <code>trunc_ln708_*_reg</code> (enable <code>ap_ce_reg</code>) → combinational <code>+ 16'dC</code>, i.e. the product is registered 2 stages before its sum, exactly as in the baseline.</li></ul><p>DESIGN_CHANGE: Two HLS-level changes would make all 125 products mappable onto this block, together worth ~125 16-bit adders and ~125 16-bit register banks of soft logic. (a) Re-generate the pipeline without the <code>ap_ce</code> stall (flow control by valid bits instead of a global clock enable), so the multiply/truncate registers free-run and can become the block's two registers. (b) Have <code>ap_rst</code> reset the datapath registers <code>p</code> and <code>trunc_ln708_*</code> (HLS "reset all registers"), so the block's synchronous clear can be driven from <code>ap_rst</code> and match after every reset, not only at start-up. With both, each product becomes <code>result[25:10]</code> of a block with <code>ax = data_*_V_read_int_reg</code>, <code>ay = weight</code>, <code>bx = C&lt;&lt;10</code>, <code>chainin = 0</code>, absorbing the bias add and the truncate register at no extra register stage.</p></div><details class="inner"><summary>tool events <span class="meta">38 recorded, 1 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>Bash</code> <span class="meta"><span class="bad">error</span> ls -la /work; wc -l /work/bnn.v; ls -la /work/sim_reference/ 2&gt;/dev/null</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "command": "ls -la /work; wc -l /work/bnn.v; ls -la /work/sim_reference/ 2&gt;/dev/null"
+}</pre><div class="label">error</div><pre class="plain">&lt;tool_use_error&gt;Error: No such tool available: Bash. Bash is disabled for this session, in subagents as well as here.&lt;/tool_use_error&gt;</pre></div></details><details class="inner"><summary><code>Glob</code> <span class="meta"><span class="ok">completed</span> **/*.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "**/*.v"
+}</pre><div class="label">output</div><pre class="plain">sim_reference/mult_add_int_18x19.v
+sim_reference/tb_equiv_bnn.v
+bnn.v</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/sim_reference/mult_add_int_18x19.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/sim_reference/mult_add_int_18x19.v"
+}</pre><div class="label">output</div><pre class="plain">1	// mult_add_int_18x19: result = ax*ay + bx + chainin, unsigned, the product and bx zero-extended
+2	// to 64 bits, modulo 2^64 (the sum wraps at the result width).
+3	// Ports: clk, reset, mode_sigs[12], ax[18], ay[19], bx[36], chainin[64], scanin[19] in;
+4	// result[64], chainout[64], scanout[19] out. mode_sigs and scanin are not read (the scan chain is
+5	// unused and tied to 0 in every spec).
+6	// Registers (the arch's annotation read literally, decision 2026-10-16): every input is registered
+7	// at the block's entry at one clock edge (ax, ay, bx and chainin alike); the product and
+8	// the sum are formed from those registers and loaded into result at the next edge.
+9	// Cycles: ax, ay, bx and chainin to result 2. chainout is combinational from the input
+10	// registers: the sum result loads at the next edge unless that edge clears it (1 cycle from the
+11	// inputs).
+12	// scanout is the ay register (ay to scanout 1), as before; nothing specifies it.
+13	// Reset: synchronous, active high (2026-10-17: the arch's annotation does not distinguish a reset
+14	// register from a clear sampled by the registers themselves): at a clock edge that samples it high
+15	// every register of the block (operand registers, chainin register, result) is cleared to 0; the block
+16	// loads again at the next edge that samples it low. No register has an initial value: every one is
+17	// X until the first clear.
+18	module mult_add_int_18x19 (
+19	    input clk,
+20	    input reset,
+21	    input [11:0] mode_sigs,
+22	    input [17:0] ax,
+23	    input [18:0] ay,
+24	    input [35:0] bx,
+25	    input [63:0] chainin,
+26	    input [18:0] scanin,
+27	    output reg [63:0] result,
+28	    output [63:0] chainout,
+29	    output [18:0] scanout
+30	);
+31	
+32	    // stage 1: the input registers
+33	    reg [17:0] ax_reg;
+34	    reg [18:0] ay_reg;
+35	    reg [35:0] bx_reg;
+36	    reg [63:0] chainin_reg;
+37	
+38	    // combinational middle: the product, the addend and chainin, from the registers
+39	    wire [36:0] prod = ax_reg * ay_reg;                          // 18x19 -&gt; 37, exact
+40	    wire [63:0] sum  = prod + bx_reg + chainin_reg;              // zero-extended, modulo 2^64
+41	
+42	    always @(posedge clk) begin
+43	        if (reset) begin
+44	            result &lt;= 0;
+45	            ax_reg &lt;= 0; ay_reg &lt;= 0; bx_reg &lt;= 0; chainin_reg &lt;= 0;
+46	        end
+47	        else begin
+48	            ax_reg &lt;= ax; ay_reg &lt;= ay; bx_reg &lt;= bx; chainin_reg &lt;= chainin;
+49	            result &lt;= sum;                                       // stage 2
+50	        end
+51	    end
+52	
+53	    assign chainout = sum;                                  // the sum of the input registers
+54	    assign scanout  = ay_reg;
+55	
+56	endmodule
+57	</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/sim_reference/tb_equiv_bnn.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/sim_reference/tb_equiv_bnn.v"
+}</pre><div class="label">output</div><pre class="plain">1	// tb_equiv_bnn.v: equivalence testbench for bnn's bnn, generated by verify/equiv/gen_tb.py
+2	// on 2026-10-22; do not edit, regenerate (the command is in make_testbenches.sh):
+3	//   gen_tb.py --source /home/samu/dev/llm-hardblocks/vtr-verilog-to-routing/vtr_flow/benchmarks/verilog/koios/bnn.v --module bnn --ref bnn_ref --design bnn --out tb_equiv_bnn.v --clock ap_clk --reset ap_rst --lead-in 4 --no-impulse --idle ap_start=1 --tasks tasks_bnn.vh --drive drive_bnn.vh --init-zero --random 4000
+4	// Compares every output every cycle: ap_done[1], ap_idle[1], ap_ready[1], layer16_out_0_V[16], layer16_out_0_V_ap_vld[1], layer16_out_1_V[16], layer16_out_1_V_ap_vld[1], layer16_out_2_V[16], layer16_out_2_V_ap_vld[1], layer16_out_3_V[16], layer16_out_3_V_ap_vld[1], layer16_out_4_V[16], layer16_out_4_V_ap_vld[1], const_size_in_1[16], const_size_in_1_ap_vld[1], const_size_out_1[16], const_size_out_1_ap_vld[1].
+5	// Resets: ap_rst (active high); policy strict; compare from the first cycle after the reset release.
+6	// In the zero phases: ap_start = 1.
+7	`timescale 1ns/1ps
+8	`ifndef REF
+9	`define REF bnn_ref
+10	`endif
+11	`ifndef MODEL_STR
+12	`define MODEL_STR "mult_add_int_18x19"
+13	`endif
+14	`ifndef RESET_CYCLES
+15	`define RESET_CYCLES 4
+16	`endif
+17	`ifndef LEAD_IN
+18	`define LEAD_IN 4
+19	`endif
+20	`ifndef RANDOM_CYCLES
+21	`define RANDOM_CYCLES 4000
+22	`endif
+23	`ifndef RESET_RATE
+24	`define RESET_RATE 64
+25	`endif
+26	`ifndef SEED
+27	`define SEED 32'h2545f491
+28	`endif
+29	`ifdef START_ONLY
+30	`define MIDRUN_RESETS 0
+31	`else
+32	`define MIDRUN_RESETS 1
+33	`endif
+34	module tb;
+35	    reg ap_clk = 0; always #5 ap_clk = ~ap_clk;
+36	    reg ap_rst = 0;
+37	    reg ap_start = 0;
+38	    reg input1_V_ap_vld = 0;
+39	    reg [255:0] input1_V = 0;
+40	    wire ap_done_ref, ap_done_dut;
+41	    wire ap_idle_ref, ap_idle_dut;
+42	    wire ap_ready_ref, ap_ready_dut;
+43	    wire [15:0] layer16_out_0_V_ref, layer16_out_0_V_dut;
+44	    wire layer16_out_0_V_ap_vld_ref, layer16_out_0_V_ap_vld_dut;
+45	    wire [15:0] layer16_out_1_V_ref, layer16_out_1_V_dut;
+46	    wire layer16_out_1_V_ap_vld_ref, layer16_out_1_V_ap_vld_dut;
+47	    wire [15:0] layer16_out_2_V_ref, layer16_out_2_V_dut;
+48	    wire layer16_out_2_V_ap_vld_ref, layer16_out_2_V_ap_vld_dut;
+49	    wire [15:0] layer16_out_3_V_ref, layer16_out_3_V_dut;
+50	    wire layer16_out_3_V_ap_vld_ref, layer16_out_3_V_ap_vld_dut;
+51	    wire [15:0] layer16_out_4_V_ref, layer16_out_4_V_dut;
+52	    wire layer16_out_4_V_ap_vld_ref, layer16_out_4_V_ap_vld_dut;
+53	    wire [15:0] const_size_in_1_ref, const_size_in_1_dut;
+54	    wire const_size_in_1_ap_vld_ref, const_size_in_1_ap_vld_dut;
+55	    wire [15:0] const_size_out_1_ref, const_size_out_1_dut;
+56	    wire const_size_out_1_ap_vld_ref, const_size_out_1_ap_vld_dut;
+57	    `REF u_ref (.ap_clk(ap_clk), .ap_rst(ap_rst), .ap_start(ap_start), .ap_done(ap_done_ref), .ap_idle(ap_idle_ref), .ap_ready(ap_ready_ref), .input1_V_ap_vld(input1_V_ap_vld), .input1_V(input1_V), .layer16_out_0_V(layer16_out_0_V_ref), .layer16_out_0_V_ap_vld(layer16_out_0_V_ap_vld_ref), .layer16_out_1_V(layer16_out_1_V_ref), .layer16_out_1_V_ap_vld(layer16_out_1_V_ap_vld_ref), .layer16_out_2_V(layer16_out_2_V_ref), .layer16_out_2_V_ap_vld(layer16_out_2_V_ap_vld_ref), .layer16_out_3_V(layer16_out_3_V_ref), .layer16_out_3_V_ap_vld(layer16_out_3_V_ap_vld_ref), .layer16_out_4_V(layer16_out_4_V_ref), .layer16_out_4_V_ap_vld(layer16_out_4_V_ap_vld_ref), .const_size_in_1(const_size_in_1_ref), .const_size_in_1_ap_vld(const_size_in_1_ap_vld_ref), .const_size_out_1(const_size_out_1_ref), .const_size_out_1_ap_vld(const_size_out_1_ap_vld_ref));
+58	    `DUT u_dut (.ap_clk(ap_clk), .ap_rst(ap_rst), .ap_start(ap_start), .ap_done(ap_done_dut), .ap_idle(ap_idle_dut), .ap_ready(ap_ready_dut), .input1_V_ap_vld(input1_V_ap_vld), .input1_V(input1_V), .layer16_out_0_V(layer16_out_0_V_dut), .layer16_out_0_V_ap_vld(layer16_out_0_V_ap_vld_dut), .layer16_out_1_V(layer16_out_1_V_dut), .layer16_out_1_V_ap_vld(layer16_out_1_
+…[truncated, 22427 chars total]</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> ^module|^endmodule</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "^module|^endmodule",
+ "path": "/work/bnn.v",
+ "output_mode": "content",
+ "-n": true
+}</pre><div class="label">output</div><pre class="plain">24:module dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1 (
+3329:endmodule //dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1
+3339:module dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2 (
+7210:endmodule //dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2
+7220:module dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s (
+15350:endmodule //dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s
+15360:module dense_latency_ap_fixed_ap_fixed_config14_0_0_0_0_0_0 (
+16370:endmodule //dense_latency_ap_fixed_ap_fixed_config14_0_0_0_0_0_0
+16378:module myproject_mul_16s_10ns_26_2_0_MulnS_4(clk, ce, a, b, p);
+16393:endmodule
+16395:module myproject_mul_16s_10ns_26_2_0(
+16424:endmodule
+16433:module myproject_mul_16s_11ns_26_2_0_MulnS_1(clk, ce, a, b, p);
+16448:endmodule
+16450:module myproject_mul_16s_11ns_26_2_0(
+16479:endmodule
+16488:module myproject_mul_16s_12ns_26_2_0_MulnS_0(clk, ce, a, b, p);
+16503:endmodule
+16505:module myproject_mul_16s_12ns_26_2_0(
+16534:endmodule
+16543:module myproject_mul_16s_13ns_26_2_0_MulnS_2(clk, ce, a, b, p);
+16558:endmodule
+16560:module myproject_mul_16s_13ns_26_2_0(
+16589:endmodule
+16598:module myproject_mul_16s_8ns_24_2_0_MulnS_5(clk, ce, a, b, p);
+16613:endmodule
+16615:module myproject_mul_16s_8ns_24_2_0(
+16644:endmodule
+16653:module myproject_mul_16s_9ns_25_2_0_MulnS_3(clk, ce, a, b, p);
+16668:endmodule
+16670:module myproject_mul_16s_9ns_25_2_0(
+16699:endmodule
+16711:module bnn (
+21794:endmodule //myproject
+21804:module normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1 (
+25007:endmodule //normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1
+25017:module normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2 (
+26687:endmodule //normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2
+26697:module normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s (
+28393:endmodule //normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s
+28403:module normalize_ap_fixed_ap_fixed_config16_0_0_0_0_0_0_0_0_0_0 (
+28693:endmodule //normalize_ap_fixed_ap_fixed_config16_0_0_0_0_0_0_0_0_0_0
+28703:module relu_max_ap_fixed_ap_fixed_1_relu1_config13_s (
+29673:endmodule //relu_max_ap_fixed_ap_fixed_1_relu1_config13_s
+29683:module relu_max_ap_fixed_ap_fixed_1_relu1_config5_s (
+31613:endmodule //relu_max_ap_fixed_ap_fixed_1_relu1_config5_s
+31623:module relu_max_ap_fixed_ap_fixed_1_relu1_config9_s (
+32593:endmodule //relu_max_ap_fixed_ap_fixed_1_relu1_config9_s</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/bnn.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/bnn.v",
+ "offset": 16370,
+ "limit": 340
+}</pre><div class="label">output</div><pre class="plain">16370	endmodule //dense_latency_ap_fixed_ap_fixed_config14_0_0_0_0_0_0
+16371	// ==============================================================
+16372	// Vivado(TM) HLS - High-Level Synthesis from C, C++ and SystemC v2019.2 (64-bit)
+16373	// Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+16374	// ==============================================================
+16375	
+16376	`timescale 1 ns / 1 ps
+16377	
+16378	module myproject_mul_16s_10ns_26_2_0_MulnS_4(clk, ce, a, b, p);
+16379	input clk;
+16380	input ce;
+16381	input  [16 - 1 : 0] a;
+16382	input [10 - 1 : 0] b;
+16383	output[26 - 1 : 0] p;
+16384	reg  [26 - 1 : 0] p;
+16385	wire  [26 - 1 : 0] tmp_product;
+16386	
+16387	assign tmp_product = (a) * ({1'b0, b});
+16388	always @ (posedge clk) begin
+16389	    if (ce) begin
+16390	        p &lt;= tmp_product;
+16391	    end
+16392	end
+16393	endmodule
+16394	`timescale 1 ns / 1 ps
+16395	module myproject_mul_16s_10ns_26_2_0(
+16396	    clk,
+16397	    reset,
+16398	    ce,
+16399	    din0,
+16400	    din1,
+16401	    dout);
+16402	
+16403	parameter ID = 32'd1;
+16404	parameter NUM_STAGE = 32'd1;
+16405	parameter din0_WIDTH = 32'd1;
+16406	parameter din1_WIDTH = 32'd1;
+16407	parameter dout_WIDTH = 32'd1;
+16408	input clk;
+16409	input reset;
+16410	input ce;
+16411	input[din0_WIDTH - 1:0] din0;
+16412	input[din1_WIDTH - 1:0] din1;
+16413	output[dout_WIDTH - 1:0] dout;
+16414	
+16415	
+16416	
+16417	myproject_mul_16s_10ns_26_2_0_MulnS_4 myproject_mul_16s_10ns_26_2_0_MulnS_4_U(
+16418	    .clk( clk ),
+16419	    .ce( ce ),
+16420	    .a( din0 ),
+16421	    .b( din1 ),
+16422	    .p( dout ));
+16423	
+16424	endmodule
+16425	
+16426	// ==============================================================
+16427	// Vivado(TM) HLS - High-Level Synthesis from C, C++ and SystemC v2019.2 (64-bit)
+16428	// Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+16429	// ==============================================================
+16430	
+16431	`timescale 1 ns / 1 ps
+16432	
+16433	module myproject_mul_16s_11ns_26_2_0_MulnS_1(clk, ce, a, b, p);
+16434	input clk;
+16435	input ce;
+16436	input  [16 - 1 : 0] a;
+16437	input [11 - 1 : 0] b;
+16438	output[26 - 1 : 0] p;
+16439	reg  [26 - 1 : 0] p;
+16440	wire  [26 - 1 : 0] tmp_product;
+16441	
+16442	assign tmp_product = (a) * ({1'b0, b});
+16443	always @ (posedge clk) begin
+16444	    if (ce) begin
+16445	        p &lt;= tmp_product;
+16446	    end
+16447	end
+16448	endmodule
+16449	`timescale 1 ns / 1 ps
+16450	module myproject_mul_16s_11ns_26_2_0(
+16451	    clk,
+16452	    reset,
+16453	    ce,
+16454	    din0,
+16455	    din1,
+16456	    dout);
+16457	
+16458	parameter ID = 32'd1;
+16459	parameter NUM_STAGE = 32'd1;
+16460	parameter din0_WIDTH = 32'd1;
+16461	parameter din1_WIDTH = 32'd1;
+16462	parameter dout_WIDTH = 32'd1;
+16463	input clk;
+16464	input reset;
+16465	input ce;
+16466	input[din0_WIDTH - 1:0] din0;
+16467	input[din1_WIDTH - 1:0] din1;
+16468	output[dout_WIDTH - 1:0] dout;
+16469	
+16470	
+16471	
+16472	myproject_mul_16s_11ns_26_2_0_MulnS_1 myproject_mul_16s_11ns_26_2_0_MulnS_1_U(
+16473	    .clk( clk ),
+16474	    .ce( ce ),
+16475	    .a( din0 ),
+16476	    .b( din1 ),
+16477	    .p( dout ));
+16478	
+16479	endmodule
+16480	
+16481	// ==============================================================
+16482	// Vivado(TM) HLS - High-Level Synthesis from C, C++ and SystemC v2019.2 (64-bit)
+16483	// Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+16484	// ==============================================================
+16485	
+16486	`timescale 1 ns / 1 ps
+16487	
+16488	module myproject_mul_16s_12ns_26_2_0_MulnS_0(clk, ce, a, b, p);
+16489	input clk;
+16490	input ce;
+16491	input  [16 - 1 : 0] a;
+16492	input [12 - 1 : 0] b;
+16493	output[26 - 1 : 0] p;
+16494	reg  [26 - 1 : 0] p;
+16495	wire  [26 - 1 : 0] tmp_product;
+16496	
+16497	assign tmp_product = (a) * ({1'b0, b});
+16498	always @ (posedge clk) begin
+16499	    if (ce) begin
+16500	        p &lt;= tmp_product;
+16501	    end
+16502	end
+16503	endmodule
+16504	`timescale 1 ns / 1 ps
+16505	module myproject_mul_16s_12ns_26_2_0(
+16506	    clk,
+16507	  
+…[truncated, 9608 chars total]</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> myproject_mul_16s_|grp_|_U\d+</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "myproject_mul_16s_|grp_|_U\\d+",
+ "path": "/work/bnn.v",
+ "output_mode": "count"
+}</pre><div class="label">output</div><pre class="plain">bnn.v:2356
+
+Found 2356 total occurrences across 1 file.</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/bnn.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/bnn.v",
+ "offset": 16711,
+ "limit": 250
+}</pre><div class="label">output</div><pre class="plain">16711	module bnn (
+16712	        ap_clk,
+16713	        ap_rst,
+16714	        ap_start,
+16715	        ap_done,
+16716	        ap_idle,
+16717	        ap_ready,
+16718	        input1_V_ap_vld,
+16719	        input1_V,
+16720	        layer16_out_0_V,
+16721	        layer16_out_0_V_ap_vld,
+16722	        layer16_out_1_V,
+16723	        layer16_out_1_V_ap_vld,
+16724	        layer16_out_2_V,
+16725	        layer16_out_2_V_ap_vld,
+16726	        layer16_out_3_V,
+16727	        layer16_out_3_V_ap_vld,
+16728	        layer16_out_4_V,
+16729	        layer16_out_4_V_ap_vld,
+16730	        const_size_in_1,
+16731	        const_size_in_1_ap_vld,
+16732	        const_size_out_1,
+16733	        const_size_out_1_ap_vld
+16734	);
+16735	
+16736	parameter    ap_ST_fsm_pp0_stage0 = 1'd1;
+16737	
+16738	input   ap_clk;
+16739	input   ap_rst;
+16740	input   ap_start;
+16741	output   ap_done;
+16742	output   ap_idle;
+16743	output   ap_ready;
+16744	input   input1_V_ap_vld;
+16745	input  [255:0] input1_V;
+16746	output  [15:0] layer16_out_0_V;
+16747	output   layer16_out_0_V_ap_vld;
+16748	output  [15:0] layer16_out_1_V;
+16749	output   layer16_out_1_V_ap_vld;
+16750	output  [15:0] layer16_out_2_V;
+16751	output   layer16_out_2_V_ap_vld;
+16752	output  [15:0] layer16_out_3_V;
+16753	output   layer16_out_3_V_ap_vld;
+16754	output  [15:0] layer16_out_4_V;
+16755	output   layer16_out_4_V_ap_vld;
+16756	output  [15:0] const_size_in_1;
+16757	output   const_size_in_1_ap_vld;
+16758	output  [15:0] const_size_out_1;
+16759	output   const_size_out_1_ap_vld;
+16760	
+16761	reg ap_done;
+16762	reg ap_idle;
+16763	reg ap_ready;
+16764	reg layer16_out_0_V_ap_vld;
+16765	reg layer16_out_1_V_ap_vld;
+16766	reg layer16_out_2_V_ap_vld;
+16767	reg layer16_out_3_V_ap_vld;
+16768	reg layer16_out_4_V_ap_vld;
+16769	reg const_size_in_1_ap_vld;
+16770	reg const_size_out_1_ap_vld;
+16771	
+16772	reg   [0:0] ap_CS_fsm;
+16773	wire    ap_CS_fsm_pp0_stage0;
+16774	wire    ap_enable_reg_pp0_iter0;
+16775	reg    ap_enable_reg_pp0_iter1;
+16776	reg    ap_enable_reg_pp0_iter2;
+16777	reg    ap_enable_reg_pp0_iter3;
+16778	reg    ap_enable_reg_pp0_iter4;
+16779	reg    ap_enable_reg_pp0_iter5;
+16780	reg    ap_enable_reg_pp0_iter6;
+16781	reg    ap_enable_reg_pp0_iter7;
+16782	reg    ap_enable_reg_pp0_iter8;
+16783	reg    ap_enable_reg_pp0_iter9;
+16784	reg    ap_enable_reg_pp0_iter10;
+16785	reg    ap_enable_reg_pp0_iter11;
+16786	reg    ap_enable_reg_pp0_iter12;
+16787	reg    ap_enable_reg_pp0_iter13;
+16788	reg    ap_enable_reg_pp0_iter14;
+16789	reg    ap_enable_reg_pp0_iter15;
+16790	reg    ap_enable_reg_pp0_iter16;
+16791	reg    ap_enable_reg_pp0_iter17;
+16792	reg    ap_enable_reg_pp0_iter18;
+16793	reg    ap_enable_reg_pp0_iter19;
+16794	reg    ap_enable_reg_pp0_iter20;
+16795	reg    ap_enable_reg_pp0_iter21;
+16796	reg    ap_enable_reg_pp0_iter22;
+16797	reg    ap_enable_reg_pp0_iter23;
+16798	reg    ap_enable_reg_pp0_iter24;
+16799	reg    ap_enable_reg_pp0_iter25;
+16800	reg    ap_enable_reg_pp0_iter26;
+16801	reg    ap_enable_reg_pp0_iter27;
+16802	reg    ap_enable_reg_pp0_iter28;
+16803	reg    ap_enable_reg_pp0_iter29;
+16804	reg    ap_enable_reg_pp0_iter30;
+16805	reg    ap_enable_reg_pp0_iter31;
+16806	reg    ap_enable_reg_pp0_iter32;
+16807	reg    ap_enable_reg_pp0_iter33;
+16808	reg    ap_enable_reg_pp0_iter34;
+16809	reg    ap_enable_reg_pp0_iter35;
+16810	reg    ap_enable_reg_pp0_iter36;
+16811	reg    ap_enable_reg_pp0_iter37;
+16812	reg    ap_enable_reg_pp0_iter38;
+16813	reg    ap_enable_reg_pp0_iter39;
+16814	reg    ap_enable_reg_pp0_iter40;
+16815	reg    ap_enable_reg_pp0_iter41;
+16816	reg    ap_enable_reg_pp0_iter42;
+16817	reg    ap_enable_reg_pp0_iter43;
+16818	reg    ap_enable_reg_pp0_iter44;
+16819	reg    ap_enable_reg_pp0_iter45;
+16820	reg    ap_enable_reg_pp0_iter46;
+16821	reg    ap_enable_reg_pp0_iter47;
+16822	reg    ap_enable_reg_pp0_iter48;
+16823	reg    ap_enable_reg_pp0_iter49;
+16824	reg    ap_enable_reg_pp0_iter50;
+16825	reg    ap_enable_reg_pp0_iter51;
+16826	reg    ap_enable_reg_pp0_iter52;
+16827	reg    ap_enable_reg_pp0_iter53;
+16828	reg    ap_
+…[truncated, 10108 chars total]</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> myproject_mul_16s_\w+_2_0 #</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "myproject_mul_16s_\\w+_2_0 #",
+ "path": "/work/bnn.v",
+ "output_mode": "content",
+ "-n": true,
+ "-A": 20,
+ "head_limit": 60
+}</pre><div class="label">output</div><pre class="plain">22596:myproject_mul_16s_12ns_26_2_0 #(
+22597-    .ID( 1 ),
+22598-    .NUM_STAGE( 2 ),
+22599-    .din0_WIDTH( 16 ),
+22600-    .din1_WIDTH( 12 ),
+22601-    .dout_WIDTH( 26 ))
+22602-myproject_mul_16s_12ns_26_2_0_U2(
+22603-    .clk(ap_clk),
+22604-    .reset(ap_rst),
+22605-    .din0(data_35_V_read_int_reg),
+22606-    .din1(grp_fu_804_p1),
+22607-    .ce(grp_fu_804_ce),
+22608-    .dout(grp_fu_804_p2)
+22609-);
+22610-
+22611:myproject_mul_16s_12ns_26_2_0 #(
+22612-    .ID( 1 ),
+22613-    .NUM_STAGE( 2 ),
+22614-    .din0_WIDTH( 16 ),
+22615-    .din1_WIDTH( 12 ),
+22616-    .dout_WIDTH( 26 ))
+22617-myproject_mul_16s_12ns_26_2_0_U3(
+22618-    .clk(ap_clk),
+22619-    .reset(ap_rst),
+22620-    .din0(data_60_V_read_int_reg),
+22621-    .din1(grp_fu_805_p1),
+22622-    .ce(grp_fu_805_ce),
+22623-    .dout(grp_fu_805_p2)
+22624-);
+22625-
+22626:myproject_mul_16s_12ns_26_2_0 #(
+22627-    .ID( 1 ),
+22628-    .NUM_STAGE( 2 ),
+22629-    .din0_WIDTH( 16 ),
+22630-    .din1_WIDTH( 12 ),
+22631-    .dout_WIDTH( 26 ))
+22632-myproject_mul_16s_12ns_26_2_0_U4(
+22633-    .clk(ap_clk),
+22634-    .reset(ap_rst),
+22635-    .din0(data_62_V_read_int_reg),
+22636-    .din1(grp_fu_806_p1),
+22637-    .ce(grp_fu_806_ce),
+22638-    .dout(grp_fu_806_p2)
+22639-);
+22640-
+22641:myproject_mul_16s_12ns_26_2_0 #(
+22642-    .ID( 1 ),
+22643-    .NUM_STAGE( 2 ),
+22644-    .din0_WIDTH( 16 ),
+22645-    .din1_WIDTH( 12 ),
+22646-    .dout_WIDTH( 26 ))
+22647-myproject_mul_16s_12ns_26_2_0_U5(
+22648-    .clk(ap_clk),
+22649-    .reset(ap_rst),
+22650-    .din0(data_37_V_read_int_reg),
+22651-    .din1(grp_fu_807_p1),
+22652-    .ce(grp_fu_807_ce),
+22653-    .dout(grp_fu_807_p2)
+22654-);
+22655-
+
+[Showing results with pagination = limit: 60]</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> ^myproject_mul_16s_\w+ #\(</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "^myproject_mul_16s_\\w+ #\\(",
+ "path": "/work/bnn.v",
+ "output_mode": "content",
+ "-n": true,
+ "head_limit": 400
+}</pre><div class="label">output</div><pre class="plain">22596:myproject_mul_16s_12ns_26_2_0 #(
+22611:myproject_mul_16s_12ns_26_2_0 #(
+22626:myproject_mul_16s_12ns_26_2_0 #(
+22641:myproject_mul_16s_12ns_26_2_0 #(
+22656:myproject_mul_16s_11ns_26_2_0 #(
+22671:myproject_mul_16s_11ns_26_2_0 #(
+22686:myproject_mul_16s_12ns_26_2_0 #(
+22701:myproject_mul_16s_11ns_26_2_0 #(
+22716:myproject_mul_16s_12ns_26_2_0 #(
+22731:myproject_mul_16s_13ns_26_2_0 #(
+22746:myproject_mul_16s_12ns_26_2_0 #(
+22761:myproject_mul_16s_12ns_26_2_0 #(
+22776:myproject_mul_16s_12ns_26_2_0 #(
+22791:myproject_mul_16s_12ns_26_2_0 #(
+22806:myproject_mul_16s_11ns_26_2_0 #(
+22821:myproject_mul_16s_12ns_26_2_0 #(
+22836:myproject_mul_16s_12ns_26_2_0 #(
+22851:myproject_mul_16s_12ns_26_2_0 #(
+22866:myproject_mul_16s_12ns_26_2_0 #(
+22881:myproject_mul_16s_12ns_26_2_0 #(
+22896:myproject_mul_16s_11ns_26_2_0 #(
+22911:myproject_mul_16s_12ns_26_2_0 #(
+22926:myproject_mul_16s_12ns_26_2_0 #(
+22941:myproject_mul_16s_11ns_26_2_0 #(
+22956:myproject_mul_16s_11ns_26_2_0 #(
+22971:myproject_mul_16s_12ns_26_2_0 #(
+22986:myproject_mul_16s_11ns_26_2_0 #(
+23001:myproject_mul_16s_11ns_26_2_0 #(
+23016:myproject_mul_16s_12ns_26_2_0 #(
+23031:myproject_mul_16s_11ns_26_2_0 #(
+23046:myproject_mul_16s_12ns_26_2_0 #(
+23061:myproject_mul_16s_12ns_26_2_0 #(
+23076:myproject_mul_16s_13ns_26_2_0 #(
+23091:myproject_mul_16s_11ns_26_2_0 #(
+23106:myproject_mul_16s_12ns_26_2_0 #(
+23121:myproject_mul_16s_11ns_26_2_0 #(
+23136:myproject_mul_16s_12ns_26_2_0 #(
+23151:myproject_mul_16s_11ns_26_2_0 #(
+23166:myproject_mul_16s_11ns_26_2_0 #(
+23181:myproject_mul_16s_11ns_26_2_0 #(
+23196:myproject_mul_16s_12ns_26_2_0 #(
+23211:myproject_mul_16s_12ns_26_2_0 #(
+23226:myproject_mul_16s_11ns_26_2_0 #(
+23241:myproject_mul_16s_12ns_26_2_0 #(
+23256:myproject_mul_16s_11ns_26_2_0 #(
+23271:myproject_mul_16s_12ns_26_2_0 #(
+23286:myproject_mul_16s_12ns_26_2_0 #(
+23301:myproject_mul_16s_11ns_26_2_0 #(
+23316:myproject_mul_16s_13ns_26_2_0 #(
+23331:myproject_mul_16s_12ns_26_2_0 #(
+23346:myproject_mul_16s_11ns_26_2_0 #(
+23361:myproject_mul_16s_12ns_26_2_0 #(
+23376:myproject_mul_16s_11ns_26_2_0 #(
+23391:myproject_mul_16s_12ns_26_2_0 #(
+23406:myproject_mul_16s_12ns_26_2_0 #(
+23421:myproject_mul_16s_12ns_26_2_0 #(
+23436:myproject_mul_16s_12ns_26_2_0 #(
+23451:myproject_mul_16s_12ns_26_2_0 #(
+23466:myproject_mul_16s_11ns_26_2_0 #(
+23481:myproject_mul_16s_12ns_26_2_0 #(
+23496:myproject_mul_16s_13ns_26_2_0 #(
+25434:myproject_mul_16s_10ns_26_2_0 #(
+25449:myproject_mul_16s_10ns_26_2_0 #(
+25464:myproject_mul_16s_9ns_25_2_0 #(
+25479:myproject_mul_16s_9ns_25_2_0 #(
+25494:myproject_mul_16s_10ns_26_2_0 #(
+25509:myproject_mul_16s_10ns_26_2_0 #(
+25524:myproject_mul_16s_9ns_25_2_0 #(
+25539:myproject_mul_16s_10ns_26_2_0 #(
+25554:myproject_mul_16s_9ns_25_2_0 #(
+25569:myproject_mul_16s_9ns_25_2_0 #(
+25584:myproject_mul_16s_10ns_26_2_0 #(
+25599:myproject_mul_16s_8ns_24_2_0 #(
+25614:myproject_mul_16s_10ns_26_2_0 #(
+25629:myproject_mul_16s_9ns_25_2_0 #(
+25644:myproject_mul_16s_9ns_25_2_0 #(
+25659:myproject_mul_16s_10ns_26_2_0 #(
+25674:myproject_mul_16s_10ns_26_2_0 #(
+25689:myproject_mul_16s_10ns_26_2_0 #(
+25704:myproject_mul_16s_10ns_26_2_0 #(
+25719:myproject_mul_16s_11ns_26_2_0 #(
+25734:myproject_mul_16s_9ns_25_2_0 #(
+25749:myproject_mul_16s_11ns_26_2_0 #(
+25764:myproject_mul_16s_10ns_26_2_0 #(
+25779:myproject_mul_16s_10ns_26_2_0 #(
+25794:myproject_mul_16s_11ns_26_2_0 #(
+25809:myproject_mul_16s_10ns_26_2_0 #(
+25824:myproject_mul_16s_10ns_26_2_0 #(
+25839:myproject_mul_16s_10ns_26_2_0 #(
+25854:myproject_mul_16s_10ns_26_2_0 #(
+25869:myproject_mul_16s_10ns_26_2_0 #(
+25884:myproject_mul_16s_10ns_26_2_0 #(
+27136:myproject_mul_16s_9ns_25_2_0 #(
+27151:myproject_mul_16s_9ns_25_2_0 #(
+27166:myproject_mul_16s_9ns_25_2_0 #(
+27181:myproject_mul_16s_9ns_25_2_0 #(
+27196:myproject_mul_16s_9ns_25_2_0 #(
+27211:myproject_mul_16s_9ns_25_2_0 #(
+27226:myproject_mul_16s_9ns_25_2_0 #(
+27241:myproject_mul_16s_10ns_26_2_0 #(
+27256:myproject_mul_16s_10ns_26_2_0 #(
+27271:myproject_mul_16s_10ns_26_2_0 #(
+27286:myproject_mul_16s_10ns_26_2_0 #(
+…[truncated, 4839 chars total]</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> ^(dense_latency|normalize|relu_max)\w*\s+\w+_U?\d*\s*\(|^(dense_latency|normalize|relu_max)\w* #\(</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "^(dense_latency|normalize|relu_max)\\w*\\s+\\w+_U?\\d*\\s*\\(|^(dense_latency|normalize|relu_max)\\w* #\\(",
+ "path": "/work/bnn.v",
+ "output_mode": "content",
+ "-n": true,
+ "head_limit": 60
+}</pre><div class="label">output</div><pre class="plain">18345:dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s_fu_125(
+18447:dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2 grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2_fu_193(
+18517:dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1 grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_229(
+18588:normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1 grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_235(
+18722:normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2 grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2_fu_303(
+18792:normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s_fu_339(
+18862:dense_latency_ap_fixed_ap_fixed_config14_0_0_0_0_0_0 grp_dense_latency_ap_fixed_ap_fixed_config14_0_0_0_0_0_0_fu_375(
+18905:relu_max_ap_fixed_ap_fixed_1_relu1_config5_s call_ret_i_relu_max_ap_fixed_ap_fixed_1_relu1_config5_s_fu_411(
+19037:relu_max_ap_fixed_ap_fixed_1_relu1_config9_s call_ret_i1_relu_max_ap_fixed_ap_fixed_1_relu1_config9_s_fu_479(
+19105:relu_max_ap_fixed_ap_fixed_1_relu1_config13_s call_ret_i2_relu_max_ap_fixed_ap_fixed_1_relu1_config13_s_fu_515(
+19173:normalize_ap_fixed_ap_fixed_config16_0_0_0_0_0_0_0_0_0_0 grp_normalize_ap_fixed_ap_fixed_config16_0_0_0_0_0_0_0_0_0_0_fu_551(</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/bnn.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/bnn.v",
+ "offset": 21804,
+ "limit": 120
+}</pre><div class="label">output</div><pre class="plain">21804	module normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1 (
+21805	        ap_clk,
+21806	        ap_rst,
+21807	        data_0_V_read,
+21808	        data_1_V_read,
+21809	        data_2_V_read,
+21810	        data_3_V_read,
+21811	        data_4_V_read,
+21812	        data_5_V_read,
+21813	        data_6_V_read,
+21814	        data_7_V_read,
+21815	        data_8_V_read,
+21816	        data_9_V_read,
+21817	        data_10_V_read,
+21818	        data_11_V_read,
+21819	        data_12_V_read,
+21820	        data_13_V_read,
+21821	        data_14_V_read,
+21822	        data_15_V_read,
+21823	        data_16_V_read,
+21824	        data_17_V_read,
+21825	        data_18_V_read,
+21826	        data_19_V_read,
+21827	        data_20_V_read,
+21828	        data_21_V_read,
+21829	        data_22_V_read,
+21830	        data_23_V_read,
+21831	        data_24_V_read,
+21832	        data_25_V_read,
+21833	        data_26_V_read,
+21834	        data_27_V_read,
+21835	        data_28_V_read,
+21836	        data_29_V_read,
+21837	        data_30_V_read,
+21838	        data_31_V_read,
+21839	        data_32_V_read,
+21840	        data_33_V_read,
+21841	        data_34_V_read,
+21842	        data_35_V_read,
+21843	        data_36_V_read,
+21844	        data_37_V_read,
+21845	        data_38_V_read,
+21846	        data_39_V_read,
+21847	        data_40_V_read,
+21848	        data_41_V_read,
+21849	        data_42_V_read,
+21850	        data_43_V_read,
+21851	        data_44_V_read,
+21852	        data_45_V_read,
+21853	        data_46_V_read,
+21854	        data_47_V_read,
+21855	        data_48_V_read,
+21856	        data_49_V_read,
+21857	        data_50_V_read,
+21858	        data_51_V_read,
+21859	        data_52_V_read,
+21860	        data_53_V_read,
+21861	        data_54_V_read,
+21862	        data_55_V_read,
+21863	        data_56_V_read,
+21864	        data_57_V_read,
+21865	        data_58_V_read,
+21866	        data_59_V_read,
+21867	        data_60_V_read,
+21868	        data_61_V_read,
+21869	        data_62_V_read,
+21870	        data_63_V_read,
+21871	        ap_return_0,
+21872	        ap_return_1,
+21873	        ap_return_2,
+21874	        ap_return_3,
+21875	        ap_return_4,
+21876	        ap_return_5,
+21877	        ap_return_6,
+21878	        ap_return_7,
+21879	        ap_return_8,
+21880	        ap_return_9,
+21881	        ap_return_10,
+21882	        ap_return_11,
+21883	        ap_return_12,
+21884	        ap_return_13,
+21885	        ap_return_14,
+21886	        ap_return_15,
+21887	        ap_return_16,
+21888	        ap_return_17,
+21889	        ap_return_18,
+21890	        ap_return_19,
+21891	        ap_return_20,
+21892	        ap_return_21,
+21893	        ap_return_22,
+21894	        ap_return_23,
+21895	        ap_return_24,
+21896	        ap_return_25,
+21897	        ap_return_26,
+21898	        ap_return_27,
+21899	        ap_return_28,
+21900	        ap_return_29,
+21901	        ap_return_30,
+21902	        ap_return_31,
+21903	        ap_return_32,
+21904	        ap_return_33,
+21905	        ap_return_34,
+21906	        ap_return_35,
+21907	        ap_return_36,
+21908	        ap_return_37,
+21909	        ap_return_38,
+21910	        ap_return_39,
+21911	        ap_return_40,
+21912	        ap_return_41,
+21913	        ap_return_42,
+21914	        ap_return_43,
+21915	        ap_return_44,
+21916	        ap_return_45,
+21917	        ap_return_46,
+21918	        ap_return_47,
+21919	        ap_return_48,
+21920	        ap_return_49,
+21921	        ap_return_50,
+21922	        ap_return_51,
+21923	        ap_return_52,</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/bnn.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/bnn.v",
+ "offset": 21930,
+ "limit": 160
+}</pre><div class="label">output</div><pre class="plain">21930	        ap_return_59,
+21931	        ap_return_60,
+21932	        ap_return_61,
+21933	        ap_return_62,
+21934	        ap_return_63,
+21935	        ap_ce
+21936	);
+21937	
+21938	
+21939	input   ap_clk;
+21940	input   ap_rst;
+21941	input  [15:0] data_0_V_read;
+21942	input  [15:0] data_1_V_read;
+21943	input  [15:0] data_2_V_read;
+21944	input  [15:0] data_3_V_read;
+21945	input  [15:0] data_4_V_read;
+21946	input  [15:0] data_5_V_read;
+21947	input  [15:0] data_6_V_read;
+21948	input  [15:0] data_7_V_read;
+21949	input  [15:0] data_8_V_read;
+21950	input  [15:0] data_9_V_read;
+21951	input  [15:0] data_10_V_read;
+21952	input  [15:0] data_11_V_read;
+21953	input  [15:0] data_12_V_read;
+21954	input  [15:0] data_13_V_read;
+21955	input  [15:0] data_14_V_read;
+21956	input  [15:0] data_15_V_read;
+21957	input  [15:0] data_16_V_read;
+21958	input  [15:0] data_17_V_read;
+21959	input  [15:0] data_18_V_read;
+21960	input  [15:0] data_19_V_read;
+21961	input  [15:0] data_20_V_read;
+21962	input  [15:0] data_21_V_read;
+21963	input  [15:0] data_22_V_read;
+21964	input  [15:0] data_23_V_read;
+21965	input  [15:0] data_24_V_read;
+21966	input  [15:0] data_25_V_read;
+21967	input  [15:0] data_26_V_read;
+21968	input  [15:0] data_27_V_read;
+21969	input  [15:0] data_28_V_read;
+21970	input  [15:0] data_29_V_read;
+21971	input  [15:0] data_30_V_read;
+21972	input  [15:0] data_31_V_read;
+21973	input  [15:0] data_32_V_read;
+21974	input  [15:0] data_33_V_read;
+21975	input  [15:0] data_34_V_read;
+21976	input  [15:0] data_35_V_read;
+21977	input  [15:0] data_36_V_read;
+21978	input  [15:0] data_37_V_read;
+21979	input  [15:0] data_38_V_read;
+21980	input  [15:0] data_39_V_read;
+21981	input  [15:0] data_40_V_read;
+21982	input  [15:0] data_41_V_read;
+21983	input  [15:0] data_42_V_read;
+21984	input  [15:0] data_43_V_read;
+21985	input  [15:0] data_44_V_read;
+21986	input  [15:0] data_45_V_read;
+21987	input  [15:0] data_46_V_read;
+21988	input  [15:0] data_47_V_read;
+21989	input  [15:0] data_48_V_read;
+21990	input  [15:0] data_49_V_read;
+21991	input  [15:0] data_50_V_read;
+21992	input  [15:0] data_51_V_read;
+21993	input  [15:0] data_52_V_read;
+21994	input  [15:0] data_53_V_read;
+21995	input  [15:0] data_54_V_read;
+21996	input  [15:0] data_55_V_read;
+21997	input  [15:0] data_56_V_read;
+21998	input  [15:0] data_57_V_read;
+21999	input  [15:0] data_58_V_read;
+22000	input  [15:0] data_59_V_read;
+22001	input  [15:0] data_60_V_read;
+22002	input  [15:0] data_61_V_read;
+22003	input  [15:0] data_62_V_read;
+22004	input  [15:0] data_63_V_read;
+22005	output  [15:0] ap_return_0;
+22006	output  [15:0] ap_return_1;
+22007	output  [15:0] ap_return_2;
+22008	output  [15:0] ap_return_3;
+22009	output  [15:0] ap_return_4;
+22010	output  [15:0] ap_return_5;
+22011	output  [15:0] ap_return_6;
+22012	output  [15:0] ap_return_7;
+22013	output  [15:0] ap_return_8;
+22014	output  [15:0] ap_return_9;
+22015	output  [15:0] ap_return_10;
+22016	output  [15:0] ap_return_11;
+22017	output  [15:0] ap_return_12;
+22018	output  [15:0] ap_return_13;
+22019	output  [15:0] ap_return_14;
+22020	output  [15:0] ap_return_15;
+22021	output  [15:0] ap_return_16;
+22022	output  [15:0] ap_return_17;
+22023	output  [15:0] ap_return_18;
+22024	output  [15:0] ap_return_19;
+22025	output  [15:0] ap_return_20;
+22026	output  [15:0] ap_return_21;
+22027	output  [15:0] ap_return_22;
+22028	output  [15:0] ap_return_23;
+22029	output  [15:0] ap_return_24;
+22030	output  [15:0] ap_return_25;
+22031	output  [15:0] ap_return_26;
+22032	output  [15:0] ap_return_27;
+22033	output  [15:0] ap_return_28;
+22034	output  [15:0] ap_return_29;
+22035	output  [15:0] ap_return_30;
+22036	output  [15:0] ap_return_31;
+22037	output  [15:0] ap_return_32;
+22038	output  [15:0] ap_return_33;
+22039	output  [15:0] ap_return_34;
+22040	output  [15:0] ap_return_35;
+22041	output  [15:0] ap_return_36;
+22042	output  [15:0] ap_return_37;
+22043	output  [15:0] ap_return_38;
+22044	output  [15:0] ap_return_39;
+22045	output  [15:0] ap_return_40;
+22046	output  [15:0] ap_return_41;
+22047	output  [15:0
+…[truncated, 5338 chars total]</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/bnn.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/bnn.v",
+ "offset": 22136,
+ "limit": 200
+}</pre><div class="label">output</div><pre class="plain">22136	reg   [15:0] data_46_V_read_2_reg_18625;
+22137	wire    ap_block_state1_pp0_stage0_iter0;
+22138	wire    ap_block_state2_pp0_stage0_iter1;
+22139	wire    ap_block_state3_pp0_stage0_iter2;
+22140	wire    ap_block_pp0_stage0_11001;
+22141	reg   [15:0] data_42_V_read_2_reg_18631;
+22142	reg   [15:0] data_39_V_read_2_reg_18637;
+22143	reg   [15:0] trunc_ln_reg_18948;
+22144	reg   [15:0] trunc_ln708_31_reg_18953;
+22145	reg   [15:0] trunc_ln708_32_reg_18958;
+22146	reg   [15:0] trunc_ln708_s_reg_18963;
+22147	reg   [15:0] trunc_ln708_33_reg_18968;
+22148	reg   [15:0] trunc_ln708_34_reg_18973;
+22149	reg   [15:0] trunc_ln708_35_reg_18978;
+22150	reg   [15:0] trunc_ln708_36_reg_18983;
+22151	reg   [15:0] trunc_ln708_37_reg_18988;
+22152	reg   [15:0] trunc_ln708_38_reg_18993;
+22153	reg   [15:0] trunc_ln708_39_reg_18998;
+22154	reg   [15:0] trunc_ln708_40_reg_19003;
+22155	reg   [15:0] trunc_ln708_41_reg_19008;
+22156	reg   [15:0] trunc_ln708_42_reg_19013;
+22157	reg   [15:0] trunc_ln708_43_reg_19018;
+22158	reg   [15:0] trunc_ln708_44_reg_19023;
+22159	reg   [15:0] trunc_ln708_45_reg_19028;
+22160	reg   [15:0] trunc_ln708_46_reg_19033;
+22161	reg   [15:0] trunc_ln708_47_reg_19038;
+22162	reg   [15:0] trunc_ln708_48_reg_19043;
+22163	reg   [15:0] trunc_ln708_49_reg_19048;
+22164	reg   [15:0] trunc_ln708_50_reg_19053;
+22165	reg   [15:0] trunc_ln708_51_reg_19058;
+22166	reg   [15:0] trunc_ln708_52_reg_19063;
+22167	reg   [15:0] trunc_ln708_53_reg_19068;
+22168	reg   [15:0] trunc_ln708_54_reg_19073;
+22169	reg   [15:0] trunc_ln708_55_reg_19078;
+22170	reg   [15:0] trunc_ln708_56_reg_19083;
+22171	reg   [15:0] trunc_ln708_57_reg_19088;
+22172	reg   [15:0] trunc_ln708_58_reg_19093;
+22173	reg   [15:0] trunc_ln708_59_reg_19098;
+22174	reg   [15:0] trunc_ln708_60_reg_19103;
+22175	reg   [15:0] trunc_ln708_61_reg_19108;
+22176	reg   [15:0] trunc_ln708_62_reg_19113;
+22177	reg   [15:0] trunc_ln708_63_reg_19118;
+22178	reg   [15:0] trunc_ln708_64_reg_19123;
+22179	reg   [15:0] trunc_ln708_65_reg_19128;
+22180	reg   [15:0] trunc_ln708_66_reg_19133;
+22181	reg   [15:0] trunc_ln708_67_reg_19138;
+22182	reg   [15:0] trunc_ln708_68_reg_19143;
+22183	reg   [15:0] trunc_ln708_69_reg_19148;
+22184	reg   [15:0] trunc_ln708_70_reg_19153;
+22185	reg   [15:0] trunc_ln708_71_reg_19158;
+22186	reg   [15:0] trunc_ln708_72_reg_19163;
+22187	reg   [15:0] trunc_ln708_73_reg_19168;
+22188	reg   [15:0] trunc_ln708_74_reg_19173;
+22189	reg   [15:0] trunc_ln708_75_reg_19178;
+22190	reg   [15:0] trunc_ln708_76_reg_19183;
+22191	reg   [15:0] trunc_ln708_77_reg_19188;
+22192	reg   [15:0] trunc_ln708_78_reg_19193;
+22193	reg   [15:0] trunc_ln708_79_reg_19198;
+22194	reg   [15:0] trunc_ln708_80_reg_19203;
+22195	reg   [15:0] trunc_ln708_81_reg_19208;
+22196	reg   [15:0] trunc_ln708_82_reg_19213;
+22197	reg   [15:0] trunc_ln708_83_reg_19218;
+22198	reg   [15:0] trunc_ln708_84_reg_19223;
+22199	reg   [15:0] trunc_ln708_85_reg_19228;
+22200	reg   [15:0] trunc_ln708_86_reg_19233;
+22201	reg   [15:0] trunc_ln708_87_reg_19238;
+22202	reg   [15:0] trunc_ln708_88_reg_19243;
+22203	reg   [15:0] trunc_ln708_89_reg_19248;
+22204	reg   [15:0] trunc_ln708_90_reg_19253;
+22205	reg   [15:0] trunc_ln708_91_reg_19258;
+22206	reg   [15:0] trunc_ln708_92_reg_19263;
+22207	wire   [11:0] grp_fu_804_p1;
+22208	wire    ap_block_pp0_stage0;
+22209	wire   [11:0] grp_fu_805_p1;
+22210	wire   [11:0] grp_fu_806_p1;
+22211	wire   [11:0] grp_fu_807_p1;
+22212	wire   [10:0] grp_fu_808_p1;
+22213	wire   [10:0] grp_fu_809_p1;
+22214	wire   [11:0] grp_fu_810_p1;
+22215	wire   [10:0] grp_fu_811_p1;
+22216	wire   [11:0] grp_fu_812_p1;
+22217	wire   [12:0] grp_fu_813_p1;
+22218	wire   [11:0] grp_fu_814_p1;
+22219	wire   [11:0] grp_fu_815_p1;
+22220	wire   [11:0] grp_fu_816_p1;
+22221	wire   [11:0] grp_fu_818_p1;
+22222	wire   [10:0] grp_fu_819_p1;
+22223	wire   [11:0] grp_fu_820_p1;
+22224	wire   [11:0] grp_fu_821_p1;
+22225	wire   [11:0] grp_fu_822_p1;
+22226	wire   [11:0] grp_fu_823_p1;
+22227	wire   [11:0] grp_fu_824_p1;
+22228	wire   [10:0] grp_fu_825_p1;
+22229	wire   [11:0] grp_fu_826_
+…[truncated, 7832 chars total]</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/bnn.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/bnn.v",
+ "offset": 18345,
+ "limit": 140
+}</pre><div class="label">output</div><pre class="plain">18345	dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s_fu_125(
+18346	    .ap_clk(ap_clk),
+18347	    .ap_rst(ap_rst),
+18348	    .data_0_V_read(layer5_out_0_V_reg_2786),
+18349	    .data_1_V_read(layer5_out_1_V_reg_2791),
+18350	    .data_2_V_read(layer5_out_2_V_reg_2796),
+18351	    .data_3_V_read(layer5_out_3_V_reg_2801),
+18352	    .data_4_V_read(layer5_out_4_V_reg_2806),
+18353	    .data_5_V_read(layer5_out_5_V_reg_2811),
+18354	    .data_6_V_read(layer5_out_6_V_reg_2816),
+18355	    .data_7_V_read(layer5_out_7_V_reg_2821),
+18356	    .data_8_V_read(layer5_out_8_V_reg_2826),
+18357	    .data_9_V_read(layer5_out_9_V_reg_2831),
+18358	    .data_10_V_read(layer5_out_10_V_reg_2836),
+18359	    .data_11_V_read(layer5_out_11_V_reg_2841),
+18360	    .data_12_V_read(layer5_out_12_V_reg_2846),
+18361	    .data_13_V_read(layer5_out_13_V_reg_2851),
+18362	    .data_14_V_read(layer5_out_14_V_reg_2856),
+18363	    .data_15_V_read(layer5_out_15_V_reg_2861),
+18364	    .data_16_V_read(layer5_out_16_V_reg_2866),
+18365	    .data_17_V_read(layer5_out_17_V_reg_2871),
+18366	    .data_18_V_read(layer5_out_18_V_reg_2876),
+18367	    .data_19_V_read(layer5_out_19_V_reg_2881),
+18368	    .data_20_V_read(layer5_out_20_V_reg_2886),
+18369	    .data_21_V_read(layer5_out_21_V_reg_2891),
+18370	    .data_22_V_read(layer5_out_22_V_reg_2896),
+18371	    .data_23_V_read(layer5_out_23_V_reg_2901),
+18372	    .data_24_V_read(layer5_out_24_V_reg_2906),
+18373	    .data_25_V_read(layer5_out_25_V_reg_2911),
+18374	    .data_26_V_read(layer5_out_26_V_reg_2916),
+18375	    .data_27_V_read(layer5_out_27_V_reg_2921),
+18376	    .data_28_V_read(layer5_out_28_V_reg_2926),
+18377	    .data_29_V_read(layer5_out_29_V_reg_2931),
+18378	    .data_30_V_read(layer5_out_30_V_reg_2936),
+18379	    .data_31_V_read(layer5_out_31_V_reg_2941),
+18380	    .data_32_V_read(layer5_out_32_V_reg_2946),
+18381	    .data_33_V_read(layer5_out_33_V_reg_2951),
+18382	    .data_34_V_read(layer5_out_34_V_reg_2956),
+18383	    .data_35_V_read(layer5_out_35_V_reg_2961),
+18384	    .data_36_V_read(layer5_out_36_V_reg_2966),
+18385	    .data_37_V_read(layer5_out_37_V_reg_2971),
+18386	    .data_38_V_read(layer5_out_38_V_reg_2976),
+18387	    .data_39_V_read(layer5_out_39_V_reg_2981),
+18388	    .data_40_V_read(layer5_out_40_V_reg_2986),
+18389	    .data_41_V_read(layer5_out_41_V_reg_2991),
+18390	    .data_42_V_read(layer5_out_42_V_reg_2996),
+18391	    .data_43_V_read(layer5_out_43_V_reg_3001),
+18392	    .data_44_V_read(layer5_out_44_V_reg_3006),
+18393	    .data_45_V_read(layer5_out_45_V_reg_3011),
+18394	    .data_46_V_read(layer5_out_46_V_reg_3016),
+18395	    .data_47_V_read(layer5_out_47_V_reg_3021),
+18396	    .data_48_V_read(layer5_out_48_V_reg_3026),
+18397	    .data_49_V_read(layer5_out_49_V_reg_3031),
+18398	    .data_50_V_read(layer5_out_50_V_reg_3036),
+18399	    .data_51_V_read(layer5_out_51_V_reg_3041),
+18400	    .data_52_V_read(layer5_out_52_V_reg_3046),
+18401	    .data_53_V_read(layer5_out_53_V_reg_3051),
+18402	    .data_54_V_read(layer5_out_54_V_reg_3056),
+18403	    .data_55_V_read(layer5_out_55_V_reg_3061),
+18404	    .data_56_V_read(layer5_out_56_V_reg_3066),
+18405	    .data_57_V_read(layer5_out_57_V_reg_3071),
+18406	    .data_58_V_read(layer5_out_58_V_reg_3076),
+18407	    .data_59_V_read(layer5_out_59_V_reg_3081),
+18408	    .data_60_V_read(layer5_out_60_V_reg_3086),
+18409	    .data_61_V_read(layer5_out_61_V_reg_3091),
+18410	    .data_62_V_read(layer5_out_62_V_reg_3096),
+18411	    .data_63_V_read(layer5_out_63_V_reg_3101),
+18412	    .ap_return_0(grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s_fu_125_ap_return_0),
+18413	    .ap_return_1(grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s_fu_125_ap_return_1),
+18414	    .ap_return_2(grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s_fu_125_ap_return_2),
+18415	    .ap_return_3(grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s_fu_125_ap_ret
+…[truncated, 9446 chars total]</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/bnn.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/bnn.v",
+ "offset": 28403,
+ "limit": 295
+}</pre><div class="label">output</div><pre class="plain">28403	module normalize_ap_fixed_ap_fixed_config16_0_0_0_0_0_0_0_0_0_0 (
+28404	        ap_clk,
+28405	        ap_rst,
+28406	        data_0_V_read,
+28407	        data_1_V_read,
+28408	        data_2_V_read,
+28409	        data_3_V_read,
+28410	        data_4_V_read,
+28411	        ap_return_0,
+28412	        ap_return_1,
+28413	        ap_return_2,
+28414	        ap_return_3,
+28415	        ap_return_4,
+28416	        ap_ce
+28417	);
+28418	
+28419	
+28420	input   ap_clk;
+28421	input   ap_rst;
+28422	input  [15:0] data_0_V_read;
+28423	input  [15:0] data_1_V_read;
+28424	input  [15:0] data_2_V_read;
+28425	input  [15:0] data_3_V_read;
+28426	input  [15:0] data_4_V_read;
+28427	output  [15:0] ap_return_0;
+28428	output  [15:0] ap_return_1;
+28429	output  [15:0] ap_return_2;
+28430	output  [15:0] ap_return_3;
+28431	output  [15:0] ap_return_4;
+28432	input   ap_ce;
+28433	
+28434	reg[15:0] ap_return_0;
+28435	reg[15:0] ap_return_1;
+28436	reg[15:0] ap_return_2;
+28437	reg[15:0] ap_return_3;
+28438	reg[15:0] ap_return_4;
+28439	
+28440	wire    ap_block_state1_pp0_stage0_iter0;
+28441	wire    ap_block_state2_pp0_stage0_iter1;
+28442	wire    ap_block_state3_pp0_stage0_iter2;
+28443	wire    ap_block_pp0_stage0_11001;
+28444	reg   [12:0] trunc_ln708_s_reg_362;
+28445	reg   [12:0] trunc_ln708_s_reg_362_pp0_iter1_reg;
+28446	reg   [14:0] trunc_ln_reg_382;
+28447	reg   [14:0] trunc_ln708_1_reg_387;
+28448	reg   [14:0] trunc_ln708_2_reg_392;
+28449	reg   [14:0] trunc_ln708_3_reg_397;
+28450	wire   [8:0] grp_fu_95_p1;
+28451	wire    ap_block_pp0_stage0;
+28452	wire   [8:0] grp_fu_96_p1;
+28453	wire   [8:0] grp_fu_97_p1;
+28454	wire   [8:0] grp_fu_98_p1;
+28455	wire   [24:0] grp_fu_98_p2;
+28456	wire   [24:0] grp_fu_96_p2;
+28457	wire   [24:0] grp_fu_97_p2;
+28458	wire   [24:0] grp_fu_95_p2;
+28459	wire   [15:0] sext_ln708_fu_278_p1;
+28460	wire   [13:0] sext_ln703_fu_287_p1;
+28461	wire   [13:0] add_ln703_1_fu_290_p2;
+28462	wire   [15:0] sext_ln708_1_fu_300_p1;
+28463	wire   [15:0] sext_ln708_2_fu_309_p1;
+28464	wire   [15:0] sext_ln708_3_fu_318_p1;
+28465	wire   [15:0] add_ln703_fu_281_p2;
+28466	wire   [15:0] sext_ln703_1_fu_296_p1;
+28467	wire   [15:0] add_ln703_2_fu_303_p2;
+28468	wire   [15:0] add_ln703_3_fu_312_p2;
+28469	wire   [15:0] add_ln703_4_fu_321_p2;
+28470	reg    grp_fu_95_ce;
+28471	reg    grp_fu_96_ce;
+28472	reg    grp_fu_97_ce;
+28473	reg    grp_fu_98_ce;
+28474	reg    ap_ce_reg;
+28475	reg   [15:0] data_0_V_read_int_reg;
+28476	reg   [15:0] data_1_V_read_int_reg;
+28477	reg   [15:0] data_2_V_read_int_reg;
+28478	reg   [15:0] data_3_V_read_int_reg;
+28479	reg   [15:0] data_4_V_read_int_reg;
+28480	reg   [15:0] ap_return_0_int_reg;
+28481	reg   [15:0] ap_return_1_int_reg;
+28482	reg   [15:0] ap_return_2_int_reg;
+28483	reg   [15:0] ap_return_3_int_reg;
+28484	reg   [15:0] ap_return_4_int_reg;
+28485	
+28486	myproject_mul_16s_9ns_25_2_0 #(
+28487	    .ID( 1 ),
+28488	    .NUM_STAGE( 2 ),
+28489	    .din0_WIDTH( 16 ),
+28490	    .din1_WIDTH( 9 ),
+28491	    .dout_WIDTH( 25 ))
+28492	myproject_mul_16s_9ns_25_2_0_U513(
+28493	    .clk(ap_clk),
+28494	    .reset(ap_rst),
+28495	    .din0(data_4_V_read_int_reg),
+28496	    .din1(grp_fu_95_p1),
+28497	    .ce(grp_fu_95_ce),
+28498	    .dout(grp_fu_95_p2)
+28499	);
+28500	
+28501	myproject_mul_16s_9ns_25_2_0 #(
+28502	    .ID( 1 ),
+28503	    .NUM_STAGE( 2 ),
+28504	    .din0_WIDTH( 16 ),
+28505	    .din1_WIDTH( 9 ),
+28506	    .dout_WIDTH( 25 ))
+28507	myproject_mul_16s_9ns_25_2_0_U514(
+28508	    .clk(ap_clk),
+28509	    .reset(ap_rst),
+28510	    .din0(data_2_V_read_int_reg),
+28511	    .din1(grp_fu_96_p1),
+28512	    .ce(grp_fu_96_ce),
+28513	    .dout(grp_fu_96_p2)
+28514	);
+28515	
+28516	myproject_mul_16s_9ns_25_2_0 #(
+28517	    .ID( 1 ),
+28518	    .NUM_STAGE( 2 ),
+28519	    .din0_WIDTH( 16 ),
+28520	    .din1_WIDTH( 9 ),
+28521	    .dout_WIDTH( 25 ))
+28522	myproject_mul_16s_9ns_25_2_0_U515(
+28523	    .clk(ap_clk),
+28524	    .reset(ap_rst),
+28525	    .din0(data_3_V_read_int_reg),
+28526	    .din1(grp_fu_97_p1),
+28527	    .ce(grp_fu_97_ce),
+28528	    .dout(grp_fu_97_p2)
+28529	);
+2853
+…[truncated, 9553 chars total]</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> assign add_ln703</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "assign add_ln703",
+ "path": "/work/bnn.v",
+ "output_mode": "count"
+}</pre><div class="label">output</div><pre class="plain">bnn.v:1451
+
+Found 1451 total occurrences across 1 file.</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> ^assign (add_ln|grp_fu_804_p1|trunc)</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "^assign (add_ln|grp_fu_804_p1|trunc)",
+ "path": "/work/bnn.v",
+ "output_mode": "content",
+ "-n": true,
+ "offset": 0,
+ "head_limit": 30
+}</pre><div class="label">output</div><pre class="plain">2231:assign add_ln703_538_fu_280_p2 = (tmp_3_reg_3443_pp0_iter2_reg + sub_ln703_reg_4017_pp0_iter2_reg);
+2233:assign add_ln703_539_fu_260_p2 = (tmp_3_reg_3443 + add_ln703_reg_4010);
+2235:assign add_ln703_540_fu_288_p2 = (tmp_3_reg_3443_pp0_iter2_reg + sub_ln703_531_reg_4023_pp0_iter2_reg);
+2237:assign add_ln703_541_fu_348_p2 = (tmp_4_reg_3454_pp0_iter4_reg + sub_ln703_535_reg_4073_pp0_iter4_reg);
+2239:assign add_ln703_542_fu_352_p2 = (tmp_4_reg_3454_pp0_iter4_reg + sub_ln703_534_reg_4029_pp0_iter4_reg);
+2241:assign add_ln703_543_fu_272_p2 = (tmp_4_reg_3454_pp0_iter1_reg + add_ln703_539_reg_4035);
+2243:assign add_ln703_544_fu_312_p2 = (tmp_4_reg_3454_pp0_iter3_reg + sub_ln703_532_reg_4061);
+2245:assign add_ln703_545_fu_364_p2 = (tmp_4_reg_3454_pp0_iter4_reg + sub_ln703_533_reg_4042_pp0_iter4_reg);
+2247:assign add_ln703_546_fu_438_p2 = (mult_307_V_reg_3472_pp0_iter5_reg + sub_ln703_536_reg_4159);
+2249:assign add_ln703_547_fu_320_p2 = (mult_307_V_reg_3472_pp0_iter3_reg + tmp_4_reg_3454_pp0_iter3_reg);
+2251:assign add_ln703_548_fu_368_p2 = (add_ln703_538_reg_4067_pp0_iter4_reg + add_ln703_547_reg_4128);
+2253:assign add_ln703_549_fu_304_p2 = (mult_307_V_reg_3472_pp0_iter2_reg + add_ln703_543_reg_4054);
+2255:assign add_ln703_550_fu_384_p2 = (add_ln703_540_reg_4079_pp0_iter4_reg + add_ln703_547_reg_4128);
+2257:assign add_ln703_551_fu_393_p2 = (mult_307_V_reg_3472_pp0_iter4_reg + sub_ln703_542_fu_360_p2);
+2259:assign add_ln703_552_fu_454_p2 = (mult_307_V_reg_3472_pp0_iter5_reg + add_ln703_542_reg_4177);
+2261:assign add_ln703_553_fu_458_p2 = (mult_307_V_reg_3472_pp0_iter5_reg + sub_ln703_539_reg_4165);
+2263:assign add_ln703_554_fu_324_p2 = (mult_307_V_reg_3472_pp0_iter3_reg + sub_ln703_543_reg_4091);
+2265:assign add_ln703_555_fu_466_p2 = (mult_307_V_reg_3472_pp0_iter5_reg + sub_ln703_538_reg_4048_pp0_iter5_reg);
+2267:assign add_ln703_556_fu_478_p2 = (mult_320_V_reg_3500_pp0_iter5_reg + add_ln703_546_fu_438_p2);
+2269:assign add_ln703_557_fu_488_p2 = (mult_320_V_reg_3500_pp0_iter5_reg + sub_ln703_547_fu_446_p2);
+2271:assign add_ln703_558_fu_498_p2 = (mult_320_V_reg_3500_pp0_iter5_reg + add_ln703_548_reg_4188);
+2273:assign add_ln703_559_fu_332_p2 = (mult_320_V_reg_3500_pp0_iter3_reg + add_ln703_549_reg_4103);
+2275:assign add_ln703_560_fu_336_p2 = (mult_320_V_reg_3500_pp0_iter3_reg + mult_307_V_reg_3472_pp0_iter3_reg);
+2277:assign add_ln703_561_fu_510_p2 = (add_ln703_541_reg_4171 + add_ln703_560_reg_4153_pp0_iter5_reg);
+2279:assign add_ln703_562_fu_522_p2 = (mult_320_V_reg_3500_pp0_iter5_reg + sub_ln703_552_reg_4217);
+2281:assign add_ln703_563_fu_526_p2 = (mult_320_V_reg_3500_pp0_iter5_reg + add_ln703_551_reg_4222);
+2283:assign add_ln703_564_fu_406_p2 = (add_ln703_544_reg_4116 + add_ln703_560_reg_4153);
+2285:assign add_ln703_565_fu_554_p2 = (mult_320_V_reg_3500_pp0_iter5_reg + sub_ln703_544_reg_4122_pp0_iter5_reg);
+2287:assign add_ln703_566_fu_418_p2 = (mult_386_V_reg_3539_pp0_iter4_reg + sub_ln703_558_reg_4140);
+2289:assign add_ln703_567_fu_629_p2 = (mult_307_V_reg_3472_pp0_iter5_reg + sub_ln703_537_reg_4085_pp0_iter5_reg);
+
+[Showing results with pagination = limit: 30]</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> [*+-] </span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "[*+-] ",
+ "path": "/work/bnn.v",
+ "output_mode": "content",
+ "-n": true,
+ "head_limit": 400,
+ "offset": 0,
+ "glob": "bnn.v"
+}</pre><div class="label">output</div><pre class="plain">&lt;persisted-output&gt;
+Output too large (39KB). Full output saved to: /home/agent/.claude/projects/-work/94baf209-ba11-4efb-95e4-7c3f80eacfdb/tool-results/toolu_01Kd9hz9vnZxYhxBK6nxufZB.txt
+
+Preview (first 2KB):
+12:// RTL generated by Vivado(TM) HLS - High-Level Synthesis from C, C++ and OpenCL
+2105:assign acc_10_V_fu_2733_p2 = (add_ln703_758_fu_2728_p2 + add_ln703_751_reg_4920);
+2107:assign acc_11_V_fu_2738_p2 = (sub_ln703_811_fu_2474_p2 - mult_960_V_reg_3958_pp0_iter7_reg);
+2109:assign acc_12_V_fu_2743_p2 = (mult_960_V_reg_3958_pp0_iter7_reg + sub_ln703_812_fu_2479_p2);
+2111:assign acc_13_V_fu_2748_p2 = (add_ln703_735_fu_2484_p2 - mult_960_V_reg_3958_pp0_iter7_reg);
+2113:assign acc_14_V_fu_2753_p2 = (sub_ln703_813_fu_2489_p2 - mult_960_V_reg_3958_pp0_iter7_reg);
+2115:assign acc_15_V_fu_2758_p2 = (sub_ln703_814_fu_2494_p2 - mult_960_V_reg_3958_pp0_iter7_reg);
+2117:assign acc_16_V_fu_2771_p2 = (add_ln703_761_fu_2763_p2 + add_ln703_762_fu_2767_p2);
+2119:assign acc_17_V_fu_2777_p2 = (sub_ln703_815_fu_2499_p2 - mult_960_V_reg_3958_pp0_iter7_reg);
+2121:assign acc_18_V_fu_2782_p2 = (add_ln703_736_fu_2504_p2 - mult_960_V_reg_3958_pp0_iter7_reg);
+2123:assign acc_19_V_fu_2787_p2 = (sub_ln703_790_fu_2299_p2 + add_ln703_751_reg_4920);
+2125:assign acc_1_V_fu_2678_p2 = (mult_960_V_reg_3958_pp0_iter7_reg + sub_ln703_805_fu_2439_p2);
+2127:assign acc_20_V_fu_2797_p2 = (add_ln703_765_fu_2792_p2 + add_ln703_751_reg_4920);
+2129:assign acc_21_V_fu_2802_p2 = (sub_ln703_816_fu_2509_p2 - mult_960_V_reg_3958_pp0_iter7_reg);
+2131:assign acc_22_V_fu_2807_p2 = (mult_960_V_reg_3958_pp0_iter7_reg + sub_ln703_817_fu_2514_p2);
+2133:assign acc_23_V_fu_2812_p2 = (sub_ln703_818_fu_2519_p2 - mult_960_V_reg_3958_pp0_iter7_reg);
+2135:assign acc_24_V_fu_2817_p2 = (sub_ln703_819_fu_2524_p2 - mult_960_V_reg_3958_pp0_iter7_reg);
+2137:assign acc_25_V_fu_2822_p2 = (sub_ln703_791_fu_2318_p2 + add_ln703_751_reg_4920);
+2139:assign acc_26_V_fu_2827_p2 = (add_ln703_738_fu_2528_p2 - mult_960_V_reg_3958_pp0_iter7_reg);
+2141:assign acc_27_V_fu_2832_p2 = (add_ln703_741_fu_2536_p2 - mult_960_V_reg_3958_pp0_iter7_reg);
+2143:assign acc_28_V_fu_2837_p2 = (sub_ln703_820_fu_2541_p2 - mult_960_V_reg_3958_pp0_iter7_reg);
+...
+&lt;/persisted-output&gt;</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/bnn.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/bnn.v",
+ "offset": 19240,
+ "limit": 180
+}</pre><div class="label">output</div><pre class="plain">19240	    end else begin
+19241	        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19242	            ap_enable_reg_pp0_iter13 &lt;= ap_enable_reg_pp0_iter12;
+19243	        end
+19244	    end
+19245	end
+19246	
+19247	always @ (posedge ap_clk) begin
+19248	    if (ap_rst == 1'b1) begin
+19249	        ap_enable_reg_pp0_iter14 &lt;= 1'b0;
+19250	    end else begin
+19251	        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19252	            ap_enable_reg_pp0_iter14 &lt;= ap_enable_reg_pp0_iter13;
+19253	        end
+19254	    end
+19255	end
+19256	
+19257	always @ (posedge ap_clk) begin
+19258	    if (ap_rst == 1'b1) begin
+19259	        ap_enable_reg_pp0_iter15 &lt;= 1'b0;
+19260	    end else begin
+19261	        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19262	            ap_enable_reg_pp0_iter15 &lt;= ap_enable_reg_pp0_iter14;
+19263	        end
+19264	    end
+19265	end
+19266	
+19267	always @ (posedge ap_clk) begin
+19268	    if (ap_rst == 1'b1) begin
+19269	        ap_enable_reg_pp0_iter16 &lt;= 1'b0;
+19270	    end else begin
+19271	        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19272	            ap_enable_reg_pp0_iter16 &lt;= ap_enable_reg_pp0_iter15;
+19273	        end
+19274	    end
+19275	end
+19276	
+19277	always @ (posedge ap_clk) begin
+19278	    if (ap_rst == 1'b1) begin
+19279	        ap_enable_reg_pp0_iter17 &lt;= 1'b0;
+19280	    end else begin
+19281	        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19282	            ap_enable_reg_pp0_iter17 &lt;= ap_enable_reg_pp0_iter16;
+19283	        end
+19284	    end
+19285	end
+19286	
+19287	always @ (posedge ap_clk) begin
+19288	    if (ap_rst == 1'b1) begin
+19289	        ap_enable_reg_pp0_iter18 &lt;= 1'b0;
+19290	    end else begin
+19291	        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19292	            ap_enable_reg_pp0_iter18 &lt;= ap_enable_reg_pp0_iter17;
+19293	        end
+19294	    end
+19295	end
+19296	
+19297	always @ (posedge ap_clk) begin
+19298	    if (ap_rst == 1'b1) begin
+19299	        ap_enable_reg_pp0_iter19 &lt;= 1'b0;
+19300	    end else begin
+19301	        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19302	            ap_enable_reg_pp0_iter19 &lt;= ap_enable_reg_pp0_iter18;
+19303	        end
+19304	    end
+19305	end
+19306	
+19307	always @ (posedge ap_clk) begin
+19308	    if (ap_rst == 1'b1) begin
+19309	        ap_enable_reg_pp0_iter2 &lt;= 1'b0;
+19310	    end else begin
+19311	        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19312	            ap_enable_reg_pp0_iter2 &lt;= ap_enable_reg_pp0_iter1;
+19313	        end
+19314	    end
+19315	end
+19316	
+19317	always @ (posedge ap_clk) begin
+19318	    if (ap_rst == 1'b1) begin
+19319	        ap_enable_reg_pp0_iter20 &lt;= 1'b0;
+19320	    end else begin
+19321	        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19322	            ap_enable_reg_pp0_iter20 &lt;= ap_enable_reg_pp0_iter19;
+19323	        end
+19324	    end
+19325	end
+19326	
+19327	always @ (posedge ap_clk) begin
+19328	    if (ap_rst == 1'b1) begin
+19329	        ap_enable_reg_pp0_iter21 &lt;= 1'b0;
+19330	    end else begin
+19331	        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19332	            ap_enable_reg_pp0_iter21 &lt;= ap_enable_reg_pp0_iter20;
+19333	        end
+19334	    end
+19335	end
+19336	
+19337	always @ (posedge ap_clk) begin
+19338	    if (ap_rst == 1'b1) begin
+19339	        ap_enable_reg_pp0_iter22 &lt;= 1'b0;
+19340	    end else begin
+19341	        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19342	            ap_enable_reg_pp0_iter22 &lt;= ap_enable_reg_pp0_iter21;
+19343	        end
+19344	    end
+19345	end
+19346	
+19347	always @ (posedge ap_clk) begin
+19348	    if (ap_rst == 1'b1) begin
+19349	        ap_enable_reg_pp0_iter23 &lt;= 1'b0;
+19350	    end else begin
+19351	        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19352	            ap_enable_reg_pp0_iter23 &lt;= ap_enable_reg_pp0_iter22;
+19353	        end
+19354	    end
+19355	end
+19356	
+19357	always @ (posedge ap_clk) begin
+19358	    if (ap_rst == 1'b1) begin
+19359	        ap_enable_reg_pp0_iter24 &lt;= 1'b0;
+19360	    end else begin
+19361	
+…[truncated, 5953 chars total]</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/bnn.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/bnn.v",
+ "offset": 21600,
+ "limit": 200
+}</pre><div class="label">output</div><pre class="plain">21600	assign ap_block_state63_pp0_stage0_iter62_ignore_call210 = ~(1'b1 == 1'b1);
+21601	
+21602	assign ap_block_state63_pp0_stage0_iter62_ignore_call243 = ~(1'b1 == 1'b1);
+21603	
+21604	assign ap_block_state63_pp0_stage0_iter62_ignore_call309 = ~(1'b1 == 1'b1);
+21605	
+21606	assign ap_block_state63_pp0_stage0_iter62_ignore_call342 = ~(1'b1 == 1'b1);
+21607	
+21608	assign ap_block_state63_pp0_stage0_iter62_ignore_call408 = ~(1'b1 == 1'b1);
+21609	
+21610	assign ap_block_state63_pp0_stage0_iter62_ignore_call414 = ~(1'b1 == 1'b1);
+21611	
+21612	assign ap_block_state63_pp0_stage0_iter62_ignore_call80 = ~(1'b1 == 1'b1);
+21613	
+21614	assign ap_block_state64_pp0_stage0_iter63 = ~(1'b1 == 1'b1);
+21615	
+21616	assign ap_block_state64_pp0_stage0_iter63_ignore_call15 = ~(1'b1 == 1'b1);
+21617	
+21618	assign ap_block_state64_pp0_stage0_iter63_ignore_call210 = ~(1'b1 == 1'b1);
+21619	
+21620	assign ap_block_state64_pp0_stage0_iter63_ignore_call243 = ~(1'b1 == 1'b1);
+21621	
+21622	assign ap_block_state64_pp0_stage0_iter63_ignore_call309 = ~(1'b1 == 1'b1);
+21623	
+21624	assign ap_block_state64_pp0_stage0_iter63_ignore_call342 = ~(1'b1 == 1'b1);
+21625	
+21626	assign ap_block_state64_pp0_stage0_iter63_ignore_call408 = ~(1'b1 == 1'b1);
+21627	
+21628	assign ap_block_state64_pp0_stage0_iter63_ignore_call414 = ~(1'b1 == 1'b1);
+21629	
+21630	assign ap_block_state64_pp0_stage0_iter63_ignore_call80 = ~(1'b1 == 1'b1);
+21631	
+21632	assign ap_block_state65_pp0_stage0_iter64 = ~(1'b1 == 1'b1);
+21633	
+21634	assign ap_block_state65_pp0_stage0_iter64_ignore_call15 = ~(1'b1 == 1'b1);
+21635	
+21636	assign ap_block_state65_pp0_stage0_iter64_ignore_call210 = ~(1'b1 == 1'b1);
+21637	
+21638	assign ap_block_state65_pp0_stage0_iter64_ignore_call243 = ~(1'b1 == 1'b1);
+21639	
+21640	assign ap_block_state65_pp0_stage0_iter64_ignore_call309 = ~(1'b1 == 1'b1);
+21641	
+21642	assign ap_block_state65_pp0_stage0_iter64_ignore_call342 = ~(1'b1 == 1'b1);
+21643	
+21644	assign ap_block_state65_pp0_stage0_iter64_ignore_call408 = ~(1'b1 == 1'b1);
+21645	
+21646	assign ap_block_state65_pp0_stage0_iter64_ignore_call414 = ~(1'b1 == 1'b1);
+21647	
+21648	assign ap_block_state65_pp0_stage0_iter64_ignore_call80 = ~(1'b1 == 1'b1);
+21649	
+21650	assign ap_block_state66_pp0_stage0_iter65 = ~(1'b1 == 1'b1);
+21651	
+21652	assign ap_block_state66_pp0_stage0_iter65_ignore_call15 = ~(1'b1 == 1'b1);
+21653	
+21654	assign ap_block_state66_pp0_stage0_iter65_ignore_call210 = ~(1'b1 == 1'b1);
+21655	
+21656	assign ap_block_state66_pp0_stage0_iter65_ignore_call243 = ~(1'b1 == 1'b1);
+21657	
+21658	assign ap_block_state66_pp0_stage0_iter65_ignore_call309 = ~(1'b1 == 1'b1);
+21659	
+21660	assign ap_block_state66_pp0_stage0_iter65_ignore_call342 = ~(1'b1 == 1'b1);
+21661	
+21662	assign ap_block_state66_pp0_stage0_iter65_ignore_call408 = ~(1'b1 == 1'b1);
+21663	
+21664	assign ap_block_state66_pp0_stage0_iter65_ignore_call414 = ~(1'b1 == 1'b1);
+21665	
+21666	assign ap_block_state66_pp0_stage0_iter65_ignore_call80 = ~(1'b1 == 1'b1);
+21667	
+21668	assign ap_block_state67_pp0_stage0_iter66 = ~(1'b1 == 1'b1);
+21669	
+21670	assign ap_block_state67_pp0_stage0_iter66_ignore_call15 = ~(1'b1 == 1'b1);
+21671	
+21672	assign ap_block_state67_pp0_stage0_iter66_ignore_call210 = ~(1'b1 == 1'b1);
+21673	
+21674	assign ap_block_state67_pp0_stage0_iter66_ignore_call243 = ~(1'b1 == 1'b1);
+21675	
+21676	assign ap_block_state67_pp0_stage0_iter66_ignore_call309 = ~(1'b1 == 1'b1);
+21677	
+21678	assign ap_block_state67_pp0_stage0_iter66_ignore_call342 = ~(1'b1 == 1'b1);
+21679	
+21680	assign ap_block_state67_pp0_stage0_iter66_ignore_call408 = ~(1'b1 == 1'b1);
+21681	
+21682	assign ap_block_state67_pp0_stage0_iter66_ignore_call414 = ~(1'b1 == 1'b1);
+21683	
+21684	assign ap_block_state67_pp0_stage0_iter66_ignore_call80 = ~(1'b1 == 1'b1);
+21685	
+21686	assign ap_block_state68_pp0_stage0_iter67 = ~(1'b1 == 1'b1);
+21687	
+21688	assign ap_block_state68_pp0_stage0_iter67_ignore_call15 = ~(1'b1 == 1'b1);
+21689	
+21690	assign ap_block_state68_pp0_stage0_iter67_ignore_call210 = ~(1'b1 == 1'b1)
+…[truncated, 8695 chars total]</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/bnn.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/bnn.v",
+ "offset": 24700,
+ "limit": 120
+}</pre><div class="label">output</div><pre class="plain">24700	
+24701	always @ (*) begin
+24702	    if (((1'b1 == ap_ce_reg) &amp; (1'b0 == ap_block_pp0_stage0_11001))) begin
+24703	        grp_fu_864_ce = 1'b1;
+24704	    end else begin
+24705	        grp_fu_864_ce = 1'b0;
+24706	    end
+24707	end
+24708	
+24709	always @ (*) begin
+24710	    if (((1'b1 == ap_ce_reg) &amp; (1'b0 == ap_block_pp0_stage0_11001))) begin
+24711	        grp_fu_866_ce = 1'b1;
+24712	    end else begin
+24713	        grp_fu_866_ce = 1'b0;
+24714	    end
+24715	end
+24716	
+24717	always @ (*) begin
+24718	    if (((1'b1 == ap_ce_reg) &amp; (1'b0 == ap_block_pp0_stage0_11001))) begin
+24719	        grp_fu_867_ce = 1'b1;
+24720	    end else begin
+24721	        grp_fu_867_ce = 1'b0;
+24722	    end
+24723	end
+24724	
+24725	assign add_ln1118_1_fu_17671_p2 = ((sext_ln1118_76_fu_17661_p1) + (shl_ln1118_6_fu_17664_p3));
+24726	
+24727	assign add_ln1118_2_fu_17735_p2 = ((shl_ln1118_7_fu_17717_p3) + (sext_ln1118_80_fu_17731_p1));
+24728	
+24729	assign add_ln1118_fu_17625_p2 = ((shl_ln_fu_17607_p3) + (sext_ln1118_73_fu_17621_p1));
+24730	
+24731	assign add_ln703_36_fu_17926_p2 = (trunc_ln708_31_reg_18953 + 16'd2428);
+24732	
+24733	assign add_ln703_37_fu_17931_p2 = ((trunc_ln708_32_reg_18958) + (16'd63557));
+24734	
+24735	assign add_ln703_38_fu_17936_p2 = (trunc_ln708_s_reg_18963 + 16'd2668);
+24736	
+24737	assign add_ln703_39_fu_17941_p2 = (trunc_ln708_33_reg_18968 + 16'd770);
+24738	
+24739	assign add_ln703_40_fu_17946_p2 = ((trunc_ln708_34_reg_18973) + (16'd65261));
+24740	
+24741	assign add_ln703_41_fu_17951_p2 = (trunc_ln708_35_reg_18978 + 16'd1774);
+24742	
+24743	assign add_ln703_42_fu_17956_p2 = ((trunc_ln708_36_reg_18983) + (16'd61620));
+24744	
+24745	assign add_ln703_43_fu_17961_p2 = (trunc_ln708_37_reg_18988 + 16'd1134);
+24746	
+24747	assign add_ln703_44_fu_17966_p2 = (trunc_ln708_38_reg_18993 + 16'd3344);
+24748	
+24749	assign add_ln703_45_fu_17971_p2 = (trunc_ln708_39_reg_18998 + 16'd476);
+24750	
+24751	assign add_ln703_46_fu_17976_p2 = ((trunc_ln708_40_reg_19003) + (16'd65055));
+24752	
+24753	assign add_ln703_47_fu_17981_p2 = ((trunc_ln708_41_reg_19008) + (16'd63350));
+24754	
+24755	assign add_ln703_48_fu_17986_p2 = (trunc_ln708_42_reg_19013 + 16'd6336);
+24756	
+24757	assign add_ln703_49_fu_17991_p2 = (trunc_ln708_43_reg_19018 + 16'd779);
+24758	
+24759	assign add_ln703_50_fu_17996_p2 = ((trunc_ln708_44_reg_19023) + (16'd65093));
+24760	
+24761	assign add_ln703_51_fu_18001_p2 = ((trunc_ln708_45_reg_19028) + (16'd64452));
+24762	
+24763	assign add_ln703_52_fu_18006_p2 = (trunc_ln708_46_reg_19033 + 16'd150);
+24764	
+24765	assign add_ln703_53_fu_18011_p2 = ((trunc_ln708_47_reg_19038) + (16'd64356));
+24766	
+24767	assign add_ln703_54_fu_18016_p2 = ((trunc_ln708_48_reg_19043) + (16'd61833));
+24768	
+24769	assign add_ln703_55_fu_18021_p2 = ((trunc_ln708_49_reg_19048) + (16'd62693));
+24770	
+24771	assign add_ln703_56_fu_18026_p2 = ((trunc_ln708_50_reg_19053) + (16'd65182));
+24772	
+24773	assign add_ln703_57_fu_18031_p2 = ((trunc_ln708_51_reg_19058) + (16'd65467));
+24774	
+24775	assign add_ln703_58_fu_18036_p2 = ((trunc_ln708_52_reg_19063) + (16'd65273));
+24776	
+24777	assign add_ln703_59_fu_18041_p2 = ((trunc_ln708_53_reg_19068) + (16'd64093));
+24778	
+24779	assign add_ln703_60_fu_18046_p2 = (trunc_ln708_54_reg_19073 + 16'd639);
+24780	
+24781	assign add_ln703_61_fu_18051_p2 = ((trunc_ln708_55_reg_19078) + (16'd61811));
+24782	
+24783	assign add_ln703_62_fu_18056_p2 = (trunc_ln708_56_reg_19083 + 16'd2997);
+24784	
+24785	assign add_ln703_63_fu_18061_p2 = ((trunc_ln708_57_reg_19088) + (16'd65397));
+24786	
+24787	assign add_ln703_64_fu_18066_p2 = ((trunc_ln708_58_reg_19093) + (16'd62604));
+24788	
+24789	assign add_ln703_65_fu_18071_p2 = ((trunc_ln708_59_reg_19098) + (16'd60961));
+24790	
+24791	assign add_ln703_66_fu_18076_p2 = (trunc_ln708_60_reg_19103 + 16'd3539);
+24792	
+24793	assign add_ln703_67_fu_18081_p2 = ((trunc_ln708_61_reg_19108) + (16'd64305));
+24794	
+24795	assign add_ln703_68_fu_18086_p2 = ((trunc_ln708_62_reg_19113) + (16'd64971));
+24796	
+24797	assign add_ln703_69_fu_18091_p2 = (tr
+…[truncated, 5017 chars total]</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> trunc_ln708_31_reg_18953 &lt;=|trunc_ln_reg_18948 &lt;=|trunc_ln708_92_reg_19263 &lt;=</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "trunc_ln708_31_reg_18953 &lt;=|trunc_ln_reg_18948 &lt;=|trunc_ln708_92_reg_19263 &lt;=",
+ "path": "/work/bnn.v",
+ "output_mode": "content",
+ "-n": true,
+ "-B": 4,
+ "-A": 4
+}</pre><div class="label">output</div><pre class="plain">23654-    if (((1'b1 == ap_ce_reg) &amp; (1'b0 == ap_block_pp0_stage0_11001))) begin
+23655-        data_39_V_read_2_reg_18637 &lt;= data_39_V_read_int_reg;
+23656-        data_42_V_read_2_reg_18631 &lt;= data_42_V_read_int_reg;
+23657-        data_46_V_read_2_reg_18625 &lt;= data_46_V_read_int_reg;
+23658:        trunc_ln708_31_reg_18953 &lt;= {{grp_fu_832_p2[25:10]}};
+23659-        trunc_ln708_32_reg_18958 &lt;= {{grp_fu_860_p2[25:10]}};
+23660-        trunc_ln708_33_reg_18968 &lt;= {{grp_fu_857_p2[25:10]}};
+23661-        trunc_ln708_34_reg_18973 &lt;= {{grp_fu_846_p2[25:10]}};
+23662-        trunc_ln708_35_reg_18978 &lt;= {{grp_fu_829_p2[25:10]}};
+--
+23715-        trunc_ln708_88_reg_19243 &lt;= {{grp_fu_842_p2[25:10]}};
+23716-        trunc_ln708_89_reg_19248 &lt;= {{grp_fu_805_p2[25:10]}};
+23717-        trunc_ln708_90_reg_19253 &lt;= {{grp_fu_833_p2[25:10]}};
+23718-        trunc_ln708_91_reg_19258 &lt;= {{grp_fu_806_p2[25:10]}};
+23719:        trunc_ln708_92_reg_19263 &lt;= {{grp_fu_820_p2[25:10]}};
+23720-        trunc_ln708_s_reg_18963 &lt;= {{grp_fu_828_p2[25:10]}};
+23721:        trunc_ln_reg_18948 &lt;= {{grp_fu_852_p2[25:10]}};
+23722-    end
+23723-end
+23724-
+23725-always @ (*) begin</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> _fu_235_ap_return_0|_fu_303_ap_return_0|_fu_339_ap_return_0|_fu_375_ap_return_0|_fu_411_ap_return_0|…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "_fu_235_ap_return_0|_fu_303_ap_return_0|_fu_339_ap_return_0|_fu_375_ap_return_0|_fu_411_ap_return_0|_fu_479_ap_return_0|_fu_515_ap_return_0|_fu_125_ap_return_0\\b|_fu_193_ap_return_0\\b|_fu_229_ap_return_0\\b",
+ "path": "/work/bnn.v",
+ "output_mode": "content",
+ "-n": true,
+ "head_limit": 60
+}</pre><div class="label">output</div><pre class="plain">17308:wire   [15:0] grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s_fu_125_ap_return_0;
+17410:wire   [15:0] grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2_fu_193_ap_return_0;
+17512:wire   [15:0] grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_229_ap_return_0;
+17646:wire   [15:0] grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_235_ap_return_0;
+17780:wire   [15:0] grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2_fu_303_ap_return_0;
+17882:wire   [15:0] grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s_fu_339_ap_return_0;
+17984:wire   [15:0] grp_dense_latency_ap_fixed_ap_fixed_config14_0_0_0_0_0_0_fu_375_ap_return_0;
+18060:wire   [15:0] call_ret_i_relu_max_ap_fixed_ap_fixed_1_relu1_config5_s_fu_411_ap_return_0;
+18125:wire   [15:0] call_ret_i1_relu_max_ap_fixed_ap_fixed_1_relu1_config9_s_fu_479_ap_return_0;
+18158:wire   [15:0] call_ret_i2_relu_max_ap_fixed_ap_fixed_1_relu1_config13_s_fu_515_ap_return_0;
+18412:    .ap_return_0(grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s_fu_125_ap_return_0),
+18482:    .ap_return_0(grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2_fu_193_ap_return_0),
+18521:    .ap_return_0(grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_229_ap_return_0),
+18655:    .ap_return_0(grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_235_ap_return_0),
+18757:    .ap_return_0(grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2_fu_303_ap_return_0),
+18827:    .ap_return_0(grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s_fu_339_ap_return_0),
+18897:    .ap_return_0(grp_dense_latency_ap_fixed_ap_fixed_config14_0_0_0_0_0_0_fu_375_ap_return_0),
+18971:    .ap_return_0(call_ret_i_relu_max_ap_fixed_ap_fixed_1_relu1_config5_s_fu_411_ap_return_0),
+19071:    .ap_return_0(call_ret_i1_relu_max_ap_fixed_ap_fixed_1_relu1_config9_s_fu_479_ap_return_0),
+19139:    .ap_return_0(call_ret_i2_relu_max_ap_fixed_ap_fixed_1_relu1_config13_s_fu_515_ap_return_0),
+19891:        layer10_out_0_V_reg_3586 &lt;= grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2_fu_193_ap_return_0;
+19923:        layer12_out_0_V_reg_3746 &lt;= grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2_fu_303_ap_return_0;
+19955:        layer13_out_0_V_reg_3906 &lt;= call_ret_i2_relu_max_ap_fixed_ap_fixed_1_relu1_config13_s_fu_515_ap_return_0;
+19987:        layer14_out_0_V_reg_4066 &lt;= grp_dense_latency_ap_fixed_ap_fixed_config14_0_0_0_0_0_0_fu_375_ap_return_0;
+19992:        layer2_out_0_V_reg_2146 &lt;= grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_229_ap_return_0;
+20056:        layer4_out_0_V_reg_2466 &lt;= grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_235_ap_return_0;
+20120:        layer5_out_0_V_reg_2786 &lt;= call_ret_i_relu_max_ap_fixed_ap_fixed_1_relu1_config5_s_fu_411_ap_return_0;
+20184:        layer6_out_0_V_reg_3106 &lt;= grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s_fu_125_ap_return_0;
+20216:        layer8_out_0_V_reg_3266 &lt;= grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s_fu_339_ap_return_0;
+20248:        layer9_out_0_V_reg_3426 &lt;= call_ret_i1_relu_max_ap_fixed_ap_fixed_1_relu1_config9_s_fu_479_ap_return_0;</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> _fu_235_ap_ce|_fu_303_ap_ce|_fu_339_ap_ce|_fu_551_ap_ce</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "_fu_235_ap_ce|_fu_303_ap_ce|_fu_339_ap_ce|_fu_551_ap_ce",
+ "path": "/work/bnn.v",
+ "output_mode": "content",
+ "-n": true,
+ "-A": 3
+}</pre><div class="label">output</div><pre class="plain">17710:reg    grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_235_ap_ce;
+17711-reg    ap_block_state1_pp0_stage0_iter0_ignore_call80;
+17712-wire    ap_block_state2_pp0_stage0_iter1_ignore_call80;
+17713-wire    ap_block_state3_pp0_stage0_iter2_ignore_call80;
+--
+17812:reg    grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2_fu_303_ap_ce;
+17813-reg    ap_block_state1_pp0_stage0_iter0_ignore_call342;
+17814-wire    ap_block_state2_pp0_stage0_iter1_ignore_call342;
+17815-wire    ap_block_state3_pp0_stage0_iter2_ignore_call342;
+--
+17914:reg    grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s_fu_339_ap_ce;
+17915-reg    ap_block_state1_pp0_stage0_iter0_ignore_call243;
+17916-wire    ap_block_state2_pp0_stage0_iter1_ignore_call243;
+17917-wire    ap_block_state3_pp0_stage0_iter2_ignore_call243;
+--
+18195:reg    grp_normalize_ap_fixed_ap_fixed_config16_0_0_0_0_0_0_0_0_0_0_fu_551_ap_ce;
+18196-reg    ap_block_state1_pp0_stage0_iter0_ignore_call414;
+18197-wire    ap_block_state2_pp0_stage0_iter1_ignore_call414;
+18198-wire    ap_block_state3_pp0_stage0_iter2_ignore_call414;
+--
+18719:    .ap_ce(grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_235_ap_ce)
+18720-);
+18721-
+18722-normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2 grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2_fu_303(
+--
+18789:    .ap_ce(grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2_fu_303_ap_ce)
+18790-);
+18791-
+18792-normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s_fu_339(
+--
+18859:    .ap_ce(grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s_fu_339_ap_ce)
+18860-);
+18861-
+18862-dense_latency_ap_fixed_ap_fixed_config14_0_0_0_0_0_0 grp_dense_latency_ap_fixed_ap_fixed_config14_0_0_0_0_0_0_fu_375(
+--
+19186:    .ap_ce(grp_normalize_ap_fixed_ap_fixed_config16_0_0_0_0_0_0_0_0_0_0_fu_551_ap_ce)
+19187-);
+19188-
+19189-always @ (posedge ap_clk) begin
+--
+20381:        grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_235_ap_ce = 1'b1;
+20382-    end else begin
+20383:        grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_235_ap_ce = 1'b0;
+20384-    end
+20385-end
+20386-
+--
+20389:        grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2_fu_303_ap_ce = 1'b1;
+20390-    end else begin
+20391:        grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2_fu_303_ap_ce = 1'b0;
+20392-    end
+20393-end
+20394-
+--
+20397:        grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s_fu_339_ap_ce = 1'b1;
+20398-    end else begin
+20399:        grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s_fu_339_ap_ce = 1'b0;
+20400-    end
+20401-end
+20402-
+--
+20405:        grp_normalize_ap_fixed_ap_fixed_config16_0_0_0_0_0_0_0_0_0_0_fu_551_ap_ce = 1'b1;
+20406-    end else begin
+20407:        grp_normalize_ap_fixed_ap_fixed_config16_0_0_0_0_0_0_0_0_0_0_fu_551_ap_ce = 1'b0;
+20408-    end
+20409-end
+20410-</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/bnn.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/bnn.v",
+ "offset": 20360,
+ "limit": 60
+}</pre><div class="label">output</div><pre class="plain">20360	    end
+20361	end
+20362	
+20363	always @ (*) begin
+20364	    if (((1'b0 == ap_block_pp0_stage0_11001_ignoreCallOp277) &amp; (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+20365	        grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s_fu_125_ap_ce = 1'b1;
+20366	    end else begin
+20367	        grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s_fu_125_ap_ce = 1'b0;
+20368	    end
+20369	end
+20370	
+20371	always @ (*) begin
+20372	    if (((1'b0 == ap_block_pp0_stage0_11001_ignoreCallOp509) &amp; (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+20373	        grp_dense_latency_ap_fixed_ap_fixed_config14_0_0_0_0_0_0_fu_375_ap_ce = 1'b1;
+20374	    end else begin
+20375	        grp_dense_latency_ap_fixed_ap_fixed_config14_0_0_0_0_0_0_fu_375_ap_ce = 1'b0;
+20376	    end
+20377	end
+20378	
+20379	always @ (*) begin
+20380	    if (((1'b0 == ap_block_pp0_stage0_11001_ignoreCallOp144) &amp; (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+20381	        grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_235_ap_ce = 1'b1;
+20382	    end else begin
+20383	        grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_235_ap_ce = 1'b0;
+20384	    end
+20385	end
+20386	
+20387	always @ (*) begin
+20388	    if (((1'b0 == ap_block_pp0_stage0_11001_ignoreCallOp440) &amp; (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+20389	        grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2_fu_303_ap_ce = 1'b1;
+20390	    end else begin
+20391	        grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2_fu_303_ap_ce = 1'b0;
+20392	    end
+20393	end
+20394	
+20395	always @ (*) begin
+20396	    if (((1'b0 == ap_block_pp0_stage0_11001_ignoreCallOp328) &amp; (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+20397	        grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s_fu_339_ap_ce = 1'b1;
+20398	    end else begin
+20399	        grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s_fu_339_ap_ce = 1'b0;
+20400	    end
+20401	end
+20402	
+20403	always @ (*) begin
+20404	    if (((1'b0 == ap_block_pp0_stage0_11001_ignoreCallOp523) &amp; (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+20405	        grp_normalize_ap_fixed_ap_fixed_config16_0_0_0_0_0_0_0_0_0_0_fu_551_ap_ce = 1'b1;
+20406	    end else begin
+20407	        grp_normalize_ap_fixed_ap_fixed_config16_0_0_0_0_0_0_0_0_0_0_fu_551_ap_ce = 1'b0;
+20408	    end
+20409	end
+20410	
+20411	always @ (*) begin
+20412	    if ((input1_V_ap_vld == 1'b1)) begin
+20413	        input1_V_ap_vld_in_sig = input1_V_ap_vld;
+20414	    end else begin
+20415	        input1_V_ap_vld_in_sig = input1_V_ap_vld_preg;
+20416	    end
+20417	end
+20418	
+20419	always @ (*) begin</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> assign ap_block_pp0_stage0_11001_ignoreCallOp144|assign ap_CS_fsm_pp0_stage0|ap_block_pp0_stage0_110…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "assign ap_block_pp0_stage0_11001_ignoreCallOp144|assign ap_CS_fsm_pp0_stage0|ap_block_pp0_stage0_11001_ignoreCallOp144 =|ap_block_pp0_stage0_11001 =|assign ap_block_pp0_stage0 =|ap_block_pp0_stage0_subdone",
+ "path": "/work/bnn.v",
+ "output_mode": "content",
+ "-n": true,
+ "head_limit": 40
+}</pre><div class="label">output</div><pre class="plain">2685:assign ap_block_pp0_stage0 = ~(1'b1 == 1'b1);
+2687:assign ap_block_pp0_stage0_11001 = ~(1'b1 == 1'b1);
+6290:assign ap_block_pp0_stage0 = ~(1'b1 == 1'b1);
+6292:assign ap_block_pp0_stage0_11001 = ~(1'b1 == 1'b1);
+13428:assign ap_block_pp0_stage0 = ~(1'b1 == 1'b1);
+13430:assign ap_block_pp0_stage0_11001 = ~(1'b1 == 1'b1);
+16208:assign ap_block_pp0_stage0 = ~(1'b1 == 1'b1);
+16210:assign ap_block_pp0_stage0_11001 = ~(1'b1 == 1'b1);
+17307:reg    ap_block_pp0_stage0_subdone;
+19201:        if (((1'b0 == ap_block_pp0_stage0_subdone) &amp; (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+19211:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19221:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19231:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19241:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19251:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19261:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19271:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19281:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19291:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19301:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19311:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19321:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19331:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19341:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19351:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19361:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19371:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19381:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19391:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19401:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19411:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19421:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19431:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19441:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19451:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19461:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19471:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19481:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19491:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+19501:        if ((1'b0 == ap_block_pp0_stage0_subdone)) begin
+
+[Showing results with pagination = limit: 40]</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> ap_block_pp0_stage0_11001_ignoreCallOp144|ap_CS_fsm_pp0_stage0 =|ap_CS_fsm_pp0_stage0;|ap_block_pp0_…</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "ap_block_pp0_stage0_11001_ignoreCallOp144|ap_CS_fsm_pp0_stage0 =|ap_CS_fsm_pp0_stage0;|ap_block_pp0_stage0_subdone =",
+ "path": "/work/bnn.v",
+ "output_mode": "content",
+ "-n": true,
+ "-B": 3,
+ "-A": 6,
+ "head_limit": 80
+}</pre><div class="label">output</div><pre class="plain">16770-reg const_size_out_1_ap_vld;
+16771-
+16772-reg   [0:0] ap_CS_fsm;
+16773:wire    ap_CS_fsm_pp0_stage0;
+16774-wire    ap_enable_reg_pp0_iter0;
+16775-reg    ap_enable_reg_pp0_iter1;
+16776-reg    ap_enable_reg_pp0_iter2;
+16777-reg    ap_enable_reg_pp0_iter3;
+16778-reg    ap_enable_reg_pp0_iter4;
+16779-reg    ap_enable_reg_pp0_iter5;
+--
+17776-wire    ap_block_state66_pp0_stage0_iter65_ignore_call80;
+17777-wire    ap_block_state67_pp0_stage0_iter66_ignore_call80;
+17778-wire    ap_block_state68_pp0_stage0_iter67_ignore_call80;
+17779:reg    ap_block_pp0_stage0_11001_ignoreCallOp144;
+17780-wire   [15:0] grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2_fu_303_ap_return_0;
+17781-wire   [15:0] grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2_fu_303_ap_return_1;
+17782-wire   [15:0] grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2_fu_303_ap_return_2;
+17783-wire   [15:0] grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2_fu_303_ap_return_3;
+17784-wire   [15:0] grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2_fu_303_ap_return_4;
+17785-wire   [15:0] grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2_fu_303_ap_return_5;
+--
+20377-end
+20378-
+20379-always @ (*) begin
+20380:    if (((1'b0 == ap_block_pp0_stage0_11001_ignoreCallOp144) &amp; (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+20381-        grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_235_ap_ce = 1'b1;
+20382-    end else begin
+20383-        grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_235_ap_ce = 1'b0;
+20384-    end
+20385-end
+20386-
+--
+20483-    endcase
+20484-end
+20485-
+20486:assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
+20487-
+20488-assign ap_block_pp0_stage0 = ~(1'b1 == 1'b1);
+20489-
+20490-always @ (*) begin
+20491-    ap_block_pp0_stage0_01001 = ((ap_start == 1'b1) &amp; ((ap_start == 1'b0) | (input1_V_ap_vld_in_sig == 1'b0)));
+20492-end
+--
+20496-end
+20497-
+20498-always @ (*) begin
+20499:    ap_block_pp0_stage0_11001_ignoreCallOp144 = ((ap_start == 1'b1) &amp; ((ap_start == 1'b0) | (input1_V_ap_vld_in_sig == 1'b0)));
+20500-end
+20501-
+20502-always @ (*) begin
+20503-    ap_block_pp0_stage0_11001_ignoreCallOp277 = ((ap_start == 1'b1) &amp; ((ap_start == 1'b0) | (input1_V_ap_vld_in_sig == 1'b0)));
+20504-end
+20505-
+--
+20528-end
+20529-
+20530-always @ (*) begin
+20531:    ap_block_pp0_stage0_subdone = ((ap_start == 1'b1) &amp; ((ap_start == 1'b0) | (input1_V_ap_vld_in_sig == 1'b0)));
+20532-end
+20533-
+20534-assign ap_block_state10_pp0_stage0_iter9 = ~(1'b1 == 1'b1);
+20535-
+20536-assign ap_block_state10_pp0_stage0_iter9_ignore_call15 = ~(1'b1 == 1'b1);
+20537-</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/bnn.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/bnn.v",
+ "offset": 20455,
+ "limit": 35
+}</pre><div class="label">output</div><pre class="plain">20455	        layer16_out_2_V_ap_vld = 1'b0;
+20456	    end
+20457	end
+20458	
+20459	always @ (*) begin
+20460	    if (((1'b0 == ap_block_pp0_stage0_11001) &amp; (ap_enable_reg_pp0_iter67 == 1'b1))) begin
+20461	        layer16_out_3_V_ap_vld = 1'b1;
+20462	    end else begin
+20463	        layer16_out_3_V_ap_vld = 1'b0;
+20464	    end
+20465	end
+20466	
+20467	always @ (*) begin
+20468	    if (((1'b0 == ap_block_pp0_stage0_11001) &amp; (ap_enable_reg_pp0_iter67 == 1'b1))) begin
+20469	        layer16_out_4_V_ap_vld = 1'b1;
+20470	    end else begin
+20471	        layer16_out_4_V_ap_vld = 1'b0;
+20472	    end
+20473	end
+20474	
+20475	always @ (*) begin
+20476	    case (ap_CS_fsm)
+20477	        ap_ST_fsm_pp0_stage0 : begin
+20478	            ap_NS_fsm = ap_ST_fsm_pp0_stage0;
+20479	        end
+20480	        default : begin
+20481	            ap_NS_fsm = 1'b0;
+20482	        end
+20483	    endcase
+20484	end
+20485	
+20486	assign ap_CS_fsm_pp0_stage0 = ap_CS_fsm[32'd0];
+20487	
+20488	assign ap_block_pp0_stage0 = ~(1'b1 == 1'b1);
+20489	</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> ap_CS_fsm &lt;=</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "ap_CS_fsm &lt;=",
+ "path": "/work/bnn.v",
+ "output_mode": "content",
+ "-n": true,
+ "-B": 6,
+ "-A": 3
+}</pre><div class="label">output</div><pre class="plain">19185-    .ap_return_4(grp_normalize_ap_fixed_ap_fixed_config16_0_0_0_0_0_0_0_0_0_0_fu_551_ap_return_4),
+19186-    .ap_ce(grp_normalize_ap_fixed_ap_fixed_config16_0_0_0_0_0_0_0_0_0_0_fu_551_ap_ce)
+19187-);
+19188-
+19189-always @ (posedge ap_clk) begin
+19190-    if (ap_rst == 1'b1) begin
+19191:        ap_CS_fsm &lt;= ap_ST_fsm_pp0_stage0;
+19192-    end else begin
+19193:        ap_CS_fsm &lt;= ap_NS_fsm;
+19194-    end
+19195-end
+19196-</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/bnn.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/bnn.v",
+ "offset": 20040,
+ "limit": 25
+}</pre><div class="label">output</div><pre class="plain">20040	        layer2_out_53_V_reg_2411 &lt;= grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_229_ap_return_53;
+20041	        layer2_out_54_V_reg_2416 &lt;= grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_229_ap_return_54;
+20042	        layer2_out_55_V_reg_2421 &lt;= grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_229_ap_return_55;
+20043	        layer2_out_56_V_reg_2426 &lt;= grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_229_ap_return_56;
+20044	        layer2_out_57_V_reg_2431 &lt;= grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_229_ap_return_57;
+20045	        layer2_out_58_V_reg_2436 &lt;= grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_229_ap_return_58;
+20046	        layer2_out_59_V_reg_2441 &lt;= grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_229_ap_return_59;
+20047	        layer2_out_5_V_reg_2171 &lt;= grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_229_ap_return_5;
+20048	        layer2_out_60_V_reg_2446 &lt;= grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_229_ap_return_60;
+20049	        layer2_out_61_V_reg_2451 &lt;= grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_229_ap_return_61;
+20050	        layer2_out_62_V_reg_2456 &lt;= grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_229_ap_return_62;
+20051	        layer2_out_63_V_reg_2461 &lt;= grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_229_ap_return_63;
+20052	        layer2_out_6_V_reg_2176 &lt;= grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_229_ap_return_6;
+20053	        layer2_out_7_V_reg_2181 &lt;= grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_229_ap_return_7;
+20054	        layer2_out_8_V_reg_2186 &lt;= grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_229_ap_return_8;
+20055	        layer2_out_9_V_reg_2191 &lt;= grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_229_ap_return_9;
+20056	        layer4_out_0_V_reg_2466 &lt;= grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_235_ap_return_0;
+20057	        layer4_out_10_V_reg_2516 &lt;= grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_235_ap_return_10;
+20058	        layer4_out_11_V_reg_2521 &lt;= grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_235_ap_return_11;
+20059	        layer4_out_12_V_reg_2526 &lt;= grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_235_ap_return_12;
+20060	        layer4_out_13_V_reg_2531 &lt;= grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_235_ap_return_13;
+20061	        layer4_out_14_V_reg_2536 &lt;= grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_235_ap_return_14;
+20062	        layer4_out_15_V_reg_2541 &lt;= grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_235_ap_return_15;
+20063	        layer4_out_16_V_reg_2546 &lt;= grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_235_ap_return_16;
+20064	        layer4_out_17_V_reg_2551 &lt;= grp_normalize_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_1_fu_235_ap_return_17;</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/bnn.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/bnn.v",
+ "offset": 19876,
+ "limit": 20
+}</pre><div class="label">output</div><pre class="plain">19876	    end
+19877	end
+19878	
+19879	always @ (posedge ap_clk) begin
+19880	    if (ap_rst == 1'b1) begin
+19881	        input1_V_preg &lt;= 256'd0;
+19882	    end else begin
+19883	        if ((~((ap_start == 1'b0) &amp; (1'b1 == ap_CS_fsm_pp0_stage0)) &amp; (input1_V_ap_vld == 1'b1))) begin
+19884	            input1_V_preg &lt;= input1_V;
+19885	        end
+19886	    end
+19887	end
+19888	
+19889	always @ (posedge ap_clk) begin
+19890	    if ((1'b0 == ap_block_pp0_stage0_11001)) begin
+19891	        layer10_out_0_V_reg_3586 &lt;= grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2_fu_193_ap_return_0;
+19892	        layer10_out_10_V_reg_3636 &lt;= grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2_fu_193_ap_return_10;
+19893	        layer10_out_11_V_reg_3641 &lt;= grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2_fu_193_ap_return_11;
+19894	        layer10_out_12_V_reg_3646 &lt;= grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2_fu_193_ap_return_12;
+19895	        layer10_out_13_V_reg_3651 &lt;= grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_2_fu_193_ap_return_13;</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/bnn.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/bnn.v",
+ "offset": 20490,
+ "limit": 45
+}</pre><div class="label">output</div><pre class="plain">20490	always @ (*) begin
+20491	    ap_block_pp0_stage0_01001 = ((ap_start == 1'b1) &amp; ((ap_start == 1'b0) | (input1_V_ap_vld_in_sig == 1'b0)));
+20492	end
+20493	
+20494	always @ (*) begin
+20495	    ap_block_pp0_stage0_11001 = ((ap_start == 1'b1) &amp; ((ap_start == 1'b0) | (input1_V_ap_vld_in_sig == 1'b0)));
+20496	end
+20497	
+20498	always @ (*) begin
+20499	    ap_block_pp0_stage0_11001_ignoreCallOp144 = ((ap_start == 1'b1) &amp; ((ap_start == 1'b0) | (input1_V_ap_vld_in_sig == 1'b0)));
+20500	end
+20501	
+20502	always @ (*) begin
+20503	    ap_block_pp0_stage0_11001_ignoreCallOp277 = ((ap_start == 1'b1) &amp; ((ap_start == 1'b0) | (input1_V_ap_vld_in_sig == 1'b0)));
+20504	end
+20505	
+20506	always @ (*) begin
+20507	    ap_block_pp0_stage0_11001_ignoreCallOp328 = ((ap_start == 1'b1) &amp; ((ap_start == 1'b0) | (input1_V_ap_vld_in_sig == 1'b0)));
+20508	end
+20509	
+20510	always @ (*) begin
+20511	    ap_block_pp0_stage0_11001_ignoreCallOp397 = ((ap_start == 1'b1) &amp; ((ap_start == 1'b0) | (input1_V_ap_vld_in_sig == 1'b0)));
+20512	end
+20513	
+20514	always @ (*) begin
+20515	    ap_block_pp0_stage0_11001_ignoreCallOp440 = ((ap_start == 1'b1) &amp; ((ap_start == 1'b0) | (input1_V_ap_vld_in_sig == 1'b0)));
+20516	end
+20517	
+20518	always @ (*) begin
+20519	    ap_block_pp0_stage0_11001_ignoreCallOp509 = ((ap_start == 1'b1) &amp; ((ap_start == 1'b0) | (input1_V_ap_vld_in_sig == 1'b0)));
+20520	end
+20521	
+20522	always @ (*) begin
+20523	    ap_block_pp0_stage0_11001_ignoreCallOp523 = ((ap_start == 1'b1) &amp; ((ap_start == 1'b0) | (input1_V_ap_vld_in_sig == 1'b0)));
+20524	end
+20525	
+20526	always @ (*) begin
+20527	    ap_block_pp0_stage0_11001_ignoreCallOp70 = ((ap_start == 1'b1) &amp; ((ap_start == 1'b0) | (input1_V_ap_vld_in_sig == 1'b0)));
+20528	end
+20529	
+20530	always @ (*) begin
+20531	    ap_block_pp0_stage0_subdone = ((ap_start == 1'b1) &amp; ((ap_start == 1'b0) | (input1_V_ap_vld_in_sig == 1'b0)));
+20532	end
+20533	
+20534	assign ap_block_state10_pp0_stage0_iter9 = ~(1'b1 == 1'b1);</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> input1_V_ap_vld_preg</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "input1_V_ap_vld_preg",
+ "path": "/work/bnn.v",
+ "output_mode": "content",
+ "-n": true,
+ "-B": 6,
+ "-A": 8
+}</pre><div class="label">output</div><pre class="plain">16909-wire    ap_block_state66_pp0_stage0_iter65;
+16910-wire    ap_block_state67_pp0_stage0_iter66;
+16911-wire    ap_block_state68_pp0_stage0_iter67;
+16912-reg    ap_block_pp0_stage0_11001;
+16913-reg   [255:0] input1_V_preg;
+16914-reg   [255:0] input1_V_in_sig;
+16915:reg    input1_V_ap_vld_preg;
+16916-reg    input1_V_blk_n;
+16917-wire    ap_block_pp0_stage0;
+16918-reg   [15:0] layer2_out_0_V_reg_2146;
+16919-reg   [15:0] layer2_out_1_V_reg_2151;
+16920-reg   [15:0] layer2_out_2_V_reg_2156;
+16921-reg   [15:0] layer2_out_3_V_reg_2161;
+16922-reg   [15:0] layer2_out_4_V_reg_2166;
+16923-reg   [15:0] layer2_out_5_V_reg_2171;
+--
+18336-#0 ap_enable_reg_pp0_iter63 = 1'b0;
+18337-#0 ap_enable_reg_pp0_iter64 = 1'b0;
+18338-#0 ap_enable_reg_pp0_iter65 = 1'b0;
+18339-#0 ap_enable_reg_pp0_iter66 = 1'b0;
+18340-#0 ap_enable_reg_pp0_iter67 = 1'b0;
+18341-#0 input1_V_preg = 256'd0;
+18342:#0 input1_V_ap_vld_preg = 1'b0;
+18343-end
+18344-
+18345-dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s grp_dense_latency_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_0_s_fu_125(
+18346-    .ap_clk(ap_clk),
+18347-    .ap_rst(ap_rst),
+18348-    .data_0_V_read(layer5_out_0_V_reg_2786),
+18349-    .data_1_V_read(layer5_out_1_V_reg_2791),
+18350-    .data_2_V_read(layer5_out_2_V_reg_2796),
+--
+19863-        end
+19864-    end
+19865-end
+19866-
+19867-always @ (posedge ap_clk) begin
+19868-    if (ap_rst == 1'b1) begin
+19869:        input1_V_ap_vld_preg &lt;= 1'b0;
+19870-    end else begin
+19871-        if (((1'b0 == ap_block_pp0_stage0_11001) &amp; (ap_start == 1'b1) &amp; (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+19872:            input1_V_ap_vld_preg &lt;= 1'b0;
+19873-        end else if ((~((ap_start == 1'b0) &amp; (1'b1 == ap_CS_fsm_pp0_stage0)) &amp; (input1_V_ap_vld == 1'b1))) begin
+19874:            input1_V_ap_vld_preg &lt;= input1_V_ap_vld;
+19875-        end
+19876-    end
+19877-end
+19878-
+19879-always @ (posedge ap_clk) begin
+19880-    if (ap_rst == 1'b1) begin
+19881-        input1_V_preg &lt;= 256'd0;
+19882-    end else begin
+--
+20409-end
+20410-
+20411-always @ (*) begin
+20412-    if ((input1_V_ap_vld == 1'b1)) begin
+20413-        input1_V_ap_vld_in_sig = input1_V_ap_vld;
+20414-    end else begin
+20415:        input1_V_ap_vld_in_sig = input1_V_ap_vld_preg;
+20416-    end
+20417-end
+20418-
+20419-always @ (*) begin
+20420-    if (((ap_start == 1'b1) &amp; (1'b0 == ap_block_pp0_stage0) &amp; (ap_start == 1'b1) &amp; (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+20421-        input1_V_blk_n = input1_V_ap_vld;
+20422-    end else begin
+20423-        input1_V_blk_n = 1'b1;</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/bnn.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/bnn.v",
+ "offset": 29400,
+ "limit": 90
+}</pre><div class="label">output</div><pre class="plain">29400	
+29401	assign tmp_313_fu_720_p3 = data_8_V_read[32'd15];
+29402	
+29403	assign tmp_314_fu_734_p3 = data_8_V_read[32'd15];
+29404	
+29405	assign tmp_315_fu_748_p3 = {{xor_ln1495_102_fu_742_p2}, {10'd0}};
+29406	
+29407	assign tmp_316_fu_774_p3 = data_9_V_read[32'd15];
+29408	
+29409	assign tmp_317_fu_788_p3 = data_9_V_read[32'd15];
+29410	
+29411	assign tmp_318_fu_802_p3 = {{xor_ln1495_103_fu_796_p2}, {10'd0}};
+29412	
+29413	assign tmp_319_fu_828_p3 = data_10_V_read[32'd15];
+29414	
+29415	assign tmp_320_fu_842_p3 = data_10_V_read[32'd15];
+29416	
+29417	assign tmp_321_fu_856_p3 = {{xor_ln1495_104_fu_850_p2}, {10'd0}};
+29418	
+29419	assign tmp_322_fu_882_p3 = data_11_V_read[32'd15];
+29420	
+29421	assign tmp_323_fu_896_p3 = data_11_V_read[32'd15];
+29422	
+29423	assign tmp_324_fu_910_p3 = {{xor_ln1495_105_fu_904_p2}, {10'd0}};
+29424	
+29425	assign tmp_325_fu_936_p3 = data_12_V_read[32'd15];
+29426	
+29427	assign tmp_326_fu_950_p3 = data_12_V_read[32'd15];
+29428	
+29429	assign tmp_327_fu_964_p3 = {{xor_ln1495_106_fu_958_p2}, {10'd0}};
+29430	
+29431	assign tmp_328_fu_990_p3 = data_13_V_read[32'd15];
+29432	
+29433	assign tmp_329_fu_1004_p3 = data_13_V_read[32'd15];
+29434	
+29435	assign tmp_330_fu_1018_p3 = {{xor_ln1495_107_fu_1012_p2}, {10'd0}};
+29436	
+29437	assign tmp_331_fu_1044_p3 = data_14_V_read[32'd15];
+29438	
+29439	assign tmp_332_fu_1058_p3 = data_14_V_read[32'd15];
+29440	
+29441	assign tmp_333_fu_1072_p3 = {{xor_ln1495_108_fu_1066_p2}, {10'd0}};
+29442	
+29443	assign tmp_334_fu_1098_p3 = data_15_V_read[32'd15];
+29444	
+29445	assign tmp_335_fu_1112_p3 = data_15_V_read[32'd15];
+29446	
+29447	assign tmp_336_fu_1126_p3 = {{xor_ln1495_109_fu_1120_p2}, {10'd0}};
+29448	
+29449	assign tmp_337_fu_1152_p3 = data_16_V_read[32'd15];
+29450	
+29451	assign tmp_338_fu_1166_p3 = data_16_V_read[32'd15];
+29452	
+29453	assign tmp_339_fu_1180_p3 = {{xor_ln1495_110_fu_1174_p2}, {10'd0}};
+29454	
+29455	assign tmp_340_fu_1206_p3 = data_17_V_read[32'd15];
+29456	
+29457	assign tmp_341_fu_1220_p3 = data_17_V_read[32'd15];
+29458	
+29459	assign tmp_342_fu_1234_p3 = {{xor_ln1495_111_fu_1228_p2}, {10'd0}};
+29460	
+29461	assign tmp_343_fu_1260_p3 = data_18_V_read[32'd15];
+29462	
+29463	assign tmp_344_fu_1274_p3 = data_18_V_read[32'd15];
+29464	
+29465	assign tmp_345_fu_1288_p3 = {{xor_ln1495_112_fu_1282_p2}, {10'd0}};
+29466	
+29467	assign tmp_346_fu_1314_p3 = data_19_V_read[32'd15];
+29468	
+29469	assign tmp_347_fu_1328_p3 = data_19_V_read[32'd15];
+29470	
+29471	assign tmp_348_fu_1342_p3 = {{xor_ln1495_113_fu_1336_p2}, {10'd0}};
+29472	
+29473	assign tmp_349_fu_1368_p3 = data_20_V_read[32'd15];
+29474	
+29475	assign tmp_350_fu_1382_p3 = data_20_V_read[32'd15];
+29476	
+29477	assign tmp_351_fu_1396_p3 = {{xor_ln1495_114_fu_1390_p2}, {10'd0}};
+29478	
+29479	assign tmp_352_fu_1422_p3 = data_21_V_read[32'd15];
+29480	
+29481	assign tmp_353_fu_1436_p3 = data_21_V_read[32'd15];
+29482	
+29483	assign tmp_354_fu_1450_p3 = {{xor_ln1495_115_fu_1444_p2}, {10'd0}};
+29484	
+29485	assign tmp_355_fu_1476_p3 = data_22_V_read[32'd15];
+29486	
+29487	assign tmp_356_fu_1490_p3 = data_22_V_read[32'd15];
+29488	
+29489	assign tmp_357_fu_1504_p3 = {{xor_ln1495_116_fu_1498_p2}, {10'd0}};</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> data_0_V_read_int_reg &lt;= data_0_V_read</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "data_0_V_read_int_reg &lt;= data_0_V_read",
+ "path": "/work/bnn.v",
+ "output_mode": "content",
+ "-n": true,
+ "-B": 4
+}</pre><div class="label">output</div><pre class="plain">5295-end
+5296-
+5297-always @ (posedge ap_clk) begin
+5298-    if ((1'b1 == ap_ce)) begin
+5299:        data_0_V_read_int_reg &lt;= data_0_V_read;
+--
+11633-end
+11634-
+11635-always @ (posedge ap_clk) begin
+11636-    if ((1'b1 == ap_ce)) begin
+11637:        data_0_V_read_int_reg &lt;= data_0_V_read;
+--
+15983-end
+15984-
+15985-always @ (posedge ap_clk) begin
+15986-    if ((1'b1 == ap_ce)) begin
+15987:        data_0_V_read_int_reg &lt;= data_0_V_read;
+--
+23582-end
+23583-
+23584-always @ (posedge ap_clk) begin
+23585-    if ((1'b1 == ap_ce)) begin
+23586:        data_0_V_read_int_reg &lt;= data_0_V_read;
+--
+25938-end
+25939-
+25940-always @ (posedge ap_clk) begin
+25941-    if ((1'b1 == ap_ce)) begin
+25942:        data_0_V_read_int_reg &lt;= data_0_V_read;
+--
+27610-end
+27611-
+27612-always @ (posedge ap_clk) begin
+27613-    if ((1'b1 == ap_ce)) begin
+27614:        data_0_V_read_int_reg &lt;= data_0_V_read;
+--
+28558-end
+28559-
+28560-always @ (posedge ap_clk) begin
+28561-    if ((1'b1 == ap_ce)) begin
+28562:        data_0_V_read_int_reg &lt;= data_0_V_read;</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> ap_ce_reg &lt;= ap_ce</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "ap_ce_reg &lt;= ap_ce",
+ "path": "/work/bnn.v",
+ "output_mode": "content",
+ "-n": true,
+ "-B": 2
+}</pre><div class="label">output</div><pre class="plain">1208-
+1209-always @ (posedge ap_clk) begin
+1210:    ap_ce_reg &lt;= ap_ce;
+--
+4818-
+4819-always @ (posedge ap_clk) begin
+4820:    ap_ce_reg &lt;= ap_ce;
+--
+10418-
+10419-always @ (posedge ap_clk) begin
+10420:    ap_ce_reg &lt;= ap_ce;
+--
+15804-
+15805-always @ (posedge ap_clk) begin
+15806:    ap_ce_reg &lt;= ap_ce;
+--
+23510-
+23511-always @ (posedge ap_clk) begin
+23512:    ap_ce_reg &lt;= ap_ce;
+--
+25898-
+25899-always @ (posedge ap_clk) begin
+25900:    ap_ce_reg &lt;= ap_ce;
+--
+27570-
+27571-always @ (posedge ap_clk) begin
+27572:    ap_ce_reg &lt;= ap_ce;
+--
+28545-
+28546-always @ (posedge ap_clk) begin
+28547:    ap_ce_reg &lt;= ap_ce;</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> ap_block_pp0_stage0_11001</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "ap_block_pp0_stage0_11001",
+ "path": "/work/bnn.v",
+ "output_mode": "content",
+ "-n": true,
+ "head_limit": 250,
+ "-i": false
+}</pre><div class="label">output</div><pre class="plain">241:wire    ap_block_pp0_stage0_11001;
+1214:    if (((1'b0 == ap_block_pp0_stage0_11001) &amp; (1'b1 == ap_ce_reg))) begin
+2687:assign ap_block_pp0_stage0_11001 = ~(1'b1 == 1'b1);
+3522:wire    ap_block_pp0_stage0_11001;
+4824:    if (((1'b0 == ap_block_pp0_stage0_11001) &amp; (1'b1 == ap_ce_reg))) begin
+6292:assign ap_block_pp0_stage0_11001 = ~(1'b1 == 1'b1);
+7475:wire    ap_block_pp0_stage0_11001;
+10424:    if (((1'b0 == ap_block_pp0_stage0_11001) &amp; (1'b1 == ap_ce_reg))) begin
+13430:assign ap_block_pp0_stage0_11001 = ~(1'b1 == 1'b1);
+15460:wire    ap_block_pp0_stage0_11001;
+15810:    if (((1'b1 == ap_ce_reg) &amp; (1'b0 == ap_block_pp0_stage0_11001))) begin
+16210:assign ap_block_pp0_stage0_11001 = ~(1'b1 == 1'b1);
+16912:reg    ap_block_pp0_stage0_11001;
+17409:reg    ap_block_pp0_stage0_11001_ignoreCallOp277;
+17511:reg    ap_block_pp0_stage0_11001_ignoreCallOp397;
+17645:reg    ap_block_pp0_stage0_11001_ignoreCallOp70;
+17779:reg    ap_block_pp0_stage0_11001_ignoreCallOp144;
+17881:reg    ap_block_pp0_stage0_11001_ignoreCallOp440;
+17983:reg    ap_block_pp0_stage0_11001_ignoreCallOp328;
+18058:reg    ap_block_pp0_stage0_11001_ignoreCallOp509;
+18264:reg    ap_block_pp0_stage0_11001_ignoreCallOp523;
+19871:        if (((1'b0 == ap_block_pp0_stage0_11001) &amp; (ap_start == 1'b1) &amp; (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+19890:    if ((1'b0 == ap_block_pp0_stage0_11001)) begin
+20284:    if (((1'b0 == ap_block_pp0_stage0_11001) &amp; (ap_enable_reg_pp0_iter67 == 1'b1))) begin
+20316:    if (((1'b0 == ap_block_pp0_stage0_11001) &amp; (ap_start == 1'b1) &amp; (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+20332:    if (((1'b0 == ap_block_pp0_stage0_11001) &amp; (ap_enable_reg_pp0_iter67 == 1'b1))) begin
+20340:    if (((1'b0 == ap_block_pp0_stage0_11001) &amp; (ap_enable_reg_pp0_iter67 == 1'b1))) begin
+20348:    if (((1'b0 == ap_block_pp0_stage0_11001_ignoreCallOp70) &amp; (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+20356:    if (((1'b0 == ap_block_pp0_stage0_11001_ignoreCallOp397) &amp; (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+20364:    if (((1'b0 == ap_block_pp0_stage0_11001_ignoreCallOp277) &amp; (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+20372:    if (((1'b0 == ap_block_pp0_stage0_11001_ignoreCallOp509) &amp; (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+20380:    if (((1'b0 == ap_block_pp0_stage0_11001_ignoreCallOp144) &amp; (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+20388:    if (((1'b0 == ap_block_pp0_stage0_11001_ignoreCallOp440) &amp; (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+20396:    if (((1'b0 == ap_block_pp0_stage0_11001_ignoreCallOp328) &amp; (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+20404:    if (((1'b0 == ap_block_pp0_stage0_11001_ignoreCallOp523) &amp; (1'b1 == ap_CS_fsm_pp0_stage0))) begin
+20436:    if (((1'b0 == ap_block_pp0_stage0_11001) &amp; (ap_enable_reg_pp0_iter67 == 1'b1))) begin
+20444:    if (((1'b0 == ap_block_pp0_stage0_11001) &amp; (ap_enable_reg_pp0_iter67 == 1'b1))) begin
+20452:    if (((1'b0 == ap_block_pp0_stage0_11001) &amp; (ap_enable_reg_pp0_iter67 == 1'b1))) begin
+20460:    if (((1'b0 == ap_block_pp0_stage0_11001) &amp; (ap_enable_reg_pp0_iter67 == 1'b1))) begin
+20468:    if (((1'b0 == ap_block_pp0_stage0_11001) &amp; (ap_enable_reg_pp0_iter67 == 1'b1))) begin
+20495:    ap_block_pp0_stage0_11001 = ((ap_start == 1'b1) &amp; ((ap_start == 1'b0) | (input1_V_ap_vld_in_sig == 1'b0)));
+20499:    ap_block_pp0_stage0_11001_ignoreCallOp144 = ((ap_start == 1'b1) &amp; ((ap_start == 1'b0) | (input1_V_ap_vld_in_sig == 1'b0)));
+20503:    ap_block_pp0_stage0_11001_ignoreCallOp277 = ((ap_start == 1'b1) &amp; ((ap_start == 1'b0) | (input1_V_ap_vld_in_sig == 1'b0)));
+20507:    ap_block_pp0_stage0_11001_ignoreCallOp328 = ((ap_start == 1'b1) &amp; ((ap_start == 1'b0) | (input1_V_ap_vld_in_sig == 1'b0)));
+20511:    ap_block_pp0_stage0_11001_ignoreCallOp397 = ((ap_start == 1'b1) &amp; ((ap_start == 1'b0) | (input1_V_ap_vld_in_sig == 1'b0)));
+20515:    ap_block_pp0_stage0_11001_ignoreCallOp440 = ((ap_start == 1'b1) &amp; ((ap_start == 1'b0) | (input1_V_ap_vld_in_sig == 1'b0)));
+20519:    ap_block_pp0_stage0_11001_ignoreCallOp509 = ((ap_start == 1'b1) &amp; ((ap_start == 1'b0)
+…[truncated, 15150 chars total]</pre></div></details></div></div></details></div></details></div></details></div></details><details class="section"><summary><h2>The kept rewrite</h2> <span class="meta">absent</span></summary><div class="body"><p class="absent">No edit.diff in the run dir (the run produced no edit, or ended before one was recorded).</p></div></details><details class="section"><summary><h2>Verification</h2> <span class="meta">0 editor attempt(s) · from the outcome record · final: planner_declined</span></summary><div class="body"><p class="note">This run predates the per-attempt record (2026-09-12). With a single editor attempt, the rows below follow directly from the recorded outcome code and reason; nothing is inferred beyond what that code implies about the stages that ran.</p><p class="absent">No editor call recorded: the loop ended before an edit (the planner declined, its response was malformed, or the plan was rejected).</p><h3>Checks on the final editor attempt</h3><p class="absent">Outcome code 'planner_declined': the run ended before any check ran (planner declined: no representative mapping).</p><h3>Synthesis-only result (counted from files)</h3><p class="absent">No synthesis netlist under vtr/ in this run dir.</p><h3>Packed netlist (counted from files)</h3><p class="absent">No packed .net under vtr/ (the run never reached VPR, or the flow failed before packing).</p><p>Modes recorded in the outcome as used after the edit: <span class="absent">none recorded</span></p></div></details><details class="section"><summary><h2>Numbers</h2> <span class="meta">no PPA · 1 call(s)</span></summary><div class="body"><h3>PPA as recorded</h3><p class="absent">No PPA recorded (the run ended before a VTR flow completed; before 2026-09-12 also any rejected run).</p><h3>Coverage</h3><table class="num"><tr><th>quantity</th><th class="n">value</th><th>what it counts</th></tr><tr><td>sites offered</td><td class='n'>10</td><td class='note'>sites DETECT found and handed to the planner (one RTL expression each)</td></tr><tr><td>site instances offered</td><td class='n'>125</td><td class='note'>those sites times the elaborated instance count of their module</td></tr><tr><td>sites converted</td><td class='n'>—</td><td class='note'>sites the approved plan names</td></tr><tr><td>site instances converted</td><td class='n'>—</td><td class='note'>converted sites times their module's instance count</td></tr><tr><td>blocks packed</td><td class='n'>—</td><td class='note'>packed block instances in the target mode (editor attempt )</td></tr><tr><td>tiles packed</td><td class='n'>—</td><td class='note'>DSP tiles in the target mode (the .net mode count); absent on records before 2026-10-15</td></tr></table><p class="note">Offered and packed are not the same unit: a site is a source region, a packed block is an elaborated instance, and one block can fuse several sites (or the editor can chain several blocks for one site), so they are recorded raw rather than as a ratio.</p><h3>Block counts</h3><p class="absent">No packed netlist to count.</p><h3>Tokens and cost per call</h3><div style="overflow-x:auto"><table class="num"><tr><th>#</th><th>role</th><th>model</th><th>status</th><th class="n">in</th><th class="n">out</th><th class="n">reasoning</th><th class="n">cache read</th><th class="n">cache write</th><th class="n">total</th><th class="n">steps</th><th class="n">tool calls (errors)</th><th class="n">seconds</th><th class="n">cost $</th></tr><tr><td>1</td><td>planner</td><td><code>anthropic/claude-opus-5</code></td><td>ok</td><td class='n'>76</td><td class='n'>79391</td><td class='n'>70181</td><td class='n'>2979949</td><td class='n'>176714</td><td class='n'>3236130</td><td class='n'>39</td><td class='n'>38 (1)</td><td class='n'>1144.2</td><td class='n'>5.2423</td></tr><tr class='total'><td></td><td>total (1 calls)</td><td></td><td></td><td class='n'>76</td><td class='n'>79391</td><td class='n'>70181</td><td class='n'>2979949</td><td class='n'>176714</td><td class='n'>3236130</td><td></td><td></td><td class='n'>1145.0</td><td class='n'>5.2423</td></tr></table></div><p class="note">Cost a client-side list-price estimate per call, summed, not a bill. Token components are kept separate (uncached input, output, reasoning, cache read, cache write); total is their sum, with reasoning counted once. Reasoning tokens are already counted inside the output column.</p></div></details><details class="section"><summary><h2>Objective loop</h2> <span class="meta">0 rewrite(s) measured · stopped by: planner declined</span></summary><div class="body"><dl class="kv"><dt>revisions allowed</dt><dd>9</dd><dt>seeds per rewrite</dt><dd>1, 2, 3, 4, 5 (adaptive)</dd><dt>kept</dt><dd><b>n/a</b></dd><dt>loop stopped by</dt><dd>planner declined (no representative mapping)</dd><dt>objective</dt><dd>area x delay x wirelength (delay register to register, 2026-10-20)</dd><dt>baseline</dt><dd><span class="absent">no baseline product: it could not be formed (area, delay or wirelength missing)</span></dd></dl><p class="note">The objective is area x delay x wirelength (delay register to register, 2026-10-20): VPR's total used logic block area (I/Os and empty grid tiles excluded) times the critical path times the total routed wirelength. Each term is the median over the loop's seeds; the product is the product of the medians. Beside every product stand the ratios against the baseline, A/A0 (area), D/D0 (critical path), W/W0 (wirelength) and their product, so the normalization can be read off. After each measured rewrite, the planner is given every measurement so far and asked for a revision. A revision is built and checked like the first rewrite, and the lowest product is kept, a later rewrite having to beat it by more than 5.11%. The loop stops when the planner declines to revise, when a revision does not lower the best product by more than 5.11%, when a revision fails its checks, or when 9 revisions have been made.</p><p class="absent">No rewrite was measured: the run produced no accepted edit, so the loop had nothing to compare.</p></div></details><script type="application/json" id="run-summary">{"sites_converted": null, "sites_offered": 10, "instances_converted": null, "instances_offered": 125, "loop": true, "loop_dry": false, "candidates_measured": 0, "loop_cap": 9, "loop_ended_by": null, "loop_stop": {"by": "planner_declined", "label": "planner declined", "detail": "no representative mapping", "read": "outcome"}, "kept": null, "period_ns": null, "used_area": null, "area_backfilled_from": null, "area_note": "nothing was measured: the record carries no PPA", "area_delay": null, "wirelength": null, "wirelength_source": null, "objective": null, "ratios": {"area": null, "delay": null, "wirelength": null, "product": null}, "ppa_basis": "the one recorded flow", "baseline": {"regime": "koios_extra_small", "cpd_ns": 8.49884, "used_area": 195004000.0, "area_source": "entry", "area_delay": 1657307795.36, "wirelength": 1183312, "wirelength_source": "entry", "objective": 1961112201943032.2, "file": "configs/baselines/complexDSP.yaml", "source": "baselines file entry", "convention": "seed-1 figures of the baselines file entry (the run record carries no baseline the loop divided by)"}, "verified": null, "run_id": "20261024-052751-8a1320", "suite": "koios_medium", "design": "bnn", "mode": "mult_add_mode_18_19_36", "started_at": "2026-10-24T05:27:51-07:00", "accepted": false, "outcome": "planner_declined", "tier": "NONE", "editor_attempts": 0, "model_family": "Claude", "layer": "claude-code", "models": {"planner": "anthropic/claude-opus-5"}, "wall_seconds": 1145.0479620010592, "agent_seconds": 1144.2, "blocks_packed": null, "regime": "koios_extra_small", "archived": false, "file": "bnn_mult_add_mode_18_19_36_20261024-052751-8a1320.html"}</script></main></body></html>

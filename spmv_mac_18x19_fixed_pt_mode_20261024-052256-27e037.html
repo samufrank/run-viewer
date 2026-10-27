@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>spmv → mac_18x19_fixed_pt_mode · 20261024-052256-27e037</title><style>
+:root { color-scheme: light; }
+/* Embedded previews (Slack) size their frame from a height measured once, at first paint
+   and possibly at a different width than the one displayed; a page whose height depends on
+   line wrapping then gets cut off. A definite minimum height in absolute units (not vh, not
+   %) keeps the measured height at or above the collapsed page's height down to ~500px wide
+   (measured 1418px at 500px, 977 at 700, 893 at 1200). Below the fold in a normal browser. */
+html, body { height: auto; }
+body { margin: 0; padding: 1.5rem 1rem 4rem; background: #fff; color: #1a1a1a; min-height: 1450px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 15px; line-height: 1.6; }
+main { max-width: 72rem; margin: 0 auto; }
+h1 { font-size: 1.4rem; margin: 0 0 .25rem; font-weight: 600; }
+h2 { font-size: 1.1rem; margin: 0; font-weight: 600; display: inline; }
+h3 { font-size: 1rem; margin: 1.2rem 0 .4rem; font-weight: 600; }
+.sub { color: #555; margin: 0 0 1rem; }
+table { border-collapse: collapse; margin: .5rem 0 1rem; }
+th, td { text-align: left; padding: .2rem .8rem .2rem 0; vertical-align: top; }
+th { font-weight: 600; color: #444; white-space: nowrap; }
+table.num td.n, table.num th.n { text-align: right; font-variant-numeric: tabular-nums; }
+tr.total td { border-top: 1px solid #bbb; font-weight: 600; }
+details { margin: .6rem 0; border: 1px solid #d8d8d8; border-radius: 4px; background: #fff; }
+details > summary { cursor: pointer; padding: .55rem .8rem; list-style: none;
+  display: flex; gap: .6rem; align-items: baseline; flex-wrap: wrap; }
+details > summary::-webkit-details-marker { display: none; }
+details > summary::before { content: "\25B8"; color: #777; font-size: .8em; }
+details[open] > summary::before { content: "\25BE"; }
+details > summary > .meta { color: #666; font-size: .9em; }
+details > .body { padding: .2rem .8rem .8rem; border-top: 1px solid #e6e6e6; }
+details.section > summary { font-size: 1.05rem; }
+details.call { margin-left: 0; }
+details.inner { border-color: #e6e6e6; }
+details.inner > summary { padding: .35rem .6rem; font-size: .92em; }
+pre { white-space: pre-wrap; word-break: break-word; margin: .3rem 0 .8rem;
+  padding: .7rem .9rem; border-radius: 4px; font-size: .86em; line-height: 1.5;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+pre.prompt { background: #f4f4f2; border-left: 3px solid #b8b8b0; }
+pre.response { background: #eef3f8; border-left: 3px solid #7f9fbf; }
+pre.plain { background: #f6f6f6; }
+/* A prompt or response with its Markdown rendered. The tint and the left rule are the same
+   as the plain form above, so a rendered block still reads as quoted agent traffic and not
+   as the page's own prose; only the inside is laid out instead of shown as source. */
+.md { margin: .3rem 0 .8rem; padding: .6rem .9rem; border-radius: 4px; font-size: .93em;
+  overflow-wrap: break-word; }
+.md.prompt { background: #f4f4f2; border-left: 3px solid #b8b8b0; }
+.md.response { background: #eef3f8; border-left: 3px solid #7f9fbf; }
+.md > :first-child { margin-top: 0; } .md > :last-child { margin-bottom: 0; }
+.md p { margin: .5rem 0; }
+.md ul, .md ol { margin: .5rem 0; padding-left: 1.5rem; }
+.md li { margin: .15rem 0; }
+.md ul.md-litnum { list-style: none; padding-left: .8rem; }
+.md .md-num { color: #555; }
+.md blockquote { margin: .5rem 0; padding: .1rem .8rem; border-left: 2px solid #c4c4c4;
+  color: #444; }
+.md hr { border: 0; border-top: 1px solid #d5d5d5; margin: .8rem 0; }
+.md code { background: rgba(0,0,0,.055); padding: .05em .3em; border-radius: 3px; }
+.md .mdh { font-weight: 600; margin: .9rem 0 .35rem; line-height: 1.3; }
+.md .mdh1 { font-size: 1.12em; } .md .mdh2 { font-size: 1.07em; }
+.md .mdh3 { font-size: 1.02em; } .md .mdh4, .md .mdh5, .md .mdh6 { font-size: 1em; }
+/* A fenced block is a box inside the response, and must not widen or escape it: it wraps,
+   and scrolls sideways only within its own frame. */
+.md .md-code { margin: .5rem 0; border: 1px solid #dcdcdc; border-radius: 4px;
+  background: #fbfbfa; max-width: 100%; overflow: hidden; }
+.md .md-lang { display: block; padding: .15rem .6rem; border-bottom: 1px solid #e6e6e6;
+  color: #666; font-size: .8em; letter-spacing: .03em; }
+.md .md-code > pre { margin: 0; background: none; border: 0; border-radius: 0;
+  padding: .55rem .7rem; max-width: 100%; overflow-x: auto; white-space: pre-wrap;
+  word-break: break-word; }
+.md .md-code > pre > code { background: none; padding: 0; }
+.md .md-tw { overflow-x: auto; max-width: 100%; margin: .5rem 0; }
+.md .md-tw table { border-collapse: collapse; }
+.md .md-tw th, .md .md-tw td { border: 1px solid #dedede; padding: .2rem .5rem;
+  white-space: normal; }
+.md .md-note { color: #666; font-size: .85em; font-style: italic; margin: 0 0 .5rem; }
+ul.paths { margin: .2rem 0; padding-left: 1.2rem; }
+ul.paths li { margin: .1rem 0; word-break: break-all; }
+.diff { white-space: pre-wrap; word-break: break-word; margin: .3rem 0 .8rem;
+  padding: .7rem .9rem; border-radius: 4px; font-size: .86em; line-height: 1.5;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  background: #fafafa; border: 1px solid #e3e3e3; }
+.diff div { min-height: 1.5em; }
+.diff .add { background: #e2f3e2; }
+.diff .del { background: #f8e0e0; }
+.diff .add-ws, .diff .del-ws { color: #999; background: #f3f3f3; }
+.diff .hunk { color: #6a5acd; }
+.diff .hdr { color: #666; }
+.diff details.ws { margin: .1rem 0; border: 1px dashed #ccc; background: #f6f6f6; }
+.diff details.ws > summary { padding: .1rem .5rem; color: #777; font-family: inherit; font-size: .95em; }
+.diff details.ws > summary::before { content: "\25B8 "; }
+.diff details.ws[open] > summary::before { content: "\25BE "; }
+.schem { margin: .4rem 0 .8rem; overflow-x: auto; background: #fff;
+  border: 1px solid #e3e3e3; border-radius: 4px; padding: .4rem; }
+.schem svg { display: block; }
+.label { font-weight: 600; color: #444; font-size: .85em; text-transform: uppercase;
+  letter-spacing: .03em; margin: .6rem 0 .1rem; }
+.absent { color: #777; font-style: italic; }
+.ok { color: #1f6f3a; } .bad { color: #a33; } .na { color: #777; }
+.note { color: #555; font-size: .9em; }
+.tools { margin: .4rem 0 0; }
+.controls { margin: 0 0 1rem; font-size: .9em; color: #555; }
+.controls button { font: inherit; padding: .1rem .5rem; margin-right: .3rem; }
+dl.kv { display: grid; grid-template-columns: max-content 1fr; gap: .1rem 1.2rem; margin: .6rem 0 1rem; }
+dl.kv dt { color: #555; } dl.kv dd { margin: 0; }
+@media (max-width: 600px) { dl.kv { grid-template-columns: 1fr; } dl.kv dt { margin-top: .4rem; } }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .92em; }
+.summary { margin: .4rem 0 .6rem; padding: .6rem .9rem; background: #f5f8fb; border: 1px solid #d6e0ea;
+  border-radius: 4px; }
+.summary p { margin: .15rem 0; }
+p.how { color: #555; font-size: .9em; margin: 0 0 .6rem; }
+/* one colour per agent role: a left rule on the call and a chip in its summary line */
+.role { display: inline-block; padding: 0 .4rem; border-radius: 3px; font-size: .88em; font-weight: 600; }
+.role-planner { background: #ece6f7; color: #4b3590; }
+.role-plan-reviewer { background: #f8ecd6; color: #7a5310; }
+.role-editor { background: #dceef3; color: #18596f; }
+.role-acceptance { background: #f6e1e8; color: #8a2f4e; }
+.role-other { background: #eee; color: #555; }
+details.call.role-planner { border-left: 4px solid #8b70cf; }
+details.call.role-plan-reviewer { border-left: 4px solid #d29a3a; }
+details.call.role-editor { border-left: 4px solid #3f93ad; }
+details.call.role-acceptance { border-left: 4px solid #c45c80; }
+details.pass { border-color: #c4c4c4; background: #fcfcfc; }
+details.pass > summary { font-size: 1rem; }
+p.pass-head { margin: 0; padding: .35rem .8rem; border-top: 1px solid #e6e6e6; font-size: .92em; color: #333; }
+.retry-tag { display: inline-block; padding: 0 .35rem; border: 1px dashed #999; border-radius: 3px;
+  font-size: .85em; color: #555; }
+p.retry { margin: .7rem 0 .2rem; padding-left: .6rem; border-left: 2px dashed #999; color: #555; font-size: .9em; }
+</style><script>
+function setAll(open) {
+  document.querySelectorAll('details').forEach(function (d) { d.open = open; });
+}
+// an in-page link to a collapsed block opens it and every block around it
+function openHash() {
+  var e = document.getElementById(location.hash.slice(1));
+  for (; e; e = e.parentElement) { if (e.tagName === 'DETAILS') e.open = true; }
+}
+window.addEventListener('hashchange', openHash);
+window.addEventListener('DOMContentLoaded', openHash);
+</script></head><body><main><h1>spmv → mac_18x19_fixed_pt_mode · 20261024-052256-27e037</h1><p class="sub">benchadapt adaptation run · record at <code>outputs/adapt/koios_medium/spmv/mac_18x19_fixed_pt_mode/20261024-052256-27e037</code></p><div class="summary"><p><b>What a run is.</b> One invocation of the framework on one design with one mode: here spmv with <code>mac_18x19_fixed_pt_mode</code>.</p><p><b>What happened.</b> 0 rewrites measured. Loop stopped by: planner declined (no representative mapping).</p><p><b>Result.</b> Area x delay not measured; verification: not recorded in the run record.</p></div><p class="how">How to read this page: the table below holds the run's settings; each section after it opens on click: the mode contract, the agent calls grouped by pass, the kept rewrite's diff, verification, numbers, and the objective loop comparing the rewrites.</p><dl class="kv"><dt>run id</dt><dd><code>20261024-052256-27e037</code></dd><dt>started</dt><dd>2026-10-24 05:22:56 -0700</dd><dt>finished</dt><dd>2026-10-24 05:27:00 -0700</dd><dt>suite / design</dt><dd>koios_medium / <b>spmv</b></dd><dt>target mode</dt><dd><code>mac_18x19_fixed_pt_mode</code></dd><dt>tier</dt><dd>NONE (NONE) — not recorded</dd><dt>outcome</dt><dd><b class="bad">rejected</b> [<code>planner_declined</code>] — planner declined: no representative mapping</dd><dt>wall clock</dt><dd>4m 5s (agents 4m 4s, VTR and other 1s)  [244.8 s total; 'other' is synthesis-only checks and framework time between calls]</dd><dt>models</dt><dd>all roles: <code>anthropic/claude-opus-5</code></dd><dt>layout</dt><dd>koios_extra_small, 90 x 90</dd><dt>VPR arguments</dt><dd>channel width 300 · device koios_extra_small <span class="note">(from run.json)</span></dd><dt>seeds</dt><dd>main flow seed 1<br>loop seeds 1, 2, 3, 4, 5 (adaptive)</dd><dt>sandbox</dt><dd>bubblewrap <span class="note">(recorded per agent call, before the run-level field existed: every call in this run ran in its own mount namespace)</span></dd><dt>agent reads</dt><dd>none outside the agents' own working directories <span class="note">(paths each agent named outside its own working directory, computed from the tool events; its own scratch excluded)</span></dd><dt>prompt set</dt><dd><code>ba2da55e15e7</code> <span class="note">(sha256 over 10 templates in src/agents and 96 inline pieces; full value in run.json <code>prompt_set</code>)</span></dd></dl><div class="controls"><button type="button" onclick="setAll(true)">expand all</button><button type="button" onclick="setAll(false)">collapse all</button>exported 2026-10-27T12:52:00-07:00</div><details class="section"><summary><h2>Mode contract</h2> <span class="meta">recorded (outcome.json contract field)</span></summary><div class="body"><p class="note">Verbatim, as recorded with the run and sent to the agents.</p><pre class="plain">- primitive to instantiate: `mac_int_18x19` (precision INT19)
+- computes: acc += a*b
+- input ports: clk[1] (clock), reset[1], a[18], b[19]
+- output ports: out[37]
+- arithmetic: the block reads each operand port as an unsigned number, and its result is unsigned. An operand narrower than its port is zero-extended to the port width. The result wraps at 37 bits: a value past the result width keeps its low 37 bits (modulo 2^37), with no saturation and no flag.
+- registers: on `clk`, the block registers its operands (`a`, `b`) at one clock edge and `out` at the next, with the arithmetic between the two registers: operands applied before clock edge k appear in `out` after edge k+1, 2 cycles later. The block has no clock enable and no path around either register. `out` is the running sum: it adds its term (one product) on every clock edge that does not clear it, and `reset` is its only control (no enable, no load).
+- reset: `reset` is synchronous and active high: at a clock edge that samples it high it clears every register of the block (the operand registers and the running sum) to 0, and the block loads again at the next edge that samples it low.
+- power-up: every register of the block is unknown until the first clear by `reset`; no register of the block has an initial value, and a rewrite may not rely on one.
+- connections: connect every input port, by the port names above.</pre></div></details><details class="section"><summary><h2>Agent calls</h2> <span class="meta">1 call(s) in 1 pass, in order</span></summary><div class="body"><p class="note">Role: <span class="role role-planner">planner</span> <span class="role role-plan-reviewer">plan reviewer</span> <span class="role role-editor">editor</span> <span class="role role-acceptance">acceptance reviewer</span>. A plan reviewer sending the plan back, or the editor being asked again, is a <span class="retry-tag">retry</span> inside the same pass.</p><details class="pass" open><summary><b>Pass 1</b> <span class="meta">1 call, 4m 4s</span></summary><p class="pass-head"><b>planner declined</b> · the planner declined the first plan, so the loop had nothing to measure (no representative mapping)</p><div class="body"><details class="call role-planner" id="call-1"><summary>Call 1 · <span class="role role-planner">planner</span> · anthropic/claude-opus-5 · <span class="ok">ok</span> <span class="meta">in 18 · out 15763 · reasoning 12158 · cache read 206793 · cache write 39008 · 244.0 s</span></summary><div class="body"><div class="label">prompt</div><div class="md prompt"><div class="mdh mdh2">Task</div><p>You are the planner. Read the design source, spmv.v, and decide which of the candidate arithmetic regions listed below to rewrite onto the hard block described next, or that none should be rewritten. Write a plan for the editor, who carries it out; do not edit any file.</p><div class="mdh mdh2">The block</div><ul><li>primitive to instantiate: <code>mac_int_18x19</code> (precision INT19)</li><li>computes: acc += a*b</li><li>input ports: clk[1] (clock), reset[1], a[18], b[19]</li><li>output ports: out[37]</li><li>arithmetic: the block reads each operand port as an unsigned number, and its result is unsigned. An operand narrower than its port is zero-extended to the port width. The result wraps at 37 bits: a value past the result width keeps its low 37 bits (modulo 2^37), with no saturation and no flag.</li><li>registers: on <code>clk</code>, the block registers its operands (<code>a</code>, <code>b</code>) at one clock edge and <code>out</code> at the next, with the arithmetic between the two registers: operands applied before clock edge k appear in <code>out</code> after edge k+1, 2 cycles later. The block has no clock enable and no path around either register. <code>out</code> is the running sum: it adds its term (one product) on every clock edge that does not clear it, and <code>reset</code> is its only control (no enable, no load).</li><li>reset: <code>reset</code> is synchronous and active high: at a clock edge that samples it high it clears every register of the block (the operand registers and the running sum) to 0, and the block loads again at the next edge that samples it low.</li><li>power-up: every register of the block is unknown until the first clear by <code>reset</code>; no register of the block has an initial value, and a rewrite may not rely on one.</li><li>connections: connect every input port, by the port names above.</li></ul><div class="mdh mdh2">The design</div><p>Baseline: the unmodified spmv under this run's VPR settings (channel width 300, median of five seeds, 1 to 5) has a worst register-to-register path of 6.95433 ns on its one clock <code>clk</code> (I/O pads not timed) and uses 32 DSP tiles (as packed at seed 1) of the device's 132. Its used logic-block area is 5.85603e+07 minimum-width transistor areas (one DSP tile 253779, one cluster 27905) and its routed wirelength is 197938, so its area x delay x wirelength product, the objective, is 8.06098e+13. Its slowest stage (read off the seed-1 timing report) is in fetcher: no multiply, a register through six LUTs into a flip-flop with synchronous reset and enable; wire 5.96 ns in all, 1.60 of it into the third LUT. The next slowest stage (read off the seed-1 timing report), in fetcher, is no multiply, a register through six LUTs into a flip-flop with synchronous reset and enable; wire 5.65 ns in all, 6.776 ns, so shortening the slowest stage past that point buys nothing on its own. Any path your rewrite creates is compared against that critical path.</p><div class="mdh mdh3">Delays on this architecture</div><p>The block rows and the soft flip-flop row are from the architecture file. Wire and adder delays are sampled, given as a range with the median in parentheses. A row marked "on this design" is measured on the unmodified design's own placement under this run's VPR settings, with the design's hard multiplier standing in for the block; the other rows are sampled over earlier runs of other designs on this architecture.</p><div class="md-tw"><table><thead><tr><th>element on a path</th><th>ns</th></tr></thead><tbody><tr><td>into the block: a path ends at the block's input register (setup)</td><td>0.019</td></tr><tr><td>inside the block: input register clock-to-Q + delay + output register setup</td><td>0.060 + 2.140 + 0.019 = 2.219, below the baseline's critical path</td></tr><tr><td>out of the block: a path starts at the output register of <code>out</code> (clock-to-Q)</td><td>0.060</td></tr><tr><td>wire, block to block</td><td>0.96 to 2.22 (median 1.17)</td></tr><tr><td>wire, register to first block</td><td>1.00 to 3.19 (median 1.52)</td></tr><tr><td>wire, last block to register</td><td>0.83 to 2.67 (median 2.25)</td></tr><tr><td>wire, block into soft logic</td><td>0.54 to 1.90 (median 0.96)</td></tr><tr><td>soft adder level, cell plus wire to the next</td><td>0.32 to 2.91 (median 1.14)</td></tr><tr><td>soft flip-flop, clock to output</td><td>0.060</td></tr></tbody></table></div><div class="mdh mdh3">Candidate regions</div><p>An id names a product by its module and its multiply. One that ends in <code>(sum_in=&lt;module&gt;)</code> is a product whose sum sits in that other module: the product leaves its own module through a port and is added there, so the arithmetic to convert spans both. A <code>#1</code>, <code>#2</code> after an id separates instances of the same product that sit in sums of different shapes.</p><p>In every row, operation: multiply.<br>In every row, register stages between the products and their sum: products reach no sum.<br>In every row, products in the whole sum this one belongs to: no sum.</p><div class="md-tw"><table><thead><tr><th>id</th><th>instances</th><th>what it already is in the baseline</th></tr></thead><tbody><tr><td>Channel.$mul$spmv.v:3317$75</td><td>32</td><td>on a DSP tile in mult_9x9_fixed_pt mode, one to a tile on all 32 tiles (96 of the 128 slots open)</td></tr><tr><td>bvb.$mul$spmv.v:2490$57</td><td>1</td><td>no DSP tile; a product by a constant factor that synthesis turns into shifts, so the baseline netlist holds no multiply cell for it</td></tr><tr><td>spmv.$mul$spmv.v:163$11</td><td>1</td><td>no DSP tile; a product by a constant factor that synthesis turns into shifts, so the baseline netlist holds no multiply cell for it</td></tr><tr><td>spmv.$mul$spmv.v:172$13</td><td>1</td><td>no DSP tile; a product by a constant factor that synthesis turns into shifts, so the baseline netlist holds no multiply cell for it</td></tr></tbody></table></div><div class="mdh mdh2">Correctness: these must hold</div><ul><li><strong>Same behavior.</strong> The rewritten design must produce the same outputs as the original on every cycle, with every register of the original starting at 0. Do not change what the design computes. Logic added only to reproduce it (recomputing a value, deriving the block's reset, correcting a block's result) is allowed.</li><li><strong>Visibility.</strong> Only what the block's output ports carry is visible outside it. A value read by anything else (another expression, a module port, another module) cannot go inside a block: keep it outside, or recompute it. Check the source for every reader.</li><li><strong>Terms.</strong> Keep every term of the original arithmetic. A term with no matching block port is computed outside the block. A port the design ties to a constant may be tied the same way on the block.</li><li><strong>Registers and reset.</strong> The block's registers, if it has any, behave as the contract states. A design register may become a block register only if that keeps its behavior. Drive the block's reset so that "same behavior" holds after every reset, not only at start-up. Registers the rewrite adds start unknown; do not rely on their initial value.</li><li><strong>Assumptions.</strong> If the rewrite is correct only under an assumption about the design's inputs or use (a bound on a value, when a signal is asserted), state it on a line starting <code>ASSUMES:</code> and cite the lines of the design that support it. The reference testbench does not know your assumption, so the rewrite must still match the original under it.</li><li><strong>Scope.</strong> Change only what the rewrite onto the block needs.</li></ul><div class="mdh mdh2">Cost (guidance: go against it only with a reason in the plan)</div><ul><li>The clock period is the delay of the slowest stage (the logic between one register and the next). A rewrite that does not touch the slowest stage should not be expected to make the design faster, and should not make another stage slower than it.</li><li>Blocks in series are separate stages.</li><li>Moving or adding registers changes stage lengths and when values arrive.</li><li>Area falls when soft adders and flip-flops move into blocks.</li><li>A DSP tile holds two blocks of this mode. Blocks in one tile share one clock and one reset, so blocks on different reset signals cannot share a tile. Synthesis may already have placed the design's multiplies on tiles, so a block that only replaces one saves little: count tiles against the baseline.</li></ul><div class="mdh mdh2">Objective</div><p>Minimize area × delay × wirelength against the baseline. If you expect no rewrite to lower it, output TIER: NONE. Among rewrites that lower it, choose the one that lowers it most.</p><div class="mdh mdh2">Output</div><div class="mdh mdh3">Tiers</div><ul><li><strong>T1:</strong> The block replaces the region's arithmetic as it stands: the same operations on the same operands, now inside the block.</li><li><strong>T2:</strong> The region's arithmetic is regrouped to fit the block (products regrouped into the block's sums, registers moved), computing the same values.</li><li><strong>NONE:</strong> No rewrite: no candidate can be rewritten correctly.</li></ul><div class="mdh mdh3">Header</div><p>Write exactly this header, each key at the start of its own line, then the plan:</p><p>TIER: &lt;exactly one of T1, T2, NONE&gt;<br>REGIONS: &lt;the converted candidate ids, comma-separated; NONE when TIER is NONE&gt;<br>SHARED_REDUCTION: &lt;the signal or module the converted products are summed in; NONE for a single region&gt;<br>BLOCKS: &lt;how many blocks the rewrite instantiates, one integer&gt;<br>TILES: &lt;how many DSP tiles the whole design then uses, one integer&gt;<br>STAGE_NS: &lt;the delay of the slowest stage the rewrite leaves, in ns, one number&gt;<br>MAPPING: &lt;which design signals go to which block ports&gt;<br>PLAN: &lt;the plan, stating everything listed below&gt;</p><div class="mdh mdh3">What the plan must state</div><ul><li>Every candidate region, converted or left, with the reason each is left; candidates that share a reason may be grouped.</li><li>How many blocks the rewrite adds, and how many DSP tiles the design then uses.</li><li>The longest series of blocks in any stage and its delay, against the slowest stage.</li><li>What soft logic leaves which stage, and whether that stage is the slowest.</li><li>For each converted region, the register stages from its operands to its result, before and after the rewrite.</li></ul><div class="mdh mdh3">Output rules</div><ul><li>Write nothing before the TIER line; read the source first.</li><li>A reviewer checks the plan automatically and no person reads it, so do not end with a question or an offer.</li><li>If a change to the design itself, not to the rewrite, would let more of it use the block, you may say so on a line starting <code>DESIGN_CHANGE:</code>. It is reported to the user and does not change your decision.</li></ul><div class="mdh mdh2">Reference simulation</div><p>After the edit, the framework simulates the edited design against the original with the reference testbench, comparing every output on every cycle. A candidate that does not match is not measured. The testbench (tb_equiv_spmv.v) and the block's behavioural model (mac_int_18x19.v) are in sim_reference/.</p><p>Read these files in this directory: spmv.v</p></div><div class="label">response</div><div class="md response"><p>I'll start by reading the design source.</p><p>TIER: NONE<br>REGIONS: NONE<br>SHARED_REDUCTION: NONE<br>BLOCKS: 0<br>TILES: 32<br>STAGE_NS: 6.95433<br>MAPPING: none — no block is instantiated; no design signal is connected to <code>a</code>, <code>b</code>, <code>clk</code> or <code>reset</code><br>PLAN:</p><p><strong>Decision: leave the design unmodified. No candidate can be rewritten onto <code>mac_int_18x19</code> and still match the original cycle for cycle.</strong></p><p><strong>Candidate 1 — <code>Channel.$mul$spmv.v:3317$75</code> (32 instances), left.</strong></p><p>What it is (spmv.v:3285-3323): per channel, <code>mult &lt;= vec_val * mat_val</code> in a clocked block with enable <code>vec_val_rd_en_reg &amp;&amp; mat_val_rd_en_reg</code> and <strong>no</strong> <code>rst</code> branch; <code>mult_wr_en</code> is set at the same edge. <code>mult</code> has exactly one reader, <code>fifo_mult.din</code> (spmv.v:3299), and the FIFO's <code>we</code> is <code>mult_wr_en</code> (spmv.v:3300). Two independent blockers:</p><ol><li><em>Latency.</em> <code>vec_val</code>/<code>mat_val</code> are registered dpram read ports inside <code>generic_fifo_sc_a</code> (spmv.v:3618-3631, dpram at spmv.v:3709-3716), so the popped operands first exist in the cycle in which <code>vec_val_rd_en_reg</code>/<code>mat_val_rd_en_reg</code> are high. Operands valid in cycle t ⇒ <code>mult</code> holds the product in cycle t+1, with <code>mult_wr_en</code>=1 in that same cycle, so the FIFO's dpram stores the product at edge t+2. The block is 2 cycles: operands applied in cycle t appear on <code>out</code> only in cycle t+2, i.e. one cycle after the FIFO must already have captured them. There is no earlier source for the operands (they are BRAM outputs; the address is known a cycle earlier but the data is not), and the consumer register is the FIFO's BRAM word, which cannot be moved. Delaying <code>mult_wr_en</code> by one cycle to match would shift every <code>mult_full</code>/<code>mult_empty</code> handshake, hence every <code>Accumulator</code> read, every <code>data_out</code> FIFO write and the free-running round-robin in spmv.v:160-202, so <code>dout</code>/<code>done_reg</code> would move in time — the strict same-cycle compare in tb_equiv_spmv.v:83-96 fails.</li><li><em>Running sum vs. single product, no enable.</em> The region's own row says "products reach no sum": each channel needs one standalone 16-bit product per enabled cycle, while the block has no enable and no load and its <code>out</code> is a running sum that can only be cleared, never reloaded. Zeroing <code>a</code> on non-enabled cycles suppresses a term but does not expose the last term. Recovering one product would mean <code>out_k − out_{k−1}</code> in soft logic: a 16-bit subtract plus a 16-bit register per channel, 32 times — more soft logic than the 8×8 multiply it removes (which synthesis already put on a DSP), and still one cycle late. Clearing the block each cycle is not an option either: a <code>reset</code> edge clears the operand registers too, so a reset-per-product scheme yields one product every two cycles at best.</li></ol><p>Note on reset, for completeness: the retained value of <code>mult</code> across a mid-run <code>rst</code> is not observable (whenever <code>mult_wr_en</code> is 1, <code>mult</code> was written at that same edge), so the absence of a <code>rst</code> branch in spmv.v:3312-3323 is not by itself fatal; blockers 1 and 2 are.</p><p>The tile prize this forgoes is real and is why the region was examined: 32 blocks, two to a tile on one shared <code>clk</code>/<code>rst</code>, would be 16 DSP tiles against the baseline's 32 (−4.06e6 of 5.856e7 area units). It is not reachable correctly.</p><p><strong>Candidates 2-4 — <code>bvb.$mul$spmv.v:2490$57</code>, <code>spmv.$mul$spmv.v:163$11</code>, <code>spmv.$mul$spmv.v:172$13</code>, left (one shared reason).</strong></p><p>All three are a small counter times a constant power of two used as a barrel-shift amount: <code>id &gt;&gt; (counter*8)</code> (spmv.v:2490), <code>data_out &gt;&gt; (counter_delay*16)</code> (spmv.v:163), <code>addr_out &gt;&gt; (counter_delay*8)</code> (spmv.v:172). Synthesis turns each into a bit concatenation, so the baseline netlist holds no multiply cell and no soft adder for them — there is nothing for the block to absorb and no area to save. Putting one on a block would instead <em>add</em> a DSP tile (and tiles come two blocks each, so up to two more tiles), add a block-to-soft-logic wire (0.54-1.90 ns) into the variable shifter, and insert the block's 2-cycle latency into a path that is combinational within one stage. The shift amount is also still needed in soft form (<code>counter_delay</code> is read by <code>counter_store==counter_delay</code> at spmv.v:199 and by <code>counter_delay &lt;= counter</code>), so nothing leaves the soft fabric. The accumulate semantics would also have to be undone: <code>out</code> would hold Σ of the term over all cycles, not <code>counter*K</code>, so each would need its gated-increment reconstruction and a modulo slice to re-wrap the 5-bit counter. Strictly cost with no benefit under area × delay × wirelength.</p><p><strong>Blocks and tiles.</strong> The rewrite adds 0 blocks. The design continues to use 32 DSP tiles, as packed at seed 1.</p><p><strong>Longest series of blocks in any stage.</strong> Zero blocks in series, 0 ns of block delay. The slowest stage is untouched: the six-LUT register-to-flip-flop path in <code>fetcher</code>, 6.95433 ns; the next stage is 6.776 ns, so even a successful rewrite elsewhere could have bought at most 0.178 ns of period before hitting the second stage.</p><p><strong>Soft logic moved.</strong> None. No stage loses or gains logic, so no stage becomes slower and none becomes the new critical stage.</p><p><strong>Register stages, before and after.</strong> <code>Channel.$mul$spmv.v:3317$75</code>: before, 1 stage from <code>vec_val</code>/<code>mat_val</code> to <code>mult</code>; after, unchanged at 1 (the block would have made it 2, which is the first blocker). The three constant-factor products: before, 0 stages (combinational shift amounts); after, unchanged at 0 (the block would have made each 2).</p><p>DESIGN_CHANGE: Two changes to the design itself would open the 32 Channel products to the block, worth roughly 16 DSP tiles. (a) Pipeline the product path in <code>Channel</code> by one more stage — register <code>mult</code> twice and delay <code>mult_wr_en</code> equally (spmv.v:3312-3323) — so the FIFO write lands two cycles after the operands and the block's 2-cycle latency fits. (b) Do the per-row accumulation where the multiply is, rather than after the <code>fifo_mult</code>: the design already computes Σ mat_val·vec_val per row, but splits it across the FIFO into a product in <code>Channel</code> and <code>wr_data &lt;= wr_data + mult_out</code> in <code>Accumulator</code> (spmv.v:3428). Accumulating in the channel, with the block's synchronous <code>reset</code> driven at row boundaries and the row-change detection allowed two cycles of pipeline, maps one <code>mac_int_18x19</code> per channel onto the running sum it was built for and removes the 16-bit soft adder and its flip-flops from each <code>Accumulator</code>.</p></div><details class="inner"><summary>tool events <span class="meta">12 recorded, 0 error(s)</span></summary><div class="body"><div class="tools"><details class="inner"><summary><code>Glob</code> <span class="meta"><span class="ok">completed</span> **/*.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "**/*.v"
+}</pre><div class="label">output</div><pre class="plain">sim_reference/mac_int_18x19.v
+sim_reference/tb_equiv_spmv.v
+spmv.v</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/sim_reference/mac_int_18x19.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/sim_reference/mac_int_18x19.v"
+}</pre><div class="label">output</div><pre class="plain">1	// mac_int_18x19: out accumulates a*b, unsigned, modulo 2^37 (the running sum wraps at the
+2	// output width; the product alone can fill it).
+3	// Ports: clk, reset, a[18], b[19] in; out[37] out.
+4	// Registers (the arch's annotation read literally, decision 2026-10-16): a and b are registered
+5	// at the block's entry at one clock edge; at the next, out &lt;= out + a*b from those
+6	// registers, so out is the accumulator. Cycles: a, b to out 2. A product, once added, stays in
+7	// out until reset: reset is the accumulator's only control (no enable, no load).
+8	// Reset: synchronous, active high (2026-10-17: the arch's annotation does not distinguish a reset
+9	// register from a clear sampled by the registers themselves): at a clock edge that samples it high
+10	// every register of the block (a, b registers and out) is cleared to 0; the block loads again at the
+11	// next edge that samples it low. No register has an initial value: every one is X until the first
+12	// clear, so out is X until the block is reset.
+13	module mac_int_18x19 (
+14	    input clk,
+15	    input reset,
+16	    input [17:0] a,
+17	    input [18:0] b,
+18	    output reg [36:0] out
+19	);
+20	
+21	    // stage 1: the input registers
+22	    reg [17:0] a_reg;
+23	    reg [18:0] b_reg;
+24	
+25	    // combinational middle: the product and the add to the running sum
+26	    wire [36:0] prod = a_reg * b_reg;                             // 18x19 -&gt; 37, exact
+27	    wire [36:0] sum  = out + prod;                                // modulo 2^37
+28	
+29	    always @(posedge clk) begin
+30	        if (reset) begin
+31	            out &lt;= 0;
+32	            a_reg &lt;= 0; b_reg &lt;= 0;
+33	        end
+34	        else begin
+35	            a_reg &lt;= a; b_reg &lt;= b;
+36	            out &lt;= sum;                                          // stage 2: the accumulator
+37	        end
+38	    end
+39	
+40	endmodule
+41	</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/sim_reference/tb_equiv_spmv.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/sim_reference/tb_equiv_spmv.v"
+}</pre><div class="label">output</div><pre class="plain">1	// tb_equiv_spmv.v: equivalence testbench for spmv's spmv, generated by verify/equiv/gen_tb.py
+2	// on 2026-10-22; do not edit, regenerate (the command is in make_testbenches.sh):
+3	//   gen_tb.py --source /home/samu/dev/llm-hardblocks/vtr-verilog-to-routing/vtr_flow/benchmarks/verilog/koios/spmv.v --module spmv --ref spmv_ref --design spmv --out tb_equiv_spmv.v -DCOL_ID_BITS=8 -DROW_ID_BITS=8 -DMAT_VAL_BITS=8 -DVEC_VAL_BITS=8 -DMULT_BITS=(`VEC_VAL_BITS+`MAT_VAL_BITS) -DNUM_CHANNEL=32 -DNUM_CHANNEL_BITS=$clog2(`NUM_CHANNEL) -DLANE_NUM=(3*`NUM_CHANNEL) -DNUM_MAT_VALS=4096 -DNUM_COL_IDS=`NUM_MAT_VALS -DNUM_ROW_IDS=`NUM_MAT_VALS -DNUM_VEC_VALS=128 -DMAT_VAL_ADDR_WIDTH=12 -DCOL_ID_ADDR_WIDTH=`MAT_VAL_ADDR_WIDTH -DROW_ID_ADDR_WIDTH=`MAT_VAL_ADDR_WIDTH -DFIFO_DEPTH=8 -DMAX_COLS=(1&lt;&lt;`COL_ID_BITS) -DBYTES_PER_ADDR_PER_BRAM=1 -DNUM_BRAMS=1 -DVEC_VAL_BYTES=(`VEC_VAL_BITS/8) -DVEC_VAL_OFFSET=$clog2(`VEC_VAL_BITS) -DNUM_VEC_VALS_PER_ADDR_PER_BRAM=(`BYTES_PER_ADDR_PER_BRAM/`VEC_VAL_BYTES) -DNUM_VEC_VALS_PER_ADDR=`NUM_VEC_VALS_PER_ADDR_PER_BRAM*`NUM_BRAMS -DNUM_VEC_VALS_PER_ADDR_BITS=$clog2(`NUM_VEC_VALS_PER_ADDR) -DNUM_ADDR=(`NUM_VEC_VALS/`NUM_VEC_VALS_PER_ADDR)+1 -DBVB_AWIDTH=`COL_ID_BITS -DCOUNTER_BITS=$clog2(`NUM_ADDR) -DLOCAL_ID_BITS=`NUM_VEC_VALS_PER_ADDR_BITS --reset rst --lead-in 4 --no-impulse --drive drive_spmv.vh --init-zero --random 3000
+4	// Compares every output every cycle: dout[16], done_reg[1].
+5	// Resets: rst (active high); policy strict; compare from the first cycle after the reset release.
+6	`timescale 1ns/1ps
+7	`ifndef REF
+8	`define REF spmv_ref
+9	`endif
+10	`ifndef MODEL_STR
+11	`define MODEL_STR "mult_add_int_18x19"
+12	`endif
+13	`ifndef RESET_CYCLES
+14	`define RESET_CYCLES 4
+15	`endif
+16	`ifndef LEAD_IN
+17	`define LEAD_IN 4
+18	`endif
+19	`ifndef RANDOM_CYCLES
+20	`define RANDOM_CYCLES 3000
+21	`endif
+22	`ifndef RESET_RATE
+23	`define RESET_RATE 64
+24	`endif
+25	`ifndef SEED
+26	`define SEED 32'h2545f491
+27	`endif
+28	`ifdef START_ONLY
+29	`define MIDRUN_RESETS 0
+30	`else
+31	`define MIDRUN_RESETS 1
+32	`endif
+33	module tb;
+34	    reg clk = 0; always #5 clk = ~clk;
+35	    reg rst = 0;
+36	    reg [7:0] mat_val_din = 0;
+37	    reg [7:0] col_id_din = 0;
+38	    reg [7:0] row_id_din = 0;
+39	    reg mat_val_wren = 0;
+40	    reg col_id_wren = 0;
+41	    reg row_id_wren = 0;
+42	    reg [11:0] mat_val_addr_ext = 0;
+43	    reg [11:0] col_id_addr_ext = 0;
+44	    reg [11:0] row_id_addr_ext = 0;
+45	    reg [7:0] vector_din = 0;
+46	    reg vector_wren = 0;
+47	    reg [7:0] vector_addr_ext = 0;
+48	    wire [15:0] dout_ref, dout_dut;
+49	    wire done_reg_ref, done_reg_dut;
+50	    `REF u_ref (.clk(clk), .rst(rst), .dout(dout_ref), .done_reg(done_reg_ref), .mat_val_din(mat_val_din), .col_id_din(col_id_din), .row_id_din(row_id_din), .mat_val_wren(mat_val_wren), .col_id_wren(col_id_wren), .row_id_wren(row_id_wren), .mat_val_addr_ext(mat_val_addr_ext), .col_id_addr_ext(col_id_addr_ext), .row_id_addr_ext(row_id_addr_ext), .vector_din(vector_din), .vector_wren(vector_wren), .vector_addr_ext(vector_addr_ext));
+51	    `DUT u_dut (.clk(clk), .rst(rst), .dout(dout_dut), .done_reg(done_reg_dut), .mat_val_din(mat_val_din), .col_id_din(col_id_din), .row_id_din(row_id_din), .mat_val_wren(mat_val_wren), .col_id_wren(col_id_wren), .row_id_wren(row_id_wren), .mat_val_addr_ext(mat_val_addr_ext), .col_id_addr_ext(col_id_addr_ext), .row_id_addr_ext(row_id_addr_ext), .vector_din(vector_din), .vector_wren(vector_wren), .vector_addr_ext(vector_addr_ext));
+52	    initial $init_zero(`MODEL_STR, u_ref, u_dut);   // the power-up value of every soft register and memory word
+53	    // one xorshift32 PRNG behind every random value; draw sets r32
+54	    reg [31:0] prng = `SEED, r32;
+55	    task draw; begin prng = prng ^ (prng &lt;&lt; 13); prng = prng ^ (prng &gt;&gt; 17); prng = prng ^ (prng &lt;&lt; 5); r32 = prng; end endtask
+56	    // bookkeeping
+57	    localparam NOUT = 2; localparam MAXW = 16;
+58	    integer mm [0:NOUT-1]; integer dl [0:NOUT-1]; integer xr [0:NOUT-1]; integer xd [0:NOUT-
+…[truncated, 13031 chars total]</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/spmv.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/spmv.v",
+ "limit": 250
+}</pre><div class="label">output</div><pre class="plain">1	//////////////////////////////////////////////////////////////////////////////
+2	// Matrix vector multiplication design with sparsity
+3	// This is a Sparse Matrix-Vector Multiplication accelerator design. 
+4	// The mathematical formula is Y = M * X where M is input sparse matrix, 
+5	// X is input dense vector and Y is output dense vector. We support 8-bit 
+6	// precision. Vector X is loaded in on-chip banked memory before start of 
+7	// the operation. The input to the accelerator are 3 values corresponding 
+8	// to each matrix element: data, col, number of non zero values in a row. 
+9	// There are 32 channels which can run in parallel. Each channel has a MAC 
+10	// unit. Computation for each row of the matrix is assigned to a channel 
+11	// dynamically based on the number of non zero values in that row. The final
+12	// accumulated value is written in the output memory. The write address is 
+13	// based on row number. Hence, write is out of order with respect to rows 
+14	// in output vector.
+15	// Multipliers in channels followed by accumulators, Banked Vector Buffer 
+16	// (RAM and crossbar) to store vector elements. Arbiter to fetch data from 
+17	// RAMs store matrix elements. Uses CISR encoding. Multiple FIFOs.
+18	//////////////////////////////////////////////////////////////////////////////
+19	
+20	//////////////////////////////////////////////////////////////////////////////
+21	// Author: Aatman Borda
+22	//////////////////////////////////////////////////////////////////////////////
+23	
+24	//`define SIMULATION
+25	`define COL_ID_BITS 8
+26	`define ROW_ID_BITS 8
+27	`define MAT_VAL_BITS 8
+28	`define VEC_VAL_BITS 8
+29	`define MULT_BITS (`VEC_VAL_BITS + `MAT_VAL_BITS)
+30	`define NUM_CHANNEL 32
+31	`define NUM_CHANNEL_BITS $clog2(`NUM_CHANNEL)
+32	`define LANE_NUM (3 * `NUM_CHANNEL)
+33	// `define LANE_NUM_BITS $clog2(`LANE_NUM)
+34	//`define NUM_MAT_VALS 8864
+35	`define NUM_MAT_VALS 4096
+36	`define NUM_COL_IDS `NUM_MAT_VALS
+37	`define NUM_ROW_IDS `NUM_MAT_VALS
+38	`define NUM_VEC_VALS 128
+39	
+40	//`define MAT_VAL_ADDR_WIDTH $clog2(`NUM_MAT_VALS)
+41	`define MAT_VAL_ADDR_WIDTH 12
+42	`define COL_ID_ADDR_WIDTH `MAT_VAL_ADDR_WIDTH
+43	`define ROW_ID_ADDR_WIDTH `MAT_VAL_ADDR_WIDTH
+44	
+45	`define FIFO_DEPTH 8
+46	`define MAX_COLS (1&lt;&lt;`COL_ID_BITS)
+47	
+48	// MACROS for BVB
+49	`define BYTES_PER_ADDR_PER_BRAM 1
+50	`define NUM_BRAMS 1
+51	`define VEC_VAL_BYTES (`VEC_VAL_BITS/8)
+52	`define VEC_VAL_OFFSET $clog2(`VEC_VAL_BITS)
+53	`define NUM_VEC_VALS_PER_ADDR_PER_BRAM (`BYTES_PER_ADDR_PER_BRAM/`VEC_VAL_BYTES)
+54	`define NUM_VEC_VALS_PER_ADDR `NUM_VEC_VALS_PER_ADDR_PER_BRAM*`NUM_BRAMS
+55	`define NUM_VEC_VALS_PER_ADDR_BITS $clog2(`NUM_VEC_VALS_PER_ADDR)
+56	`define NUM_ADDR (`NUM_VEC_VALS/`NUM_VEC_VALS_PER_ADDR)+1
+57	`define BVB_AWIDTH `COL_ID_BITS
+58	`define COUNTER_BITS $clog2(`NUM_ADDR)
+59	`define LOCAL_ID_BITS `NUM_VEC_VALS_PER_ADDR_BITS
+60	
+61	module spmv(
+62		input clk,
+63		input rst,
+64	
+65		output [`MULT_BITS-1:0] dout,
+66	
+67		output reg done_reg,
+68	
+69	  input [`MAT_VAL_BITS-1:0] mat_val_din,
+70	  input	[`COL_ID_BITS-1:0] col_id_din,
+71	  input [`ROW_ID_BITS-1:0] row_id_din,
+72	
+73	  input mat_val_wren,
+74	  input col_id_wren,
+75	  input row_id_wren,
+76	
+77	  input [`MAT_VAL_ADDR_WIDTH-1:0] mat_val_addr_ext,
+78	  input [`COL_ID_ADDR_WIDTH-1:0] col_id_addr_ext,
+79	  input [`ROW_ID_ADDR_WIDTH-1:0] row_id_addr_ext,
+80	
+81		input [`NUM_VEC_VALS_PER_ADDR*`VEC_VAL_BITS-1:0] vector_din,
+82	  input vector_wren,
+83	  input [`BVB_AWIDTH-1:0] vector_addr_ext
+84	);
+85	
+86		// Row ID fifo signal
+87		wire [(`ROW_ID_BITS*`NUM_CHANNEL)-1:0] row_id;
+88		wire [`NUM_CHANNEL-1:0] row_id_empty;
+89		wire [`NUM_CHANNEL-1:0] row_id_rd_en;
+90	
+91		// column id fifo signals
+92		wire [(`COL_ID_BITS*`NUM_CHANNEL-1):0] col_id;
+93		wire [`NUM_CHANNEL-1:0] col_id_empty;
+94		wire [`NUM_CHANNEL-1:0] col_id_rd_en; 
+95	
+96		// matrix elements fifo signals
+97		wire [(`MAT_VAL_BITS*`NUM_CHANNEL)-1:0] mat_val;
+98		wire [`NUM_CHANNEL-1:0] mat_val_empty;
+99		wire [`NUM_CHANNEL-1:0
+…[truncated, 8999 chars total]</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/spmv.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/spmv.v",
+ "offset": 2400,
+ "limit": 180
+}</pre><div class="label">output</div><pre class="plain">2400		generic_fifo_sc_a #( 
+2401			.dw(`VEC_VAL_BITS), 
+2402			.aw(FIFO_DEPTH_BITS) 
+2403		) fifo_bvb_27 ( 
+2404			.clk(clk), // input clk 
+2405			.rst(rst), 
+2406			.clr(1'b0), 
+2407			.din(ram_out), 
+2408			.we(val_wr_en[27]), // input wr_en 
+2409			.re(val_rd_en[27]), // input rd_en 
+2410			.dout(val[(27+1)*`VEC_VAL_BITS-1:27*`VEC_VAL_BITS]), 
+2411			.full(val_full[27]), // output full 
+2412			.empty(val_empty[27]) // output empty 
+2413		);
+2414	
+2415		generic_fifo_sc_a #( 
+2416			.dw(`VEC_VAL_BITS), 
+2417			.aw(FIFO_DEPTH_BITS) 
+2418		) fifo_bvb_28 ( 
+2419			.clk(clk), // input clk 
+2420			.rst(rst), 
+2421			.clr(1'b0), 
+2422			.din(ram_out), 
+2423			.we(val_wr_en[28]), // input wr_en 
+2424			.re(val_rd_en[28]), // input rd_en 
+2425			.dout(val[(28+1)*`VEC_VAL_BITS-1:28*`VEC_VAL_BITS]), 
+2426			.full(val_full[28]), // output full 
+2427			.empty(val_empty[28]) // output empty 
+2428		);
+2429	
+2430		generic_fifo_sc_a #( 
+2431			.dw(`VEC_VAL_BITS), 
+2432			.aw(FIFO_DEPTH_BITS) 
+2433		) fifo_bvb_29 ( 
+2434			.clk(clk), // input clk 
+2435			.rst(rst), 
+2436			.clr(1'b0), 
+2437			.din(ram_out), 
+2438			.we(val_wr_en[29]), // input wr_en 
+2439			.re(val_rd_en[29]), // input rd_en 
+2440			.dout(val[(29+1)*`VEC_VAL_BITS-1:29*`VEC_VAL_BITS]), 
+2441			.full(val_full[29]), // output full 
+2442			.empty(val_empty[29]) // output empty 
+2443		);
+2444	
+2445		generic_fifo_sc_a #( 
+2446			.dw(`VEC_VAL_BITS), 
+2447			.aw(FIFO_DEPTH_BITS) 
+2448		) fifo_bvb_30 ( 
+2449			.clk(clk), // input clk 
+2450			.rst(rst), 
+2451			.clr(1'b0), 
+2452			.din(ram_out), 
+2453			.we(val_wr_en[30]), // input wr_en 
+2454			.re(val_rd_en[30]), // input rd_en 
+2455			.dout(val[(30+1)*`VEC_VAL_BITS-1:30*`VEC_VAL_BITS]), 
+2456			.full(val_full[30]), // output full 
+2457			.empty(val_empty[30]) // output empty 
+2458		);
+2459	
+2460		generic_fifo_sc_a #( 
+2461			.dw(`VEC_VAL_BITS), 
+2462			.aw(FIFO_DEPTH_BITS) 
+2463		) fifo_bvb_31 ( 
+2464			.clk(clk), // input clk 
+2465			.rst(rst), 
+2466			.clr(1'b0), 
+2467			.din(ram_out), 
+2468			.we(val_wr_en[31]), // input wr_en 
+2469			.re(val_rd_en[31]), // input rd_en 
+2470			.dout(val[(31+1)*`VEC_VAL_BITS-1:31*`VEC_VAL_BITS]), 
+2471			.full(val_full[31]), // output full 
+2472			.empty(val_empty[31]) // output empty 
+2473		);
+2474	
+2475		assign id_empty_shifted = id_empty &gt;&gt; counter;
+2476		assign val_full_shifted = val_full &gt;&gt; counter;
+2477		assign id_rd_en_local = (start &amp; (~id_empty_shifted) &amp; (~val_full_shifted));
+2478		assign id_rd_en = id_rd_en_local &lt;&lt; counter;
+2479	
+2480		always @ (posedge clk) begin
+2481			if (rst) begin
+2482				counter &lt;= 0;
+2483				counter_delay &lt;= 0;
+2484			end
+2485			else if (start) begin
+2486				counter &lt;= counter + 1;
+2487				counter_delay &lt;= counter;
+2488				id_rd_en_local_reg &lt;= id_rd_en_local;
+2489				val_wr_en &lt;= id_rd_en_local_reg &lt;&lt; counter_delay;
+2490				rd_addr &lt;= id &gt;&gt; (counter*`COL_ID_BITS);
+2491			end
+2492		end
+2493	endmodule
+2494	
+2495	module Big_Channel(
+2496		input clk, 
+2497		input rst, 
+2498		input start,
+2499		input fetcher_done,
+2500		
+2501		input [`MAT_VAL_BITS * `NUM_CHANNEL -1 :0] mat_val,
+2502		input [`NUM_CHANNEL - 1 : 0] mat_val_empty,
+2503		output [`NUM_CHANNEL - 1 : 0] mat_val_rd_en,
+2504	
+2505		input [`VEC_VAL_BITS * `NUM_CHANNEL - 1 : 0] vec_val,
+2506		input [`NUM_CHANNEL-1:0] vec_val_empty,
+2507		output [`NUM_CHANNEL-1:0] vec_val_rd_en,
+2508	
+2509		input [`ROW_ID_BITS * `NUM_CHANNEL -1:0] row_id,
+2510		input [`NUM_CHANNEL-1:0] row_id_empty,
+2511		output [`NUM_CHANNEL-1:0] row_id_rd_en,
+2512	
+2513		output [`MULT_BITS * `NUM_CHANNEL -1:0] data_out,
+2514		output [`NUM_CHANNEL-1:0] data_out_empty,
+2515		output [`ROW_ID_BITS * `NUM_CHANNEL -1:0] addr_out,
+2516		input [`NUM_CHANNEL-1:0] out_rd_en,
+2517	
+2518		output [`NUM_CHANNEL-1:0] done
+2519	);
+2520		
+2521		Channel_Accumulator CH_0 ( 
+2522			.clk(clk), 
+2523			.rst(rst), 
+2524			.start(start), 
+2525			.fetcher_done(fetcher_done), 
+2526			.mat_val(mat_val[(0+1)*`MAT_VAL_BITS-1:0*`MAT_VAL_BITS]), 
+2527			.mat_val_empty(mat_v
+…[truncated, 6153 chars total]</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/spmv.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/spmv.v",
+ "offset": 3230,
+ "limit": 200
+}</pre><div class="label">output</div><pre class="plain">3230					.mat_val_empty(mat_val_empty), 
+3231					.mat_val_rd_en(mat_val_rd_en),
+3232					.vec_val(vec_val), 
+3233					.vec_val_empty(vec_val_empty), 
+3234					.vec_val_rd_en(vec_val_rd_en),
+3235					.mult_out(mult_out),
+3236					.mult_empty(mult_empty), 
+3237					.mult_rd_en(mult_rd_en), 
+3238					.done(mult_done)
+3239		);
+3240						
+3241		Accumulator A0(	.clk(clk), 
+3242						.rst(rst), 
+3243						.start(start),
+3244						.mult_done(mult_done),
+3245						.row_id(row_id), 
+3246						.row_id_empty(row_id_empty), 
+3247						.row_id_rd_en(row_id_rd_en), 
+3248						.mult_out(mult_out),
+3249						.mult_empty(mult_empty), 
+3250						.mult_rd_en(mult_rd_en), 
+3251						.data_out(data_out),
+3252						.data_out_empty(data_out_empty),
+3253						.addr_out(addr_out),
+3254						.out_rd_en(out_rd_en),
+3255						.done(done)			
+3256		);
+3257	
+3258	endmodule
+3259	
+3260	module Channel(
+3261		input clk, 
+3262		input rst,
+3263		input start,
+3264		input fetcher_done,
+3265	
+3266		input [`MAT_VAL_BITS-1:0] mat_val,
+3267		input mat_val_empty,
+3268		output mat_val_rd_en,
+3269	
+3270		input [`VEC_VAL_BITS-1:0] vec_val,
+3271		input vec_val_empty,
+3272		output vec_val_rd_en,
+3273	
+3274		output [`MULT_BITS-1:0] mult_out,
+3275		output mult_empty,
+3276		input mult_rd_en,
+3277	
+3278		output done 
+3279		);
+3280	
+3281		parameter FIFO_DEPTH = 8;
+3282		// parameter FIFO_DEPTH_BITS = `LOG2(FIFO_DEPTH);
+3283		parameter FIFO_DEPTH_BITS = $clog2(8);
+3284	
+3285		reg [`MULT_BITS-1:0] mult;
+3286		reg mult_wr_en;
+3287		wire mult_full;
+3288		
+3289		reg vec_val_rd_en_reg;
+3290		reg mat_val_rd_en_reg;
+3291	
+3292		generic_fifo_sc_a #(
+3293			.dw(`MULT_BITS),
+3294			.aw(FIFO_DEPTH_BITS)
+3295			) fifo_mult (
+3296			.clk(clk),
+3297			.rst(rst),
+3298			.clr(1'b0),
+3299			.din(mult),
+3300			.we(mult_wr_en),
+3301			.re(mult_rd_en),
+3302			.dout(mult_out),
+3303			.full(mult_full),
+3304			.empty(mult_empty)
+3305		);
+3306	
+3307		assign done = mat_val_empty &amp; fetcher_done &amp; start;
+3308	
+3309		assign vec_val_rd_en = start &amp; (~vec_val_empty) &amp; (~mat_val_empty) &amp; (~mult_full);
+3310		assign mat_val_rd_en = start &amp; (~vec_val_empty) &amp; (~mat_val_empty) &amp; (~mult_full);
+3311	
+3312		always@(posedge clk) begin
+3313			vec_val_rd_en_reg &lt;= vec_val_rd_en;
+3314			mat_val_rd_en_reg &lt;= mat_val_rd_en;
+3315	
+3316			if(vec_val_rd_en_reg &amp;&amp; mat_val_rd_en_reg) begin
+3317				mult &lt;= vec_val * mat_val;
+3318				mult_wr_en &lt;= 1;
+3319			end
+3320			else begin
+3321				mult_wr_en &lt;= 0;
+3322			end
+3323		end
+3324	endmodule
+3325	
+3326	module Accumulator(
+3327		input clk, 
+3328		input rst, 
+3329		input start, 
+3330		input mult_done,
+3331	
+3332		input [`ROW_ID_BITS-1:0] row_id,
+3333		input row_id_empty,
+3334		output row_id_rd_en,
+3335	
+3336		input [`MULT_BITS-1:0] mult_out,
+3337		input mult_empty,
+3338		output mult_rd_en,
+3339	
+3340		output [`MULT_BITS-1:0] data_out,
+3341		output data_out_empty,
+3342		output [`ROW_ID_BITS-1:0] addr_out,
+3343		input out_rd_en,
+3344	
+3345		output reg done
+3346		);
+3347		
+3348		reg first_read;
+3349	
+3350		reg row_id_rd_en_reg;
+3351		reg mult_rd_en_reg;
+3352	
+3353		wire data_out_full;
+3354		wire addr_out_full_nc;
+3355	
+3356		wire addr_out_empty_nc;
+3357	
+3358		reg [`MULT_BITS-1:0] wr_data;
+3359		reg [`ROW_ID_BITS-1:0] wr_addr;
+3360		reg wr_en;
+3361	
+3362		reg [`MULT_BITS-1:0] wr_data_delay;
+3363		reg [`ROW_ID_BITS-1:0] wr_addr_delay;
+3364	
+3365		reg last;
+3366	
+3367		parameter FIFO_DEPTH_BITS = $clog2(`FIFO_DEPTH);
+3368	
+3369		generic_fifo_sc_a #(
+3370			.aw(FIFO_DEPTH_BITS),
+3371			.dw(`MULT_BITS)
+3372		) fifo_data_out (
+3373			.clk(clk),
+3374			.rst(rst),
+3375			.clr(1'b0),
+3376			.din(wr_data_delay),
+3377			.we(wr_en),
+3378			.re(out_rd_en),
+3379			.dout(data_out),
+3380			.full(data_out_full),
+3381			.empty(data_out_empty)
+3382		);
+3383	
+3384		generic_fifo_sc_a #(
+3385			.aw(FIFO_DEPTH_BITS),
+3386			.dw(`ROW_ID_BITS)
+3387		) fifo_addr_out (
+3388			.clk(clk),
+3389			.rst(rst),
+3390			.clr(1'b0),
+3391			.din(wr_addr_delay),
+3392			.we(wr_en),
+3393			.re(out_rd_en),
+3394			.dout(addr_out)
+…[truncated, 5015 chars total]</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> module generic_fifo_sc_a</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "module generic_fifo_sc_a",
+ "output_mode": "content",
+ "-n": true
+}</pre><div class="label">output</div><pre class="plain">spmv.v:3586:module generic_fifo_sc_a</pre></div></details><details class="inner"><summary><code>Grep</code> <span class="meta"><span class="ok">completed</span> ^module </span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "pattern": "^module ",
+ "output_mode": "content",
+ "-n": true
+}</pre><div class="label">output</div><pre class="plain">sim_reference/mac_int_18x19.v:13:module mac_int_18x19 (
+sim_reference/tb_equiv_spmv.v:33:module tb;
+spmv.v:61:module spmv(
+spmv.v:299:module fetcher(
+spmv.v:1935:module bvb(
+spmv.v:2495:module Big_Channel(
+spmv.v:3194:module Channel_Accumulator(
+spmv.v:3260:module Channel(
+spmv.v:3326:module Accumulator(
+spmv.v:3586:module generic_fifo_sc_a
+spmv.v:3677:module dpram #(
+spmv.v:3748:module spram #(</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/spmv.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/spmv.v",
+ "offset": 3586,
+ "limit": 95
+}</pre><div class="label">output</div><pre class="plain">3586	module generic_fifo_sc_a
+3587		#(parameter dw=8,
+3588		  parameter aw=8)
+3589		(clk, rst, clr, din, we, dout, re,
+3590		full, empty);
+3591	
+3592	localparam max_size = 1&lt;&lt;aw;
+3593	
+3594	input 			clk, rst, clr;
+3595	input 	[dw-1:0]	din;
+3596	input 			we;
+3597	output	[dw-1:0]	dout;
+3598	input 	wire		re;
+3599	output			full;
+3600	output			empty;
+3601	
+3602	////////////////////////////////////////////////////////////////////
+3603	//
+3604	// Local Wires
+3605	//
+3606	wire 	[dw-1:0]	din_nc;
+3607	wire 	[dw-1:0]	out_nc;
+3608	reg		[aw-1:0]	wp;
+3609	wire	[aw-1:0]	wp_pl1;
+3610	reg		[aw-1:0]	rp;
+3611	wire	[aw-1:0]	rp_pl1;
+3612	reg					gb;
+3613	
+3614	////////////////////////////////////////////////////////////////////
+3615	//
+3616	// Memory Block
+3617	//
+3618	dpram #(
+3619		.AWIDTH(aw),
+3620		.DWIDTH(dw)
+3621		) u0 (
+3622		.clk(clk),
+3623		.address_a(rp),
+3624		.wren_a(1'b0),
+3625		.data_a(din_nc),
+3626		.out_a(dout),
+3627		.address_b(wp),
+3628		.wren_b(we),
+3629		.data_b(din),
+3630		.out_b(out_nc)
+3631	);
+3632	
+3633	
+3634	////////////////////////////////////////////////////////////////////
+3635	//
+3636	// Misc Logic
+3637	//
+3638	
+3639	always @(posedge clk)
+3640		if(rst)	wp &lt;= {aw{1'b0}};
+3641		else
+3642		if(clr)		wp &lt;= {aw{1'b0}};
+3643		else
+3644		if(we)		wp &lt;= wp_pl1;
+3645	
+3646	assign wp_pl1 = wp + 1'b1;
+3647	
+3648	always @(posedge clk)
+3649		if(rst)		rp &lt;= {aw{1'b0}};
+3650		else
+3651		if(clr)		rp &lt;= {aw{1'b0}};
+3652		else
+3653		if(re)		rp &lt;= rp_pl1;
+3654	
+3655	assign rp_pl1 = rp + 1'b1;
+3656	
+3657	////////////////////////////////////////////////////////////////////
+3658	//
+3659	// Combinatorial Full &amp; Empty Flags
+3660	//
+3661	
+3662	assign empty = ((wp == rp) &amp; !gb);
+3663	assign full  = ((wp == rp) &amp;  gb);
+3664	
+3665	// Guard Bit ...
+3666	always @(posedge clk)
+3667		if(rst)						gb &lt;= 1'b0;
+3668		else
+3669		if(clr)						gb &lt;= 1'b0;
+3670		else
+3671		if((wp_pl1 == rp) &amp; we)		gb &lt;= 1'b1;
+3672		else
+3673		if(re)						gb &lt;= 1'b0;
+3674	
+3675	endmodule
+3676	
+3677	module dpram #(
+3678		parameter DWIDTH = 32,
+3679		parameter AWIDTH = 10
+3680	  )</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/spmv.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/spmv.v",
+ "offset": 3677,
+ "limit": 100
+}</pre><div class="label">output</div><pre class="plain">3677	module dpram #(
+3678		parameter DWIDTH = 32,
+3679		parameter AWIDTH = 10
+3680	  )
+3681	  (
+3682		clk,
+3683		address_a,
+3684		address_b,
+3685		wren_a,
+3686		wren_b,
+3687		data_a,
+3688		data_b,
+3689		out_a,
+3690		out_b
+3691	);
+3692	
+3693	localparam NUM_WORDS=1&lt;&lt;AWIDTH;
+3694	
+3695	input clk;
+3696	input [(AWIDTH-1):0] address_a;
+3697	input [(AWIDTH-1):0] address_b;
+3698	input  wren_a;
+3699	input  wren_b;
+3700	input [(DWIDTH-1):0] data_a;
+3701	input [(DWIDTH-1):0] data_b;
+3702	output reg [(DWIDTH-1):0] out_a;
+3703	output reg [(DWIDTH-1):0] out_b;
+3704	
+3705	`ifndef hard_mem
+3706	
+3707		reg [DWIDTH-1:0] ram[NUM_WORDS-1:0];
+3708	
+3709		always @ (posedge clk) begin
+3710			if (wren_a) begin
+3711				ram[address_a] &lt;= data_a;
+3712			end
+3713			else begin
+3714				out_a &lt;= ram[address_a];
+3715			end
+3716		end
+3717		  
+3718		always @ (posedge clk) begin 
+3719			if (wren_b) begin
+3720				ram[address_b] &lt;= data_b;
+3721			end 
+3722			else begin
+3723				out_b &lt;= ram[address_b];
+3724			end
+3725		end
+3726	
+3727	`else
+3728	defparam u_dual_port_ram.ADDR_WIDTH = AWIDTH;
+3729	defparam u_dual_port_ram.DATA_WIDTH = DWIDTH;
+3730	
+3731		dual_port_ram u_dual_port_ram(
+3732		.addr1(address_a),
+3733		.we1(wren_a),
+3734		.data1(data_a),
+3735		.out1(out_a),
+3736		.addr2(address_b),
+3737		.we2(wren_b),
+3738		.data2(data_b),
+3739		.out2(out_b),
+3740		.clk(clk)
+3741		);
+3742	
+3743	`endif
+3744	
+3745	endmodule
+3746	
+3747	
+3748	module spram #(
+3749	`ifdef SIMULATION
+3750		parameter INIT="init.txt",
+3751	`endif
+3752		parameter AWIDTH=5,
+3753		parameter NUM_WORDS=32,
+3754		parameter DWIDTH=16)
+3755		(
+3756			input clk,
+3757			input [(AWIDTH-1):0] address,
+3758			input wren,
+3759			input [(DWIDTH-1):0] din,
+3760			output reg [(DWIDTH-1):0] dout
+3761		);
+3762		`ifndef hard_mem
+3763			reg [DWIDTH-1:0] mem [NUM_WORDS-1:0];
+3764	
+3765	//		initial begin
+3766	//			$readmemh(INIT, mem);
+3767	//		end
+3768	
+3769			always @ (posedge clk) begin 
+3770				if (wren) begin
+3771					mem[address] &lt;= din;
+3772				end
+3773				dout &lt;= mem[address];
+3774			end
+3775		`else 
+3776	</pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/spmv.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/spmv.v",
+ "offset": 3194,
+ "limit": 40
+}</pre><div class="label">output</div><pre class="plain">3194	module Channel_Accumulator(
+3195		input clk, 
+3196		input rst, 
+3197		input start,
+3198		input fetcher_done,
+3199		
+3200		input [`MAT_VAL_BITS-1:0] mat_val,
+3201		input mat_val_empty,
+3202		output mat_val_rd_en,
+3203	
+3204		input [`VEC_VAL_BITS-1:0] vec_val,
+3205		input vec_val_empty,
+3206		output vec_val_rd_en,
+3207	
+3208		input [`ROW_ID_BITS-1:0] row_id,
+3209		input row_id_empty,
+3210		output row_id_rd_en,
+3211	
+3212		output [`MULT_BITS-1:0] data_out,
+3213		output data_out_empty,
+3214		output [`ROW_ID_BITS-1:0] addr_out,
+3215		input out_rd_en,
+3216	
+3217		output done
+3218		);
+3219	 
+3220		wire mult_rd_en;
+3221		wire mult_empty;
+3222		wire [`MULT_BITS-1:0] mult_out;
+3223		wire mult_done;
+3224		
+3225		Channel CH0(.clk(clk), 
+3226					.rst(rst),
+3227					.start(start),
+3228					.fetcher_done(fetcher_done),
+3229					.mat_val(mat_val), 
+3230					.mat_val_empty(mat_val_empty), 
+3231					.mat_val_rd_en(mat_val_rd_en),
+3232					.vec_val(vec_val), 
+3233					.vec_val_empty(vec_val_empty), </pre></div></details><details class="inner"><summary><code>Read</code> <span class="meta"><span class="ok">completed</span> /work/spmv.v</span></summary><div class="body"><div class="label">input</div><pre class="plain">{
+ "file_path": "/work/spmv.v",
+ "offset": 3429,
+ "limit": 60
+}</pre><div class="label">output</div><pre class="plain">3429					end
+3430				end
+3431				else if (last) begin
+3432					wr_en &lt;= 1;
+3433					done &lt;= 1;
+3434				end
+3435				else begin
+3436					wr_en &lt;= 0;
+3437				end
+3438			end
+3439		end
+3440	endmodule
+3441	
+3442	
+3443	/////////////////////////////////////////////////////////////////////
+3444	////                                                             ////
+3445	////  Universal FIFO Single Clock                                ////
+3446	////                                                             ////
+3447	////                                                             ////
+3448	////  Author: Rudolf Usselmann                                   ////
+3449	////          rudi@asics.ws                                      ////
+3450	////                                                             ////
+3451	////                                                             ////
+3452	////  D/L from: http://www.opencores.org/cores/generic_fifos/    ////
+3453	////                                                             ////
+3454	/////////////////////////////////////////////////////////////////////
+3455	////                                                             ////
+3456	//// Copyright (C) 2000-2002 Rudolf Usselmann                    ////
+3457	////                         www.asics.ws                        ////
+3458	////                         rudi@asics.ws                       ////
+3459	////                                                             ////
+3460	//// This source file may be used and distributed without        ////
+3461	//// restriction provided that this copyright statement is not   ////
+3462	//// removed from the file and that any derivative work contains ////
+3463	//// the original copyright notice and the associated disclaimer.////
+3464	////                                                             ////
+3465	////     THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY     ////
+3466	//// EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED   ////
+3467	//// TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS   ////
+3468	//// FOR A PARTICULAR PURPOSE. IN NO EVENT SHALL THE AUTHOR      ////
+3469	//// OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,         ////
+3470	//// INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES    ////
+3471	//// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE   ////
+3472	//// GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR        ////
+3473	//// BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF  ////
+3474	//// LIABILITY, WHETHER IN  CONTRACT, STRICT LIABILITY, OR TORT  ////
+3475	//// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT  ////
+3476	//// OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE         ////
+3477	//// POSSIBILITY OF SUCH DAMAGE.                                 ////
+3478	////                                                             ////
+3479	/////////////////////////////////////////////////////////////////////
+3480	
+3481	//  CVS Log
+3482	//
+3483	//  $Id: generic_fifo_sc_a.v,v 1.1.1.1 2002-09-25 05:42:06 rudi Exp $
+3484	//
+3485	//  $Date: 2002-09-25 05:42:06 $
+3486	//  $Revision: 1.1.1.1 $
+3487	//  $Author: rudi $
+3488	//  $Locker:  $</pre></div></details></div></div></details></div></details></div></details></div></details><details class="section"><summary><h2>The kept rewrite</h2> <span class="meta">absent</span></summary><div class="body"><p class="absent">No edit.diff in the run dir (the run produced no edit, or ended before one was recorded).</p></div></details><details class="section"><summary><h2>Verification</h2> <span class="meta">0 editor attempt(s) · from the outcome record · final: planner_declined</span></summary><div class="body"><p class="note">This run predates the per-attempt record (2026-09-12). With a single editor attempt, the rows below follow directly from the recorded outcome code and reason; nothing is inferred beyond what that code implies about the stages that ran.</p><p class="absent">No editor call recorded: the loop ended before an edit (the planner declined, its response was malformed, or the plan was rejected).</p><h3>Checks on the final editor attempt</h3><p class="absent">Outcome code 'planner_declined': the run ended before any check ran (planner declined: no representative mapping).</p><h3>Synthesis-only result (counted from files)</h3><p class="absent">No synthesis netlist under vtr/ in this run dir.</p><h3>Packed netlist (counted from files)</h3><p class="absent">No packed .net under vtr/ (the run never reached VPR, or the flow failed before packing).</p><p>Modes recorded in the outcome as used after the edit: <span class="absent">none recorded</span></p></div></details><details class="section"><summary><h2>Numbers</h2> <span class="meta">no PPA · 1 call(s)</span></summary><div class="body"><h3>PPA as recorded</h3><p class="absent">No PPA recorded (the run ended before a VTR flow completed; before 2026-09-12 also any rejected run).</p><h3>Coverage</h3><table class="num"><tr><th>quantity</th><th class="n">value</th><th>what it counts</th></tr><tr><td>sites offered</td><td class='n'>4</td><td class='note'>sites DETECT found and handed to the planner (one RTL expression each)</td></tr><tr><td>site instances offered</td><td class='n'>35</td><td class='note'>those sites times the elaborated instance count of their module</td></tr><tr><td>sites converted</td><td class='n'>—</td><td class='note'>sites the approved plan names</td></tr><tr><td>site instances converted</td><td class='n'>—</td><td class='note'>converted sites times their module's instance count</td></tr><tr><td>blocks packed</td><td class='n'>—</td><td class='note'>packed block instances in the target mode (editor attempt )</td></tr><tr><td>tiles packed</td><td class='n'>—</td><td class='note'>DSP tiles in the target mode (the .net mode count); absent on records before 2026-10-15</td></tr></table><p class="note">Offered and packed are not the same unit: a site is a source region, a packed block is an elaborated instance, and one block can fuse several sites (or the editor can chain several blocks for one site), so they are recorded raw rather than as a ratio.</p><h3>Block counts</h3><p class="absent">No packed netlist to count.</p><h3>Tokens and cost per call</h3><div style="overflow-x:auto"><table class="num"><tr><th>#</th><th>role</th><th>model</th><th>status</th><th class="n">in</th><th class="n">out</th><th class="n">reasoning</th><th class="n">cache read</th><th class="n">cache write</th><th class="n">total</th><th class="n">steps</th><th class="n">tool calls (errors)</th><th class="n">seconds</th><th class="n">cost $</th></tr><tr><td>1</td><td>planner</td><td><code>anthropic/claude-opus-5</code></td><td>ok</td><td class='n'>18</td><td class='n'>15763</td><td class='n'>12158</td><td class='n'>206793</td><td class='n'>39008</td><td class='n'>261582</td><td class='n'>13</td><td class='n'>12 (0)</td><td class='n'>244.0</td><td class='n'>0.8876</td></tr><tr class='total'><td></td><td>total (1 calls)</td><td></td><td></td><td class='n'>18</td><td class='n'>15763</td><td class='n'>12158</td><td class='n'>206793</td><td class='n'>39008</td><td class='n'>261582</td><td></td><td></td><td class='n'>244.8</td><td class='n'>0.8876</td></tr></table></div><p class="note">Cost a client-side list-price estimate per call, summed, not a bill. Token components are kept separate (uncached input, output, reasoning, cache read, cache write); total is their sum, with reasoning counted once. Reasoning tokens are already counted inside the output column.</p></div></details><details class="section"><summary><h2>Objective loop</h2> <span class="meta">0 rewrite(s) measured · stopped by: planner declined</span></summary><div class="body"><dl class="kv"><dt>revisions allowed</dt><dd>9</dd><dt>seeds per rewrite</dt><dd>1, 2, 3, 4, 5 (adaptive)</dd><dt>kept</dt><dd><b>n/a</b></dd><dt>loop stopped by</dt><dd>planner declined (no representative mapping)</dd><dt>objective</dt><dd>area x delay x wirelength (delay register to register, 2026-10-20)</dd><dt>baseline</dt><dd><span class="absent">no baseline product: it could not be formed (area, delay or wirelength missing)</span></dd></dl><p class="note">The objective is area x delay x wirelength (delay register to register, 2026-10-20): VPR's total used logic block area (I/Os and empty grid tiles excluded) times the critical path times the total routed wirelength. Each term is the median over the loop's seeds; the product is the product of the medians. Beside every product stand the ratios against the baseline, A/A0 (area), D/D0 (critical path), W/W0 (wirelength) and their product, so the normalization can be read off. After each measured rewrite, the planner is given every measurement so far and asked for a revision. A revision is built and checked like the first rewrite, and the lowest product is kept, a later rewrite having to beat it by more than 8.73%. The loop stops when the planner declines to revise, when a revision does not lower the best product by more than 8.73%, when a revision fails its checks, or when 9 revisions have been made.</p><p class="absent">No rewrite was measured: the run produced no accepted edit, so the loop had nothing to compare.</p></div></details><script type="application/json" id="run-summary">{"sites_converted": null, "sites_offered": 4, "instances_converted": null, "instances_offered": 35, "loop": true, "loop_dry": false, "candidates_measured": 0, "loop_cap": 9, "loop_ended_by": null, "loop_stop": {"by": "planner_declined", "label": "planner declined", "detail": "no representative mapping", "read": "outcome"}, "kept": null, "period_ns": null, "used_area": null, "area_backfilled_from": null, "area_note": "nothing was measured: the record carries no PPA", "area_delay": null, "wirelength": null, "wirelength_source": null, "objective": null, "ratios": {"area": null, "delay": null, "wirelength": null, "product": null}, "ppa_basis": "the one recorded flow", "baseline": {"regime": "koios_extra_small", "cpd_ns": 7.06559, "used_area": 58560300.0, "area_source": "entry", "area_delay": 413763070.077, "wirelength": 196932, "wirelength_source": "entry", "objective": 81483188916403.77, "file": "configs/baselines/complexDSP.yaml", "source": "baselines file entry", "convention": "seed-1 figures of the baselines file entry (the run record carries no baseline the loop divided by)"}, "verified": null, "run_id": "20261024-052256-27e037", "suite": "koios_medium", "design": "spmv", "mode": "mac_18x19_fixed_pt_mode", "started_at": "2026-10-24T05:22:56-07:00", "accepted": false, "outcome": "planner_declined", "tier": "NONE", "editor_attempts": 0, "model_family": "Claude", "layer": "claude-code", "models": {"planner": "anthropic/claude-opus-5"}, "wall_seconds": 244.84456453705207, "agent_seconds": 244.0, "blocks_packed": null, "regime": "koios_extra_small", "archived": false, "file": "spmv_mac_18x19_fixed_pt_mode_20261024-052256-27e037.html"}</script></main></body></html>
