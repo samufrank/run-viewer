@@ -339,3 +339,184 @@
 20260827-152947-8d3f03:
   description: "not recorded (pre-schema-2) bilinearintrp; period -7.1%; area +1.8%; sop_4_mode, and the only raygentop run to beat its baseline period."
   equivalence: "equivalent; sim 542 cycles on bilinearintrp.r/g/b, 0 mismatches; LEC 166/166; tb_equiv_bilin_rgb_run4.v, int_sop_4_model.v (1-stage)"
+
+
+# 2026-11-03 Task 3: one group per setting (estimates off, estimates on, correctness-only), the
+# group name naming the setting; index runs within the setting, originals first, then the repeats
+# (sweeps 20261104-143803-6b5321 and 20261105-114856-295dc9). Labels say which results do not count and why.
+
+20261103-010851-d517af:
+  description: "0/33 none converted; period not recorded; area not recorded; tpu_like.small.os.fixed on mult_add_mode_18_19_36 (first run), planner declined at the first pass, no edit. Setting: estimates off. Tree cb1b8b42."
+  group: {name: "2026-11-03 Task 3: estimates off", index: 1, size: 12}
+
+20261103-012333-953da7:
+  description: "0/9 none converted; period not recorded; area not recorded; raygentop on mult_add_mode_18_19_36 (sweep 10beeb entry 1), planner declined at the first pass, no edit. raygentop offered 9 regions here (matmult excluded, its harness compared bilinearintrp only); not comparable with later raygentop runs, which offer 18. Setting: estimates off. Tree cb1b8b42."
+  group: {name: "2026-11-03 Task 3: estimates off", index: 2, size: 12}
+
+20261103-012745-628cbc:
+  description: "0/9 none kept (9 built in bilinearintrp); period of the original; area of the original; raygentop on comb_mult_add_16_mode (sweep 10beeb entry 2), rewrites measured, none beat the original, original kept. raygentop offered 9 regions here (matmult excluded, its harness compared bilinearintrp only); not comparable with later raygentop runs, which offer 18. Setting: estimates off. Tree cb1b8b42."
+  group: {name: "2026-11-03 Task 3: estimates off", index: 3, size: 12}
+
+20261103-014601-10e135:
+  description: "6/9 bilinearintrp; period -6.7%; area +5.9%; raygentop on comb_sop_2_18_mode (sweep 10beeb entry 3), accepted T2, kept the first pass; product 0.989 of the baseline (medians of seeds 1 to 5). raygentop offered 9 regions here (matmult excluded, its harness compared bilinearintrp only); not comparable with later raygentop runs, which offer 18. Setting: estimates off. Tree cb1b8b42."
+  group: {name: "2026-11-03 Task 3: estimates off", index: 4, size: 12}
+
+20261103-021351-dcfa6c:
+  description: "9/9 bilinearintrp; period -9.4%; area -3.5%; raygentop on sop_2_mode (sweep 10beeb entry 4), accepted T2, kept the first pass; product 0.874 of the baseline (medians of seeds 1 to 5). raygentop offered 9 regions here (matmult excluded, its harness compared bilinearintrp only); not comparable with later raygentop runs, which offer 18. Setting: estimates off. Tree cb1b8b42."
+  group: {name: "2026-11-03 Task 3: estimates off", index: 5, size: 12}
+
+20261103-023509-c76bfc:
+  description: "0/4 none kept (4 built in corr, corr_seq); period of the original; area of the original; stereovision1 on mult_add_mode_18_19_36 (sweep 10beeb entry 5), rewrites measured, none beat the original, original kept. Setting: estimates off. Tree cb1b8b42."
+  group: {name: "2026-11-03 Task 3: estimates off", index: 6, size: 12}
+
+20261103-025544-e9e34c:
+  description: "0/4 none kept (4 built in corr, corr_seq); period of the original; area of the original; stereovision1 on comb_sop_2_18_mode (sweep 10beeb entry 6), rewrites measured, none beat the original, original kept. Setting: estimates off. Tree cb1b8b42."
+  group: {name: "2026-11-03 Task 3: estimates off", index: 7, size: 12}
+
+20261103-031157-0841dc:
+  description: "0/1 none kept (1 built in FPMult_PrepModule); period of the original; area of the original; softmax on mult_add_mode_18_19_36 (sweep 10beeb entry 7), rewrites measured, none beat the original, original kept. Out of the settings comparison (D66: the datatype gate compares the per-design tag, which blocked every rewrite in correctness-only 4c1d63). In this run the gate passed; the rewrite was measured and lost. Setting: estimates off. Tree cb1b8b42."
+  group: {name: "2026-11-03 Task 3: estimates off", index: 8, size: 12}
+
+20261103-034027-cc8c26:
+  description: "0/4 none converted; period not recorded; area not recorded; spmv on mac_18x19_fixed_pt_mode (sweep 10beeb entry 8), planner declined at the first pass, no edit. Ran on the spmv testbench from before its fix (it drove out-of-range addresses); the spmv runs on it are out of the settings comparison, their outcomes reflecting the testbench, not the planner. This run declined before any simulation, so its own ending is the planner's. Setting: estimates off. Tree cb1b8b42."
+  group: {name: "2026-11-03 Task 3: estimates off", index: 9, size: 12}
+
+20261103-035128-c4dc6a:
+  description: "1/1 qmult; period -17.0%; area -7.3%; conv_layer on mult_add_mode_18_19_36 (sweep 10beeb entry 9), accepted T1, kept the first pass; product 0.770 of the baseline (medians of seeds 1 to 5). Setting: estimates off. Tree cb1b8b42."
+  group: {name: "2026-11-03 Task 3: estimates off", index: 10, size: 12}
+
+20261104-143804-26b856:
+  description: "9/9 bilinearintrp; period -0.3%; area -2.3%; raygentop on sop_2_mode, accepted T2, kept revision1; product 0.974 of the baseline (medians of seeds 1 to 5). Repeat 1 of 2 of this pair and setting (sweep 6b5321 entry 1). raygentop offered 9 regions here (matmult excluded, its harness compared bilinearintrp only); not comparable with later raygentop runs, which offer 18. Setting: estimates off. Tree 940d0a9b."
+  group: {name: "2026-11-03 Task 3: estimates off", index: 11, size: 12}
+
+20261104-151252-7998c7:
+  description: "0/9 none kept (6 built in bilinearintrp); period of the original; area of the original; raygentop on sop_2_mode, rewrites measured, none beat the original, original kept. Repeat 2 of 2 of this pair and setting (sweep 6b5321 entry 2). raygentop offered 9 regions here (matmult excluded, its harness compared bilinearintrp only); not comparable with later raygentop runs, which offer 18. Setting: estimates off. Tree 940d0a9b."
+  group: {name: "2026-11-03 Task 3: estimates off", index: 12, size: 12}
+
+20261103-041733-e83a32:
+  description: "0/9 none converted; period not recorded; area not recorded; raygentop on mult_add_mode_18_19_36 (sweep a27faf entry 1), planner declined at the first pass, no edit. raygentop offered 9 regions here (matmult excluded, its harness compared bilinearintrp only); not comparable with later raygentop runs, which offer 18. Setting: estimates on. Tree cb1b8b42."
+  group: {name: "2026-11-03 Task 3: estimates on", index: 1, size: 16}
+
+20261103-042003-9c4d8c:
+  description: "0/9 none converted; period not recorded; area not recorded; raygentop on comb_mult_add_16_mode (sweep a27faf entry 2), planner declined at the first pass, no edit. raygentop offered 9 regions here (matmult excluded, its harness compared bilinearintrp only); not comparable with later raygentop runs, which offer 18. Setting: estimates on. Tree cb1b8b42."
+  group: {name: "2026-11-03 Task 3: estimates on", index: 2, size: 16}
+
+20261103-042150-eeebed:
+  description: "0/9 none kept (9 built in bilinearintrp); period of the original; area of the original; raygentop on comb_sop_2_18_mode (sweep a27faf entry 3), rewrites measured, none beat the original, original kept. raygentop offered 9 regions here (matmult excluded, its harness compared bilinearintrp only); not comparable with later raygentop runs, which offer 18. Setting: estimates on. Tree cb1b8b42."
+  group: {name: "2026-11-03 Task 3: estimates on", index: 3, size: 16}
+
+20261103-043909-a45c58:
+  description: "6/9 bilinearintrp; period -3.5%; area -0.5%; raygentop on sop_2_mode (sweep a27faf entry 4), accepted T2, kept the first pass; product 0.960 of the baseline (medians of seeds 1 to 5). raygentop offered 9 regions here (matmult excluded, its harness compared bilinearintrp only); not comparable with later raygentop runs, which offer 18. Setting: estimates on. Tree cb1b8b42."
+  group: {name: "2026-11-03 Task 3: estimates on", index: 4, size: 16}
+
+20261103-051301-505f50:
+  description: "0/4 none kept (4 built in corr, corr_seq); period of the original; area of the original; stereovision1 on mult_add_mode_18_19_36 (sweep a27faf entry 5), rewrites measured, none beat the original, original kept. Setting: estimates on. Tree cb1b8b42."
+  group: {name: "2026-11-03 Task 3: estimates on", index: 5, size: 16}
+
+20261103-054445-2cca2c:
+  description: "0/4 none converted; period not recorded; area not recorded; stereovision1 on comb_sop_2_18_mode (sweep a27faf entry 6), planner declined at the first pass, no edit. Setting: estimates on. Tree cb1b8b42."
+  group: {name: "2026-11-03 Task 3: estimates on", index: 6, size: 16}
+
+20261103-055036-30789c:
+  description: "0/33 none converted; period not recorded; area not recorded; tpu_like.small.os.fixed on mult_add_mode_18_19_36 (sweep a27faf entry 7), planner declined at the first pass, no edit. Setting: estimates on. Tree cb1b8b42."
+  group: {name: "2026-11-03 Task 3: estimates on", index: 7, size: 16}
+
+20261103-055744-0b307b:
+  description: "0/1 none converted; period not recorded; area not recorded; softmax on mult_add_mode_18_19_36 (sweep a27faf entry 8), planner declined at the first pass, no edit. Out of the settings comparison (D66: the datatype gate compares the per-design tag, which blocked every rewrite in correctness-only 4c1d63). This run declined before any edit, so the gate never ran. Setting: estimates on. Tree cb1b8b42."
+  group: {name: "2026-11-03 Task 3: estimates on", index: 8, size: 16}
+
+20261103-060112-81b1d1:
+  description: "0/4 none converted (1 selected in Channel); period not recorded; area not recorded; spmv on mac_18x19_fixed_pt_mode (sweep a27faf entry 9), rejected at acceptance review, unmeasured. Ran on the spmv testbench from before its fix (it drove out-of-range addresses), so this outcome reflects the testbench, not the planner; out of the settings comparison. Setting: estimates on. Tree cb1b8b42."
+  group: {name: "2026-11-03 Task 3: estimates on", index: 9, size: 16}
+
+20261103-071847-b10f10:
+  description: "1/1 qmult; period -17.0%; area -7.3%; conv_layer on mult_add_mode_18_19_36 (sweep a27faf entry 10), accepted T1, kept the first pass; product 0.770 of the baseline (medians of seeds 1 to 5). Setting: estimates on. Tree cb1b8b42."
+  group: {name: "2026-11-03 Task 3: estimates on", index: 10, size: 16}
+
+20261104-153247-51b79e:
+  description: "9/9 bilinearintrp; period -8.9%; area -3.5%; raygentop on sop_2_mode, accepted T2, kept the first pass; product 0.879 of the baseline (medians of seeds 1 to 5). Repeat 1 of 2 of this pair and setting (sweep 6b5321 entry 3). raygentop offered 9 regions here (matmult excluded, its harness compared bilinearintrp only); not comparable with later raygentop runs, which offer 18. Setting: estimates on. Tree 940d0a9b."
+  group: {name: "2026-11-03 Task 3: estimates on", index: 11, size: 16}
+
+20261104-155516-655c81:
+  description: "9/9 bilinearintrp; period -4.5%; area -1.8%; raygentop on sop_2_mode, accepted T2, kept the first pass; product 0.938 of the baseline (medians of seeds 1 to 5). Repeat 2 of 2 of this pair and setting (sweep 6b5321 entry 4). raygentop offered 9 regions here (matmult excluded, its harness compared bilinearintrp only); not comparable with later raygentop runs, which offer 18. Setting: estimates on. Tree 940d0a9b."
+  group: {name: "2026-11-03 Task 3: estimates on", index: 12, size: 16}
+
+20261104-172954-e66edb:
+  description: "1/4 Channel; period -7.8%; area -43.6%; spmv on mac_18x19_fixed_pt_mode, accepted T2, kept the first pass; product 0.520 of the baseline (medians of seeds 1 to 5). Repeat 1 of 2 of this pair and setting (sweep 6b5321 entry 7). Ran on the spmv testbench from before its fix (it drove out-of-range addresses); out of the settings comparison. Result invalid: its synthesized netlist never multiplies (an X comparison folded to a constant). Setting: estimates on. Tree 940d0a9b."
+  group: {name: "2026-11-03 Task 3: estimates on", index: 13, size: 16}
+
+20261104-182221-45880c:
+  description: "0/4 none converted (1 selected in Channel); period not recorded; area not recorded; spmv on mac_18x19_fixed_pt_mode, ended on simulation failures, unmeasured. Repeat 2 of 2 of this pair and setting (sweep 6b5321 entry 8). Ran on the spmv testbench from before its fix (it drove out-of-range addresses), so this outcome reflects the testbench, not the planner; out of the settings comparison. Memory-influenced: agents shared Claude Code auto-memory within the run. Setting: estimates on. Tree 940d0a9b."
+  group: {name: "2026-11-03 Task 3: estimates on", index: 14, size: 16}
+
+20261105-141019-e22b59:
+  description: "0/33 none converted; period not recorded; area not recorded; tpu_like.small.os.fixed on mult_add_mode_18_19_36, planner declined at the first pass, no edit. Repeat 1 of 2 of this pair and setting (sweep 295dc9 entry 3). Setting: estimates on. Tree 940d0a9b."
+  group: {name: "2026-11-03 Task 3: estimates on", index: 15, size: 16}
+
+20261105-141618-b31c4e:
+  description: "0/33 none converted; period not recorded; area not recorded; tpu_like.small.os.fixed on mult_add_mode_18_19_36, planner declined at the first pass, no edit. Repeat 2 of 2 of this pair and setting (sweep 295dc9 entry 4). Setting: estimates on. Tree 940d0a9b."
+  group: {name: "2026-11-03 Task 3: estimates on", index: 16, size: 16}
+
+20261103-112915-f2ac83:
+  description: "3/9 bilinearintrp; period -6.5%; area +5.3%; raygentop on mult_add_mode_18_19_36 (sweep 02b75e entry 1), accepted T2, kept revision1; product 0.985 of the baseline (medians of seeds 1 to 5). raygentop offered 9 regions here (matmult excluded, its harness compared bilinearintrp only); not comparable with later raygentop runs, which offer 18. Setting: correctness-only. Tree 940d0a9b."
+  group: {name: "2026-11-03 Task 3: correctness-only", index: 1, size: 16}
+
+20261103-123302-385709:
+  description: "0/9 none kept (9 built in bilinearintrp); period of the original; area of the original; raygentop on comb_mult_add_16_mode (sweep 02b75e entry 2), rewrites measured, none beat the original, original kept. raygentop offered 9 regions here (matmult excluded, its harness compared bilinearintrp only); not comparable with later raygentop runs, which offer 18. Setting: correctness-only. Tree 940d0a9b."
+  group: {name: "2026-11-03 Task 3: correctness-only", index: 2, size: 16}
+
+20261103-124756-69042a:
+  description: "9/9 bilinearintrp; period +1.8%; area -1.8%; raygentop on comb_sop_2_18_mode (sweep 02b75e entry 3), accepted T2, kept revision1; product 1.000 of the baseline (medians of seeds 1 to 5). raygentop offered 9 regions here (matmult excluded, its harness compared bilinearintrp only); not comparable with later raygentop runs, which offer 18. Setting: correctness-only. Tree 940d0a9b."
+  group: {name: "2026-11-03 Task 3: correctness-only", index: 3, size: 16}
+
+20261103-133636-5f1c42:
+  description: "6/9 bilinearintrp; period -8.1%; area +2.4%; raygentop on sop_2_mode (sweep 02b75e entry 4), accepted T2, kept the first pass; product 0.941 of the baseline (medians of seeds 1 to 5). raygentop offered 9 regions here (matmult excluded, its harness compared bilinearintrp only); not comparable with later raygentop runs, which offer 18. Setting: correctness-only. Tree 940d0a9b."
+  group: {name: "2026-11-03 Task 3: correctness-only", index: 4, size: 16}
+
+20261103-140325-de02b1:
+  description: "0/4 none kept (4 built in corr, corr_seq); period of the original; area of the original; stereovision1 on mult_add_mode_18_19_36 (sweep 02b75e entry 5), rewrites measured, none beat the original, original kept. Setting: correctness-only. Tree 940d0a9b."
+  group: {name: "2026-11-03 Task 3: correctness-only", index: 5, size: 16}
+
+20261103-142442-536d93:
+  description: "0/4 none kept (4 built in corr, corr_seq); period of the original; area of the original; stereovision1 on comb_sop_2_18_mode (sweep 02b75e entry 6), rewrites measured, none beat the original, original kept. Setting: correctness-only. Tree 940d0a9b."
+  group: {name: "2026-11-03 Task 3: correctness-only", index: 6, size: 16}
+
+20261103-144112-04d9e8:
+  description: "32/33 activation, norm; period -5.2%; area +1.5%; tpu_like.small.os.fixed on mult_add_mode_18_19_36 (sweep 02b75e entry 7), accepted T2, kept the first pass; product 0.962 of the baseline (medians of seeds 1 to 5). Setting: correctness-only. Tree 940d0a9b."
+  group: {name: "2026-11-03 Task 3: correctness-only", index: 7, size: 16}
+
+20261103-170005-4c1d63:
+  description: "0/1 none converted (1 selected in FPMult_PrepModule); period not recorded; area not recorded; softmax on mult_add_mode_18_19_36 (sweep 02b75e entry 8), rejected at acceptance review, unmeasured. Out of the settings comparison: the datatype gate compares the per-design tag (D66), so no rewrite could pass; here it failed five rewrites that passed simulation. Setting: correctness-only. Tree 940d0a9b."
+  group: {name: "2026-11-03 Task 3: correctness-only", index: 8, size: 16}
+
+20261103-181054-863859:
+  description: "1/4 Channel; period -4.1%; area -8.4%; spmv on mac_18x19_fixed_pt_mode (sweep 02b75e entry 9), accepted T2, kept the first pass; product 0.878 of the baseline (medians of seeds 1 to 5). Ran on the spmv testbench from before its fix (it drove out-of-range addresses); the exception among those runs: its result stands, checked under the fixed testbench. Setting: correctness-only. Tree 940d0a9b."
+  group: {name: "2026-11-03 Task 3: correctness-only", index: 9, size: 16}
+
+20261103-192639-72858f:
+  description: "1/1 qmult; period -17.0%; area -7.3%; conv_layer on mult_add_mode_18_19_36 (sweep 02b75e entry 10), accepted T1, kept the first pass; product 0.770 of the baseline (medians of seeds 1 to 5). Setting: correctness-only. Tree 940d0a9b."
+  group: {name: "2026-11-03 Task 3: correctness-only", index: 10, size: 16}
+
+20261104-162310-86d643:
+  description: "0/9 none kept (9 built in bilinearintrp); period of the original; area of the original; raygentop on sop_2_mode, rewrites measured, none beat the original, original kept. Repeat 1 of 2 of this pair and setting (sweep 6b5321 entry 5). raygentop offered 9 regions here (matmult excluded, its harness compared bilinearintrp only); not comparable with later raygentop runs, which offer 18. Setting: correctness-only. Tree 940d0a9b."
+  group: {name: "2026-11-03 Task 3: correctness-only", index: 11, size: 16}
+
+20261104-163536-296189:
+  description: "9/9 bilinearintrp; period -6.5%; area -3.5%; raygentop on sop_2_mode, accepted T2, kept revision1; product 0.903 of the baseline (medians of seeds 1 to 5). Repeat 2 of 2 of this pair and setting (sweep 6b5321 entry 6). raygentop offered 9 regions here (matmult excluded, its harness compared bilinearintrp only); not comparable with later raygentop runs, which offer 18. Setting: correctness-only. Tree 940d0a9b."
+  group: {name: "2026-11-03 Task 3: correctness-only", index: 12, size: 16}
+
+20261105-114857-52c414:
+  description: "0/4 none converted (1 selected in Channel); period not recorded; area not recorded; spmv on mac_18x19_fixed_pt_mode, rejected at acceptance review, unmeasured. Repeat 1 of 2 of this pair and setting (sweep 295dc9 entry 1). Ran on the spmv testbench from before its fix (it drove out-of-range addresses), so this outcome reflects the testbench, not the planner; out of the settings comparison. Setting: correctness-only. Tree 940d0a9b."
+  group: {name: "2026-11-03 Task 3: correctness-only", index: 13, size: 16}
+
+20261105-131303-626fe4:
+  description: "0/4 none converted (1 selected in Channel); period not recorded; area not recorded; spmv on mac_18x19_fixed_pt_mode, plan rejected by the plan reviewer, no edit. Repeat 2 of 2 of this pair and setting (sweep 295dc9 entry 2). Ran on the spmv testbench from before its fix (it drove out-of-range addresses), so this outcome reflects the testbench, not the planner; out of the settings comparison. Setting: correctness-only. Tree 940d0a9b."
+  group: {name: "2026-11-03 Task 3: correctness-only", index: 14, size: 16}
+
+20261105-142527-2f28b3:
+  description: "16/33 activation; period -5.2%; area +1.5%; tpu_like.small.os.fixed on mult_add_mode_18_19_36, accepted T2, kept the first pass; product 0.962 of the baseline (medians of seeds 1 to 5). Repeat 1 of 2 of this pair and setting (sweep 295dc9 entry 5). Setting: correctness-only. Tree 940d0a9b."
+  group: {name: "2026-11-03 Task 3: correctness-only", index: 15, size: 16}
+
+20261105-161608-61b09e:
+  description: "0/33 none kept (32 built in activation, norm); period of the original; area of the original; tpu_like.small.os.fixed on mult_add_mode_18_19_36, rewrites measured, none beat the original, original kept. Repeat 2 of 2 of this pair and setting (sweep 295dc9 entry 6). Setting: correctness-only. Tree 940d0a9b."
+  group: {name: "2026-11-03 Task 3: correctness-only", index: 16, size: 16}
