@@ -521,3 +521,31 @@
 20261105-161608-61b09e:
   description: "0/33 none kept (32 built in activation, norm); period of the original; area of the original; tpu_like.small.os.fixed on mult_add_mode_18_19_36, rewrites measured, none beat the original, original kept. Repeat 2 of 2 of this pair and setting (sweep 295dc9 entry 6). Setting: correctness-only. Tree 940d0a9b."
   group: {name: "2026-11-03 Task 3: correctness-only", index: 16, size: 16}
+
+20261114-235013-6ebc16:
+  description: "14/91 my_fir_* (the kept revision; the first pass selected 45); period -46.9%; area -34.4%; stereovision2 on dsp48e2_preadd_ma_mode (sweep 14d5d5 entry 1), accepted T1, kept revision4 of 4 measured passes (blocks 144, 132, 78, 42), revision3's plan rejected, the revision5 planner declined; product 0.348 of the baseline (medians of seeds 1 to 5), band 13.4%. One block per my_fir module folds one tap pair through the pre-adder; the cascade is not used; the other my_fir multiplies became soft shift-and-add logic, so the gain is not the block's alone. Sim 8520 cycles, 0 mismatches; LEC not run. Arch complexDSP_amd, SDC regime. Setting: correctness-only, sites-only. Tree e41cca5 dirty."
+  group: {name: "AMD-inspired modes, first runs (11/14-15)", index: 1, size: 5}
+
+20261115-021313-a6de20:
+  description: "1/1 qmult; period -6.8%; area -17.6%; conv_layer on dsp48e2_macc_mode (sweep 14d5d5 entry 2), accepted T1, kept revision1 of 2 measured passes, the revision2 planner declined; product 0.767 of the baseline (medians of seeds 1 to 5), band 3.7%. 84 blocks absorb the multiply, the adder and the accumulator; OPMODE switches per cycle between P + A*B and P = C; the three resets take the design's reset. Sim 1156 cycles, 0 mismatches; LEC not run. Arch complexDSP_amd, SDC regime. Setting: correctness-only, sites-only. Tree e41cca5 dirty."
+  group: {name: "AMD-inspired modes, first runs (11/14-15)", index: 2, size: 5}
+
+20261115-031116-08f961:
+  description: "1/20 sub_activation; period -0.4%; area +0.1%; tpu_like.small.ws on dsp48e2_macc_mode (sweep 14d5d5 entry 3), accepted T2, kept the first pass, the revision1 planner declined; product 0.997 of the baseline (medians of seeds 1 to 5), band 14.1%: inside the band, no measurable gain. 16 blocks, C + A*B for tanh and hold otherwise, resets and A/B enables driven by the design. Sim 4721 cycles, 0 mismatches; LEC not run. Arch complexDSP_amd, SDC regime. Setting: correctness-only, sites-only. Tree e41cca5 dirty."
+  group: {name: "AMD-inspired modes, first runs (11/14-15)", index: 3, size: 5}
+
+20261115-040350-1b134e:
+  description: "9/18 bilinearintrp; period -9.2%; area -2.9%; raygentop on dsp58_int8_dot_mode (sweep 14d5d5 entry 4), accepted T1, kept revision1 of 2 measured passes, the revision2 planner declined; product 0.882 of the baseline (medians of seeds 1 to 5), band 6.3%. Three blocks, one three-term dot product per colour channel; the kept revision moves two subtracts onto pad-fed operands, which the SDC leaves untimed (the first pass, seed 1 only: product 0.915). Sim 1052 cycles, 0 mismatches; LEC not run. Arch complexDSP_amd, SDC regime. Setting: correctness-only, sites-only. Tree e41cca5 dirty."
+  group: {name: "AMD-inspired modes, first runs (11/14-15)", index: 4, size: 5}
+
+20261115-042706-55ffa3:
+  description: "4/4 corr, corr_seq; period -18.8%; area +21.6%; stereovision1 on dspcplx_mult_re_mode (sweep 14d5d5 entry 5), accepted T2, kept the first pass of 2 measured passes (revision1 was 8.2% worse); product 0.987 of the baseline (medians of seeds 1 to 5), band 8.8%: inside the band, area traded for period. 76 blocks, each A_RE*B_RE + A_IM*B_IM through the conjugate input; DSP tiles 41 to 76. Sim 6121 cycles, 0 mismatches; LEC not run. Arch complexDSP_amd, SDC regime. Setting: correctness-only, sites-only. Tree e41cca5 dirty."
+  group: {name: "AMD-inspired modes, first runs (11/14-15)", index: 5, size: 5}
+
+20261114-173527-81ed5c:
+  description: "1/1 qmult; period -17.0%; area -7.3%; conv_layer on mult_add_mode_18_19_36 (sweep 4f8fb3 entry 1), accepted T1, kept the first pass, the revision1 planner declined; product 0.770 of the baseline (medians of seeds 1 to 5), band 5.6%. Sim 1156 cycles, 0 mismatches; LEC not run. Regression run for --detect-sites-only. Tree e41cca5 dirty."
+  group: {name: "DETECT sites-only regression (11/14)", index: 1, size: 2}
+
+20261114-175945-51d3f3:
+  description: "16/33 norm; period -1.0%; area +0.3%; tpu_like.small.os.fixed on mult_add_mode_18_19_36 (sweep 4f8fb3 entry 2), accepted T2, kept revision1 of 2 measured passes (the first pass was above the original), the revision2 planner declined; product 0.993 of the baseline (medians of seeds 1 to 5), band 3.5%: inside the band. Sim 4577 cycles, 0 mismatches; LEC not run. Regression run for --detect-sites-only. Tree e41cca5 dirty."
+  group: {name: "DETECT sites-only regression (11/14)", index: 2, size: 2}
