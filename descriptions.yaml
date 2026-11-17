@@ -549,3 +549,6 @@
 20261114-175945-51d3f3:
   description: "16/33 norm; period -1.0%; area +0.3%; tpu_like.small.os.fixed on mult_add_mode_18_19_36 (sweep 4f8fb3 entry 2), accepted T2, kept revision1 of 2 measured passes (the first pass was above the original), the revision2 planner declined; product 0.993 of the baseline (medians of seeds 1 to 5), band 3.5%: inside the band. Sim 4577 cycles, 0 mismatches; LEC not run. Regression run for --detect-sites-only. Tree e41cca5 dirty."
   group: {name: "DETECT sites-only regression (11/14)", index: 2, size: 2}
+
+20261116-171522-3d4e96:
+  description: "1/1 qmult; period -21.2%; area -17.7%; conv_layer choosing between dsp48e2_macc and dsp48e2_macc_mreg1 (--choose-mode pilot, sweep c8c8ba entry 1): the first plan chose dsp48e2_macc_mreg1, approved on the first round; accepted T2, kept revision2 of 3 measured passes, the revision3 planner declined; product 0.648 of the baseline (medians of seeds 1 to 5), band 3.7%. 84 blocks take the design's operand, product and accumulator registers; the kept revision holds OPMODE constant and selects the element-wise add through RSTP. No repair, no gate failure. Sim 1156 cycles, 0 mismatches; LEC not run. Arch complexDSP_amd, SDC regime. Setting: correctness-only, sites-only, choose-mode. Tree 4ee9eb3."
