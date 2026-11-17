@@ -552,3 +552,20 @@
 
 20261116-171522-3d4e96:
   description: "1/1 qmult; period -21.2%; area -17.7%; conv_layer choosing between dsp48e2_macc and dsp48e2_macc_mreg1 (--choose-mode pilot, sweep c8c8ba entry 1): the first plan chose dsp48e2_macc_mreg1, approved on the first round; accepted T2, kept revision2 of 3 measured passes, the revision3 planner declined; product 0.648 of the baseline (medians of seeds 1 to 5), band 3.7%. 84 blocks take the design's operand, product and accumulator registers; the kept revision holds OPMODE constant and selects the element-wise add through RSTP. No repair, no gate failure. Sim 1156 cycles, 0 mismatches; LEC not run. Arch complexDSP_amd, SDC regime. Setting: correctness-only, sites-only, choose-mode. Tree 4ee9eb3."
+  group: {name: "Choose-mode on conv_layer (11/16)", index: 1, size: 5}
+
+20261116-190412-318140:
+  description: "1/1 qmult; period -4.1%; area -17.4%; conv_layer on dsp48e2_macc_mreg1_mode alone (sweep 612310 entry 1), accepted T2, kept the first pass, the revision1 planner declined; product 0.792 of the baseline (medians of seeds 1 to 5), band 3.7%. 84 blocks take the design's operand, product and accumulator registers; OPMODE switches per cycle. The one-mode run the first choose-mode test (3d4e96, product 0.648) is read against. Sim 1156 cycles, 0 mismatches; LEC not run. Arch complexDSP_amd, SDC regime. Setting: correctness-only, sites-only. Tree 4ee9eb3."
+  group: {name: "Choose-mode on conv_layer (11/16)", index: 2, size: 5}
+
+20261116-192856-4aba97:
+  description: "1/1 qmult; period -13.5%; area -17.8%; conv_layer choosing between dsp48e2_macc and dsp48e2_preadd_ma (--choose-mode, sweep 612310 entry 2): the first plan chose dsp48e2_macc, approved on the first round; accepted T1, kept revision1 of 2 measured passes, the revision2 planner declined; product 0.711 of the baseline (medians of seeds 1 to 5), band 3.7%. The kept revision holds OPMODE constant and selects the element-wise add through RSTP. No repair, no gate failure. Sim 1156 cycles, 0 mismatches; LEC not run. Arch complexDSP_amd, SDC regime. Setting: correctness-only, sites-only, choose-mode. Tree 4ee9eb3."
+  group: {name: "Choose-mode on conv_layer (11/16)", index: 3, size: 5}
+
+20261116-201741-34674c:
+  description: "1/1 qmult; period -3.7%; area +0.1%; conv_layer on dsp48e2_preadd_ma_mode alone (sweep 612310 entry 3), accepted T1, kept the first pass, the revision1 planner declined; product 0.965 of the baseline (medians of seeds 1 to 5), band 3.7%: inside the band, no measurable gain. 84 blocks used as plain multipliers (D = 0, PCIN = 0); adder and registers stay soft. Sim 1156 cycles, 0 mismatches; LEC not run. Arch complexDSP_amd, SDC regime. Setting: correctness-only, sites-only. Tree 4ee9eb3."
+  group: {name: "Choose-mode on conv_layer (11/16)", index: 4, size: 5}
+
+20261116-204203-0d2a40:
+  description: "1/1 qmult; period -6.8%; area -17.6%; conv_layer on dsp48e2_macc_mode alone (sweep 612310 entry 4), accepted T1, kept the first pass of 2 measured passes (revision1 was 7.3% worse); product 0.767 of the baseline (medians of seeds 1 to 5), band 3.7%. 84 blocks absorb the multiply, the adder and the accumulator; OPMODE switches per cycle; C driven combinationally. The one-mode run the second choose-mode test (4aba97, product 0.711) is read against. Sim 1156 cycles, 0 mismatches; LEC not run. Arch complexDSP_amd, SDC regime. Setting: correctness-only, sites-only. Tree 4ee9eb3."
+  group: {name: "Choose-mode on conv_layer (11/16)", index: 5, size: 5}
